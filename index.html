@@ -94,12 +94,10 @@ header h1{font-size:1rem;font-weight:700;flex:1}
 .waiting-msg{text-align:center;padding:14px;color:var(--muted);font-size:.88rem;background:var(--surface);border-radius:var(--radius)}
 .pay-box{background:#0d2e1b;border:1px solid #22c55e44;border-radius:var(--radius);padding:14px}
 .pay-box h3{color:var(--green);font-size:.85rem;margin-bottom:10px;text-transform:uppercase}
-#lightbox{position:fixed;inset:0;background:#000d;z-index:900;display:none;align-items:center;justify-content:center}
+#lightbox{position:fixed;inset:0;background:#000d;z-index:900;display:none;align-items:center;justify-content:center;overflow:hidden;touch-action:none}
 #lightbox.open{display:flex}
-#lightbox img{max-width:95vw;max-height:82vh;border-radius:10px;object-fit:contain;transform-origin:center;transition:transform .12s}
+#lightbox img{max-width:95vw;max-height:88vh;border-radius:10px;object-fit:contain;transform-origin:center;transition:transform .08s;user-select:none;touch-action:none}
 #lb-close{position:absolute;top:16px;right:16px;color:#fff;font-size:2rem;cursor:pointer;background:none;border:none;z-index:10}
-.lb-controls{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10}
-.lb-controls button{background:#ffffff22;color:#fff;border:1px solid #ffffff44;border-radius:10px;padding:10px 14px;font-size:1rem;font-weight:700;cursor:pointer;backdrop-filter:blur(6px)}
 .add-visit-btn{background:none;border:1px dashed var(--border);border-radius:8px;color:var(--muted);padding:8px 14px;font-size:.82rem;cursor:pointer;white-space:nowrap}
 .doc-box{background:#0f172a;border:1px solid #334155;border-radius:var(--radius);padding:12px;margin-top:8px}
 .doc-box a{color:var(--accent);font-weight:700;text-decoration:none;font-size:.9rem}
@@ -137,11 +135,6 @@ header h1{font-size:1rem;font-weight:700;flex:1}
 <div id="lightbox" onclick="closeLb()">
   <button id="lb-close" onclick="closeLb()">✕</button>
   <img id="lb-img" src="" alt="" onclick="event.stopPropagation()">
-  <div class="lb-controls" onclick="event.stopPropagation()">
-    <button onclick="zoomLb(-0.25)">−</button>
-    <button onclick="resetLb()">Reset</button>
-    <button onclick="zoomLb(0.25)">+</button>
-  </div>
 </div>
 <input type="file" id="input-gallery" accept="image/*" multiple style="display:none" onchange="handleFiles(this)">
 <input type="file" id="input-camera" accept="image/*" capture="environment" style="display:none" onchange="handleFiles(this)">
@@ -188,12 +181,26 @@ function getMainDt(c){
   return{dt:c.datetime,type:'visit'};
 }
 
-let lbScale=1;
-function applyLbZoom(){document.getElementById('lb-img').style.transform=`scale(${lbScale})`;}
-window.openLb=src=>{lbScale=1;document.getElementById('lb-img').src=src;applyLbZoom();document.getElementById('lightbox').classList.add('open')};
+let lbScale=1, lbX=0, lbY=0, lbStartDist=0, lbStartScale=1, lbLastX=0, lbLastY=0, lbDragging=false;
+function applyLbZoom(){document.getElementById('lb-img').style.transform=`translate(${lbX}px,${lbY}px) scale(${lbScale})`;}
+function lbDist(t){const dx=t[0].clientX-t[1].clientX,dy=t[0].clientY-t[1].clientY;return Math.hypot(dx,dy)}
+function lbMid(t){return{x:(t[0].clientX+t[1].clientX)/2,y:(t[0].clientY+t[1].clientY)/2}}
+window.openLb=src=>{lbScale=1;lbX=0;lbY=0;const img=document.getElementById('lb-img');img.src=src;applyLbZoom();document.getElementById('lightbox').classList.add('open')};
 window.closeLb=()=>document.getElementById('lightbox').classList.remove('open');
-window.zoomLb=d=>{lbScale=Math.min(Math.max(lbScale+d,1),4);applyLbZoom();};
-window.resetLb=()=>{lbScale=1;applyLbZoom();};
+window.resetLb=()=>{lbScale=1;lbX=0;lbY=0;applyLbZoom();};
+const lb=document.getElementById('lightbox');
+lb.addEventListener('touchstart',e=>{
+  if(!lb.classList.contains('open'))return;
+  if(e.touches.length===2){e.preventDefault();lbStartDist=lbDist(e.touches);lbStartScale=lbScale;lbDragging=false;}
+  else if(e.touches.length===1){lbLastX=e.touches[0].clientX;lbLastY=e.touches[0].clientY;lbDragging=lbScale>1;}
+},{passive:false});
+lb.addEventListener('touchmove',e=>{
+  if(!lb.classList.contains('open'))return;
+  if(e.touches.length===2){e.preventDefault();const next=Math.min(Math.max(lbStartScale*(lbDist(e.touches)/lbStartDist),1),6);lbScale=next;if(lbScale===1){lbX=0;lbY=0;}applyLbZoom();}
+  else if(e.touches.length===1&&lbDragging){e.preventDefault();const x=e.touches[0].clientX,y=e.touches[0].clientY;lbX+=x-lbLastX;lbY+=y-lbLastY;lbLastX=x;lbLastY=y;applyLbZoom();}
+},{passive:false});
+lb.addEventListener('touchend',e=>{if(e.touches.length===0)lbDragging=false;if(lbScale<1.05)resetLb();},{passive:false});
+lb.addEventListener('dblclick',e=>{e.preventDefault();lbScale=lbScale>1?1:2.4;if(lbScale===1){lbX=0;lbY=0;}applyLbZoom();});
 
 const q=query(col,orderBy('createdAt','asc'));
 onSnapshot(q,snap=>{
@@ -355,7 +362,7 @@ function renderDetailFull(c){
 
       const absentBox=ly.absentAt?`<div style="background:#1a0a2e;border:1px solid #a855f744;border-radius:var(--radius);padding:12px"><p style="color:var(--purple);font-size:.88rem">🚫 Ausente em: <strong>${fdt(ly.absentAt)}</strong></p></div>`:'';
       const quoteBox=ly.quote?`<div style="background:#141000;border:1px solid #eab30844;border-radius:var(--radius);padding:14px"><p style="color:var(--yellow);font-size:.78rem;text-transform:uppercase;margin-bottom:6px">💰 Orçamento</p><p style="font-size:.88rem">${ly.quote}</p>${ly.quoteObs?`<p style="margin-top:6px;color:var(--muted);font-size:.82rem">💬 ${ly.quoteObs}</p>`:''}</div>`:'';
-      const docBox=ly.budgetImage?.data?`<div class="doc-box"><p style="color:var(--accent);font-size:.78rem;text-transform:uppercase;margin-bottom:6px">🖼️ Imagem do orçamento</p><img class="budget-preview" src="${ly.budgetImage.data}" onclick="openLb('${ly.budgetImage.data}')"><button class="done-btn" style="margin-top:10px;background:#1e3a5f" onclick="openLb('${ly.budgetImage.data}')">🔍 Ver orçamento com zoom</button></div>`:'';
+      const docBox=ly.budgetImage?.data?`<div class="doc-box"><p style="color:var(--accent);font-size:.78rem;text-transform:uppercase;margin-bottom:6px">🖼️ Imagem do orçamento</p><img class="budget-preview" src="${ly.budgetImage.data}" onclick="openLb('${ly.budgetImage.data}')"><p style="font-size:.72rem;color:var(--muted);margin-top:8px">Toque na imagem e use dois dedos para aproximar/afastar.</p></div>`:'';
       const entry=ly.entry||{}; const total=moneyNum(ly.approval?.value); const ent=total*((entry.percent||40)/100); const rem=total-ent;
       const entryBox=entry.enabled?`<div class="entry-box"><h3 style="color:var(--green);font-size:.78rem;margin-bottom:6px">💵 Entrada / Sinal</h3><div class="entry-grid"><div><label>Total</label><span>${ly.approval?.value||fmtMoney(total)}</span></div><div><label>Entrada (${entry.percent||40}%)</label><span>${fmtMoney(ent)}</span></div><div><label>Saldo restante</label><span>${fmtMoney(rem)}</span></div><div><label>Status</label><span>${entry.received?'✅ Recebida':'⏳ Pendente'}</span></div></div><p style="font-size:.8rem;color:var(--muted);margin-top:8px">Forma: ${entry.payment||'—'}</p></div>`:'';
       const waiting=!ly.quote&&ly.status==='evaluated'?`<div class="waiting-msg">⏳ Aguardando orçamento...</div>`:'';
