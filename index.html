@@ -22,6 +22,7 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 header h1{font-size:1rem;font-weight:700;flex:1}
 #conn{font-size:.85rem}
 .reload-btn{background:none;border:1px solid var(--border);border-radius:8px;color:var(--muted);padding:6px 10px;font-size:.75rem;cursor:pointer}
+.install-btn{display:none;background:var(--accent);border:none;border-radius:8px;color:#fff;padding:6px 10px;font-size:.75rem;font-weight:700;cursor:pointer}
 .search-wrap{padding:12px 16px 0;position:relative}
 .search-wrap input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px 10px 36px;color:var(--text);font-size:.9rem;outline:none}
 .search-wrap input:focus{border-color:var(--accent)}
@@ -124,6 +125,7 @@ header h1{font-size:1rem;font-weight:700;flex:1}
   <span style="font-size:1.4rem">❄️</span>
   <h1>Técnico</h1>
   <span id="conn">🔴</span>
+  <button class="install-btn" id="install-btn">⬇ Instalar</button>
   <button class="reload-btn" onclick="location.reload()">🔄</button>
 </header>
 <div class="search-wrap">
@@ -512,9 +514,33 @@ window.addVisit=async id=>{
 </script>
 
 <script>
+let deferredInstallPrompt = null;
+const installBtn = document.getElementById('install-btn');
+
+window.addEventListener('beforeinstallprompt', (event) => {
+  event.preventDefault();
+  deferredInstallPrompt = event;
+  if (installBtn) installBtn.style.display = 'inline-block';
+});
+
+if (installBtn) {
+  installBtn.addEventListener('click', async () => {
+    if (!deferredInstallPrompt) return;
+    deferredInstallPrompt.prompt();
+    await deferredInstallPrompt.userChoice.catch(() => null);
+    deferredInstallPrompt = null;
+    installBtn.style.display = 'none';
+  });
+}
+
+window.addEventListener('appinstalled', () => {
+  deferredInstallPrompt = null;
+  if (installBtn) installBtn.style.display = 'none';
+});
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js')
+    navigator.serviceWorker.register('./service-worker.js', { scope: './' })
       .then(reg => {
         reg.update();
       })
