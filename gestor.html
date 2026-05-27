@@ -68,6 +68,7 @@ textarea.fi{resize:vertical;min-height:52px}
 .se{background:#14532d33;color:#86efac;border:1px solid #14532d}.de{background:#22c55e}
 .sq{background:#451a0333;color:#fbbf24;border:1px solid #451a03}.dq{background:#f59e0b}
 .sa{background:#1c191733;color:#fb923c;border:1px solid #1c1917}.da{background:#f97316}
+.srd{background:#083344;color:#67e8f9;border:1px solid #155e75}.drd{background:#06b6d4}
 .sab{background:#3b076433;color:#d8b4fe;border:1px solid #3b0764}.dab{background:#a855f7}
 .sr{background:#3b121933;color:#fca5a5;border:1px solid #3b1219}.dr{background:#ef4444}
 .sd{background:#0d1f0d33;color:#4ade80;border:1px solid #0d1f0d}.dd{background:#22c55e}
@@ -92,6 +93,7 @@ textarea.fi{resize:vertical;min-height:52px}
 .vte.active{background:#14532d;border-color:#22c55e}
 .vtq.active{background:#451a03;border-color:#f59e0b}
 .vta.active{background:#1c1917;border-color:#f97316}
+.vtrd.active{background:#164e63;border-color:#06b6d4}
 .vtab2.active{background:#3b0764;border-color:#a855f7}
 .vtr.active{background:#3b1219;border-color:#ef4444}
 .vtd.active{background:#0d1f0d;border-color:#22c55e}
@@ -182,6 +184,7 @@ textarea.fi{resize:vertical;min-height:52px}
 <header>
   <span style="font-size:1.3rem">❄️</span>
   <h1>Painel Gestor — Refrigeração</h1>
+  <button class="btn btn-muted btn-sm" onclick="enableGestorNotifications()">🔔 Alertas</button>
   <span id="conn">🔴 Conectando...</span>
 </header>
 
@@ -237,6 +240,7 @@ textarea.fi{resize:vertical;min-height:52px}
             <option value="evaluated">✅ Avaliação concluída</option>
             <option value="quoted">💰 Aguardando aprovação</option>
             <option value="approved">🟠 Aprovado</option>
+            <option value="ready_delivery">📦 Pronto para entrega</option>
             <option value="absent">🚫 Cliente ausente</option>
             <option value="rejected">❌ Orçamento rejeitado</option>
           </select>
@@ -260,6 +264,7 @@ textarea.fi{resize:vertical;min-height:52px}
       <button class="tab" onclick="fTab('evaluated',this)">Avaliados</button>
       <button class="tab" onclick="fTab('quoted',this)">Orçamento</button>
       <button class="tab" onclick="fTab('approved',this)">Aprovados</button>
+      <button class="tab" onclick="fTab('ready_delivery',this)">Pronto entrega</button>
       <button class="tab" onclick="fTab('absent',this)">Ausente</button>
       <button class="tab" onclick="fTab('rejected',this)">Rejeitados</button>
       <button class="tab" onclick="fTab('done',this)">✅ Concluídos</button>
@@ -327,22 +332,30 @@ const leadsCol = collection(db,'leads');
 
 let all=[], leads=[], filter='all', editId=null, trashOpen=false, currentMainTab='clientes';
 let firstClientsLoad = true;
-let evaluatedSeen = new Set();
+let clientUpdateState = new Map();
 
-function evaluationKeys(c){
-  const layers = getLayers(c);
-  const keys = [];
-  layers.forEach((ly, i)=>{
-    if(ly.status === 'evaluated' && ly.techReport){
-      keys.push(`${c.id}:${i}:${ly.techReport?.model||''}:${ly.techReport?.problem||''}`);
-    }
+window.enableGestorNotifications=async()=>{
+  if(!('Notification' in window)){ toast('Seu navegador não suporta notificações.','var(--red)'); return; }
+  try{
+    const perm = await Notification.requestPermission();
+    if(perm === 'granted') toast('🔔 Alertas ativados!');
+    else toast('Permissão de alerta não liberada.','var(--yellow)');
+  }catch(e){ toast('Não foi possível ativar alertas.','var(--red)'); }
+};
+
+function layerSignature(ly){
+  return JSON.stringify({
+    techReport:ly.techReport||null,
+    absentAt:ly.absentAt||'',
+    concludedAt:ly.concludedAt||''
   });
-  return keys;
 }
-
-function notifyEvaluation(c){
-  // Notificação do navegador desativada a pedido. Mantém apenas aviso discreto na tela, se acontecer.
-  toast(`✅ Avaliação técnica concluída: ${c.name || 'Cliente'}`, 'var(--accent)');
+function clientSignature(c){ return getLayers(c).map(layerSignature).join('|'); }
+function showUpdateNotification(c){
+  const title='Atualização do técnico';
+  const body=`${c.name || 'Cliente'} recebeu uma atualização.`;
+  if('Notification' in window && Notification.permission==='granted') new Notification(title,{body,icon:'mfc-logo.png'});
+  toast(`🔔 ${body}`,'var(--accent)');
 }
 
 // ── Listeners ─────────────────────────────────
@@ -350,16 +363,14 @@ onSnapshot(query(col, orderBy('createdAt','asc')), snap => {
   const nc = snap.docs.map(d=>({id:d.id,...d.data()}));
 
   if(firstClientsLoad){
-    nc.forEach(c=>evaluationKeys(c).forEach(k=>evaluatedSeen.add(k)));
+    nc.forEach(c=>clientUpdateState.set(c.id, clientSignature(c)));
     firstClientsLoad = false;
   } else {
     nc.forEach(c=>{
-      evaluationKeys(c).forEach(k=>{
-        if(!evaluatedSeen.has(k)){
-          evaluatedSeen.add(k);
-          notifyEvaluation(c);
-        }
-      });
+      const sig=clientSignature(c);
+      const prev=clientUpdateState.get(c.id);
+      if(prev && prev!==sig) showUpdateNotification(c);
+      clientUpdateState.set(c.id,sig);
     });
   }
 
@@ -378,7 +389,7 @@ onSnapshot(query(leadsCol, orderBy('createdAt','desc')), snap => {
 });
 
 // ── Helpers ───────────────────────────────────
-const lbl = s=>({waiting:'Aguardando visita',evaluated:'Avaliação concluída',quoted:'Aguardando aprovação',approved:'Aprovado',absent:'Cliente ausente',rejected:'Orçamento rejeitado',done:'Serviço Concluído'}[s]||s||'Aguardando visita');
+const lbl = s=>({waiting:'Aguardando visita',evaluated:'Avaliação concluída',quoted:'Aguardando aprovação',approved:'Aprovado',ready_delivery:'Pronto para entrega',absent:'Cliente ausente',rejected:'Orçamento rejeitado',done:'Serviço Concluído'}[s]||s||'Aguardando visita');
 const fdt = dt=>{ if(!dt)return'—'; try{return new Date(dt).toLocaleString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch{return dt;}};
 const fdtShort = dt=>{ if(!dt)return'—'; try{return new Date(dt).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});}catch{return dt;}};
 const maps = a=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a);
@@ -403,6 +414,7 @@ function getStatus(c){ return c.status||'waiting'; }
 function getMainDt(c){
   const layers=getLayers(c);
   const active=layers.find(l=>!l.done);
+  if(active?.deliveryDate) return{dt:active.deliveryDate,type:'delivery'};
   if(active?.approval?.serviceDate) return{dt:active.approval.serviceDate,type:'service'};
   return{dt:c.datetime,type:'visit'};
 }
@@ -611,6 +623,8 @@ window.saveLayer=async(id,li)=>{
   const val=document.getElementById('ly-val-'+id+'-'+li)?.value?.trim();
   const maq=document.getElementById('ly-maq-'+id+'-'+li)?.checked||false;
   const paid=document.getElementById('ly-paid-'+id+'-'+li)?.checked||false;
+  const deliveryDate=document.getElementById('ly-delivery-'+id+'-'+li)?.value||'';
+  const deliveryObs=document.getElementById('ly-delivery-obs-'+id+'-'+li)?.value?.trim()||'';
   // Entrada
   const entryChecked=document.getElementById('ly-entry-'+id+'-'+li)?.checked||false;
   const entryPct=parseFloat(document.getElementById('ly-epct-'+id+'-'+li)?.value)||40;
@@ -619,6 +633,8 @@ window.saveLayer=async(id,li)=>{
   if(qt!==undefined)layers[li].quote=qt;
   if(obs!==undefined)layers[li].quoteObs=obs;
   if(st)layers[li].status=st;
+  layers[li].deliveryDate=deliveryDate;
+  layers[li].deliveryObs=deliveryObs;
   if(pay||svc||val)layers[li].approval={payment:pay||'',serviceDate:svc||'',value:val||'',needsMachine:maq,paid};
   else if(layers[li].approval){layers[li].approval.needsMachine=maq;layers[li].approval.paid=paid;}
   layers[li].entry={enabled:entryChecked,percent:entryPct,payment:entryPay,received:entryReceived};
@@ -745,8 +761,8 @@ window.calcEntry=(id,li)=>{
 };
 
 function statusOpts(sel){
-  return['waiting','evaluated','quoted','approved','absent','rejected','done'].map(s=>{
-    const labels={waiting:'🕐 Aguardando visita',evaluated:'✅ Avaliação concluída',quoted:'💰 Aguardando aprovação',approved:'🟠 Aprovado',absent:'🚫 Cliente ausente',rejected:'❌ Orçamento rejeitado',done:'✅ Serviço Concluído'};
+  return['waiting','evaluated','quoted','approved','ready_delivery','absent','rejected','done'].map(s=>{
+    const labels={waiting:'🕐 Aguardando visita',evaluated:'✅ Avaliação concluída',quoted:'💰 Aguardando aprovação',approved:'🟠 Aprovado',ready_delivery:'📦 Pronto para entrega',absent:'🚫 Cliente ausente',rejected:'❌ Orçamento rejeitado',done:'✅ Serviço Concluído'};
     return`<option value="${s}"${sel===s?' selected':''}>${labels[s]}</option>`;
   }).join('');
 }
@@ -764,8 +780,8 @@ function renderTrash(){
     </div>`).join('');
 }
 
-const dotCls={waiting:'dw',evaluated:'de',quoted:'dq',approved:'da',absent:'dab',rejected:'dr',done:'dd'};
-const badgeCls={waiting:'sw',evaluated:'se',quoted:'sq',approved:'sa',absent:'sab',rejected:'sr',done:'sd'};
+const dotCls={waiting:'dw',evaluated:'de',quoted:'dq',approved:'da',ready_delivery:'drd',absent:'dab',rejected:'dr',done:'dd'};
+const badgeCls={waiting:'sw',evaluated:'se',quoted:'sq',approved:'sa',ready_delivery:'srd',absent:'sab',rejected:'sr',done:'sd'};
 
 function render(){
   const list=document.getElementById('clist');
@@ -787,7 +803,7 @@ function render(){
     const done=layers.filter(l=>l.done);
 
     let aN=0;
-    const tabsHtml=layers.map((ly,li)=>{if(ly.done)return'';aN++;const isPri=c.priorityIndex===li;const cls={waiting:'vtw',evaluated:'vte',quoted:'vtq',approved:'vta',absent:'vtab2',rejected:'vtr',done:'vtd'}[ly.status]||'vtw';return`<button id="vt-${c.id}-${li}" data-vt="${c.id}" class="vtab ${cls}${isPri?' pri':''}" onclick="showVTab('${c.id}',${li})">${isPri?'⭐ ':''}Visita ${aN}${isPri?' ★':''}</button>`;}).join('');
+    const tabsHtml=layers.map((ly,li)=>{if(ly.done)return'';aN++;const isPri=c.priorityIndex===li;const cls={waiting:'vtw',evaluated:'vte',quoted:'vtq',approved:'vta',ready_delivery:'vtrd',absent:'vtab2',rejected:'vtr',done:'vtd'}[ly.status]||'vtw';return`<button id="vt-${c.id}-${li}" data-vt="${c.id}" class="vtab ${cls}${isPri?' pri':''}" onclick="showVTab('${c.id}',${li})">${isPri?'⭐ ':''}Visita ${aN}${isPri?' ★':''}</button>`;}).join('');
     const doneTab=done.length?`<button id="vt-${c.id}-done" data-vt="${c.id}" class="vtab vtd" onclick="showDoneTab('${c.id}')">✅ Concluídos (${done.length})</button>`:'';
 
     aN=0;
@@ -798,6 +814,7 @@ function render(){
       const techAcc=ly.techReport?`<div class="acc"><div class="acc-hdr" id="ath${c.id}${li}" onclick="toggleAcc('ath${c.id}${li}','atb${c.id}${li}')"><span style="font-size:.8rem;font-weight:700;color:var(--accent2)">🔧 Relatório do Técnico</span><span class="acc-arr">▼</span></div><div class="acc-body" id="atb${c.id}${li}"><p style="font-size:.85rem;margin-bottom:4px"><strong>Equipamento:</strong> ${ly.techReport.model||'—'}</p><p style="font-size:.85rem;margin-bottom:8px"><strong>Serviços:</strong> ${ly.techReport.problem||'—'}</p>${ly.techReport.photos?.length?`<div style="display:flex;gap:8px;flex-wrap:wrap">${ly.techReport.photos.map(p=>`<img src="${p}" onclick="openLb('${p}')" style="width:68px;height:68px;object-fit:cover;border-radius:6px;cursor:pointer">`).join('')}</div>`:''}</div></div>`:'';
       const absentAcc=ly.absentAt?`<div class="acc"><div class="acc-hdr" id="aah${c.id}${li}" onclick="toggleAcc('aah${c.id}${li}','aab${c.id}${li}')"><span style="font-size:.8rem;font-weight:700;color:var(--purple)">🚫 Cliente Ausente</span><span class="acc-arr">▼</span></div><div class="acc-body" id="aab${c.id}${li}"><p style="font-size:.85rem">Em: <strong>${fdt(ly.absentAt)}</strong></p></div></div>`:'';
       const apprInfo=ly.approval?.payment?`<div style="font-size:.82rem;color:var(--orange);margin-bottom:8px;padding:6px 10px;background:#1a100055;border:1px solid #f9731622;border-radius:6px">✔ ${ly.approval.payment}${ly.approval.value?' — <strong>'+ly.approval.value+'</strong>':''}${ly.approval.needsMachine?' 💳':''}${ly.approval.paid?' <span class="paid-badge">💰 Pago</span>':''} — ${fdt(ly.approval.serviceDate)}</div>`:'';
+      const deliveryInfo=ly.status==='ready_delivery'?`<div style="font-size:.82rem;color:#67e8f9;margin-bottom:8px;padding:6px 10px;background:#08334455;border:1px solid #06b6d422;border-radius:6px">📦 Pronto para entrega: <strong>${fdt(ly.deliveryDate)}</strong>${ly.deliveryObs?' — '+ly.deliveryObs:''}</div>`:'';
       const entryBox=entry.enabled?`<div class="entry-box"><h5>💵 Entrada / Sinal</h5><div class="entry-vals"><div class="ev"><label>Total</label><span id="ev-total-${c.id}-${li}">${ly.approval?.value||'R$ 0,00'}</span></div><div class="ev"><label>Entrada (${entry.percent||40}%)</label><span id="ev-entry-${c.id}-${li}">R$ 0,00</span></div><div class="ev"><label>Restante</label><span id="ev-remain-${c.id}-${li}">R$ 0,00</span></div></div><div style="margin-top:8px;font-size:.82rem;color:${entry.received?'var(--green)':'var(--muted)'}">Pagamento: ${entry.payment||'—'} ${entry.received?'✅ Entrada recebida':'⏳ Aguardando'}</div></div>`:'';
       const budgetImg=ly.budgetImage?.data||'';
       const docInfo=budgetImg?`<div class="doc-box"><p style="font-size:.78rem;color:var(--accent2);text-transform:uppercase;margin-bottom:4px">🖼️ Imagem do orçamento</p><img class="budget-preview" src="${budgetImg}" onclick="openLb('${budgetImg}')"><div class="acts"><button class="btn btn-muted btn-sm" onclick="openLb('${budgetImg}')">🔍 Ver / Zoom</button><button class="btn btn-muted btn-sm" onclick="removeBudgetImage('${c.id}',${li})">Remover</button></div></div>`:'';
@@ -818,12 +835,16 @@ function render(){
           <!-- Aprovação -->
           <div class="acc" style="margin-bottom:8px"><div class="acc-hdr" id="aph${c.id}${li}" onclick="toggleAcc('aph${c.id}${li}','apb${c.id}${li}')"><span style="font-size:.8rem;font-weight:700;color:var(--orange)">✅ Aprovação e Pagamento</span><span class="acc-arr">▼</span></div>
             <div class="acc-body" id="apb${c.id}${li}">
-              ${apprInfo}
+              ${deliveryInfo}${apprInfo}
               <div class="fgrid" style="margin-bottom:8px">
                 <div><span class="fl">Forma de pagamento</span><input type="text" class="fi" id="ly-pay-${c.id}-${li}" placeholder="Pix, Cartão..." value="${ly.approval?.payment||''}"></div>
                 <div><span class="fl">Valor do orçamento</span><input type="text" class="fi" id="ly-val-${c.id}-${li}" placeholder="R$ 0,00" value="${ly.approval?.value||''}" oninput="calcEntry('${c.id}',${li})"></div>
               </div>
               <div style="margin-bottom:10px"><span class="fl">Data e hora do serviço</span><input type="datetime-local" class="fi" id="ly-svc-${c.id}-${li}" value="${ly.approval?.serviceDate||''}"></div>
+              <div class="fgrid" style="margin-bottom:8px">
+                <div><span class="fl">📦 Data da entrega</span><input type="datetime-local" class="fi" id="ly-delivery-${c.id}-${li}" value="${ly.deliveryDate||''}"></div>
+                <div><span class="fl">Obs. da entrega</span><input type="text" class="fi" id="ly-delivery-obs-${c.id}-${li}" placeholder="Ex: entregar pela manhã" value="${ly.deliveryObs||''}"></div>
+              </div>
               <label style="display:flex;align-items:center;gap:10px;cursor:pointer;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;margin-bottom:8px">
                 <input type="checkbox" id="ly-maq-${c.id}-${li}" ${ly.approval?.needsMachine?'checked':''} style="width:17px;height:17px;accent-color:var(--orange);cursor:pointer">
                 <span style="font-size:.87rem">💳 Precisa de maquininha</span>
@@ -871,7 +892,7 @@ function render(){
         <div class="cmeta">
           <strong>${c.name||'—'} ${c.phone?`<span style="font-size:.78rem;color:var(--muted);font-weight:400">· ${c.phone}</span>`:''} ${machine?'<span title="Precisa de maquininha">💳</span>':''}</strong>
           <div class="csub">${c.address||''}</div>
-          <span class="dt-badge${mainDt.type==='service'?' svc':''}">${mainDt.type==='service'?'🔧':'📅'} ${fdt(mainDt.dt)}</span>
+          <span class="dt-badge${mainDt.type==='service'?' svc':''}">${mainDt.type==='delivery'?'📦':(mainDt.type==='service'?'🔧':'📅')} ${fdt(mainDt.dt)}</span>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
           <span class="sbadge ${badgeCls[status]||'sw'}">${lbl(status)}</span>
