@@ -181,19 +181,27 @@ function icon(s){return{waiting:'🕐',evaluated:'✅',quoted:'💰',approved:'�
 function fdt(dt){if(!dt)return'—';try{return new Date(dt).toLocaleString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch{return dt}}
 function maps(a){return'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a)}
 function docViewer(url,name='Documento'){
-  if(!url)return'';
-  const n=(name||url).toLowerCase();
-  if(n.includes('.pdf')) return url;
-  return url;
+  return url || '';
 }
 function getDocObj(c,ly){
-  return ly?.document || ly?.quoteDocument || (ly?.documentUrl?{url:ly.documentUrl,name:ly.documentName||'Documento do orçamento'}:null) || c?.document || c?.quoteDocument || (c?.documentUrl?{url:c.documentUrl,name:c.documentName||'Documento do orçamento'}:null);
+  const pick = ly?.document || ly?.quoteDocument || c?.document || c?.quoteDocument || null;
+  if(pick?.url || pick?.dataUrl) return pick;
+  if(ly?.documentUrl || ly?.docDataUrl) return {url:ly.documentUrl||ly.docDataUrl,name:ly.documentName||'Documento do orçamento',type:ly.documentType||''};
+  if(c?.documentUrl || c?.docDataUrl) return {url:c.documentUrl||c.docDataUrl,name:c.documentName||'Documento do orçamento',type:c.documentType||''};
+  return null;
+}
+function isPdfDoc(d){
+  const n=(d?.name||d?.url||'').toLowerCase();
+  return n.includes('.pdf') || String(d?.type||'').toLowerCase().includes('pdf') || String(d?.url||'').startsWith('data:application/pdf');
 }
 function docButtons(d){
-  if(!d?.url)return'';
+  if(!d?.url && !d?.dataUrl){
+    return `<div class="doc-box"><p style="color:var(--accent);font-size:.78rem;text-transform:uppercase;margin-bottom:6px">📎 Documento do orçamento</p><strong>Nenhum documento anexado</strong><small>Quando o gestor anexar o PDF do orçamento, ele aparecerá aqui para abrir no celular.</small></div>`;
+  }
   const name=d.name||'Documento do orçamento';
-  const isPdf=/\.pdf($|\?)/i.test(name)||String(d.type||'').includes('pdf');
-  return `<div class="doc-box"><p style="color:var(--accent);font-size:.78rem;text-transform:uppercase;margin-bottom:6px">📎 Documento do orçamento</p><strong>${name}</strong><div class="doc-actions"><a class="doc-btn primary ${isPdf?'pdf':''}" href="${docViewer(d.url,name)}" target="_blank" rel="noopener">${isPdf?'👁️ Visualizar PDF':'⬇️ Abrir/Baixar DOCX'}</a><a class="doc-btn" href="${d.url}" target="_blank" rel="noopener" download>⬇️ Download</a></div><small>${isPdf?'PDF abre direto no navegador.':'DOCX não tem visualização confiável no navegador do celular. Abra pelo Word, WPS Office ou Google Drive.'}</small></div>`;
+  const url=d.url||d.dataUrl;
+  const isPdf=isPdfDoc({...d,url});
+  return `<div class="doc-box"><p style="color:var(--accent);font-size:.78rem;text-transform:uppercase;margin-bottom:6px">📎 Documento do orçamento</p><strong>${name}</strong><div class="doc-actions"><a class="doc-btn primary ${isPdf?'pdf':''}" href="${docViewer(url,name)}" target="_blank" rel="noopener">${isPdf?'👁️ Abrir PDF':'⬇️ Abrir/Baixar DOCX'}</a><a class="doc-btn" href="${url}" target="_blank" rel="noopener" download="${name}">⬇️ Download</a></div><small>${isPdf?'PDF anexado. Se não abrir dentro do navegador, toque em Download.':'DOCX não tem visualização confiável no navegador do celular. Abra pelo Word, WPS Office ou Google Drive.'}</small></div>`;
 }
 function moneyNum(v){return parseFloat(String(v||'').replace(/[R$\s.]/g,'').replace(',','.'))||0}
 function fmtMoney(v){return 'R$ '+Number(v||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.')}
