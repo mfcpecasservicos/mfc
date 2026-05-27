@@ -1,6 +1,6 @@
 {
-  "name": "MFC Técnico",
-  "short_name": "MFC Técnico",
+  "name": "MFC",
+  "short_name": "MFC",
   "description": "Aplicativo técnico da MFC Peças e Serviços",
   "start_url": "./index.html",
   "scope": "./",
