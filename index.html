@@ -94,31 +94,21 @@ header h1{font-size:1rem;font-weight:700;flex:1}
 .waiting-msg{text-align:center;padding:14px;color:var(--muted);font-size:.88rem;background:var(--surface);border-radius:var(--radius)}
 .pay-box{background:#0d2e1b;border:1px solid #22c55e44;border-radius:var(--radius);padding:14px}
 .pay-box h3{color:var(--green);font-size:.85rem;margin-bottom:10px;text-transform:uppercase}
-.doc-box{background:#0f172a;border:1px solid #334155;border-radius:12px;padding:14px}
-.doc-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.doc-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border-radius:8px;border:1px solid #334155;background:#21262d;color:#e6edf3!important;font-size:.84rem;text-decoration:none;font-weight:700}
-.doc-btn.primary{background:#0e7490;border-color:#0891b2;color:#fff!important}
 #lightbox{position:fixed;inset:0;background:#000d;z-index:900;display:none;align-items:center;justify-content:center}
 #lightbox.open{display:flex}
-#lightbox img{max-width:95vw;max-height:95vh;border-radius:10px;object-fit:contain}
-#lb-close{position:absolute;top:16px;right:16px;color:#fff;font-size:2rem;cursor:pointer;background:none;border:none}
+#lightbox img{max-width:95vw;max-height:82vh;border-radius:10px;object-fit:contain;transform-origin:center;transition:transform .12s}
+#lb-close{position:absolute;top:16px;right:16px;color:#fff;font-size:2rem;cursor:pointer;background:none;border:none;z-index:10}
+.lb-controls{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10}
+.lb-controls button{background:#ffffff22;color:#fff;border:1px solid #ffffff44;border-radius:10px;padding:10px 14px;font-size:1rem;font-weight:700;cursor:pointer;backdrop-filter:blur(6px)}
 .add-visit-btn{background:none;border:1px dashed var(--border);border-radius:8px;color:var(--muted);padding:8px 14px;font-size:.82rem;cursor:pointer;white-space:nowrap}
 .doc-box{background:#0f172a;border:1px solid #334155;border-radius:var(--radius);padding:12px;margin-top:8px}
 .doc-box a{color:var(--accent);font-weight:700;text-decoration:none;font-size:.9rem}
+.budget-preview{width:100%;max-height:260px;object-fit:contain;border-radius:10px;border:1px solid var(--border);background:#020617;cursor:zoom-in;margin-top:8px}
 .entry-box{background:#0d2e1b;border:1px solid #22c55e33;border-radius:var(--radius);padding:12px;margin-top:8px}
 .entry-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
 .entry-grid div{background:var(--surface2);border-radius:8px;padding:8px}.entry-grid label{font-size:.7rem;color:var(--muted);display:block}.entry-grid span{font-weight:700}
 .company-banner{background:linear-gradient(135deg,#0e7490,#1e3a5f);border-radius:var(--radius);padding:14px;border:1px solid #67e8f955}
 .add-visit-btn:active{background:var(--surface2)}
-
-/* === MFC documento mais claro === */
-.doc-box{background:#0f172a;border:1px solid #334155;border-radius:14px;padding:14px;margin-bottom:10px}
-.doc-box strong{display:block;font-size:.9rem;color:var(--text);margin-bottom:6px}
-.doc-box small{display:block;color:var(--muted);font-size:.75rem;line-height:1.35;margin-top:8px}
-.doc-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.doc-btn{flex:1;min-width:130px;text-align:center;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:.82rem;font-weight:700;text-decoration:none}
-.doc-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-.doc-btn.pdf{background:#7f1d1d;border-color:#ef444455;color:#fecaca}
 </style>
 </head>
 <body>
@@ -146,7 +136,12 @@ header h1{font-size:1rem;font-weight:700;flex:1}
 </div>
 <div id="lightbox" onclick="closeLb()">
   <button id="lb-close" onclick="closeLb()">✕</button>
-  <img id="lb-img" src="" alt="">
+  <img id="lb-img" src="" alt="" onclick="event.stopPropagation()">
+  <div class="lb-controls" onclick="event.stopPropagation()">
+    <button onclick="zoomLb(-0.25)">−</button>
+    <button onclick="resetLb()">Reset</button>
+    <button onclick="zoomLb(0.25)">+</button>
+  </div>
 </div>
 <input type="file" id="input-gallery" accept="image/*" multiple style="display:none" onchange="handleFiles(this)">
 <input type="file" id="input-camera" accept="image/*" capture="environment" style="display:none" onchange="handleFiles(this)">
@@ -180,29 +175,6 @@ function lbl(s){return{waiting:'Aguardando visita',evaluated:'Avaliação conclu
 function icon(s){return{waiting:'🕐',evaluated:'✅',quoted:'💰',approved:'🟠',absent:'🚫',rejected:'❌',done:'✔'}[s]||'❓'}
 function fdt(dt){if(!dt)return'—';try{return new Date(dt).toLocaleString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch{return dt}}
 function maps(a){return'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a)}
-function docViewer(url,name='Documento'){
-  return url || '';
-}
-function getDocObj(c,ly){
-  const pick = ly?.document || ly?.quoteDocument || c?.document || c?.quoteDocument || null;
-  if(pick?.url || pick?.dataUrl) return pick;
-  if(ly?.documentUrl || ly?.docDataUrl) return {url:ly.documentUrl||ly.docDataUrl,name:ly.documentName||'Documento do orçamento',type:ly.documentType||''};
-  if(c?.documentUrl || c?.docDataUrl) return {url:c.documentUrl||c.docDataUrl,name:c.documentName||'Documento do orçamento',type:c.documentType||''};
-  return null;
-}
-function isPdfDoc(d){
-  const n=(d?.name||d?.url||'').toLowerCase();
-  return n.includes('.pdf') || String(d?.type||'').toLowerCase().includes('pdf') || String(d?.url||'').startsWith('data:application/pdf');
-}
-function docButtons(d){
-  if(!d?.url && !d?.dataUrl){
-    return `<div class="doc-box"><p style="color:var(--accent);font-size:.78rem;text-transform:uppercase;margin-bottom:6px">📎 Documento do orçamento</p><strong>Nenhum documento anexado</strong><small>Quando o gestor anexar o PDF do orçamento, ele aparecerá aqui para abrir no celular.</small></div>`;
-  }
-  const name=d.name||'Documento do orçamento';
-  const url=d.url||d.dataUrl;
-  const isPdf=isPdfDoc({...d,url});
-  return `<div class="doc-box"><p style="color:var(--accent);font-size:.78rem;text-transform:uppercase;margin-bottom:6px">📎 Documento do orçamento</p><strong>${name}</strong><div class="doc-actions"><a class="doc-btn primary ${isPdf?'pdf':''}" href="${docViewer(url,name)}" target="_blank" rel="noopener">${isPdf?'👁️ Abrir PDF':'⬇️ Abrir/Baixar DOCX'}</a><a class="doc-btn" href="${url}" target="_blank" rel="noopener" download="${name}">⬇️ Download</a></div><small>${isPdf?'PDF anexado. Se não abrir dentro do navegador, toque em Download.':'DOCX não tem visualização confiável no navegador do celular. Abra pelo Word, WPS Office ou Google Drive.'}</small></div>`;
-}
 function moneyNum(v){return parseFloat(String(v||'').replace(/[R$\s.]/g,'').replace(',','.'))||0}
 function fmtMoney(v){return 'R$ '+Number(v||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.')}
 function getLayers(c){
@@ -216,8 +188,12 @@ function getMainDt(c){
   return{dt:c.datetime,type:'visit'};
 }
 
-window.openLb=src=>{document.getElementById('lb-img').src=src;document.getElementById('lightbox').classList.add('open')};
+let lbScale=1;
+function applyLbZoom(){document.getElementById('lb-img').style.transform=`scale(${lbScale})`;}
+window.openLb=src=>{lbScale=1;document.getElementById('lb-img').src=src;applyLbZoom();document.getElementById('lightbox').classList.add('open')};
 window.closeLb=()=>document.getElementById('lightbox').classList.remove('open');
+window.zoomLb=d=>{lbScale=Math.min(Math.max(lbScale+d,1),4);applyLbZoom();};
+window.resetLb=()=>{lbScale=1;applyLbZoom();};
 
 const q=query(col,orderBy('createdAt','asc'));
 onSnapshot(q,snap=>{
@@ -379,7 +355,7 @@ function renderDetailFull(c){
 
       const absentBox=ly.absentAt?`<div style="background:#1a0a2e;border:1px solid #a855f744;border-radius:var(--radius);padding:12px"><p style="color:var(--purple);font-size:.88rem">🚫 Ausente em: <strong>${fdt(ly.absentAt)}</strong></p></div>`:'';
       const quoteBox=ly.quote?`<div style="background:#141000;border:1px solid #eab30844;border-radius:var(--radius);padding:14px"><p style="color:var(--yellow);font-size:.78rem;text-transform:uppercase;margin-bottom:6px">💰 Orçamento</p><p style="font-size:.88rem">${ly.quote}</p>${ly.quoteObs?`<p style="margin-top:6px;color:var(--muted);font-size:.82rem">💬 ${ly.quoteObs}</p>`:''}</div>`:'';
-      const docBox=docButtons(getDocObj(c,ly));
+      const docBox=ly.budgetImage?.data?`<div class="doc-box"><p style="color:var(--accent);font-size:.78rem;text-transform:uppercase;margin-bottom:6px">🖼️ Imagem do orçamento</p><img class="budget-preview" src="${ly.budgetImage.data}" onclick="openLb('${ly.budgetImage.data}')"><button class="done-btn" style="margin-top:10px;background:#1e3a5f" onclick="openLb('${ly.budgetImage.data}')">🔍 Ver orçamento com zoom</button></div>`:'';
       const entry=ly.entry||{}; const total=moneyNum(ly.approval?.value); const ent=total*((entry.percent||40)/100); const rem=total-ent;
       const entryBox=entry.enabled?`<div class="entry-box"><h3 style="color:var(--green);font-size:.78rem;margin-bottom:6px">💵 Entrada / Sinal</h3><div class="entry-grid"><div><label>Total</label><span>${ly.approval?.value||fmtMoney(total)}</span></div><div><label>Entrada (${entry.percent||40}%)</label><span>${fmtMoney(ent)}</span></div><div><label>Saldo restante</label><span>${fmtMoney(rem)}</span></div><div><label>Status</label><span>${entry.received?'✅ Recebida':'⏳ Pendente'}</span></div></div><p style="font-size:.8rem;color:var(--muted);margin-top:8px">Forma: ${entry.payment||'—'}</p></div>`:'';
       const waiting=!ly.quote&&ly.status==='evaluated'?`<div class="waiting-msg">⏳ Aguardando orçamento...</div>`:'';
