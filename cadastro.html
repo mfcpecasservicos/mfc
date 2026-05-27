@@ -69,7 +69,7 @@
 
   <form id="lead-form">
     <div class="card"><label>👤 Nome completo <span class="req">*</span></label><input type="text" id="f-nome" required placeholder="Seu nome completo"></div>
-    <div class="card"><label>📞 Número de contato <span class="req">*</span></label><input type="tel" id="f-telefone" required placeholder="(00) 00000-0000" maxlength="15" inputmode="tel"></div>
+    <div class="card"><label>📞 Número de contato <span class="req">*</span></label><input type="tel" id="f-telefone" required placeholder="71 9 0000-0000" maxlength="15" inputmode="tel"></div>
     <div class="card"><label>✉️ E-mail</label><input type="email" id="f-email" placeholder="seu@email.com (opcional)"></div>
     <div class="card"><label>📍 Dias D'ávila? <span class="req">*</span></label><p class="hint">Fora de Dias D'ávila haverá cobrança na visita.</p><div class="radio-group"><label class="radio-lbl"><input type="radio" name="cidade" value="Dias D'ávila" required onchange="toggleOutro()"> Sim, resido em Dias D'ávila</label><label class="radio-lbl"><input type="radio" name="cidade" value="Outro" required onchange="toggleOutro()"> Outro:</label><input type="text" id="f-cidade-outro" placeholder="Qual cidade?"></div></div>
     <div class="card"><label>🏠 Endereço <span class="req">*</span></label><input type="text" id="f-endereco" required placeholder="Rua, avenida, travessa..."></div>
@@ -101,12 +101,72 @@
   });
   const db = getFirestore(app);
 
+  // Padronização automática de texto e telefone
   const maskPhone = (v) => {
-    v = v.replace(/\D/g, "").slice(0, 11);
-    if (v.length <= 10) return v.replace(/(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3").replace(/-$/, "");
-    return v.replace(/(\d{2})(\d{5})(\d{0,4})/, "($1) $2-$3").replace(/-$/, "");
+    const d = (v || '').replace(/\D/g, '').slice(0, 11);
+    if (!d) return '';
+    if (d.length <= 2) return d;
+    if (d.length <= 3) return `${d.slice(0,2)} ${d.slice(2)}`;
+    if (d.length <= 7) return `${d.slice(0,2)} ${d.slice(2,3)} ${d.slice(3)}`;
+    if (d.length <= 11) return `${d.slice(0,2)} ${d.slice(2,3)} ${d.slice(3,7)}-${d.slice(7)}`;
+    return d;
   };
+
+  const smallWords = new Set(['de','da','do','das','dos','e','em','no','na','nos','nas','a','o','as','os']);
+  const titleCase = (value) => {
+    return (value || '')
+      .toLowerCase()
+      .replace(/\s+/g, ' ')
+      .trim()
+      .split(' ')
+      .map((word, idx) => {
+        if (!word) return '';
+        if (idx > 0 && smallWords.has(word)) return word;
+        return word.split('-').map(part =>
+          part.split("'").map(piece => piece ? piece.charAt(0).toUpperCase() + piece.slice(1) : piece).join("'")
+        ).join('-');
+      })
+      .join(' ')
+      .replace(/D'Avila/gi, "D'Ávila");
+  };
+
+  const normalizeEquipment = (value) => {
+    return titleCase(value)
+      .replace(/\bLg\b/g, 'LG')
+      .replace(/\bSamsung\b/g, 'Samsung')
+      .replace(/\bElectrolux\b/g, 'Electrolux')
+      .replace(/\bBtus?\b/gi, 'BTUs')
+      .replace(/\bKg\b/g, 'KG')
+      .replace(/\bAr Condicionado\b/gi, 'Ar Condicionado')
+      .replace(/\bSplit\b/gi, 'Split')
+      .trim();
+  };
+
+  const sentenceCase = (value) => {
+    const text = (value || '').replace(/\s+/g, ' ').trim().toLowerCase();
+    return text ? text.charAt(0).toUpperCase() + text.slice(1) : '';
+  };
+
+  const applyTextStandards = () => {
+    const byId = id => document.getElementById(id);
+    byId('f-nome').value = titleCase(byId('f-nome').value);
+    byId('f-endereco').value = titleCase(byId('f-endereco').value);
+    byId('f-numero').value = (byId('f-numero').value || '').trim().toUpperCase().replace(/\s+/g,' ');
+    byId('f-bairro').value = titleCase(byId('f-bairro').value);
+    byId('f-ref').value = titleCase(byId('f-ref').value);
+    byId('f-equip').value = normalizeEquipment(byId('f-equip').value);
+    byId('f-problema').value = sentenceCase(byId('f-problema').value);
+    byId('f-email').value = (byId('f-email').value || '').trim().toLowerCase();
+    byId('f-telefone').value = maskPhone(byId('f-telefone').value);
+    const outro = byId('f-cidade-outro');
+    if (outro.value) outro.value = titleCase(outro.value);
+  };
+
   document.getElementById('f-telefone').addEventListener('input', (e) => { e.target.value = maskPhone(e.target.value); });
+  ['f-nome','f-endereco','f-numero','f-bairro','f-ref','f-equip','f-problema','f-email','f-cidade-outro'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('blur', applyTextStandards);
+  });
 
   window.toggleOutro = () => {
     const checked = document.querySelector('input[name="cidade"]:checked');
@@ -125,6 +185,8 @@
     const successMsg = document.getElementById('success-msg');
     btn.disabled = true; text.style.display = 'none'; loader.style.display = 'block';
 
+    applyTextStandards();
+
     const rawCity = document.querySelector('input[name="cidade"]:checked').value;
     const finalCity = rawCity === 'Outro' ? document.getElementById('f-cidade-outro').value.trim() : rawCity;
     const neighborhood = document.getElementById('f-bairro').value.trim();
@@ -132,6 +194,7 @@
     const leadData = {
       name: document.getElementById('f-nome').value.trim(),
       phone: document.getElementById('f-telefone').value.trim(),
+      phoneDigits: document.getElementById('f-telefone').value.replace(/\D/g,''),
       email: document.getElementById('f-email').value.trim(),
       city: finalCity,
       cidade: finalCity,
