@@ -68,10 +68,9 @@ textarea.fi{resize:vertical;min-height:52px}
 .se{background:#14532d33;color:#86efac;border:1px solid #14532d}.de{background:#22c55e}
 .sq{background:#451a0333;color:#fbbf24;border:1px solid #451a03}.dq{background:#f59e0b}
 .sa{background:#1c191733;color:#fb923c;border:1px solid #1c1917}.da{background:#f97316}
-.srd{background:#083344;color:#67e8f9;border:1px solid #155e75}.drd{background:#06b6d4}
 .sab{background:#3b076433;color:#d8b4fe;border:1px solid #3b0764}.dab{background:#a855f7}
 .sr{background:#3b121933;color:#fca5a5;border:1px solid #3b1219}.dr{background:#ef4444}
-.sd{background:#0d1f0d33;color:#4ade80;border:1px solid #0d1f0d}.dd{background:#22c55e}
+.sd{background:#0d1f0d33;color:#4ade80;border:1px solid #0d1f0d}.dd{background:#22c55e}.srd{background:#062b3533;color:#67e8f9;border:1px solid #164e63}.drd{background:#06b6d4}
 .dt-badge{display:inline-block;margin-top:4px;font-size:.73rem;font-weight:600;color:#fff;background:linear-gradient(135deg,#1e3a5f,#0f2744);border:1px solid #2d4f7c;border-radius:6px;padding:2px 8px}
 .dt-badge.svc{background:linear-gradient(135deg,#1a1000,#2d1200);border-color:#7c3d12;color:var(--orange)}
 .paid-badge{font-size:.66rem;font-weight:700;padding:2px 7px;border-radius:10px;background:#0d2e1b;color:#4ade80;border:1px solid #22c55e44}
@@ -93,10 +92,9 @@ textarea.fi{resize:vertical;min-height:52px}
 .vte.active{background:#14532d;border-color:#22c55e}
 .vtq.active{background:#451a03;border-color:#f59e0b}
 .vta.active{background:#1c1917;border-color:#f97316}
-.vtrd.active{background:#164e63;border-color:#06b6d4}
 .vtab2.active{background:#3b0764;border-color:#a855f7}
 .vtr.active{background:#3b1219;border-color:#ef4444}
-.vtd.active{background:#0d1f0d;border-color:#22c55e}
+.vtd.active{background:#0d1f0d;border-color:#22c55e}.vtrd.active{background:#083344;border-color:#06b6d4}
 .vpanel{display:none}.vpanel.active{display:block}
 /* Accordion */
 .acc{border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:8px}
@@ -160,45 +158,20 @@ textarea.fi{resize:vertical;min-height:52px}
 .csr-item:hover{background:var(--surface2)}
 .csr-item strong{display:block;font-size:.88rem}
 .csr-item span{font-size:.78rem;color:var(--muted)}
-.csr-item.deleted{opacity:.85;border-left:3px solid var(--red);padding-left:9px}
 /* Section label */
 .slabel{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
 /* Recurrent badge */
 .recurrent-badge{background:#451a0355;color:#fbbf24;border:1px solid #f59e0b55;border-radius:6px;padding:4px 10px;font-size:.75rem;font-weight:600;display:inline-flex;align-items:center;gap:4px}
-
-/* Marca MFC */
-.brand-hero{
-  position:relative;overflow:hidden;border:1px solid var(--border);border-radius:22px;
-  background:linear-gradient(135deg,#0f172a,#111827);box-shadow:var(--shadow);margin-bottom:18px;
-}
-.brand-cover{width:100%;height:190px;object-fit:cover;display:block;opacity:.82}
-.brand-content{display:flex;align-items:center;gap:18px;padding:18px 22px;background:linear-gradient(180deg,rgba(17,24,39,.94),rgba(17,24,39,1))}
-.brand-logo{width:86px;height:86px;object-fit:contain;background:#fff;border-radius:20px;padding:8px;box-shadow:0 12px 30px rgba(0,0,0,.35);flex-shrink:0}
-.brand-content h2{font-size:1.25rem;margin-bottom:4px;color:var(--text)}
-.brand-content p{color:var(--muted);font-size:.9rem;line-height:1.4}
-@media(max-width:700px){.brand-cover{height:130px}.brand-content{padding:14px;gap:12px}.brand-logo{width:68px;height:68px}.brand-content h2{font-size:1rem}.brand-content p{font-size:.78rem}}
-.phone-copy{display:inline-flex;margin-top:6px;padding:7px 10px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--accent2);font-size:.78rem;font-weight:700;cursor:pointer}
 </style>
 </head>
 <body>
 <header>
   <span style="font-size:1.3rem">❄️</span>
   <h1>Painel Gestor — Refrigeração</h1>
-  <button class="btn btn-muted btn-sm" onclick="enableGestorNotifications()">🔔 Alertas</button>
   <span id="conn">🔴 Conectando...</span>
 </header>
 
 <div class="main">
-  <div class="brand-hero">
-    <img class="brand-cover" src="mfc-capa.png" alt="MFC Peças e Serviços">
-    <div class="brand-content">
-      <img class="brand-logo" src="mfc-logo.png" alt="Logo MFC">
-      <div>
-        <h2>Painel Gestor MFC</h2>
-        <p>Controle de clientes, visitas, orçamentos e serviços de refrigeração.</p>
-      </div>
-    </div>
-  </div>
   <!-- Tabs principais -->
   <div class="tabs" id="main-tabs">
     <button class="tab active" onclick="mainTab('clientes',this)">Clientes</button>
@@ -218,6 +191,16 @@ textarea.fi{resize:vertical;min-height:52px}
       <div style="margin-bottom:10px"><span class="fl">Observação</span><textarea class="fi" id="emp-notes" placeholder="Observação rápida da visita" style="min-height:44px"></textarea></div>
       <button class="btn btn-cyan btn-sm" onclick="addCompanyVisit()">⚡ Enviar visita empresa</button>
     </div>
+    <!-- Paste -->
+    <div class="paste-card">
+      <h2>📋 Cole as informações do cliente</h2>
+      <textarea id="paste-area" placeholder="Cole aqui o texto com os dados. Funciona com rótulo: valor ou formato de tabela (duas linhas com tabulação)."></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+        <button class="btn btn-blue btn-sm" onclick="parseAndFill()">⚡ Preencher automaticamente</button>
+        <span style="font-size:.75rem;color:var(--muted)">Reconhece Nome, Contato, Endereço, Número, Bairro, Ref, Equipamento</span>
+      </div>
+    </div>
+
     <!-- Formulário -->
     <div class="card">
       <div class="slabel" style="margin-bottom:14px">➕ Novo Cliente</div>
@@ -240,7 +223,6 @@ textarea.fi{resize:vertical;min-height:52px}
             <option value="evaluated">✅ Avaliação concluída</option>
             <option value="quoted">💰 Aguardando aprovação</option>
             <option value="approved">🟠 Aprovado</option>
-            <option value="ready_delivery">📦 Pronto para entrega</option>
             <option value="absent">🚫 Cliente ausente</option>
             <option value="rejected">❌ Orçamento rejeitado</option>
           </select>
@@ -331,50 +313,10 @@ const col = collection(db,'clients');
 const leadsCol = collection(db,'leads');
 
 let all=[], leads=[], filter='all', editId=null, trashOpen=false, currentMainTab='clientes';
-let firstClientsLoad = true;
-let clientUpdateState = new Map();
-
-window.enableGestorNotifications=async()=>{
-  if(!('Notification' in window)){ toast('Seu navegador não suporta notificações.','var(--red)'); return; }
-  try{
-    const perm = await Notification.requestPermission();
-    if(perm === 'granted') toast('🔔 Alertas ativados!');
-    else toast('Permissão de alerta não liberada.','var(--yellow)');
-  }catch(e){ toast('Não foi possível ativar alertas.','var(--red)'); }
-};
-
-function layerSignature(ly){
-  return JSON.stringify({
-    techReport:ly.techReport||null,
-    absentAt:ly.absentAt||'',
-    concludedAt:ly.concludedAt||''
-  });
-}
-function clientSignature(c){ return getLayers(c).map(layerSignature).join('|'); }
-function showUpdateNotification(c){
-  const title='Atualização do técnico';
-  const body=`${c.name || 'Cliente'} recebeu uma atualização.`;
-  if('Notification' in window && Notification.permission==='granted') new Notification(title,{body,icon:'mfc-logo.png'});
-  toast(`🔔 ${body}`,'var(--accent)');
-}
 
 // ── Listeners ─────────────────────────────────
 onSnapshot(query(col, orderBy('createdAt','asc')), snap => {
-  const nc = snap.docs.map(d=>({id:d.id,...d.data()}));
-
-  if(firstClientsLoad){
-    nc.forEach(c=>clientUpdateState.set(c.id, clientSignature(c)));
-    firstClientsLoad = false;
-  } else {
-    nc.forEach(c=>{
-      const sig=clientSignature(c);
-      const prev=clientUpdateState.get(c.id);
-      if(prev && prev!==sig) showUpdateNotification(c);
-      clientUpdateState.set(c.id,sig);
-    });
-  }
-
-  all = nc;
+  all = snap.docs.map(d=>({id:d.id,...d.data()}));
   document.getElementById('conn').textContent='🟢 Conectado';
   render(); renderTrash();
 }, err=>{ document.getElementById('conn').textContent='🔴 Erro'; console.error(err); });
@@ -389,32 +331,32 @@ onSnapshot(query(leadsCol, orderBy('createdAt','desc')), snap => {
 });
 
 // ── Helpers ───────────────────────────────────
-const lbl = s=>({waiting:'Aguardando visita',evaluated:'Avaliação concluída',quoted:'Aguardando aprovação',approved:'Aprovado',ready_delivery:'Pronto para entrega',absent:'Cliente ausente',rejected:'Orçamento rejeitado',done:'Serviço Concluído'}[s]||s||'Aguardando visita');
+function normStatus(s){
+  s=String(s||'waiting').trim().toLowerCase().replace(/-/g,'_');
+  if(['ready_delivery','ready_for_delivery','pronto_entrega','pronto_para_entrega'].includes(s))return 'ready_delivery';
+  return s;
+}
+const lbl = s=>({waiting:'Aguardando visita',evaluated:'Avaliação concluída',quoted:'Aguardando aprovação',approved:'Aprovado',ready_delivery:'Pronto para entrega',absent:'Cliente ausente',rejected:'Orçamento rejeitado',done:'Serviço Concluído'}[normStatus(s)]||s||'Aguardando visita');
 const fdt = dt=>{ if(!dt)return'—'; try{return new Date(dt).toLocaleString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch{return dt;}};
 const fdtShort = dt=>{ if(!dt)return'—'; try{return new Date(dt).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});}catch{return dt;}};
 const maps = a=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a);
-window.copyPhone = async phone => {
-  const txt = phone || '';
-  try{ await navigator.clipboard.writeText(txt); toast('📋 Número copiado!'); }
-  catch(e){ prompt('Copie o número:', txt); }
-};
 
 function toast(m, c='var(--green)'){
   const t=document.getElementById('toast');
   t.textContent=m; t.style.background=c;
   t.style.display='block';
-  setTimeout(()=>t.style.display='none', 3500);
+  setTimeout(()=>t.style.display='none', 2500);
 }
 
 function getLayers(c){
   if(c.layers&&c.layers.length)return c.layers;
   return[{status:c.status||'waiting',quote:c.quote||'',quoteObs:c.quoteObs||'',techReport:c.techReport||null,absentAt:c.absentAt||null,approval:c.approval||null,done:false,createdAt:c.createdAt||''}];
 }
-function getStatus(c){ return c.status||'waiting'; }
+function getStatus(c){ return normStatus(c.status||'waiting'); }
 function getMainDt(c){
   const layers=getLayers(c);
   const active=layers.find(l=>!l.done);
-  if(active?.deliveryDate) return{dt:active.deliveryDate,type:'delivery'};
+  if(normStatus(active?.status)==='ready_delivery') return{dt:active.deliveryDate||active.deliveryAt||active.approval?.deliveryDate||active.approval?.deliveryAt||active.approval?.serviceDate,type:'delivery'};
   if(active?.approval?.serviceDate) return{dt:active.approval.serviceDate,type:'service'};
   return{dt:c.datetime,type:'visit'};
 }
@@ -450,17 +392,11 @@ window.searchClients=val=>{
   const csr=document.getElementById('csr');
   if(!val||val.length<2){csr.style.display='none';return;}
   const q=val.toLowerCase();
-  const qDigits=val.replace(/\D/g,'');
-  const results=all.filter(c=>{
-    const name=(c.name||'').toLowerCase();
-    const phone=(c.phone||'');
-    const phoneDigits=phone.replace(/\D/g,'');
-    return name.includes(q) || phone.includes(val) || (qDigits && phoneDigits.includes(qDigits));
-  }).slice(0,10);
+  const results=all.filter(c=>!c.deleted&&((c.name||'').toLowerCase().includes(q)||(c.phone||'').includes(q))).slice(0,6);
   if(!results.length){csr.style.display='none';return;}
   csr.style.display='block';
-  csr.innerHTML=results.map(c=>`<div class="csr-item ${c.deleted?'deleted':''}" onclick="fillFromClient('${c.id}')">
-    <strong>${c.name||'—'} ${c.deleted?' <span style="color:var(--red);font-size:.72rem">🗑 Lixeira</span>':''}</strong>
+  csr.innerHTML=results.map(c=>`<div class="csr-item" onclick="fillFromClient('${c.id}')">
+    <strong>${c.name||'—'}</strong>
     <span>${c.phone||''} ${c.address?'· '+c.address:''}</span>
   </div>`).join('');
 };
@@ -623,8 +559,6 @@ window.saveLayer=async(id,li)=>{
   const val=document.getElementById('ly-val-'+id+'-'+li)?.value?.trim();
   const maq=document.getElementById('ly-maq-'+id+'-'+li)?.checked||false;
   const paid=document.getElementById('ly-paid-'+id+'-'+li)?.checked||false;
-  const deliveryDate=document.getElementById('ly-delivery-'+id+'-'+li)?.value||'';
-  const deliveryObs=document.getElementById('ly-delivery-obs-'+id+'-'+li)?.value?.trim()||'';
   // Entrada
   const entryChecked=document.getElementById('ly-entry-'+id+'-'+li)?.checked||false;
   const entryPct=parseFloat(document.getElementById('ly-epct-'+id+'-'+li)?.value)||40;
@@ -633,8 +567,6 @@ window.saveLayer=async(id,li)=>{
   if(qt!==undefined)layers[li].quote=qt;
   if(obs!==undefined)layers[li].quoteObs=obs;
   if(st)layers[li].status=st;
-  layers[li].deliveryDate=deliveryDate;
-  layers[li].deliveryObs=deliveryObs;
   if(pay||svc||val)layers[li].approval={payment:pay||'',serviceDate:svc||'',value:val||'',needsMachine:maq,paid};
   else if(layers[li].approval){layers[li].approval.needsMachine=maq;layers[li].approval.paid=paid;}
   layers[li].entry={enabled:entryChecked,percent:entryPct,payment:entryPay,received:entryReceived};
@@ -761,6 +693,7 @@ window.calcEntry=(id,li)=>{
 };
 
 function statusOpts(sel){
+  sel=normStatus(sel);
   return['waiting','evaluated','quoted','approved','ready_delivery','absent','rejected','done'].map(s=>{
     const labels={waiting:'🕐 Aguardando visita',evaluated:'✅ Avaliação concluída',quoted:'💰 Aguardando aprovação',approved:'🟠 Aprovado',ready_delivery:'📦 Pronto para entrega',absent:'🚫 Cliente ausente',rejected:'❌ Orçamento rejeitado',done:'✅ Serviço Concluído'};
     return`<option value="${s}"${sel===s?' selected':''}>${labels[s]}</option>`;
@@ -803,7 +736,7 @@ function render(){
     const done=layers.filter(l=>l.done);
 
     let aN=0;
-    const tabsHtml=layers.map((ly,li)=>{if(ly.done)return'';aN++;const isPri=c.priorityIndex===li;const cls={waiting:'vtw',evaluated:'vte',quoted:'vtq',approved:'vta',ready_delivery:'vtrd',absent:'vtab2',rejected:'vtr',done:'vtd'}[ly.status]||'vtw';return`<button id="vt-${c.id}-${li}" data-vt="${c.id}" class="vtab ${cls}${isPri?' pri':''}" onclick="showVTab('${c.id}',${li})">${isPri?'⭐ ':''}Visita ${aN}${isPri?' ★':''}</button>`;}).join('');
+    const tabsHtml=layers.map((ly,li)=>{if(ly.done)return'';aN++;const isPri=c.priorityIndex===li;const cls={waiting:'vtw',evaluated:'vte',quoted:'vtq',approved:'vta',ready_delivery:'vtrd',absent:'vtab2',rejected:'vtr',done:'vtd'}[normStatus(ly.status)]||'vtw';return`<button id="vt-${c.id}-${li}" data-vt="${c.id}" class="vtab ${cls}${isPri?' pri':''}" onclick="showVTab('${c.id}',${li})">${isPri?'⭐ ':''}Visita ${aN}${isPri?' ★':''}</button>`;}).join('');
     const doneTab=done.length?`<button id="vt-${c.id}-done" data-vt="${c.id}" class="vtab vtd" onclick="showDoneTab('${c.id}')">✅ Concluídos (${done.length})</button>`:'';
 
     aN=0;
@@ -814,7 +747,6 @@ function render(){
       const techAcc=ly.techReport?`<div class="acc"><div class="acc-hdr" id="ath${c.id}${li}" onclick="toggleAcc('ath${c.id}${li}','atb${c.id}${li}')"><span style="font-size:.8rem;font-weight:700;color:var(--accent2)">🔧 Relatório do Técnico</span><span class="acc-arr">▼</span></div><div class="acc-body" id="atb${c.id}${li}"><p style="font-size:.85rem;margin-bottom:4px"><strong>Equipamento:</strong> ${ly.techReport.model||'—'}</p><p style="font-size:.85rem;margin-bottom:8px"><strong>Serviços:</strong> ${ly.techReport.problem||'—'}</p>${ly.techReport.photos?.length?`<div style="display:flex;gap:8px;flex-wrap:wrap">${ly.techReport.photos.map(p=>`<img src="${p}" onclick="openLb('${p}')" style="width:68px;height:68px;object-fit:cover;border-radius:6px;cursor:pointer">`).join('')}</div>`:''}</div></div>`:'';
       const absentAcc=ly.absentAt?`<div class="acc"><div class="acc-hdr" id="aah${c.id}${li}" onclick="toggleAcc('aah${c.id}${li}','aab${c.id}${li}')"><span style="font-size:.8rem;font-weight:700;color:var(--purple)">🚫 Cliente Ausente</span><span class="acc-arr">▼</span></div><div class="acc-body" id="aab${c.id}${li}"><p style="font-size:.85rem">Em: <strong>${fdt(ly.absentAt)}</strong></p></div></div>`:'';
       const apprInfo=ly.approval?.payment?`<div style="font-size:.82rem;color:var(--orange);margin-bottom:8px;padding:6px 10px;background:#1a100055;border:1px solid #f9731622;border-radius:6px">✔ ${ly.approval.payment}${ly.approval.value?' — <strong>'+ly.approval.value+'</strong>':''}${ly.approval.needsMachine?' 💳':''}${ly.approval.paid?' <span class="paid-badge">💰 Pago</span>':''} — ${fdt(ly.approval.serviceDate)}</div>`:'';
-      const deliveryInfo=ly.status==='ready_delivery'?`<div style="font-size:.82rem;color:#67e8f9;margin-bottom:8px;padding:6px 10px;background:#08334455;border:1px solid #06b6d422;border-radius:6px">📦 Pronto para entrega: <strong>${fdt(ly.deliveryDate)}</strong>${ly.deliveryObs?' — '+ly.deliveryObs:''}</div>`:'';
       const entryBox=entry.enabled?`<div class="entry-box"><h5>💵 Entrada / Sinal</h5><div class="entry-vals"><div class="ev"><label>Total</label><span id="ev-total-${c.id}-${li}">${ly.approval?.value||'R$ 0,00'}</span></div><div class="ev"><label>Entrada (${entry.percent||40}%)</label><span id="ev-entry-${c.id}-${li}">R$ 0,00</span></div><div class="ev"><label>Restante</label><span id="ev-remain-${c.id}-${li}">R$ 0,00</span></div></div><div style="margin-top:8px;font-size:.82rem;color:${entry.received?'var(--green)':'var(--muted)'}">Pagamento: ${entry.payment||'—'} ${entry.received?'✅ Entrada recebida':'⏳ Aguardando'}</div></div>`:'';
       const budgetImg=ly.budgetImage?.data||'';
       const docInfo=budgetImg?`<div class="doc-box"><p style="font-size:.78rem;color:var(--accent2);text-transform:uppercase;margin-bottom:4px">🖼️ Imagem do orçamento</p><img class="budget-preview" src="${budgetImg}" onclick="openLb('${budgetImg}')"><div class="acts"><button class="btn btn-muted btn-sm" onclick="openLb('${budgetImg}')">🔍 Ver / Zoom</button><button class="btn btn-muted btn-sm" onclick="removeBudgetImage('${c.id}',${li})">Remover</button></div></div>`:'';
@@ -835,16 +767,12 @@ function render(){
           <!-- Aprovação -->
           <div class="acc" style="margin-bottom:8px"><div class="acc-hdr" id="aph${c.id}${li}" onclick="toggleAcc('aph${c.id}${li}','apb${c.id}${li}')"><span style="font-size:.8rem;font-weight:700;color:var(--orange)">✅ Aprovação e Pagamento</span><span class="acc-arr">▼</span></div>
             <div class="acc-body" id="apb${c.id}${li}">
-              ${deliveryInfo}${apprInfo}
+              ${apprInfo}
               <div class="fgrid" style="margin-bottom:8px">
                 <div><span class="fl">Forma de pagamento</span><input type="text" class="fi" id="ly-pay-${c.id}-${li}" placeholder="Pix, Cartão..." value="${ly.approval?.payment||''}"></div>
                 <div><span class="fl">Valor do orçamento</span><input type="text" class="fi" id="ly-val-${c.id}-${li}" placeholder="R$ 0,00" value="${ly.approval?.value||''}" oninput="calcEntry('${c.id}',${li})"></div>
               </div>
               <div style="margin-bottom:10px"><span class="fl">Data e hora do serviço</span><input type="datetime-local" class="fi" id="ly-svc-${c.id}-${li}" value="${ly.approval?.serviceDate||''}"></div>
-              <div class="fgrid" style="margin-bottom:8px">
-                <div><span class="fl">📦 Data da entrega</span><input type="datetime-local" class="fi" id="ly-delivery-${c.id}-${li}" value="${ly.deliveryDate||''}"></div>
-                <div><span class="fl">Obs. da entrega</span><input type="text" class="fi" id="ly-delivery-obs-${c.id}-${li}" placeholder="Ex: entregar pela manhã" value="${ly.deliveryObs||''}"></div>
-              </div>
               <label style="display:flex;align-items:center;gap:10px;cursor:pointer;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;margin-bottom:8px">
                 <input type="checkbox" id="ly-maq-${c.id}-${li}" ${ly.approval?.needsMachine?'checked':''} style="width:17px;height:17px;accent-color:var(--orange);cursor:pointer">
                 <span style="font-size:.87rem">💳 Precisa de maquininha</span>
@@ -892,7 +820,7 @@ function render(){
         <div class="cmeta">
           <strong>${c.name||'—'} ${c.phone?`<span style="font-size:.78rem;color:var(--muted);font-weight:400">· ${c.phone}</span>`:''} ${machine?'<span title="Precisa de maquininha">💳</span>':''}</strong>
           <div class="csub">${c.address||''}</div>
-          <span class="dt-badge${mainDt.type==='service'?' svc':''}">${mainDt.type==='delivery'?'📦':(mainDt.type==='service'?'🔧':'📅')} ${fdt(mainDt.dt)}</span>
+          <span class="dt-badge${mainDt.type==='service'||mainDt.type==='delivery'?' svc':''}">${mainDt.type==='delivery'?'📦':mainDt.type==='service'?'🔧':'📅'} ${fdt(mainDt.dt)}</span>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
           <span class="sbadge ${badgeCls[status]||'sw'}">${lbl(status)}</span>
@@ -901,7 +829,7 @@ function render(){
       </div>
       <div class="cc-body" id="body-${c.id}">
         <div class="igrid">
-          <div class="iblk"><label>Telefone</label><p style="user-select:text">${c.phone||'—'}</p>${c.phone?`<button class="phone-copy" onclick="event.stopPropagation();copyPhone('${c.phone}')">📋 Copiar número</button>`:''}</div>
+          <div class="iblk"><label>Telefone</label><p>${c.phone||'—'}</p></div>
           <div class="iblk"><label>Equipamento</label><p>${c.equip||'—'}</p></div>
           ${c.notes?`<div class="iblk"><label>Obs</label><p>${c.notes}</p></div>`:''}
           ${c.address?`<div class="iblk"><label>Endereço</label><p>${c.address}${c.ref?' — '+c.ref:''} <a href="${maps(c.address+(c.ref?' '+c.ref:''))}" target="_blank" style="color:var(--accent2);font-size:.75rem">📍</a></p></div>`:''}

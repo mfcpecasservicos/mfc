@@ -32,7 +32,7 @@ header h1{font-size:1rem;font-weight:700;flex:1}
 .card.s-waiting{border-left-color:#3b82f6}.card.s-evaluated{border-left-color:#22c55e}
 .card.s-quoted{border-left-color:#eab308}.card.s-approved{border-left-color:#f97316}
 .card.s-absent{border-left-color:#a855f7}.card.s-rejected{border-left-color:#ef4444}
-.card.s-done{border-left-color:#22c55e;opacity:.6}
+.card.s-done{border-left-color:#22c55e;opacity:.6}.card.s-ready_delivery{border-left-color:#06b6d4}
 .card-inner{padding:14px 16px;display:flex;align-items:center;gap:12px}
 .card-icon{font-size:1.5rem}
 .card-info{flex:1;min-width:0}
@@ -44,7 +44,7 @@ header h1{font-size:1rem;font-weight:700;flex:1}
 .b-waiting{background:#0d2346;color:#60a5fa}.b-evaluated{background:#0d2e1b;color:#86efac}
 .b-quoted{background:#2d1e00;color:#fcd34d}.b-approved{background:#2d1200;color:#fb923c}
 .b-absent{background:#2d1a4a;color:#d8b4fe}.b-rejected{background:#3b1219;color:#fca5a5}
-.b-done{background:#0d2e1b;color:#4ade80}
+.b-done{background:#0d2e1b;color:#4ade80}.b-ready_delivery{background:#062b35;color:#67e8f9}
 .paid-badge{font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:20px;background:#0d2e1b;color:#4ade80;border:1px solid #22c55e44;margin-top:4px;display:inline-block}
 .empty{text-align:center;padding:60px 20px;color:var(--muted)}
 .empty .icon{font-size:3rem;margin-bottom:12px}
@@ -72,7 +72,7 @@ header h1{font-size:1rem;font-weight:700;flex:1}
 .vt-approved.active{background:#1c1917;border-color:#f97316}
 .vt-absent.active{background:#3b0764;border-color:#a855f7}
 .vt-rejected.active{background:#3b1219;border-color:#ef4444}
-.vt-done.active{background:#0d1f0d;border-color:#22c55e}
+.vt-done.active{background:#0d1f0d;border-color:#22c55e}.vt-ready_delivery.active{background:#083344;border-color:#06b6d4}
 .v-panel{display:none}.v-panel.active{display:flex;flex-direction:column;gap:10px}
 /* Accordion */
 .acc{border:1px solid var(--border);border-radius:10px;overflow:hidden}
@@ -186,8 +186,13 @@ async function requestNotif(){if('Notification'in window&&Notification.permissio
 requestNotif();
 function sendNotif(t,b){if('Notification'in window&&Notification.permission==='granted')new Notification(t,{body:b,icon:'https://cdn.jsdelivr.net/gh/twitter/twemoji@14/assets/72x72/2744.png'})}
 
-function lbl(s){return{waiting:'Aguardando visita',evaluated:'Avaliação concluída',quoted:'Orçamento enviado',approved:'Aprovado',absent:'Cliente ausente',rejected:'Orçamento rejeitado',done:'Concluído'}[s]||s}
-function icon(s){return{waiting:'🕐',evaluated:'✅',quoted:'💰',approved:'🟠',absent:'🚫',rejected:'❌',done:'✔'}[s]||'❓'}
+function normStatus(s){
+  s=String(s||'waiting').trim().toLowerCase().replace(/-/g,'_');
+  if(['ready_delivery','ready_for_delivery','pronto_entrega','pronto_para_entrega'].includes(s))return 'ready_delivery';
+  return s;
+}
+function lbl(s){s=normStatus(s);return{waiting:'Aguardando visita',evaluated:'Avaliação concluída',quoted:'Orçamento enviado',approved:'Aprovado',ready_delivery:'Pronto para entrega',absent:'Cliente ausente',rejected:'Orçamento rejeitado',done:'Concluído'}[s]||s}
+function icon(s){s=normStatus(s);return{waiting:'🕐',evaluated:'✅',quoted:'💰',approved:'🟠',ready_delivery:'📦',absent:'🚫',rejected:'❌',done:'✔'}[s]||'📋'}
 function fdt(dt){if(!dt)return'—';try{return new Date(dt).toLocaleString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch{return dt}}
 function maps(a){return'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a)}
 function moneyNum(v){return parseFloat(String(v||'').replace(/[R$\s.]/g,'').replace(',','.'))||0}
@@ -199,6 +204,7 @@ function getLayers(c){
 function getMainDt(c){
   const layers=getLayers(c);
   const active=layers.find(l=>!l.done);
+  if(normStatus(active?.status)==='ready_delivery')return{dt:active.deliveryDate||active.deliveryAt||active.approval?.deliveryDate||active.approval?.deliveryAt||active.approval?.serviceDate,type:'delivery'};
   if(active?.approval?.serviceDate)return{dt:active.approval.serviceDate,type:'service'};
   return{dt:c.datetime,type:'visit'};
 }
@@ -223,7 +229,7 @@ onSnapshot(q,snap=>{
 
 function updateDetailBadge(c){
   const badge=document.getElementById('d-badge');
-  if(badge){badge.textContent=lbl(c.status);badge.className='badge b-'+c.status;}
+  if(badge){const st=normStatus(c.status);badge.textContent=lbl(st);badge.className='badge b-'+st;}
 }
 
 window.renderList=()=>{
@@ -240,16 +246,17 @@ window.renderList=()=>{
   if(!clients.length){wrap.innerHTML='<div class="empty"><div class="icon">📋</div><p>Sem clientes.</p></div>';return}
   wrap.innerHTML=clients.map(c=>{
     const mainDt=getMainDt(c);
-    return`<div class="card s-${c.status}" onclick="openDetail('${c.id}')">
+    const st=normStatus(c.status);
+    return`<div class="card s-${st}" onclick="openDetail('${c.id}')">
       <div class="card-inner">
-        <div class="card-icon">${icon(c.status)}</div>
+        <div class="card-icon">${icon(st)}</div>
         <div class="card-info">
           <div class="card-name">${c.name}${getLayers(c).some(l=>l.approval?.needsMachine)?' <span title="Precisa de maquininha">💳</span>':''}</div>
           <div class="card-phone">${c.address||'—'}</div>
-          <div class="card-dt${mainDt.type==='service'?' service':''}">${mainDt.type==='service'?'🔧':'📅'} ${fdt(mainDt.dt)}</div>
+          <div class="card-dt${mainDt.type==='service'||mainDt.type==='delivery'?' service':''}">${mainDt.type==='delivery'?'📦':mainDt.type==='service'?'🔧':'📅'} ${fdt(mainDt.dt)}</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
-          <span class="badge b-${c.status}">${lbl(c.status)}</span>
+          <span class="badge b-${st}">${lbl(st)}</span>
           ${getLayers(c).some(l=>l.approval?.paid)?'<span class="paid-badge">💰 Pago</span>':''}
         </div>
       </div>
@@ -314,7 +321,7 @@ function renderDetailFull(c){
   const tabs=layers.map((ly,li)=>{
     if(ly.done)return'';
     activeNum++;
-    return`<button data-vtab="${c.id}" id="vt-${c.id}-${li}" class="v-tab vt-${ly.status}${li===currentLayerIdx?' active':''}" onclick="switchTab('${c.id}',${li})">${icon(ly.status)} Visita ${activeNum}</button>`;
+    return`<button data-vtab="${c.id}" id="vt-${c.id}-${li}" class="v-tab vt-${normStatus(ly.status)}${li===currentLayerIdx?' active':''}" onclick="switchTab('${c.id}',${li})">${icon(ly.status)} Visita ${activeNum}</button>`;
   }).join('');
   const doneTab=doneLayers.length?`<button data-vtab="${c.id}" id="vt-${c.id}-done" class="v-tab vt-done" onclick="switchDoneTab('${c.id}')">✅ Concluídos (${doneLayers.length})</button>`:'';
   const addBtn=`<button class="add-visit-btn" onclick="addVisit('${c.id}')">➕</button>`;
@@ -329,7 +336,7 @@ function renderDetailFull(c){
     const isActive=li===currentLayerIdx;
     let panel='';
 
-    if(ly.status==='waiting'){
+    if(normStatus(ly.status)==='waiting'){
       panel=`
         <div class="acc">
           <div class="acc-hdr open" id="ah-f-${li}" onclick="toggleAcc('ah-f-${li}','ab-f-${li}')">
@@ -373,8 +380,8 @@ function renderDetailFull(c){
       const docBox=ly.budgetImage?.data?`<div class="doc-box"><p style="color:var(--accent);font-size:.78rem;text-transform:uppercase;margin-bottom:6px">🖼️ Imagem do orçamento</p><img class="budget-preview" src="${ly.budgetImage.data}" onclick="openLb('${ly.budgetImage.data}')"><button class="done-btn" style="margin-top:10px;background:#1e3a5f" onclick="openLb('${ly.budgetImage.data}')">🔍 Ver orçamento com zoom</button></div>`:'';
       const entry=ly.entry||{}; const total=moneyNum(ly.approval?.value); const ent=total*((entry.percent||40)/100); const rem=total-ent;
       const entryBox=entry.enabled?`<div class="entry-box"><h3 style="color:var(--green);font-size:.78rem;margin-bottom:6px">💵 Entrada / Sinal</h3><div class="entry-grid"><div><label>Total</label><span>${ly.approval?.value||fmtMoney(total)}</span></div><div><label>Entrada (${entry.percent||40}%)</label><span>${fmtMoney(ent)}</span></div><div><label>Saldo restante</label><span>${fmtMoney(rem)}</span></div><div><label>Status</label><span>${entry.received?'✅ Recebida':'⏳ Pendente'}</span></div></div><p style="font-size:.8rem;color:var(--muted);margin-top:8px">Forma: ${entry.payment||'—'}</p></div>`:'';
-      const waiting=!ly.quote&&ly.status==='evaluated'?`<div class="waiting-msg">⏳ Aguardando orçamento...</div>`:'';
-      const waitingAppr=ly.quote&&ly.status==='quoted'?`<div class="waiting-msg">⏳ Aguardando aprovação...</div>`:'';
+      const waiting=!ly.quote&&normStatus(ly.status)==='evaluated'?`<div class="waiting-msg">⏳ Aguardando orçamento...</div>`:'';
+      const waitingAppr=ly.quote&&normStatus(ly.status)==='quoted'?`<div class="waiting-msg">⏳ Aguardando aprovação...</div>`:'';
 
       const apprBox=ly.approval?.payment?`
         <div style="background:#1a1000;border:1px solid #f9731644;border-radius:var(--radius);padding:14px">
