@@ -3,7 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>App Técnico — Refrigeração</title>
+<title>MFC</title>
+<meta name="theme-color" content="#0d1117">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="MFC">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+
 <style>
 :root{--bg:#0d1117;--surface:#161b22;--surface2:#21262d;--accent:#58a6ff;--text:#e6edf3;--muted:#8b949e;--border:#30363d;--green:#3fb950;--yellow:#d29922;--orange:#db6d28;--red:#f85149;--purple:#bc8cff;--radius:12px}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -500,6 +509,18 @@ window.addVisit=async id=>{
   layers.push({status:'waiting',quote:'',quoteObs:'',techReport:null,absentAt:null,approval:null,done:false,createdAt:new Date().toISOString()});
   await updateDoc(doc(db,'clients',id),{layers});
 };
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(reg => {
+        reg.update();
+      })
+      .catch(err => console.log('Service Worker não registrado:', err));
+  });
+}
 </script>
 </body>
 </html>
