@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Cadastro - MFC Peças e Serviços</title>
+<style>
+  :root{
+    --bg:#eef4fb;--surface:#ffffff;--primary:#06437a;--primary2:#0b63b6;--yellow:#ffd51f;
+    --text:#0f172a;--muted:#64748b;--border:#dbe7f3;--error:#ef4444;--success:#22c55e;
+    --radius:20px;--shadow:0 12px 34px rgba(15,23,42,.10)
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
+  body{background:radial-gradient(circle at top,#f8fbff 0,#eef4fb 48%,#e8f0fa 100%);color:var(--text);padding:18px 14px 28px;min-height:100vh;display:flex;justify-content:center}
+  .container{max-width:640px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+
+  .hero{background:var(--surface);border-radius:28px;overflow:hidden;box-shadow:var(--shadow);border:1px solid rgba(6,67,122,.10)}
+  .hero-cover-wrap{position:relative;background:#eaf4ff}
+  .hero-cover{width:100%;height:230px;object-fit:cover;display:block}
+  .hero-cover-wrap:after{content:"";position:absolute;inset:auto 0 0;height:80px;background:linear-gradient(180deg,transparent,#fff)}
+  .hero-content{padding:0 24px 24px;text-align:center;position:relative}
+  .hero-logo{width:128px;max-width:36vw;margin:-58px auto 12px;display:block;background:#fff;border-radius:26px;padding:8px;box-shadow:0 12px 30px rgba(6,67,122,.20);position:relative;z-index:2}
+  .hero-title{font-size:2rem;font-weight:900;letter-spacing:-.03em;color:var(--primary);margin-bottom:6px}
+  .hero-subtitle{color:#475569;font-size:1rem;line-height:1.55;max-width:520px;margin:0 auto}
+  .brand-pill{display:inline-flex;align-items:center;gap:8px;margin:14px auto 0;padding:8px 13px;background:#fff8cc;border:1px solid #fde047;border-radius:999px;color:#7c5a00;font-size:.82rem;font-weight:800}
+  .benefits{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+  .benefit-card{background:#f8fbff;border:1px solid var(--border);border-radius:18px;padding:13px;text-align:left}
+  .benefit-card strong{display:block;color:#0f2e4f;font-size:.9rem;margin-bottom:3px}
+  .benefit-card span{color:var(--muted);font-size:.78rem;line-height:1.35}
+
+  form{display:flex;flex-direction:column;gap:14px}
+  .card{background:var(--surface);border-radius:var(--radius);padding:22px;box-shadow:0 4px 18px rgba(15,23,42,.06);border:1px solid var(--border);display:flex;flex-direction:column;gap:8px}
+  .card label{font-size:1rem;font-weight:800;color:#13243a;display:flex;align-items:center;gap:7px}
+  .card .hint{font-size:.82rem;color:var(--muted);line-height:1.35;margin-bottom:5px}.req{color:var(--error)}
+  input[type="text"],input[type="tel"],input[type="email"],textarea{width:100%;border:1px solid var(--border);border-radius:15px;padding:16px;font-size:1rem;color:var(--text);outline:none;transition:.18s;background:#f8fafc;min-height:54px}
+  input:focus,textarea:focus{border-color:var(--primary2);background:#fff;box-shadow:0 0 0 4px rgba(11,99,182,.10)}
+  textarea{resize:vertical;min-height:118px}
+  .radio-group{display:flex;flex-direction:column;gap:12px;margin-top:4px}
+  .radio-lbl{display:flex!important;align-items:center;gap:12px;font-size:1rem!important;font-weight:650!important;cursor:pointer;background:#f8fafc;border:1px solid var(--border);border-radius:16px;padding:13px 14px;color:#203044!important}
+  .radio-lbl input[type="radio"]{width:21px;height:21px;accent-color:var(--primary2);flex:none}
+  #f-cidade-outro{margin-top:6px;display:none}
+
+  .btn-submit{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;border:none;border-radius:20px;padding:18px 28px;font-size:1.04rem;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:.2s;width:100%;margin-top:4px;min-height:62px;box-shadow:0 14px 30px rgba(6,67,122,.28)}
+  .btn-submit:active{transform:scale(.985)}.btn-submit:disabled{background:#94a3b8;cursor:not-allowed;box-shadow:none}
+  .loader{width:21px;height:21px;border:3px solid rgba(255,255,255,.35);border-radius:50%;border-top-color:#fff;animation:spin 1s linear infinite;display:none}@keyframes spin{to{transform:rotate(360deg)}}
+  #success-msg{display:none;text-align:center;color:#166534;font-weight:800;font-size:1.02rem;padding:18px;background:#f0fdf4;border-radius:20px;border:1px solid #bbf7d0;line-height:1.45}
+  .footer-brand{text-align:center;padding:20px 0 6px;color:#64748b;font-size:.84rem}.footer-brand img{width:88px;margin-bottom:8px;opacity:.95}
+  .privacy{font-size:.76rem;color:#64748b;text-align:center;line-height:1.4;padding:0 10px 4px}
+  @media(max-width:600px){body{padding:12px 10px 22px}.hero{border-radius:24px}.hero-cover{height:185px}.hero-content{padding:0 18px 20px}.hero-logo{width:106px;margin-top:-48px;border-radius:22px}.hero-title{font-size:1.65rem}.hero-subtitle{font-size:.94rem}.benefits{grid-template-columns:1fr}.card{padding:19px;border-radius:18px}input[type="text"],input[type="tel"],input[type="email"],textarea{font-size:16px}.btn-submit{border-radius:18px}}
+</style>
+</head>
+<body>
+<div class="container" id="form-container">
+  <div class="hero">
+    <div class="hero-cover-wrap"><img src="mfc-capa.png" class="hero-cover" alt="MFC Peças e Serviços"></div>
+    <div class="hero-content">
+      <img src="mfc-logo.png" class="hero-logo" alt="Logo MFC Peças e Serviços">
+      <h1 class="hero-title">Cadastro</h1>
+      <p class="hero-subtitle">Preencha essas informações para darmos continuidade no agendamento da sua visita técnica.</p>
+      <div class="brand-pill">❄️ MFC Peças e Serviços</div>
+      <div class="benefits">
+        <div class="benefit-card"><strong>⚡ Atendimento rápido</strong><span>Cadastro enviado diretamente para nossa central.</span></div>
+        <div class="benefit-card"><strong>📍 Visita técnica</strong><span>Agendamento organizado e acompanhamento completo.</span></div>
+        <div class="benefit-card"><strong>🧊 Refrigeração</strong><span>Atendimento residencial e empresarial.</span></div>
+        <div class="benefit-card"><strong>💬 WhatsApp</strong><span>Confirmação automática após o cadastro.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <form id="lead-form">
+    <div class="card"><label>👤 Nome completo <span class="req">*</span></label><input type="text" id="f-nome" required placeholder="Seu nome completo"></div>
+    <div class="card"><label>📞 Número de contato <span class="req">*</span></label><input type="tel" id="f-telefone" required placeholder="(00) 00000-0000" maxlength="15" inputmode="tel"></div>
+    <div class="card"><label>✉️ E-mail</label><input type="email" id="f-email" placeholder="seu@email.com (opcional)"></div>
+    <div class="card"><label>📍 Dias D'ávila? <span class="req">*</span></label><p class="hint">Fora de Dias D'ávila haverá cobrança na visita.</p><div class="radio-group"><label class="radio-lbl"><input type="radio" name="cidade" value="Dias D'ávila" required onchange="toggleOutro()"> Sim, resido em Dias D'ávila</label><label class="radio-lbl"><input type="radio" name="cidade" value="Outro" required onchange="toggleOutro()"> Outro:</label><input type="text" id="f-cidade-outro" placeholder="Qual cidade?"></div></div>
+    <div class="card"><label>🏠 Endereço <span class="req">*</span></label><input type="text" id="f-endereco" required placeholder="Rua, avenida, travessa..."></div>
+    <div class="card"><label>🔢 Número da residência <span class="req">*</span></label><input type="text" id="f-numero" required placeholder="Ex: 123, S/N"></div>
+    <div class="card"><label>🏘️ Bairro <span class="req">*</span></label><input type="text" id="f-bairro" required placeholder="Seu bairro"></div>
+    <div class="card"><label>🧭 Ponto de referência <span class="req">*</span></label><input type="text" id="f-ref" required placeholder="Próximo a..."></div>
+    <div class="card"><label>🧊 Equipamento <span class="req">*</span></label><p class="hint">Apenas o equipamento, marca, BTUs e KG, caso tenha.</p><input type="text" id="f-equip" required placeholder="Ex: Ar condicionado LG 12000 BTUs"></div>
+    <div class="card"><label>📝 Descrição do problema <span class="req">*</span></label><textarea id="f-problema" required placeholder="Descreva o que está acontecendo..."></textarea></div>
+
+    <button type="submit" class="btn-submit" id="btn-submit"><span id="btn-text">Finalizar Cadastro</span><div class="loader" id="btn-loader"></div></button>
+    <div id="success-msg">✅ Cadastro finalizado com sucesso!<br>Redirecionando para o WhatsApp...</div>
+    <p class="privacy">Seus dados serão usados apenas para contato e organização da visita técnica.</p>
+  </form>
+
+  <div class="footer-brand"><img src="mfc-logo.png" alt="MFC"><p>MFC Peças e Serviços — Refrigeração</p></div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+  const app = initializeApp({
+    apiKey: "AIzaSyAUUid850sbmBAVS9JzeZ94SbC-qzkk0B8",
+    authDomain: "roteiro-mfc-d3053.firebaseapp.com",
+    projectId: "roteiro-mfc-d3053",
+    storageBucket: "roteiro-mfc-d3053.firebasestorage.app",
+    messagingSenderId: "1030114859934",
+    appId: "1:1030114859934:web:ad353eafb55205d6b4148f"
+  });
+  const db = getFirestore(app);
+
+  const maskPhone = (v) => {
+    v = v.replace(/\D/g, "").slice(0, 11);
+    if (v.length <= 10) return v.replace(/(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3").replace(/-$/, "");
+    return v.replace(/(\d{2})(\d{5})(\d{0,4})/, "($1) $2-$3").replace(/-$/, "");
+  };
+  document.getElementById('f-telefone').addEventListener('input', (e) => { e.target.value = maskPhone(e.target.value); });
+
+  window.toggleOutro = () => {
+    const checked = document.querySelector('input[name="cidade"]:checked');
+    const inputOutro = document.getElementById('f-cidade-outro');
+    const isOutro = checked && checked.value === "Outro";
+    inputOutro.style.display = isOutro ? 'block' : 'none';
+    if(isOutro){ inputOutro.setAttribute('required','true'); setTimeout(()=>inputOutro.focus(),80); }
+    else{ inputOutro.removeAttribute('required'); inputOutro.value=''; }
+  };
+
+  document.getElementById('lead-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('btn-submit');
+    const text = document.getElementById('btn-text');
+    const loader = document.getElementById('btn-loader');
+    const successMsg = document.getElementById('success-msg');
+    btn.disabled = true; text.style.display = 'none'; loader.style.display = 'block';
+
+    const rawCity = document.querySelector('input[name="cidade"]:checked').value;
+    const finalCity = rawCity === 'Outro' ? document.getElementById('f-cidade-outro').value.trim() : rawCity;
+    const neighborhood = document.getElementById('f-bairro').value.trim();
+
+    const leadData = {
+      name: document.getElementById('f-nome').value.trim(),
+      phone: document.getElementById('f-telefone').value.trim(),
+      email: document.getElementById('f-email').value.trim(),
+      city: finalCity,
+      cidade: finalCity,
+      address: document.getElementById('f-endereco').value.trim(),
+      number: document.getElementById('f-numero').value.trim(),
+      neighborhood: neighborhood,
+      bairro: neighborhood,
+      ref: document.getElementById('f-ref').value.trim(),
+      equip: document.getElementById('f-equip').value.trim(),
+      problem: document.getElementById('f-problema').value.trim(),
+      createdAt: new Date().toISOString()
+    };
+
+    try {
+      await addDoc(collection(db, 'leads'), leadData);
+      btn.style.display = 'none'; successMsg.style.display = 'block';
+      const wappMsg = encodeURIComponent("Olá! Acabei de finalizar meu cadastro para agendamento da visita técnica. Aguardo retorno para confirmação. Obrigado!");
+      setTimeout(() => { window.location.href = `https://wa.me/5571981122167?text=${wappMsg}`; }, 1500);
+    } catch (err) {
+      console.error(err); alert("Erro ao enviar cadastro. Tente novamente.");
+      btn.disabled = false; text.style.display = 'block'; loader.style.display = 'none';
+    }
+  });
+</script>
+</body>
+</html>
