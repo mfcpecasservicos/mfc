@@ -302,12 +302,21 @@ textarea.fi{resize:vertical;min-height:52px}
 
 <div id="toast"></div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, updateDoc, deleteDoc, doc, query, orderBy, where, getDocs }
-  from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+<script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore-compat.js"></script>
+<script>
+window.addEventListener('error', function(e){
+  const c=document.getElementById('conn');
+  if(c) c.textContent='🔴 Erro JS';
+  console.error('Erro JS gestor:', e.message, e.filename, e.lineno);
+});
+window.addEventListener('unhandledrejection', function(e){
+  const c=document.getElementById('conn');
+  if(c) c.textContent='🔴 Erro JS';
+  console.error('Erro promessa gestor:', e.reason);
+});
 
-const app = initializeApp({
+const app = firebase.initializeApp({
   apiKey:"AIzaSyAUUid850sbmBAVS9JzeZ94SbC-qzkk0B8",
   authDomain:"roteiro-mfc-d3053.firebaseapp.com",
   projectId:"roteiro-mfc-d3053",
@@ -315,20 +324,20 @@ const app = initializeApp({
   messagingSenderId:"1030114859934",
   appId:"1:1030114859934:web:ad353eafb55205d6b4148f"
 });
-const db = getFirestore(app);
-const col = collection(db,'clients');
-const leadsCol = collection(db,'leads');
+const db = firebase.firestore();
+const col = db.collection('clients');
+const leadsCol = db.collection('leads');
 
 let all=[], leads=[], filter='all', editId=null, trashOpen=false, currentMainTab='clientes';
 
 // ── Listeners ─────────────────────────────────
-onSnapshot(query(col, orderBy('createdAt','asc')), snap => {
+col.orderBy('createdAt','asc').onSnapshot(snap => {
   all = snap.docs.map(d=>({id:d.id,...d.data()}));
   document.getElementById('conn').textContent='🟢 Conectado';
   render(); renderTrash();
 }, err=>{ const msg=(err&&err.code)?err.code:(err&&err.message?err.message:'Erro'); document.getElementById('conn').textContent='🔴 Erro Firebase'; console.error('Erro Firestore clients:', err); if(typeof toast==='function') toast('Erro ao conectar no Firebase: '+msg, 'var(--red)'); });
 
-onSnapshot(query(leadsCol, orderBy('createdAt','desc')), snap => {
+leadsCol.orderBy('createdAt','desc').onSnapshot(snap => {
   leads = snap.docs.map(d=>({id:d.id,...d.data()}));
   const cnt = leads.length;
   const badge = document.getElementById('leads-count');
@@ -483,7 +492,7 @@ window.uploadBudgetImage=async(id,li,input)=>{
     const imgData=await resizeImageFile(file);
     const layers=[...getLayers(c)];
     layers[li]={...layers[li],budgetImage:{data:imgData,name:file.name,type:'image/jpeg',uploadedAt:new Date().toISOString()}};
-    await updateDoc(doc(db,'clients',id),{layers});
+    await db.collection('clients').doc(id).update({layers});
     toast('🖼️ Imagem do orçamento anexada!');
   }catch(e){console.error(e);alert('Erro ao salvar imagem do orçamento. Tente uma imagem menor.');}
   input.value='';
@@ -493,7 +502,7 @@ window.removeBudgetImage=async(id,li)=>{
   const c=all.find(x=>x.id===id); if(!c)return;
   const layers=[...getLayers(c)];
   layers[li]={...layers[li],budgetImage:null};
-  await updateDoc(doc(db,'clients',id),{layers});
+  await db.collection('clients').doc(id).update({layers});
   toast('🖼️ Imagem removida.');
 };
 
@@ -503,7 +512,7 @@ window.addClient=async()=>{
   if(!name){alert('Informe o nome.');return;}
   const status=document.getElementById('inp-status').value;
   const layer={status,quote:'',quoteObs:'',techReport:null,absentAt:null,approval:null,done:false,createdAt:new Date().toISOString()};
-  await addDoc(col,{name,phone:document.getElementById('inp-phone').value.trim(),address:document.getElementById('inp-address').value.trim(),ref:document.getElementById('inp-ref').value.trim(),datetime:document.getElementById('inp-datetime').value,equip:document.getElementById('inp-equip').value.trim(),notes:document.getElementById('inp-notes').value.trim(),status,layers:[layer],deleted:false,createdAt:new Date().toISOString()});
+  await col.add({name,phone:document.getElementById('inp-phone').value.trim(),address:document.getElementById('inp-address').value.trim(),ref:document.getElementById('inp-ref').value.trim(),datetime:document.getElementById('inp-datetime').value,equip:document.getElementById('inp-equip').value.trim(),notes:document.getElementById('inp-notes').value.trim(),status,layers:[layer],deleted:false,createdAt:new Date().toISOString()});
   clearForm();toast('✅ Cliente adicionado!');
 };
 window.clearForm=()=>['inp-name','inp-phone','inp-address','inp-ref','inp-datetime','inp-equip','inp-notes'].forEach(i=>document.getElementById(i).value='');
@@ -514,7 +523,7 @@ window.addCompanyVisit=async()=>{
   const budget=document.getElementById('emp-budget').value.trim();
   if(!name||!datetime){alert('Informe nome da empresa e horário.');return;}
   const layer={status:'approved',quote:budget,quoteObs:notes,techReport:null,absentAt:null,approval:{payment:'',serviceDate:datetime,value:budget,needsMachine:false,paid:false},done:false,createdAt:new Date().toISOString(),companyMode:true};
-  await addDoc(col,{type:'company',companyMode:true,name,phone:'',address:'',ref:'',datetime,equip:'Visita empresa',notes,status:'approved',layers:[layer],deleted:false,createdAt:new Date().toISOString()});
+  await col.add({type:'company',companyMode:true,name,phone:'',address:'',ref:'',datetime,equip:'Visita empresa',notes,status:'approved',layers:[layer],deleted:false,createdAt:new Date().toISOString()});
   ['emp-name','emp-datetime','emp-notes','emp-budget'].forEach(i=>document.getElementById(i).value='');
   toast('🏢 Visita empresa enviada!');
 };
@@ -529,7 +538,7 @@ window.openEdit=id=>{
 window.closeEdit=()=>{document.getElementById('edit-modal').classList.remove('open');editId=null;};
 window.saveEdit=async()=>{
   if(!editId)return;
-  await updateDoc(doc(db,'clients',editId),{name:document.getElementById('e-name').value.trim(),phone:document.getElementById('e-phone').value.trim(),address:document.getElementById('e-address').value.trim(),ref:document.getElementById('e-ref').value.trim(),datetime:document.getElementById('e-datetime').value,equip:document.getElementById('e-equip').value.trim(),notes:document.getElementById('e-notes').value.trim()});
+  await db.collection('clients').doc(editId).update({name:document.getElementById('e-name').value.trim(),phone:document.getElementById('e-phone').value.trim(),address:document.getElementById('e-address').value.trim(),ref:document.getElementById('e-ref').value.trim(),datetime:document.getElementById('e-datetime').value,equip:document.getElementById('e-equip').value.trim(),notes:document.getElementById('e-notes').value.trim()});
   closeEdit();toast('✅ Atualizado!');
 };
 
@@ -538,7 +547,7 @@ window.addLayer=async id=>{
   const c=all.find(x=>x.id===id);
   const layers=[...getLayers(c)];
   layers.push({status:'waiting',quote:'',quoteObs:'',techReport:null,absentAt:null,approval:null,done:false,createdAt:new Date().toISOString()});
-  await updateDoc(doc(db,'clients',id),{layers});toast('➕ Nova visita!');
+  await db.collection('clients').doc(id).update({layers});toast('➕ Nova visita!');
 };
 window.concludeLayer=async(id,li)=>{
   if(!confirm('Marcar esta visita como concluída?'))return;
@@ -546,7 +555,7 @@ window.concludeLayer=async(id,li)=>{
   const layers=[...getLayers(c)];
   layers[li]={...layers[li],status:'done',done:true,concludedAt:new Date().toISOString()};
   const first=layers.find(l=>!l.done);
-  await updateDoc(doc(db,'clients',id),{layers,status:first?first.status:'done'});
+  await db.collection('clients').doc(id).update({layers,status:first?first.status:'done'});
   toast('✅ Visita concluída!');
 };
 window.saveLayer=async(id,li)=>{
@@ -573,14 +582,14 @@ window.saveLayer=async(id,li)=>{
   else if(layers[li].approval){layers[li].approval.needsMachine=maq;layers[li].approval.paid=paid;layers[li].approval.workshopService=workshop;}
   layers[li].entry={enabled:entryChecked,percent:entryPct,payment:entryPay,received:entryReceived};
   const first=layers.find(l=>!l.done);
-  await updateDoc(doc(db,'clients',id),{layers,status:first?first.status:'done'});
+  await db.collection('clients').doc(id).update({layers,status:first?first.status:'done'});
   toast('💾 Salvo!');
 };
 window.setPriority=async(id,li)=>{
   const c=all.find(x=>x.id===id);
   const layers=[...getLayers(c)];
   layers.forEach((l,i)=>l.priority=i===li);
-  await updateDoc(doc(db,'clients',id),{layers,priorityIndex:li,status:layers[li].status});
+  await db.collection('clients').doc(id).update({layers,priorityIndex:li,status:layers[li].status});
   toast('⭐ Visita definida como principal!');
 };
 window.removeLayer=async(id,li)=>{
@@ -590,14 +599,14 @@ window.removeLayer=async(id,li)=>{
   if(layers.length<=1){alert('Deve haver pelo menos uma visita.');return;}
   layers.splice(li,1);
   const first=layers.find(l=>!l.done);
-  await updateDoc(doc(db,'clients',id),{layers,status:first?first.status:'done'});
+  await db.collection('clients').doc(id).update({layers,status:first?first.status:'done'});
   toast('🗑 Removida.');
 };
 
 // ── Trash ─────────────────────────────────────
-window.softDelete=async id=>{if(!confirm('Mover para a lixeira?'))return;await updateDoc(doc(db,'clients',id),{deleted:true,deletedAt:new Date().toISOString()});toast('🗑 Na lixeira.','var(--red)');};
-window.restoreClient=async id=>{await updateDoc(doc(db,'clients',id),{deleted:false,deletedAt:null});toast('♻️ Restaurado!');};
-window.hardDelete=async id=>{if(!confirm('Excluir permanentemente?'))return;await deleteDoc(doc(db,'clients',id));toast('🗑 Excluído.');};
+window.softDelete=async id=>{if(!confirm('Mover para a lixeira?'))return;await db.collection('clients').doc(id).update({deleted:true,deletedAt:new Date().toISOString()});toast('🗑 Na lixeira.','var(--red)');};
+window.restoreClient=async id=>{await db.collection('clients').doc(id).update({deleted:false,deletedAt:null});toast('♻️ Restaurado!');};
+window.hardDelete=async id=>{if(!confirm('Excluir permanentemente?'))return;await db.collection('clients').doc(id).delete();toast('🗑 Excluído.');};
 window.toggleTrash=()=>{trashOpen=!trashOpen;const el=document.getElementById('trash-list');el.style.display=trashOpen?'flex':'none';el.style.flexDirection='column';document.getElementById('tarr').textContent=trashOpen?'▲':'▼';};
 
 // ── Leads ─────────────────────────────────────
@@ -609,7 +618,7 @@ window.approveLead=async id=>{
   const existing=all.filter(c=>!c.deleted&&c.phone&&c.phone.replace(/\D/g,'')===(phone.replace(/\D/g,'')));
   const status='waiting';
   const layer={status,quote:'',quoteObs:'',techReport:null,absentAt:null,approval:null,done:false,createdAt:new Date().toISOString()};
-  await addDoc(col,{
+  await col.add({
     name:lead.name||'',phone:lead.phone||'',
     address:[lead.address,lead.number,(lead.neighborhood||lead.bairro)].filter(Boolean).join(', '),
     ref:lead.ref||'',equip:lead.equip||'',
@@ -617,11 +626,11 @@ window.approveLead=async id=>{
     city:lead.city||lead.cidade||'',status,layers:[layer],deleted:false,
     createdAt:new Date().toISOString(),fromLead:true
   });
-  await deleteDoc(doc(db,'leads',id));
+  await db.collection('leads').doc(id).delete();
   if(existing.length>0) toast(`⚠️ Cliente recorrente! ${existing.length} visita(s) anterior(es).`,'var(--yellow)');
   else toast('✅ Enviado para o técnico!');
 };
-window.deleteLead=async id=>{if(!confirm('Remover este cadastro?'))return;await deleteDoc(doc(db,'leads',id));toast('🗑 Removido.');};
+window.deleteLead=async id=>{if(!confirm('Remover este cadastro?'))return;await db.collection('leads').doc(id).delete();toast('🗑 Removido.');};
 
 function renderLeads(){
   const el=document.getElementById('leads-list');
@@ -699,7 +708,6 @@ function statusOpts(sel){
     const labels={waiting:'🕐 Aguardando visita',evaluated:'✅ Avaliação concluída',quoted:'💰 Aguardando aprovação',approved:'🟠 Aprovado',service_finished:'✅ Serviço finalizado',ready_delivery:'📦 Pronto para entrega',absent:'🚫 Cliente ausente',rejected:'❌ Orçamento rejeitado',done:'✅ Serviço Concluído'};
     return`<option value="${s}"${sel===s?' selected':''}>${labels[s]}</option>`;
   }).join('');
-}
 }
 
 function renderTrash(){
