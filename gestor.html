@@ -144,12 +144,6 @@ textarea.fi{resize:vertical;min-height:52px}
 #toast{position:fixed;bottom:20px;right:20px;background:var(--green);color:#fff;padding:10px 18px;border-radius:var(--radius-sm);font-size:.85rem;font-weight:600;display:none;z-index:999;box-shadow:var(--shadow)}
 /* Auto-save indicator */
 .autosave{font-size:.72rem;color:var(--muted);margin-left:auto}
-/* Paste */
-.paste-card{background:var(--surface);border:1px dashed var(--accent);border-radius:var(--radius);padding:16px;margin-bottom:14px}
-.paste-card h2{font-size:.88rem;margin-bottom:8px;color:var(--accent2)}
-.paste-card textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;color:var(--text);font-size:.83rem;outline:none;resize:vertical;min-height:70px;font-family:monospace}
-.paste-card textarea:focus{border-color:var(--accent)}
-
 /* Company/doc */
 .company-box{background:linear-gradient(135deg,#111827,#0f172a);border:1px solid #06b6d455;border-radius:var(--radius);padding:16px;margin-bottom:14px}
 .company-box h2{font-size:.9rem;color:var(--accent2);margin-bottom:10px}
@@ -190,23 +184,14 @@ textarea.fi{resize:vertical;min-height:52px}
     <!-- Visita empresa rápida -->
     <div class="company-box">
       <h2>🏢 Modo visita empresa</h2>
-      <div class="fgrid3">
+      <div class="fgrid">
         <div><span class="fl">Nome da empresa</span><input type="text" class="fi" id="emp-name" placeholder="Empresa"></div>
         <div><span class="fl">Horário da visita</span><input type="datetime-local" class="fi" id="emp-datetime"></div>
-        <div><span class="fl">Orçamento do técnico</span><input type="text" class="fi" id="emp-budget" placeholder="R$ 0,00"></div>
       </div>
       <div style="margin-bottom:10px"><span class="fl">Observação</span><textarea class="fi" id="emp-notes" placeholder="Observação rápida da visita" style="min-height:44px"></textarea></div>
       <button class="btn btn-cyan btn-sm" onclick="addCompanyVisit()">⚡ Enviar visita empresa</button>
     </div>
-    <!-- Paste -->
-    <div class="paste-card">
-      <h2>📋 Cole as informações do cliente</h2>
-      <textarea id="paste-area" placeholder="Cole aqui o texto com os dados. Funciona com rótulo: valor ou formato de tabela (duas linhas com tabulação)."></textarea>
-      <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
-        <button class="btn btn-blue btn-sm" onclick="parseAndFill()">⚡ Preencher automaticamente</button>
-        <span style="font-size:.75rem;color:var(--muted)">Reconhece Nome, Contato, Endereço, Número, Bairro, Ref, Equipamento</span>
-      </div>
-    </div>
+</div>
 
     <!-- Formulário -->
     <div class="card">
@@ -423,46 +408,7 @@ window.fillFromClient=id=>{
 };
 document.addEventListener('click',e=>{if(!e.target.closest('#csr')&&!e.target.matches('#client-search'))document.getElementById('csr').style.display='none';});
 
-// ── Parse & fill ──────────────────────────────
-window.parseAndFill=()=>{
-  const raw=document.getElementById('paste-area').value.trim();
-  if(!raw){alert('Cole o texto primeiro.');return;}
-  const lines=raw.split('\n').map(l=>l.trim()).filter(Boolean);
-  let name='',phone='',street='',number='',bairro='',ref='',equip='',city='';
-  let tabLine=-1;
-  for(let i=0;i<lines.length;i++){if(lines[i].includes('\t')){tabLine=i;break;}}
-  if(tabLine>=0&&lines[tabLine+1]){
-    const hds=lines[tabLine].split('\t').map(h=>h.replace(':','').trim().toLowerCase());
-    const vls=lines[tabLine+1].split('\t').map(v=>v.trim());
-    hds.forEach((h,i)=>{const v=vls[i]||'';if(!v)return;
-      if(h.includes('nome'))name=v;
-      else if(h.includes('contato')||h.includes('telefone')||h.includes('fone')||h.includes('celular'))phone=v;
-      else if(h.includes('endere'))street=v;
-      else if((h.includes('mero')||h.includes('resid')||h.includes('casa'))&&!h.includes('contato'))number=v;
-      else if(h.includes('bairro'))bairro=v;
-      else if(h.includes('refer')||h.includes('ponto'))ref=v;
-      else if(h.includes('equip')||h.includes('aparelho'))equip=v;
-      else if(h.includes('cidade')||h.includes('munic'))city=v;
-    });
-  } else {
-    function gv(labels){for(const lb of labels){const idx=raw.toLowerCase().indexOf(lb.toLowerCase());if(idx<0)continue;const rest=raw.substring(idx+lb.length).replace(/^[: ]+/,'');const nl=rest.search(/[\n\r]/);return(nl>=0?rest.substring(0,nl):rest).trim();}return'';}
-    name=gv(['Nome completo','Nome']);phone=gv(['Contato','Telefone','Tel','Fone','Celular']);
-    street=gv(['Endereço','Endereco','Rua','Avenida','Av','Rodovia']);number=gv(['Número da residência','Número da casa','Número','Numero']);
-    bairro=gv(['Bairro']);ref=gv(['Ponto de referência','Referência','Referencia','Ref','Ponto']);
-    equip=gv(['Equipamento','Aparelho']);city=gv(['Cidade','Município']);
-  }
-  const address=[street,number,bairro,city].filter(Boolean).join(', ');
-  if(name)document.getElementById('inp-name').value=name;
-  if(phone)document.getElementById('inp-phone').value=phone;
-  if(address)document.getElementById('inp-address').value=address;
-  if(ref)document.getElementById('inp-ref').value=ref;
-  if(equip)document.getElementById('inp-equip').value=equip;
-  document.getElementById('paste-area').value='';
-  toast('Campos preenchidos! Defina a data e hora.');
-};
-
-
-
+// ── Imagem do orçamento ───────────────────────
 function resizeImageFile(file, maxW=1400, quality=.78){
   return new Promise((resolve,reject)=>{
     const reader=new FileReader();
@@ -520,11 +466,10 @@ window.addCompanyVisit=async()=>{
   const name=document.getElementById('emp-name').value.trim();
   const datetime=document.getElementById('emp-datetime').value;
   const notes=document.getElementById('emp-notes').value.trim();
-  const budget=document.getElementById('emp-budget').value.trim();
   if(!name||!datetime){alert('Informe nome da empresa e horário.');return;}
-  const layer={status:'approved',quote:budget,quoteObs:notes,techReport:null,absentAt:null,approval:{payment:'',serviceDate:datetime,value:budget,needsMachine:false,paid:false},done:false,createdAt:new Date().toISOString(),companyMode:true};
+  const layer={status:'approved',quote:'',quoteObs:notes,techReport:null,absentAt:null,approval:{payment:'',serviceDate:datetime,value:'',needsMachine:false,paid:false},done:false,createdAt:new Date().toISOString(),companyMode:true};
   await col.add({type:'company',companyMode:true,name,phone:'',address:'',ref:'',datetime,equip:'Visita empresa',notes,status:'approved',layers:[layer],deleted:false,createdAt:new Date().toISOString()});
-  ['emp-name','emp-datetime','emp-notes','emp-budget'].forEach(i=>document.getElementById(i).value='');
+  ['emp-name','emp-datetime','emp-notes'].forEach(i=>document.getElementById(i).value='');
   toast('🏢 Visita empresa enviada!');
 };
 
@@ -570,17 +515,15 @@ window.saveLayer=async(id,li)=>{
   const maq=document.getElementById('ly-maq-'+id+'-'+li)?.checked||false;
   const paid=document.getElementById('ly-paid-'+id+'-'+li)?.checked||false;
   const workshop=document.getElementById('ly-workshop-'+id+'-'+li)?.checked||false;
-  // Entrada
-  const entryChecked=document.getElementById('ly-entry-'+id+'-'+li)?.checked||false;
-  const entryPct=parseFloat(document.getElementById('ly-epct-'+id+'-'+li)?.value)||40;
-  const entryPay=document.getElementById('ly-epay-'+id+'-'+li)?.value?.trim()||'';
-  const entryReceived=document.getElementById('ly-erecv-'+id+'-'+li)?.checked||false;
+  // Pagamento de 40% realizado
+  const entry40=document.getElementById('ly-entry40-'+id+'-'+li)?.checked||false;
+  const originalValue=document.getElementById('ly-val-'+id+'-'+li)?.dataset?.originalValue||val||'';
   if(qt!==undefined)layers[li].quote=qt;
   if(obs!==undefined)layers[li].quoteObs=obs;
   if(st)layers[li].status=st;
-  if(pay||svc||val)layers[li].approval={payment:pay||'',serviceDate:svc||'',value:val||'',needsMachine:maq,paid,workshopService:workshop};
+  if(pay||svc||val||maq||paid||workshop||entry40)layers[li].approval={payment:pay||'',serviceDate:svc||'',value:val||'',needsMachine:maq,paid,workshopService:workshop};
   else if(layers[li].approval){layers[li].approval.needsMachine=maq;layers[li].approval.paid=paid;layers[li].approval.workshopService=workshop;}
-  layers[li].entry={enabled:entryChecked,percent:entryPct,payment:entryPay,received:entryReceived};
+  layers[li].entry={enabled:entry40,percent:40,payment:pay||'',received:entry40,originalValue,remainingValue:val||''};
   const first=layers.find(l=>!l.done);
   await db.collection('clients').doc(id).update({layers,status:first?first.status:'done'});
   toast('💾 Salvo!');
@@ -687,20 +630,30 @@ window.showDoneTab=cid=>{
 };
 window.toggleAcc=(h,b)=>{document.getElementById(h)?.classList.toggle('open');document.getElementById(b)?.classList.toggle('open');};
 
-// Cálculo de entrada em tempo real
-window.calcEntry=(id,li)=>{
-  const pct=parseFloat(document.getElementById('ly-epct-'+id+'-'+li)?.value)||40;
-  const valRaw=(document.getElementById('ly-val-'+id+'-'+li)?.value||'').replace(/[R$\s.]/g,'').replace(',','.');
-  const total=parseFloat(valRaw)||0;
-  const entry=total*(pct/100);
-  const remaining=total-entry;
-  const fmt=v=>'R$ '+v.toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
-  const elE=document.getElementById('ev-entry-'+id+'-'+li);
-  const elR=document.getElementById('ev-remain-'+id+'-'+li);
-  const elT=document.getElementById('ev-total-'+id+'-'+li);
-  if(elE)elE.textContent=fmt(entry);
-  if(elR)elR.textContent=fmt(remaining);
-  if(elT)elT.textContent=fmt(total);
+// Pagamento de 40% realizado: desconta 40% do valor e mantém saldo no campo
+function moneyToNumber(v){
+  v=(v||'').toString().replace(/R\$/g,'').replace(/\s/g,'').replace(/\./g,'').replace(',','.');
+  return parseFloat(v)||0;
+}
+function numberToMoney(v){
+  return 'R$ '+Number(v||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+}
+window.syncEntryOriginal=(id,li)=>{
+  const inp=document.getElementById('ly-val-'+id+'-'+li);
+  const chk=document.getElementById('ly-entry40-'+id+'-'+li);
+  if(inp && (!chk || !chk.checked)) inp.dataset.originalValue=inp.value;
+};
+window.toggleEntry40=(id,li)=>{
+  const inp=document.getElementById('ly-val-'+id+'-'+li);
+  const chk=document.getElementById('ly-entry40-'+id+'-'+li);
+  if(!inp||!chk)return;
+  if(chk.checked){
+    const base=moneyToNumber(inp.dataset.originalValue||inp.value);
+    if(!inp.dataset.originalValue) inp.dataset.originalValue=inp.value;
+    inp.value=numberToMoney(base*0.60);
+  }else{
+    inp.value=inp.dataset.originalValue||inp.value;
+  }
 };
 
 function statusOpts(sel){
@@ -708,7 +661,6 @@ function statusOpts(sel){
     const labels={waiting:'🕐 Aguardando visita',evaluated:'✅ Avaliação concluída',quoted:'💰 Aguardando aprovação',approved:'🟠 Aprovado',service_finished:'✅ Serviço finalizado',ready_delivery:'📦 Pronto para entrega',absent:'🚫 Cliente ausente',rejected:'❌ Orçamento rejeitado',done:'✅ Serviço Concluído'};
     return`<option value="${s}"${sel===s?' selected':''}>${labels[s]}</option>`;
   }).join('');
-}
 }
 
 function renderTrash(){
@@ -759,7 +711,6 @@ function render(){
       const absentAcc=ly.absentAt?`<div class="acc"><div class="acc-hdr" id="aah${c.id}${li}" onclick="toggleAcc('aah${c.id}${li}','aab${c.id}${li}')"><span style="font-size:.8rem;font-weight:700;color:var(--purple)">🚫 Cliente Ausente</span><span class="acc-arr">▼</span></div><div class="acc-body" id="aab${c.id}${li}"><p style="font-size:.85rem">Em: <strong>${fdt(ly.absentAt)}</strong></p></div></div>`:'';
       const workshopInfo=ly.approval?.workshopService?`<div style="font-size:.82rem;color:#7dd3fc;margin-bottom:8px;padding:6px 10px;background:#082f4955;border:1px solid #38bdf833;border-radius:6px">🏭 Serviço no galpão</div>`:'';
       const apprInfo=ly.approval?.payment?`<div style="font-size:.82rem;color:var(--orange);margin-bottom:8px;padding:6px 10px;background:#1a100055;border:1px solid #f9731622;border-radius:6px">✔ ${ly.approval.payment}${ly.approval.value?' — <strong>'+ly.approval.value+'</strong>':''}${ly.approval.needsMachine?' 💳':''}${ly.approval.paid?' <span class="paid-badge">💰 Pago</span>':''} — ${fdt(ly.approval.serviceDate)}</div>${ly.approval?.workshopService?`<div style="font-size:.82rem;color:#7dd3fc;margin-bottom:8px;padding:6px 10px;background:#082f4955;border:1px solid #38bdf833;border-radius:6px">🏭 Serviço no galpão</div>`:''}`:'';
-      const entryBox=entry.enabled?`<div class="entry-box"><h5>💵 Entrada / Sinal</h5><div class="entry-vals"><div class="ev"><label>Total</label><span id="ev-total-${c.id}-${li}">${ly.approval?.value||'R$ 0,00'}</span></div><div class="ev"><label>Entrada (${entry.percent||40}%)</label><span id="ev-entry-${c.id}-${li}">R$ 0,00</span></div><div class="ev"><label>Restante</label><span id="ev-remain-${c.id}-${li}">R$ 0,00</span></div></div><div style="margin-top:8px;font-size:.82rem;color:${entry.received?'var(--green)':'var(--muted)'}">Pagamento: ${entry.payment||'—'} ${entry.received?'✅ Entrada recebida':'⏳ Aguardando'}</div></div>`:'';
       const budgetImg=ly.budgetImage?.data||'';
       const docInfo=budgetImg?`<div class="doc-box"><p style="font-size:.78rem;color:var(--accent2);text-transform:uppercase;margin-bottom:4px">🖼️ Imagem do orçamento</p><img class="budget-preview" src="${budgetImg}" onclick="openLb('${budgetImg}')"><div class="acts"><button class="btn btn-muted btn-sm" onclick="openLb('${budgetImg}')">🔍 Ver / Zoom</button><button class="btn btn-muted btn-sm" onclick="removeBudgetImage('${c.id}',${li})">Remover</button></div></div>`:'';
 
@@ -782,7 +733,7 @@ function render(){
               ${apprInfo}${workshopInfo}
               <div class="fgrid" style="margin-bottom:8px">
                 <div><span class="fl">Forma de pagamento</span><input type="text" class="fi" id="ly-pay-${c.id}-${li}" placeholder="Pix, Cartão..." value="${ly.approval?.payment||''}"></div>
-                <div><span class="fl">Valor do orçamento</span><input type="text" class="fi" id="ly-val-${c.id}-${li}" placeholder="R$ 0,00" value="${ly.approval?.value||''}" oninput="calcEntry('${c.id}',${li})"></div>
+                <div><span class="fl">Valor do orçamento</span><input type="text" class="fi" id="ly-val-${c.id}-${li}" placeholder="R$ 0,00" value="${ly.approval?.value||''}" data-original-value="${entry.originalValue||ly.approval?.value||''}" oninput="syncEntryOriginal('${c.id}',${li})"></div>
               </div>
               <div style="margin-bottom:10px"><span class="fl">Data e hora do serviço</span><input type="datetime-local" class="fi" id="ly-svc-${c.id}-${li}" value="${ly.approval?.serviceDate||''}"></div>
               <label style="display:flex;align-items:center;gap:10px;cursor:pointer;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;margin-bottom:8px">
@@ -797,24 +748,10 @@ function render(){
                 <input type="checkbox" id="ly-paid-${c.id}-${li}" ${ly.approval?.paid?'checked':''} style="width:17px;height:17px;accent-color:var(--green);cursor:pointer">
                 <span style="font-size:.87rem">✅ Orçamento já pago</span>
               </label>
-            </div>
-          </div>
-          <!-- Entrada/Sinal -->
-          <div class="acc" style="margin-bottom:8px"><div class="acc-hdr" id="enth${c.id}${li}" onclick="toggleAcc('enth${c.id}${li}','entb${c.id}${li}')"><span style="font-size:.8rem;font-weight:700;color:var(--green)">💵 Entrada / Sinal</span><span class="acc-arr">▼</span></div>
-            <div class="acc-body" id="entb${c.id}${li}">
-              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:10px">
-                <input type="checkbox" id="ly-entry-${c.id}-${li}" ${entry.enabled?'checked':''} style="width:17px;height:17px;accent-color:var(--green)">
-                <span style="font-size:.87rem">Cliente pagou entrada para compra da peça</span>
+              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;background:#0d2e1b55;border:1px solid #22c55e33;border-radius:var(--radius-sm);padding:9px 12px;margin-top:8px">
+                <input type="checkbox" id="ly-entry40-${c.id}-${li}" ${entry.enabled||entry.received?'checked':''} onchange="toggleEntry40('${c.id}',${li})" style="width:17px;height:17px;accent-color:var(--green);cursor:pointer">
+                <span style="font-size:.87rem">💵 Pagamento de 40% realizado</span>
               </label>
-              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px">
-                <div style="flex:1;min-width:100px"><span class="fl">% de entrada</span><input type="number" class="fi" id="ly-epct-${c.id}-${li}" value="${entry.percent||40}" min="1" max="100" oninput="calcEntry('${c.id}',${li})"></div>
-                <div style="flex:1;min-width:140px"><span class="fl">Pagamento da entrada</span><input type="text" class="fi" id="ly-epay-${c.id}-${li}" placeholder="Pix, Dinheiro..." value="${entry.payment||''}"></div>
-              </div>
-              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:10px">
-                <input type="checkbox" id="ly-erecv-${c.id}-${li}" ${entry.received?'checked':''} style="width:17px;height:17px;accent-color:var(--green)">
-                <span style="font-size:.87rem">✅ Entrada recebida</span>
-              </label>
-              ${entryBox}
             </div>
           </div>
           <div class="acts">

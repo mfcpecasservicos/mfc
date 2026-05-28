@@ -22,8 +22,7 @@ header h1{font-size:1rem;font-weight:700;flex:1}
 .card:active{transform:scale(.98)}
 .card.s-waiting{border-left-color:#3b82f6}.card.s-evaluated{border-left-color:#22c55e}
 .card.s-quoted{border-left-color:#eab308}.card.s-approved{border-left-color:#f97316}
-.card.s-ready_delivery{border-left-color:#38bdf8}
-.card.s-service_finished{border-left-color:#22c55e}
+.card.s-service_finished{border-left-color:#22c55e}.card.s-ready_delivery{border-left-color:#38bdf8}
 .card.s-absent{border-left-color:#a855f7}.card.s-rejected{border-left-color:#ef4444}
 .card.s-done{border-left-color:#22c55e;opacity:.6}
 .card-inner{padding:14px 16px;display:flex;align-items:center;gap:12px}
@@ -33,11 +32,10 @@ header h1{font-size:1rem;font-weight:700;flex:1}
 .card-phone{font-size:.75rem;color:var(--muted)}
 .card-dt{font-size:.78rem;font-weight:700;color:#fff;background:linear-gradient(135deg,#1e3a5f,#0f2744);border:1px solid #3b82f6;border-radius:6px;padding:3px 8px;display:inline-block;margin-top:4px}
 .card-dt.service{background:linear-gradient(135deg,#1a1000,#2d1200);border-color:var(--orange);color:var(--orange)}
-.card-dt.delivery{background:linear-gradient(135deg,#002f3d,#082f49);border-color:#06b6d4;color:#67e8f9}
 .badge{font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
 .b-waiting{background:#0d2346;color:#60a5fa}.b-evaluated{background:#0d2e1b;color:#86efac}
 .b-quoted{background:#2d1e00;color:#fcd34d}.b-approved{background:#2d1200;color:#fb923c}
-.b-ready_delivery{background:#0c4a6e;color:#7dd3fc}.b-service_finished{background:#052e16;color:#86efac}
+.b-service_finished{background:#0d2e1b;color:#86efac}.b-ready_delivery{background:#0c4a6e;color:#7dd3fc}
 .b-absent{background:#2d1a4a;color:#d8b4fe}.b-rejected{background:#3b1219;color:#fca5a5}
 .b-done{background:#0d2e1b;color:#4ade80}
 .paid-badge{font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:20px;background:#0d2e1b;color:#4ade80;border:1px solid #22c55e44;margin-top:4px;display:inline-block}
@@ -65,8 +63,7 @@ header h1{font-size:1rem;font-weight:700;flex:1}
 .vt-evaluated.active{background:#14532d;border-color:#22c55e}
 .vt-quoted.active{background:#451a03;border-color:#eab308}
 .vt-approved.active{background:#1c1917;border-color:#f97316}
-.vt-ready_delivery.active{background:#0c4a6e;border-color:#38bdf8}
-.vt-service_finished.active{background:#064e3b;border-color:#22c55e}
+.vt-service_finished.active{background:#14532d;border-color:#22c55e}.vt-ready_delivery.active{background:#0c4a6e;border-color:#38bdf8}
 .vt-absent.active{background:#3b0764;border-color:#a855f7}
 .vt-rejected.active{background:#3b1219;border-color:#ef4444}
 .vt-done.active{background:#0d1f0d;border-color:#22c55e}
@@ -178,11 +175,10 @@ requestNotif();
 function sendNotif(t,b){if('Notification'in window&&Notification.permission==='granted')new Notification(t,{body:b,icon:'https://cdn.jsdelivr.net/gh/twitter/twemoji@14/assets/72x72/2744.png'})}
 
 function stKey(s){return String(s||'waiting').toLowerCase().trim()}
-function lbl(s){const k=stKey(s);return{waiting:'Aguardando visita',evaluated:'Avaliação concluída',quoted:'Orçamento enviado',approved:'Aprovado',ready_delivery:'Equipamento pronto para entrega',service_finished:'Serviço finalizado',absent:'Cliente ausente',rejected:'Orçamento rejeitado',done:'Concluído'}[k]||String(s||'Aguardando visita')}
-function icon(s){const k=stKey(s);return{waiting:'🕐',evaluated:'✅',quoted:'💰',approved:'🟠',ready_delivery:'📦',service_finished:'✅',absent:'🚫',rejected:'❌',done:'✔'}[k]||'📋'}
+function lbl(s){const k=stKey(s);return{waiting:'Aguardando visita',evaluated:'Avaliação concluída',quoted:'Orçamento enviado',approved:'Aprovado',service_finished:'Serviço finalizado',ready_delivery:'Equipamento pronto para entrega',absent:'Cliente ausente',rejected:'Orçamento rejeitado',done:'Concluído'}[k]||String(s||'Aguardando visita')}
+function icon(s){const k=stKey(s);return{waiting:'🕐',evaluated:'✅',quoted:'💰',approved:'🟠',service_finished:'✅',ready_delivery:'📦',absent:'🚫',rejected:'❌',done:'✔'}[k]||'📋'}
 function fdt(dt){if(!dt)return'—';try{return new Date(dt).toLocaleString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch{return dt}}
 function maps(a){return'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a)}
-function deliveryDt(l,c){return l?.deliveryDate||l?.deliveryAt||l?.readyDeliveryDate||l?.readyAt||l?.delivery?.date||c?.deliveryDate||''}
 function moneyNum(v){return parseFloat(String(v||'').replace(/[R$\s.]/g,'').replace(',','.'))||0}
 function fmtMoney(v){return 'R$ '+Number(v||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.')}
 function getLayers(c){
@@ -192,7 +188,7 @@ function getLayers(c){
 function getMainDt(c){
   const layers=getLayers(c);
   const active=layers.find(l=>!l.done);
-  if(stKey(active?.status)==='ready_delivery')return{dt:deliveryDt(active,c)||active?.approval?.serviceDate||c.datetime,type:'delivery'};
+  if(stKey(active?.status)==='ready_delivery')return{dt:active?.readyAt||active?.concludedAt||active?.approval?.serviceDate||c.datetime,type:'delivery'};
   if(active?.approval?.serviceDate)return{dt:active.approval.serviceDate,type:'service'};
   return{dt:c.datetime,type:'visit'};
 }
@@ -370,9 +366,10 @@ function renderDetailFull(c){
       const docBox=ly.budgetImage?.data?`<div class="doc-box"><p style="color:var(--accent);font-size:.78rem;text-transform:uppercase;margin-bottom:6px">🖼️ Imagem do orçamento</p><img class="budget-preview" src="${ly.budgetImage.data}" onclick="openLb('${ly.budgetImage.data}')"><button class="done-btn" style="margin-top:10px;background:#1e3a5f" onclick="openLb('${ly.budgetImage.data}')">🔍 Ver orçamento com zoom</button></div>`:'';
       const entry=ly.entry||{}; const total=moneyNum(ly.approval?.value); const ent=total*((entry.percent||40)/100); const rem=total-ent;
       const entryBox=entry.enabled?`<div class="entry-box"><h3 style="color:var(--green);font-size:.78rem;margin-bottom:6px">💵 Entrada / Sinal</h3><div class="entry-grid"><div><label>Total</label><span>${ly.approval?.value||fmtMoney(total)}</span></div><div><label>Entrada (${entry.percent||40}%)</label><span>${fmtMoney(ent)}</span></div><div><label>Saldo restante</label><span>${fmtMoney(rem)}</span></div><div><label>Status</label><span>${entry.received?'✅ Recebida':'⏳ Pendente'}</span></div></div><p style="font-size:.8rem;color:var(--muted);margin-top:8px">Forma: ${entry.payment||'—'}</p></div>`:'';
-      const deliveryBox=stKey(ly.status)==='ready_delivery'?`<div class="doc-box" style="border-color:#38bdf855"><p style="color:#7dd3fc;font-size:.9rem;font-weight:800">📦 Equipamento pronto para entrega</p>${deliveryDt(ly,c)?`<p style="margin-top:6px;font-size:.9rem">Entrega: <strong>${fdt(deliveryDt(ly,c))}</strong></p>`:''}<p style="margin-top:6px;color:var(--muted);font-size:.82rem">Aguardando o gestor concluir a OS.</p></div>`:stKey(ly.status)==='service_finished'?`<div class="doc-box" style="border-color:#22c55e55"><p style="color:#86efac;font-size:.9rem;font-weight:800">✅ Serviço finalizado</p><p style="margin-top:6px;color:var(--muted);font-size:.82rem">Aguardando o gestor conferir e finalizar a OS.</p></div>`:'';
       const waiting=!ly.quote&&stKey(ly.status)==='evaluated'?`<div class="waiting-msg">⏳ Aguardando orçamento...</div>`:'';
       const waitingAppr=ly.quote&&stKey(ly.status)==='quoted'?`<div class="waiting-msg">⏳ Aguardando aprovação...</div>`:'';
+      const techFinishedBox=stKey(ly.status)==='service_finished'?`<div class="waiting-msg" style="border:1px solid #22c55e44;color:#86efac">✅ Serviço finalizado pelo técnico. Aguardando conclusão do gestor.</div>`:'';
+      const readyDeliveryBox=stKey(ly.status)==='ready_delivery'?`<div class="waiting-msg" style="border:1px solid #38bdf844;color:#7dd3fc">📦 Equipamento pronto para entrega.</div>`:'';
 
       const apprBox=ly.approval?.payment?`
         <div style="background:#1a1000;border:1px solid #f9731644;border-radius:var(--radius);padding:14px">
@@ -380,18 +377,19 @@ function renderDetailFull(c){
           <p style="font-size:.9rem;margin-bottom:4px">Pagamento: <strong>${ly.approval.payment}</strong>${ly.approval.value?' — <strong>'+ly.approval.value+'</strong>':''}</p>
           ${ly.approval.needsMachine?`<p style="font-size:.88rem;color:#fb923c;margin-bottom:6px;background:#2d1200;border:1px solid #f9731644;border-radius:8px;padding:6px 10px;display:inline-block">💳 Levar maquininha</p>`:''}
           ${ly.approval.paid?`<p style="font-size:.88rem;color:#4ade80;margin-bottom:6px;background:#0d2e1b;border:1px solid #22c55e44;border-radius:8px;padding:6px 10px;display:inline-block">💰 Orçamento Pago</p>`:''}
+          ${ly.approval.workshopService?`<p style="font-size:.88rem;color:#7dd3fc;margin-bottom:6px;background:#082f49;border:1px solid #38bdf844;border-radius:8px;padding:6px 10px;display:inline-block">🏭 Serviço no galpão</p>`:''}
           <p style="font-size:1rem;font-weight:700;color:var(--orange)">📅 ${fdt(ly.approval.serviceDate)}</p>
           ${c.address?`<a class="maps-link" href="${maps(c.address+(c.ref?' '+c.ref:''))}" target="_blank" style="margin-top:8px">📍 Ir ao endereço</a>`:''}
         </div>
-        <div class="pay-box">
-          <h3>✔ Registrar Conclusão</h3>
+        ${['service_finished','ready_delivery'].includes(stKey(ly.status))?'':`<div class="pay-box">
+          <h3>✔ Registrar finalização do técnico</h3>
           <div class="fg" style="margin-bottom:10px"><label>Forma de pagamento (confirmar ou alterar)</label>
             <input id="done-pay-${c.id}-${li}" type="text" placeholder="Ex: Pix, Cartão..." value="${ly.approval.payment||''}">
           </div>
-          <button class="done-btn" onclick="markDone('${c.id}',${li})">✅ Serviço finalizado</button>
-        </div>`:'';
+          <button class="done-btn" onclick="markDone('${c.id}',${li})">✅ Serviço Concluído</button>
+        </div>`}`:'';
 
-      panel=`${techAcc}${absentBox}${quoteBox}${docBox}${entryBox}${deliveryBox}${apprBox}${waiting}${waitingAppr}`;
+      panel=`${techAcc}${absentBox}${quoteBox}${docBox}${entryBox}${apprBox}${techFinishedBox}${readyDeliveryBox}${waiting}${waitingAppr}`;
     }
 
     return`<div id="vp-${c.id}-${li}" data-vpanel="${c.id}" class="v-panel${isActive?' active':''}">${panel}</div>`;
@@ -487,22 +485,24 @@ window.markDone=async(id,li)=>{
   const payment=document.getElementById('done-pay-'+id+'-'+li)?.value?.trim();
   const c=allClients.find(x=>x.id===id);
   const layers=[...getLayers(c)];
-  const isGalpao=!!layers[li].approval?.workshopService;
-  const newStatus=isGalpao?'ready_delivery':'service_finished';
+  const workshop=!!layers[li]?.approval?.workshopService;
+  const newStatus=workshop?'ready_delivery':'service_finished';
   layers[li]={...layers[li],status:newStatus,done:false,technicianFinishedAt:new Date().toISOString(),approval:{...layers[li].approval,payment:payment||layers[li].approval?.payment||''}};
+  if(workshop) layers[li].readyAt=new Date().toISOString();
   const firstActive=layers.find(l=>!l.done);
-  const mainStatus=firstActive?firstActive.status:newStatus;
-  await updateDoc(doc(db,'clients',id),{layers,status:mainStatus,technicianUpdatedAt:new Date().toISOString()});
-  alert(isGalpao?'Equipamento marcado como pronto para entrega.':'Serviço marcado como finalizado. O gestor fará a conclusão final.');
+  await updateDoc(doc(db,'clients',id),{layers,status:firstActive?firstActive.status:newStatus,technicianFinishedAt:new Date().toISOString()});
+  alert(workshop?'Equipamento pronto para entrega.':'Serviço finalizado. Aguardando conclusão do gestor.');
+  closeDetail();
 };
+
 
 window.markCompanyDone=async(id,li)=>{
   if(!confirm('Concluir visita empresa?'))return;
   const quote=document.getElementById('company-quote-'+li)?.value?.trim()||'';
   const c=allClients.find(x=>x.id===id);
   const layers=[...getLayers(c)];
-  layers[li]={...layers[li],quote,status:'done',done:true,concludedAt:new Date().toISOString(),techReport:{model:'Visita empresa',problem:c.notes||'',photos:[...(localPhotos[li]||[])]},approval:{...layers[li].approval,value:quote,serviceDate:layers[li].approval?.serviceDate||c.datetime}};
-  await updateDoc(doc(db,'clients',id),{layers,status:'done',completedAt:new Date().toISOString()});
+  layers[li]={...layers[li],quote,status:'service_finished',done:false,technicianFinishedAt:new Date().toISOString(),techReport:{model:'Visita empresa',problem:c.notes||'',photos:[...(localPhotos[li]||[])]},approval:{...layers[li].approval,value:quote,serviceDate:layers[li].approval?.serviceDate||c.datetime}};
+  await updateDoc(doc(db,'clients',id),{layers,status:'service_finished',technicianFinishedAt:new Date().toISOString()});
   closeDetail();
 };
 
