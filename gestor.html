@@ -138,10 +138,6 @@ textarea.fi{resize:vertical;min-height:52px}
 /* Auto-save indicator */
 .autosave{font-size:.72rem;color:var(--muted);margin-left:auto}
 /* Paste */
-.paste-card{background:var(--surface);border:1px dashed var(--accent);border-radius:var(--radius);padding:16px;margin-bottom:14px}
-.paste-card h2{font-size:.88rem;margin-bottom:8px;color:var(--accent2)}
-.paste-card textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;color:var(--text);font-size:.83rem;outline:none;resize:vertical;min-height:70px;font-family:monospace}
-.paste-card textarea:focus{border-color:var(--accent)}
 
 /* Company/doc */
 .company-box{background:linear-gradient(135deg,#111827,#0f172a);border:1px solid #06b6d455;border-radius:var(--radius);padding:16px;margin-bottom:14px}
@@ -171,6 +167,11 @@ textarea.fi{resize:vertical;min-height:52px}
   <span id="conn">🔴 Conectando...</span>
 </header>
 
+<!-- 
+  IMPORTANTE: NÃO adicionar bloco de "Cole as informações do cliente" / paste-card.
+  Esta funcionalidade foi removida intencionalmente e não deve ser restaurada.
+  DO NOT add paste-card, parseAndFill, or paste-area elements back to this file.
+-->
 <div class="main">
   <!-- Tabs principais -->
   <div class="tabs" id="main-tabs">
@@ -190,14 +191,7 @@ textarea.fi{resize:vertical;min-height:52px}
       <button class="btn btn-cyan btn-sm" onclick="addCompanyVisit()">⚡ Enviar visita empresa</button>
     </div>
     <!-- Paste -->
-    <div class="paste-card">
-      <h2>📋 Cole as informações do cliente</h2>
-      <textarea id="paste-area" placeholder="Cole aqui o texto com os dados. Funciona com rótulo: valor ou formato de tabela (duas linhas com tabulação)."></textarea>
-      <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
-        <button class="btn btn-blue btn-sm" onclick="parseAndFill()">⚡ Preencher automaticamente</button>
-        <span style="font-size:.75rem;color:var(--muted)">Reconhece Nome, Contato, Endereço, Número, Bairro, Ref, Equipamento</span>
-      </div>
-    </div>
+</div>
 
     <!-- Formulário -->
     <div class="card">
@@ -405,45 +399,6 @@ window.fillFromClient=id=>{
 document.addEventListener('click',e=>{if(!e.target.closest('#csr')&&!e.target.matches('#client-search'))document.getElementById('csr').style.display='none';});
 
 // ── Parse & fill ──────────────────────────────
-window.parseAndFill=()=>{
-  const raw=document.getElementById('paste-area').value.trim();
-  if(!raw){alert('Cole o texto primeiro.');return;}
-  const lines=raw.split('\n').map(l=>l.trim()).filter(Boolean);
-  let name='',phone='',street='',number='',bairro='',ref='',equip='',city='';
-  let tabLine=-1;
-  for(let i=0;i<lines.length;i++){if(lines[i].includes('\t')){tabLine=i;break;}}
-  if(tabLine>=0&&lines[tabLine+1]){
-    const hds=lines[tabLine].split('\t').map(h=>h.replace(':','').trim().toLowerCase());
-    const vls=lines[tabLine+1].split('\t').map(v=>v.trim());
-    hds.forEach((h,i)=>{const v=vls[i]||'';if(!v)return;
-      if(h.includes('nome'))name=v;
-      else if(h.includes('contato')||h.includes('telefone')||h.includes('fone')||h.includes('celular'))phone=v;
-      else if(h.includes('endere'))street=v;
-      else if((h.includes('mero')||h.includes('resid')||h.includes('casa'))&&!h.includes('contato'))number=v;
-      else if(h.includes('bairro'))bairro=v;
-      else if(h.includes('refer')||h.includes('ponto'))ref=v;
-      else if(h.includes('equip')||h.includes('aparelho'))equip=v;
-      else if(h.includes('cidade')||h.includes('munic'))city=v;
-    });
-  } else {
-    function gv(labels){for(const lb of labels){const idx=raw.toLowerCase().indexOf(lb.toLowerCase());if(idx<0)continue;const rest=raw.substring(idx+lb.length).replace(/^[: ]+/,'');const nl=rest.search(/[\n\r]/);return(nl>=0?rest.substring(0,nl):rest).trim();}return'';}
-    name=gv(['Nome completo','Nome']);phone=gv(['Contato','Telefone','Tel','Fone','Celular']);
-    street=gv(['Endereço','Endereco','Rua','Avenida','Av','Rodovia']);number=gv(['Número da residência','Número da casa','Número','Numero']);
-    bairro=gv(['Bairro']);ref=gv(['Ponto de referência','Referência','Referencia','Ref','Ponto']);
-    equip=gv(['Equipamento','Aparelho']);city=gv(['Cidade','Município']);
-  }
-  const address=[street,number,bairro,city].filter(Boolean).join(', ');
-  if(name)document.getElementById('inp-name').value=name;
-  if(phone)document.getElementById('inp-phone').value=phone;
-  if(address)document.getElementById('inp-address').value=address;
-  if(ref)document.getElementById('inp-ref').value=ref;
-  if(equip)document.getElementById('inp-equip').value=equip;
-  document.getElementById('paste-area').value='';
-  toast('Campos preenchidos! Defina a data e hora.');
-};
-
-
-
 function resizeImageFile(file, maxW=1400, quality=.78){
   return new Promise((resolve,reject)=>{
     const reader=new FileReader();
