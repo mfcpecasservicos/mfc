@@ -392,7 +392,7 @@ function renderDetailFull(c){
           <button class="done-btn" onclick="markDone('${c.id}',${li})">✅ Serviço Concluído</button>
         </div>`:'';
 
-      panel=`${techAcc}${absentBox}${quoteBox}${docBox}${entryBox}${deliveryBox}${apprBox}${waiting}${waitingAppr}`;
+      panel=`${techAcc}${absentBox}${quoteBox}${docBox}${entryBox}${apprBox}${waiting}${waitingAppr}`;
     }
 
     return`<div id="vp-${c.id}-${li}" data-vpanel="${c.id}" class="v-panel${isActive?' active':''}">${panel}</div>`;
