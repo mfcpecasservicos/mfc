@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mfc-tecnico-v7';
+const CACHE_NAME = 'mfc-tecnico-v8';
 const APP_SHELL = [
   './',
   './index.html',
@@ -11,8 +11,7 @@ const APP_SHELL = [
 
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(APP_SHELL).catch(() => null))
+    caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL).catch(() => null))
   );
   self.skipWaiting();
 });
@@ -29,30 +28,30 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const req = event.request;
   if (req.method !== 'GET') return;
-
   const url = new URL(req.url);
 
   // Não interfere em Firebase, Google APIs, CDN ou arquivos externos.
   if (url.origin !== self.location.origin) return;
 
-  // Páginas HTML: sempre tenta buscar a versão nova primeiro.
-  if (req.mode === 'navigate' || url.pathname.endsWith('.html')) {
+  // Gestor e cadastro não devem ficar presos em cache do PWA técnico.
+  if (url.pathname.endsWith('/gestor.html') || url.pathname.endsWith('/cadastro.html')) {
+    event.respondWith(
+      fetch(req, { cache: 'no-store' }).catch(() => new Response('Sem conexão. Recarregue quando a internet voltar.', {
+        status: 503,
+        headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+      }))
+    );
+    return;
+  }
+
+  // App técnico: rede primeiro para HTML, cache se cair.
+  if (req.mode === 'navigate' || url.pathname.endsWith('/index.html') || url.pathname.endsWith('/')) {
     event.respondWith(
       fetch(req).then(res => {
         const copy = res.clone();
         caches.open(CACHE_NAME).then(cache => cache.put(req, copy)).catch(() => {});
         return res;
-      }).catch(() => caches.match(req).then(cached => {
-        // Só o app técnico cai para index.html. Gestor/cadastro não recebem index por engano.
-        if (cached) return cached;
-        if (url.pathname.endsWith('/') || url.pathname.endsWith('/index.html')) {
-          return caches.match('./index.html');
-        }
-        return new Response('Sem conexão. Atualize quando a internet voltar.', {
-          status: 503,
-          headers: { 'Content-Type': 'text/plain; charset=utf-8' }
-        });
-      }))
+      }).catch(() => caches.match(req).then(cached => cached || caches.match('./index.html')))
     );
     return;
   }

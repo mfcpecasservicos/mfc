@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Painel Gestor — Refrigeração</title>
 <style>
 :root{
@@ -323,7 +326,7 @@ onSnapshot(query(col, orderBy('createdAt','asc')), snap => {
   all = snap.docs.map(d=>({id:d.id,...d.data()}));
   document.getElementById('conn').textContent='🟢 Conectado';
   render(); renderTrash();
-}, err=>{ document.getElementById('conn').textContent='🔴 Erro'; console.error(err); });
+}, err=>{ const msg=(err&&err.code)?err.code:(err&&err.message?err.message:'Erro'); document.getElementById('conn').textContent='🔴 Erro Firebase'; console.error('Erro Firestore clients:', err); if(typeof toast==='function') toast('Erro ao conectar no Firebase: '+msg, 'var(--red)'); });
 
 onSnapshot(query(leadsCol, orderBy('createdAt','desc')), snap => {
   leads = snap.docs.map(d=>({id:d.id,...d.data()}));
@@ -332,7 +335,7 @@ onSnapshot(query(leadsCol, orderBy('createdAt','desc')), snap => {
   badge.textContent = cnt;
   badge.style.display = cnt > 0 ? 'inline' : 'none';
   renderLeads();
-});
+}, err=>{ console.error('Erro Firestore leads:', err); if(typeof toast==='function') toast('Erro ao carregar novos cadastros: '+(err.code||err.message||'Erro'), 'var(--red)'); });
 
 // ── Helpers ───────────────────────────────────
 const lbl = s=>({waiting:'Aguardando visita',evaluated:'Avaliação concluída',quoted:'Aguardando aprovação',approved:'Aprovado',service_finished:'Serviço finalizado',ready_delivery:'Pronto para entrega',absent:'Cliente ausente',rejected:'Orçamento rejeitado',done:'Serviço Concluído'}[s]||s||'Aguardando visita');
