@@ -2,17 +2,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MFC</title>
-<meta name="theme-color" content="#0d1117">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="MFC">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<link rel="apple-touch-icon" href="icon-192.png">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>App Técnico — Refrigeração</title>
 <style>
 :root{--bg:#0d1117;--surface:#161b22;--surface2:#21262d;--accent:#58a6ff;--text:#e6edf3;--muted:#8b949e;--border:#30363d;--green:#3fb950;--yellow:#d29922;--orange:#db6d28;--red:#f85149;--purple:#bc8cff;--radius:12px}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -22,7 +13,6 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 header h1{font-size:1rem;font-weight:700;flex:1}
 #conn{font-size:.85rem}
 .reload-btn{background:none;border:1px solid var(--border);border-radius:8px;color:var(--muted);padding:6px 10px;font-size:.75rem;cursor:pointer}
-.install-btn{display:none;background:var(--accent);border:none;border-radius:8px;color:#fff;padding:6px 10px;font-size:.75rem;font-weight:700;cursor:pointer}
 .search-wrap{padding:12px 16px 0;position:relative}
 .search-wrap input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px 10px 36px;color:var(--text);font-size:.9rem;outline:none}
 .search-wrap input:focus{border-color:var(--accent)}
@@ -32,9 +22,9 @@ header h1{font-size:1rem;font-weight:700;flex:1}
 .card:active{transform:scale(.98)}
 .card.s-waiting{border-left-color:#3b82f6}.card.s-evaluated{border-left-color:#22c55e}
 .card.s-quoted{border-left-color:#eab308}.card.s-approved{border-left-color:#f97316}
-.card.s-ready_delivery{border-left-color:#06b6d4}
-.card.s-absent{border-left-color:#a855f7}.card.s-rejected{border-left-color:#ef4444}
 .card.s-ready_delivery{border-left-color:#38bdf8}
+.card.s-service_finished{border-left-color:#22c55e}
+.card.s-absent{border-left-color:#a855f7}.card.s-rejected{border-left-color:#ef4444}
 .card.s-done{border-left-color:#22c55e;opacity:.6}
 .card-inner{padding:14px 16px;display:flex;align-items:center;gap:12px}
 .card-icon{font-size:1.5rem}
@@ -47,13 +37,13 @@ header h1{font-size:1rem;font-weight:700;flex:1}
 .badge{font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
 .b-waiting{background:#0d2346;color:#60a5fa}.b-evaluated{background:#0d2e1b;color:#86efac}
 .b-quoted{background:#2d1e00;color:#fcd34d}.b-approved{background:#2d1200;color:#fb923c}
-.b-ready_delivery{background:#082f49;color:#67e8f9}
+.b-ready_delivery{background:#0c4a6e;color:#7dd3fc}.b-service_finished{background:#052e16;color:#86efac}
 .b-absent{background:#2d1a4a;color:#d8b4fe}.b-rejected{background:#3b1219;color:#fca5a5}
-.b-done{background:#0d2e1b;color:#4ade80}.b-ready_delivery{background:#0c4a6e;color:#7dd3fc}
+.b-done{background:#0d2e1b;color:#4ade80}
 .paid-badge{font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:20px;background:#0d2e1b;color:#4ade80;border:1px solid #22c55e44;margin-top:4px;display:inline-block}
 .empty{text-align:center;padding:60px 20px;color:var(--muted)}
 .empty .icon{font-size:3rem;margin-bottom:12px}
-#detail{position:fixed;inset:0;background:var(--bg);z-index:200;display:none;flex-direction:column;max-width:480px;margin:0 auto;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;isolation:auto}
+#detail{position:fixed;inset:0;background:var(--bg);z-index:200;display:none;flex-direction:column;max-width:480px;margin:0 auto;overflow-y:auto}
 #detail.open{display:flex}
 .detail-header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10}
 .back-btn{background:none;border:none;color:var(--accent);font-size:1.1rem;cursor:pointer;padding:4px 8px}
@@ -75,11 +65,11 @@ header h1{font-size:1rem;font-weight:700;flex:1}
 .vt-evaluated.active{background:#14532d;border-color:#22c55e}
 .vt-quoted.active{background:#451a03;border-color:#eab308}
 .vt-approved.active{background:#1c1917;border-color:#f97316}
-.vt-ready_delivery.active{background:#082f49;border-color:#06b6d4}
+.vt-ready_delivery.active{background:#0c4a6e;border-color:#38bdf8}
+.vt-service_finished.active{background:#064e3b;border-color:#22c55e}
 .vt-absent.active{background:#3b0764;border-color:#a855f7}
 .vt-rejected.active{background:#3b1219;border-color:#ef4444}
 .vt-done.active{background:#0d1f0d;border-color:#22c55e}
-.vt-ready_delivery.active{background:#0c4a6e;border-color:#38bdf8}
 .v-panel{display:none}.v-panel.active{display:flex;flex-direction:column;gap:10px}
 /* Accordion */
 .acc{border:1px solid var(--border);border-radius:10px;overflow:hidden}
@@ -110,6 +100,12 @@ header h1{font-size:1rem;font-weight:700;flex:1}
 .waiting-msg{text-align:center;padding:14px;color:var(--muted);font-size:.88rem;background:var(--surface);border-radius:var(--radius)}
 .pay-box{background:#0d2e1b;border:1px solid #22c55e44;border-radius:var(--radius);padding:14px}
 .pay-box h3{color:var(--green);font-size:.85rem;margin-bottom:10px;text-transform:uppercase}
+#lightbox{position:fixed;inset:0;background:#000d;z-index:900;display:none;align-items:center;justify-content:center}
+#lightbox.open{display:flex}
+#lightbox img{max-width:95vw;max-height:82vh;border-radius:10px;object-fit:contain;transform-origin:center;transition:transform .12s}
+#lb-close{position:absolute;top:16px;right:16px;color:#fff;font-size:2rem;cursor:pointer;background:none;border:none;z-index:10}
+.lb-controls{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10}
+.lb-controls button{background:#ffffff22;color:#fff;border:1px solid #ffffff44;border-radius:10px;padding:10px 14px;font-size:1rem;font-weight:700;cursor:pointer;backdrop-filter:blur(6px)}
 .add-visit-btn{background:none;border:1px dashed var(--border);border-radius:8px;color:var(--muted);padding:8px 14px;font-size:.82rem;cursor:pointer;white-space:nowrap}
 .doc-box{background:#0f172a;border:1px solid #334155;border-radius:var(--radius);padding:12px;margin-top:8px}
 .doc-box a{color:var(--accent);font-weight:700;text-decoration:none;font-size:.9rem}
@@ -127,7 +123,6 @@ header h1{font-size:1rem;font-weight:700;flex:1}
   <span style="font-size:1.4rem">❄️</span>
   <h1>Técnico</h1>
   <span id="conn">🔴</span>
-  <button class="install-btn" id="install-btn">⬇ Instalar</button>
   <button class="reload-btn" onclick="location.reload()">🔄</button>
 </header>
 <div class="search-wrap">
@@ -144,6 +139,15 @@ header h1{font-size:1rem;font-weight:700;flex:1}
     <span class="badge" id="d-badge"></span>
   </div>
   <div class="detail-body" id="d-body"></div>
+</div>
+<div id="lightbox" onclick="closeLb()">
+  <button id="lb-close" onclick="closeLb()">✕</button>
+  <img id="lb-img" src="" alt="" onclick="event.stopPropagation()">
+  <div class="lb-controls" onclick="event.stopPropagation()">
+    <button onclick="zoomLb(-0.25)">−</button>
+    <button onclick="resetLb()">Reset</button>
+    <button onclick="zoomLb(0.25)">+</button>
+  </div>
 </div>
 <input type="file" id="input-gallery" accept="image/*" multiple style="display:none" onchange="handleFiles(this)">
 <input type="file" id="input-camera" accept="image/*" capture="environment" style="display:none" onchange="handleFiles(this)">
@@ -174,8 +178,8 @@ requestNotif();
 function sendNotif(t,b){if('Notification'in window&&Notification.permission==='granted')new Notification(t,{body:b,icon:'https://cdn.jsdelivr.net/gh/twitter/twemoji@14/assets/72x72/2744.png'})}
 
 function stKey(s){return String(s||'waiting').toLowerCase().trim()}
-function lbl(s){const k=stKey(s);return{waiting:'Aguardando visita',evaluated:'Avaliação concluída',quoted:'Orçamento enviado',approved:'Aprovado',ready_delivery:'Pronto para entrega',absent:'Cliente ausente',rejected:'Orçamento rejeitado',done:'Concluído'}[k]||String(s||'Aguardando visita')}
-function icon(s){const k=stKey(s);return{waiting:'🕐',evaluated:'✅',quoted:'💰',approved:'🟠',ready_delivery:'📦',absent:'🚫',rejected:'❌',done:'✔'}[k]||'📋'}
+function lbl(s){const k=stKey(s);return{waiting:'Aguardando visita',evaluated:'Avaliação concluída',quoted:'Orçamento enviado',approved:'Aprovado',ready_delivery:'Equipamento pronto para entrega',service_finished:'Serviço finalizado',absent:'Cliente ausente',rejected:'Orçamento rejeitado',done:'Concluído'}[k]||String(s||'Aguardando visita')}
+function icon(s){const k=stKey(s);return{waiting:'🕐',evaluated:'✅',quoted:'💰',approved:'🟠',ready_delivery:'📦',service_finished:'✅',absent:'🚫',rejected:'❌',done:'✔'}[k]||'📋'}
 function fdt(dt){if(!dt)return'—';try{return new Date(dt).toLocaleString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch{return dt}}
 function maps(a){return'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a)}
 function deliveryDt(l,c){return l?.deliveryDate||l?.deliveryAt||l?.readyDeliveryDate||l?.readyAt||l?.delivery?.date||c?.deliveryDate||''}
@@ -189,22 +193,16 @@ function getMainDt(c){
   const layers=getLayers(c);
   const active=layers.find(l=>!l.done);
   if(stKey(active?.status)==='ready_delivery')return{dt:deliveryDt(active,c)||active?.approval?.serviceDate||c.datetime,type:'delivery'};
-  if(active?.deliveryDate)return{dt:active.deliveryDate,type:'delivery'};
   if(active?.approval?.serviceDate)return{dt:active.approval.serviceDate,type:'service'};
   return{dt:c.datetime,type:'visit'};
 }
 
-window.openLb = src => {
-  if(!src)return;
-  const w=window.open('', '_blank');
-  if(!w){ location.href=src; return; }
-  const safeTitle='Orçamento MFC';
-  w.document.open();
-  w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${safeTitle}</title><style>html,body{margin:0;min-height:100%;background:#111;color:#fff;font-family:Arial,sans-serif}body{display:flex;align-items:flex-start;justify-content:center;padding:10px}.wrap{width:100%;text-align:center}.top{position:sticky;top:0;z-index:2;background:#111d;padding:8px 0 10px;backdrop-filter:blur(6px)}button{background:#2563eb;color:#fff;border:0;border-radius:10px;padding:12px 18px;font-size:16px;font-weight:700}img{display:block;width:100%;height:auto;max-width:none;margin:10px auto;background:#fff;border-radius:8px}</style></head><body><div class="wrap"><div class="top"><button onclick="history.length>1?history.back():window.close()">← Voltar</button></div><img id="img" alt="Orçamento"></div><script>document.getElementById('img').src=${JSON.stringify(src)};<\/script></body></html>`);
-  w.document.close();
-};
-window.closeLb = () => {};
-window.resetLb = () => {};
+let lbScale=1;
+function applyLbZoom(){document.getElementById('lb-img').style.transform=`scale(${lbScale})`;}
+window.openLb=src=>{lbScale=1;document.getElementById('lb-img').src=src;applyLbZoom();document.getElementById('lightbox').classList.add('open')};
+window.closeLb=()=>document.getElementById('lightbox').classList.remove('open');
+window.zoomLb=d=>{lbScale=Math.min(Math.max(lbScale+d,1),4);applyLbZoom();};
+window.resetLb=()=>{lbScale=1;applyLbZoom();};
 
 const q=query(col,orderBy('createdAt','asc'));
 onSnapshot(q,snap=>{
@@ -372,6 +370,7 @@ function renderDetailFull(c){
       const docBox=ly.budgetImage?.data?`<div class="doc-box"><p style="color:var(--accent);font-size:.78rem;text-transform:uppercase;margin-bottom:6px">🖼️ Imagem do orçamento</p><img class="budget-preview" src="${ly.budgetImage.data}" onclick="openLb('${ly.budgetImage.data}')"><button class="done-btn" style="margin-top:10px;background:#1e3a5f" onclick="openLb('${ly.budgetImage.data}')">🔍 Ver orçamento com zoom</button></div>`:'';
       const entry=ly.entry||{}; const total=moneyNum(ly.approval?.value); const ent=total*((entry.percent||40)/100); const rem=total-ent;
       const entryBox=entry.enabled?`<div class="entry-box"><h3 style="color:var(--green);font-size:.78rem;margin-bottom:6px">💵 Entrada / Sinal</h3><div class="entry-grid"><div><label>Total</label><span>${ly.approval?.value||fmtMoney(total)}</span></div><div><label>Entrada (${entry.percent||40}%)</label><span>${fmtMoney(ent)}</span></div><div><label>Saldo restante</label><span>${fmtMoney(rem)}</span></div><div><label>Status</label><span>${entry.received?'✅ Recebida':'⏳ Pendente'}</span></div></div><p style="font-size:.8rem;color:var(--muted);margin-top:8px">Forma: ${entry.payment||'—'}</p></div>`:'';
+      const deliveryBox=stKey(ly.status)==='ready_delivery'?`<div class="doc-box" style="border-color:#38bdf855"><p style="color:#7dd3fc;font-size:.9rem;font-weight:800">📦 Equipamento pronto para entrega</p>${deliveryDt(ly,c)?`<p style="margin-top:6px;font-size:.9rem">Entrega: <strong>${fdt(deliveryDt(ly,c))}</strong></p>`:''}<p style="margin-top:6px;color:var(--muted);font-size:.82rem">Aguardando o gestor concluir a OS.</p></div>`:stKey(ly.status)==='service_finished'?`<div class="doc-box" style="border-color:#22c55e55"><p style="color:#86efac;font-size:.9rem;font-weight:800">✅ Serviço finalizado</p><p style="margin-top:6px;color:var(--muted);font-size:.82rem">Aguardando o gestor conferir e finalizar a OS.</p></div>`:'';
       const waiting=!ly.quote&&stKey(ly.status)==='evaluated'?`<div class="waiting-msg">⏳ Aguardando orçamento...</div>`:'';
       const waitingAppr=ly.quote&&stKey(ly.status)==='quoted'?`<div class="waiting-msg">⏳ Aguardando aprovação...</div>`:'';
 
@@ -389,10 +388,10 @@ function renderDetailFull(c){
           <div class="fg" style="margin-bottom:10px"><label>Forma de pagamento (confirmar ou alterar)</label>
             <input id="done-pay-${c.id}-${li}" type="text" placeholder="Ex: Pix, Cartão..." value="${ly.approval.payment||''}">
           </div>
-          <button class="done-btn" onclick="markDone('${c.id}',${li})">✅ Serviço Concluído</button>
+          <button class="done-btn" onclick="markDone('${c.id}',${li})">✅ Serviço finalizado</button>
         </div>`:'';
 
-      panel=`${techAcc}${absentBox}${quoteBox}${docBox}${entryBox}${apprBox}${waiting}${waitingAppr}`;
+      panel=`${techAcc}${absentBox}${quoteBox}${docBox}${entryBox}${deliveryBox}${apprBox}${waiting}${waitingAppr}`;
     }
 
     return`<div id="vp-${c.id}-${li}" data-vpanel="${c.id}" class="v-panel${isActive?' active':''}">${panel}</div>`;
@@ -488,15 +487,14 @@ window.markDone=async(id,li)=>{
   const payment=document.getElementById('done-pay-'+id+'-'+li)?.value?.trim();
   const c=allClients.find(x=>x.id===id);
   const layers=[...getLayers(c)];
-  layers[li]={...layers[li],status:'done',done:true,concludedAt:new Date().toISOString(),approval:{...layers[li].approval,payment:payment||layers[li].approval?.payment||''}};
-  // Status principal = primeira visita ativa restante
+  const isGalpao=!!layers[li].approval?.workshopService;
+  const newStatus=isGalpao?'ready_delivery':'service_finished';
+  layers[li]={...layers[li],status:newStatus,done:false,technicianFinishedAt:new Date().toISOString(),approval:{...layers[li].approval,payment:payment||layers[li].approval?.payment||''}};
   const firstActive=layers.find(l=>!l.done);
-  const mainStatus=firstActive?firstActive.status:'done';
-  await updateDoc(doc(db,'clients',id),{layers,status:mainStatus,completedAt:new Date().toISOString()});
-  // Se todas concluídas, fecha o detail
-  if(!firstActive)closeDetail();
+  const mainStatus=firstActive?firstActive.status:newStatus;
+  await updateDoc(doc(db,'clients',id),{layers,status:mainStatus,technicianUpdatedAt:new Date().toISOString()});
+  alert(isGalpao?'Equipamento marcado como pronto para entrega.':'Serviço marcado como finalizado. O gestor fará a conclusão final.');
 };
-
 
 window.markCompanyDone=async(id,li)=>{
   if(!confirm('Concluir visita empresa?'))return;
@@ -514,42 +512,6 @@ window.addVisit=async id=>{
   layers.push({status:'waiting',quote:'',quoteObs:'',techReport:null,absentAt:null,approval:null,done:false,createdAt:new Date().toISOString()});
   await updateDoc(doc(db,'clients',id),{layers});
 };
-</script>
-
-<script>
-let deferredInstallPrompt = null;
-const installBtn = document.getElementById('install-btn');
-
-window.addEventListener('beforeinstallprompt', (event) => {
-  event.preventDefault();
-  deferredInstallPrompt = event;
-  if (installBtn) installBtn.style.display = 'inline-block';
-});
-
-if (installBtn) {
-  installBtn.addEventListener('click', async () => {
-    if (!deferredInstallPrompt) return;
-    deferredInstallPrompt.prompt();
-    await deferredInstallPrompt.userChoice.catch(() => null);
-    deferredInstallPrompt = null;
-    installBtn.style.display = 'none';
-  });
-}
-
-window.addEventListener('appinstalled', () => {
-  deferredInstallPrompt = null;
-  if (installBtn) installBtn.style.display = 'none';
-});
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js', { scope: './' })
-      .then(reg => {
-        reg.update();
-      })
-      .catch(err => console.log('Service Worker não registrado:', err));
-  });
-}
 </script>
 </body>
 </html>
