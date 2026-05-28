@@ -709,6 +709,7 @@ function statusOpts(sel){
     return`<option value="${s}"${sel===s?' selected':''}>${labels[s]}</option>`;
   }).join('');
 }
+}
 
 function renderTrash(){
   const deleted=all.filter(c=>c.deleted===true);
