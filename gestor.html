@@ -70,7 +70,7 @@ textarea.fi{resize:vertical;min-height:52px}
 .sa{background:#1c191733;color:#fb923c;border:1px solid #1c1917}.da{background:#f97316}
 .sab{background:#3b076433;color:#d8b4fe;border:1px solid #3b0764}.dab{background:#a855f7}
 .sr{background:#3b121933;color:#fca5a5;border:1px solid #3b1219}.dr{background:#ef4444}
-.sd{background:#0d1f0d33;color:#4ade80;border:1px solid #0d1f0d}.dd{background:#22c55e}.srd{background:#062b3533;color:#67e8f9;border:1px solid #164e63}.drd{background:#06b6d4}
+.sd{background:#0d1f0d33;color:#4ade80;border:1px solid #0d1f0d}.dd{background:#22c55e}
 .dt-badge{display:inline-block;margin-top:4px;font-size:.73rem;font-weight:600;color:#fff;background:linear-gradient(135deg,#1e3a5f,#0f2744);border:1px solid #2d4f7c;border-radius:6px;padding:2px 8px}
 .dt-badge.svc{background:linear-gradient(135deg,#1a1000,#2d1200);border-color:#7c3d12;color:var(--orange)}
 .paid-badge{font-size:.66rem;font-weight:700;padding:2px 7px;border-radius:10px;background:#0d2e1b;color:#4ade80;border:1px solid #22c55e44}
@@ -94,7 +94,7 @@ textarea.fi{resize:vertical;min-height:52px}
 .vta.active{background:#1c1917;border-color:#f97316}
 .vtab2.active{background:#3b0764;border-color:#a855f7}
 .vtr.active{background:#3b1219;border-color:#ef4444}
-.vtd.active{background:#0d1f0d;border-color:#22c55e}.vtrd.active{background:#083344;border-color:#06b6d4}
+.vtd.active{background:#0d1f0d;border-color:#22c55e}
 .vpanel{display:none}.vpanel.active{display:block}
 /* Accordion */
 .acc{border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:8px}
@@ -183,15 +183,21 @@ textarea.fi{resize:vertical;min-height:52px}
     <!-- Visita empresa rápida -->
     <div class="company-box">
       <h2>🏢 Modo visita empresa</h2>
-      <div class="fgrid3">
+      <div class="fgrid">
         <div><span class="fl">Nome da empresa</span><input type="text" class="fi" id="emp-name" placeholder="Empresa"></div>
         <div><span class="fl">Horário da visita</span><input type="datetime-local" class="fi" id="emp-datetime"></div>
-        <div><span class="fl">Orçamento do técnico</span><input type="text" class="fi" id="emp-budget" placeholder="R$ 0,00"></div>
       </div>
-      <div style="margin-bottom:10px"><span class="fl">Observação</span><textarea class="fi" id="emp-notes" placeholder="Observação rápida da visita" style="min-height:44px"></textarea></div>
       <button class="btn btn-cyan btn-sm" onclick="addCompanyVisit()">⚡ Enviar visita empresa</button>
     </div>
-
+    <!-- Paste -->
+    <div class="paste-card">
+      <h2>📋 Cole as informações do cliente</h2>
+      <textarea id="paste-area" placeholder="Cole aqui o texto com os dados. Funciona com rótulo: valor ou formato de tabela (duas linhas com tabulação)."></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+        <button class="btn btn-blue btn-sm" onclick="parseAndFill()">⚡ Preencher automaticamente</button>
+        <span style="font-size:.75rem;color:var(--muted)">Reconhece Nome, Contato, Endereço, Número, Bairro, Ref, Equipamento</span>
+      </div>
+    </div>
 
     <!-- Formulário -->
     <div class="card">
@@ -238,7 +244,6 @@ textarea.fi{resize:vertical;min-height:52px}
       <button class="tab" onclick="fTab('evaluated',this)">Avaliados</button>
       <button class="tab" onclick="fTab('quoted',this)">Orçamento</button>
       <button class="tab" onclick="fTab('approved',this)">Aprovados</button>
-      <button class="tab" onclick="fTab('ready_delivery',this)">Pronto entrega</button>
       <button class="tab" onclick="fTab('absent',this)">Ausente</button>
       <button class="tab" onclick="fTab('rejected',this)">Rejeitados</button>
       <button class="tab" onclick="fTab('done',this)">✅ Concluídos</button>
@@ -323,14 +328,7 @@ onSnapshot(query(leadsCol, orderBy('createdAt','desc')), snap => {
 });
 
 // ── Helpers ───────────────────────────────────
-function normStatus(s){
-  s=String(s||'waiting').trim().toLowerCase().replace(/-/g,'_').replace(/\s+/g,'_');
-  if(s.includes('ready')&&s.includes('delivery'))return 'ready_delivery';
-  if(s.includes('pronto')&&s.includes('entrega'))return 'ready_delivery';
-  if(['ready_delivery','ready_for_delivery','pronto_entrega','pronto_para_entrega'].includes(s))return 'ready_delivery';
-  return s;
-}
-const lbl = s=>({waiting:'Aguardando visita',evaluated:'Avaliação concluída',quoted:'Aguardando aprovação',approved:'Aprovado',ready_delivery:'Pronto para entrega',absent:'Cliente ausente',rejected:'Orçamento rejeitado',done:'Serviço Concluído'}[normStatus(s)]||s||'Aguardando visita');
+const lbl = s=>({waiting:'Aguardando visita',evaluated:'Avaliação concluída',quoted:'Aguardando aprovação',approved:'Aprovado',absent:'Cliente ausente',rejected:'Orçamento rejeitado',done:'Serviço Concluído'}[s]||s||'Aguardando visita');
 const fdt = dt=>{ if(!dt)return'—'; try{return new Date(dt).toLocaleString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch{return dt;}};
 const fdtShort = dt=>{ if(!dt)return'—'; try{return new Date(dt).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});}catch{return dt;}};
 const maps = a=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a);
@@ -346,11 +344,10 @@ function getLayers(c){
   if(c.layers&&c.layers.length)return c.layers;
   return[{status:c.status||'waiting',quote:c.quote||'',quoteObs:c.quoteObs||'',techReport:c.techReport||null,absentAt:c.absentAt||null,approval:c.approval||null,done:false,createdAt:c.createdAt||''}];
 }
-function getStatus(c){ return normStatus(c.status||'waiting'); }
+function getStatus(c){ return c.status||'waiting'; }
 function getMainDt(c){
   const layers=getLayers(c);
   const active=layers.find(l=>!l.done);
-  if(normStatus(active?.status)==='ready_delivery') return{dt:active.deliveryDate||active.deliveryAt||active.approval?.deliveryDate||active.approval?.deliveryAt||active.approval?.serviceDate,type:'delivery'};
   if(active?.approval?.serviceDate) return{dt:active.approval.serviceDate,type:'service'};
   return{dt:c.datetime,type:'visit'};
 }
@@ -503,12 +500,10 @@ window.clearForm=()=>['inp-name','inp-phone','inp-address','inp-ref','inp-dateti
 window.addCompanyVisit=async()=>{
   const name=document.getElementById('emp-name').value.trim();
   const datetime=document.getElementById('emp-datetime').value;
-  const notes=document.getElementById('emp-notes').value.trim();
-  const budget=document.getElementById('emp-budget').value.trim();
   if(!name||!datetime){alert('Informe nome da empresa e horário.');return;}
-  const layer={status:'approved',quote:budget,quoteObs:notes,techReport:null,absentAt:null,approval:{payment:'',serviceDate:datetime,value:budget,needsMachine:false,paid:false},done:false,createdAt:new Date().toISOString(),companyMode:true};
-  await addDoc(col,{type:'company',companyMode:true,name,phone:'',address:'',ref:'',datetime,equip:'Visita empresa',notes,status:'approved',layers:[layer],deleted:false,createdAt:new Date().toISOString()});
-  ['emp-name','emp-datetime','emp-notes','emp-budget'].forEach(i=>document.getElementById(i).value='');
+  const layer={status:'approved',quote:'',quoteObs:'',techReport:null,absentAt:null,approval:{payment:'',serviceDate:datetime,value:'',needsMachine:false,paid:false},done:false,createdAt:new Date().toISOString(),companyMode:true};
+  await addDoc(col,{type:'company',companyMode:true,name,phone:'',address:'',ref:'',datetime,equip:'Visita empresa',notes:'',status:'approved',layers:[layer],deleted:false,createdAt:new Date().toISOString()});
+  ['emp-name','emp-datetime'].forEach(i=>document.getElementById(i).value='');
   toast('🏢 Visita empresa enviada!');
 };
 
@@ -553,17 +548,16 @@ window.saveLayer=async(id,li)=>{
   const val=document.getElementById('ly-val-'+id+'-'+li)?.value?.trim();
   const maq=document.getElementById('ly-maq-'+id+'-'+li)?.checked||false;
   const paid=document.getElementById('ly-paid-'+id+'-'+li)?.checked||false;
-  // Entrada
-  const entryChecked=document.getElementById('ly-entry-'+id+'-'+li)?.checked||false;
-  const entryPct=parseFloat(document.getElementById('ly-epct-'+id+'-'+li)?.value)||40;
-  const entryPay=document.getElementById('ly-epay-'+id+'-'+li)?.value?.trim()||'';
-  const entryReceived=document.getElementById('ly-erecv-'+id+'-'+li)?.checked||false;
+  // Entrada paga: ao marcar, o valor do orçamento já vira o saldo restante (60%)
+  const entryPaid=document.getElementById('ly-entry-paid-'+id+'-'+li)?.checked||false;
+  const valInput=document.getElementById('ly-val-'+id+'-'+li);
+  const originalValue=valInput?.dataset?.originalValue||val||'';
   if(qt!==undefined)layers[li].quote=qt;
   if(obs!==undefined)layers[li].quoteObs=obs;
   if(st)layers[li].status=st;
   if(pay||svc||val)layers[li].approval={payment:pay||'',serviceDate:svc||'',value:val||'',needsMachine:maq,paid};
   else if(layers[li].approval){layers[li].approval.needsMachine=maq;layers[li].approval.paid=paid;}
-  layers[li].entry={enabled:entryChecked,percent:entryPct,payment:entryPay,received:entryReceived};
+  layers[li].entry={enabled:entryPaid,percent:40,received:entryPaid,originalValue,remainingValue:val||''};
   const first=layers.find(l=>!l.done);
   await updateDoc(doc(db,'clients',id),{layers,status:first?first.status:'done'});
   toast('💾 Salvo!');
@@ -670,26 +664,35 @@ window.showDoneTab=cid=>{
 };
 window.toggleAcc=(h,b)=>{document.getElementById(h)?.classList.toggle('open');document.getElementById(b)?.classList.toggle('open');};
 
-// Cálculo de entrada em tempo real
-window.calcEntry=(id,li)=>{
-  const pct=parseFloat(document.getElementById('ly-epct-'+id+'-'+li)?.value)||40;
-  const valRaw=(document.getElementById('ly-val-'+id+'-'+li)?.value||'').replace(/[R$\s.]/g,'').replace(',','.');
-  const total=parseFloat(valRaw)||0;
-  const entry=total*(pct/100);
-  const remaining=total-entry;
-  const fmt=v=>'R$ '+v.toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
-  const elE=document.getElementById('ev-entry-'+id+'-'+li);
-  const elR=document.getElementById('ev-remain-'+id+'-'+li);
-  const elT=document.getElementById('ev-total-'+id+'-'+li);
-  if(elE)elE.textContent=fmt(entry);
-  if(elR)elR.textContent=fmt(remaining);
-  if(elT)elT.textContent=fmt(total);
+// Entrada paga: desconta 40% do valor informado e mantém o saldo no campo
+function moneyToNumber(v){
+  v=(v||'').toString().replace(/R\$/g,'').replace(/\s/g,'').replace(/\./g,'').replace(',','.');
+  return parseFloat(v)||0;
+}
+function numberToMoney(v){
+  return 'R$ '+Number(v||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+}
+window.syncEntryOriginal=(id,li)=>{
+  const inp=document.getElementById('ly-val-'+id+'-'+li);
+  const chk=document.getElementById('ly-entry-paid-'+id+'-'+li);
+  if(inp && (!chk || !chk.checked)) inp.dataset.originalValue=inp.value;
+};
+window.toggleEntryPaid=(id,li)=>{
+  const inp=document.getElementById('ly-val-'+id+'-'+li);
+  const chk=document.getElementById('ly-entry-paid-'+id+'-'+li);
+  if(!inp||!chk)return;
+  if(chk.checked){
+    const base=moneyToNumber(inp.dataset.originalValue||inp.value);
+    if(!inp.dataset.originalValue) inp.dataset.originalValue=inp.value;
+    inp.value=numberToMoney(base*0.60);
+  }else{
+    inp.value=inp.dataset.originalValue||inp.value;
+  }
 };
 
 function statusOpts(sel){
-  sel=normStatus(sel);
-  return['waiting','evaluated','quoted','approved','ready_delivery','absent','rejected','done'].map(s=>{
-    const labels={waiting:'🕐 Aguardando visita',evaluated:'✅ Avaliação concluída',quoted:'💰 Aguardando aprovação',approved:'🟠 Aprovado',ready_delivery:'📦 Pronto para entrega',absent:'🚫 Cliente ausente',rejected:'❌ Orçamento rejeitado',done:'✅ Serviço Concluído'};
+  return['waiting','evaluated','quoted','approved','absent','rejected','done'].map(s=>{
+    const labels={waiting:'🕐 Aguardando visita',evaluated:'✅ Avaliação concluída',quoted:'💰 Aguardando aprovação',approved:'🟠 Aprovado',absent:'🚫 Cliente ausente',rejected:'❌ Orçamento rejeitado',done:'✅ Serviço Concluído'};
     return`<option value="${s}"${sel===s?' selected':''}>${labels[s]}</option>`;
   }).join('');
 }
@@ -707,22 +710,22 @@ function renderTrash(){
     </div>`).join('');
 }
 
-const dotCls={waiting:'dw',evaluated:'de',quoted:'dq',approved:'da',ready_delivery:'drd',absent:'dab',rejected:'dr',done:'dd'};
-const badgeCls={waiting:'sw',evaluated:'se',quoted:'sq',approved:'sa',ready_delivery:'srd',absent:'sab',rejected:'sr',done:'sd'};
+const dotCls={waiting:'dw',evaluated:'de',quoted:'dq',approved:'da',absent:'dab',rejected:'dr',done:'dd'};
+const badgeCls={waiting:'sw',evaluated:'se',quoted:'sq',approved:'sa',absent:'sab',rejected:'sr',done:'sd'};
 
 function render(){
   const list=document.getElementById('clist');
   const search=(document.getElementById('search-input').value||'').toLowerCase().trim();
   let clients=all.filter(c=>c.deleted!==true);
-  if(filter==='done')clients=clients.filter(c=>normStatus(getStatus(c))==='done');
-  else if(filter==='all')clients=clients.filter(c=>normStatus(getStatus(c))!=='done');
-  else clients=clients.filter(c=>normStatus(getStatus(c))===normStatus(filter));
+  if(filter==='done')clients=clients.filter(c=>getStatus(c)==='done');
+  else if(filter==='all')clients=clients.filter(c=>getStatus(c)!=='done');
+  else clients=clients.filter(c=>getStatus(c)===filter);
   if(search)clients=clients.filter(c=>(c.name||'').toLowerCase().includes(search));
   if(!clients.length){list.innerHTML='<div class="empty"><div class="ic">📋</div><p>Nenhum cliente.</p></div>';return;}
 
   list.innerHTML=clients.map(c=>{
     const layers=getLayers(c);
-    const status=normStatus(getStatus(c));
+    const status=getStatus(c);
     const mainDt=getMainDt(c);
     const machine=hasMachine(c);
     const paid=isPaid(c);
@@ -730,7 +733,7 @@ function render(){
     const done=layers.filter(l=>l.done);
 
     let aN=0;
-    const tabsHtml=layers.map((ly,li)=>{if(ly.done)return'';aN++;const isPri=c.priorityIndex===li;const cls={waiting:'vtw',evaluated:'vte',quoted:'vtq',approved:'vta',ready_delivery:'vtrd',absent:'vtab2',rejected:'vtr',done:'vtd'}[normStatus(ly.status)]||'vtw';return`<button id="vt-${c.id}-${li}" data-vt="${c.id}" class="vtab ${cls}${isPri?' pri':''}" onclick="showVTab('${c.id}',${li})">${isPri?'⭐ ':''}Visita ${aN}${isPri?' ★':''}</button>`;}).join('');
+    const tabsHtml=layers.map((ly,li)=>{if(ly.done)return'';aN++;const isPri=c.priorityIndex===li;const cls={waiting:'vtw',evaluated:'vte',quoted:'vtq',approved:'vta',absent:'vtab2',rejected:'vtr',done:'vtd'}[ly.status]||'vtw';return`<button id="vt-${c.id}-${li}" data-vt="${c.id}" class="vtab ${cls}${isPri?' pri':''}" onclick="showVTab('${c.id}',${li})">${isPri?'⭐ ':''}Visita ${aN}${isPri?' ★':''}</button>`;}).join('');
     const doneTab=done.length?`<button id="vt-${c.id}-done" data-vt="${c.id}" class="vtab vtd" onclick="showDoneTab('${c.id}')">✅ Concluídos (${done.length})</button>`:'';
 
     aN=0;
@@ -741,7 +744,6 @@ function render(){
       const techAcc=ly.techReport?`<div class="acc"><div class="acc-hdr" id="ath${c.id}${li}" onclick="toggleAcc('ath${c.id}${li}','atb${c.id}${li}')"><span style="font-size:.8rem;font-weight:700;color:var(--accent2)">🔧 Relatório do Técnico</span><span class="acc-arr">▼</span></div><div class="acc-body" id="atb${c.id}${li}"><p style="font-size:.85rem;margin-bottom:4px"><strong>Equipamento:</strong> ${ly.techReport.model||'—'}</p><p style="font-size:.85rem;margin-bottom:8px"><strong>Serviços:</strong> ${ly.techReport.problem||'—'}</p>${ly.techReport.photos?.length?`<div style="display:flex;gap:8px;flex-wrap:wrap">${ly.techReport.photos.map(p=>`<img src="${p}" onclick="openLb('${p}')" style="width:68px;height:68px;object-fit:cover;border-radius:6px;cursor:pointer">`).join('')}</div>`:''}</div></div>`:'';
       const absentAcc=ly.absentAt?`<div class="acc"><div class="acc-hdr" id="aah${c.id}${li}" onclick="toggleAcc('aah${c.id}${li}','aab${c.id}${li}')"><span style="font-size:.8rem;font-weight:700;color:var(--purple)">🚫 Cliente Ausente</span><span class="acc-arr">▼</span></div><div class="acc-body" id="aab${c.id}${li}"><p style="font-size:.85rem">Em: <strong>${fdt(ly.absentAt)}</strong></p></div></div>`:'';
       const apprInfo=ly.approval?.payment?`<div style="font-size:.82rem;color:var(--orange);margin-bottom:8px;padding:6px 10px;background:#1a100055;border:1px solid #f9731622;border-radius:6px">✔ ${ly.approval.payment}${ly.approval.value?' — <strong>'+ly.approval.value+'</strong>':''}${ly.approval.needsMachine?' 💳':''}${ly.approval.paid?' <span class="paid-badge">💰 Pago</span>':''} — ${fdt(ly.approval.serviceDate)}</div>`:'';
-      const entryBox=entry.enabled?`<div class="entry-box"><h5>💵 Entrada / Sinal</h5><div class="entry-vals"><div class="ev"><label>Total</label><span id="ev-total-${c.id}-${li}">${ly.approval?.value||'R$ 0,00'}</span></div><div class="ev"><label>Entrada (${entry.percent||40}%)</label><span id="ev-entry-${c.id}-${li}">R$ 0,00</span></div><div class="ev"><label>Restante</label><span id="ev-remain-${c.id}-${li}">R$ 0,00</span></div></div><div style="margin-top:8px;font-size:.82rem;color:${entry.received?'var(--green)':'var(--muted)'}">Pagamento: ${entry.payment||'—'} ${entry.received?'✅ Entrada recebida':'⏳ Aguardando'}</div></div>`:'';
       const budgetImg=ly.budgetImage?.data||'';
       const docInfo=budgetImg?`<div class="doc-box"><p style="font-size:.78rem;color:var(--accent2);text-transform:uppercase;margin-bottom:4px">🖼️ Imagem do orçamento</p><img class="budget-preview" src="${budgetImg}" onclick="openLb('${budgetImg}')"><div class="acts"><button class="btn btn-muted btn-sm" onclick="openLb('${budgetImg}')">🔍 Ver / Zoom</button><button class="btn btn-muted btn-sm" onclick="removeBudgetImage('${c.id}',${li})">Remover</button></div></div>`:'';
 
@@ -764,35 +766,21 @@ function render(){
               ${apprInfo}
               <div class="fgrid" style="margin-bottom:8px">
                 <div><span class="fl">Forma de pagamento</span><input type="text" class="fi" id="ly-pay-${c.id}-${li}" placeholder="Pix, Cartão..." value="${ly.approval?.payment||''}"></div>
-                <div><span class="fl">Valor do orçamento</span><input type="text" class="fi" id="ly-val-${c.id}-${li}" placeholder="R$ 0,00" value="${ly.approval?.value||''}" oninput="calcEntry('${c.id}',${li})"></div>
+                <div><span class="fl">Valor do orçamento / saldo</span><input type="text" class="fi" id="ly-val-${c.id}-${li}" placeholder="R$ 0,00" value="${ly.approval?.value||''}" data-original-value="${entry.originalValue||ly.approval?.value||''}" oninput="syncEntryOriginal('${c.id}',${li})"></div>
               </div>
               <div style="margin-bottom:10px"><span class="fl">Data e hora do serviço</span><input type="datetime-local" class="fi" id="ly-svc-${c.id}-${li}" value="${ly.approval?.serviceDate||''}"></div>
               <label style="display:flex;align-items:center;gap:10px;cursor:pointer;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;margin-bottom:8px">
                 <input type="checkbox" id="ly-maq-${c.id}-${li}" ${ly.approval?.needsMachine?'checked':''} style="width:17px;height:17px;accent-color:var(--orange);cursor:pointer">
                 <span style="font-size:.87rem">💳 Precisa de maquininha</span>
               </label>
-              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;background:#0d2e1b55;border:1px solid #22c55e33;border-radius:var(--radius-sm);padding:9px 12px">
+              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;background:#0d2e1b55;border:1px solid #22c55e33;border-radius:var(--radius-sm);padding:9px 12px;margin-bottom:8px">
                 <input type="checkbox" id="ly-paid-${c.id}-${li}" ${ly.approval?.paid?'checked':''} style="width:17px;height:17px;accent-color:var(--green);cursor:pointer">
                 <span style="font-size:.87rem">✅ Orçamento já pago</span>
               </label>
-            </div>
-          </div>
-          <!-- Entrada/Sinal -->
-          <div class="acc" style="margin-bottom:8px"><div class="acc-hdr" id="enth${c.id}${li}" onclick="toggleAcc('enth${c.id}${li}','entb${c.id}${li}')"><span style="font-size:.8rem;font-weight:700;color:var(--green)">💵 Entrada / Sinal</span><span class="acc-arr">▼</span></div>
-            <div class="acc-body" id="entb${c.id}${li}">
-              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:10px">
-                <input type="checkbox" id="ly-entry-${c.id}-${li}" ${entry.enabled?'checked':''} style="width:17px;height:17px;accent-color:var(--green)">
-                <span style="font-size:.87rem">Cliente pagou entrada para compra da peça</span>
+              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;background:#0d2e1b55;border:1px solid #22c55e33;border-radius:var(--radius-sm);padding:9px 12px">
+                <input type="checkbox" id="ly-entry-paid-${c.id}-${li}" ${entry.enabled||entry.received?'checked':''} onchange="toggleEntryPaid('${c.id}',${li})" style="width:17px;height:17px;accent-color:var(--green);cursor:pointer">
+                <span style="font-size:.87rem">💵 Entrada paga — descontar 40%</span>
               </label>
-              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px">
-                <div style="flex:1;min-width:100px"><span class="fl">% de entrada</span><input type="number" class="fi" id="ly-epct-${c.id}-${li}" value="${entry.percent||40}" min="1" max="100" oninput="calcEntry('${c.id}',${li})"></div>
-                <div style="flex:1;min-width:140px"><span class="fl">Pagamento da entrada</span><input type="text" class="fi" id="ly-epay-${c.id}-${li}" placeholder="Pix, Dinheiro..." value="${entry.payment||''}"></div>
-              </div>
-              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:10px">
-                <input type="checkbox" id="ly-erecv-${c.id}-${li}" ${entry.received?'checked':''} style="width:17px;height:17px;accent-color:var(--green)">
-                <span style="font-size:.87rem">✅ Entrada recebida</span>
-              </label>
-              ${entryBox}
             </div>
           </div>
           <div class="acts">
@@ -814,7 +802,7 @@ function render(){
         <div class="cmeta">
           <strong>${c.name||'—'} ${c.phone?`<span style="font-size:.78rem;color:var(--muted);font-weight:400">· ${c.phone}</span>`:''} ${machine?'<span title="Precisa de maquininha">💳</span>':''}</strong>
           <div class="csub">${c.address||''}</div>
-          <span class="dt-badge${mainDt.type==='service'||mainDt.type==='delivery'?' svc':''}">${mainDt.type==='delivery'?'📦':mainDt.type==='service'?'🔧':'📅'} ${fdt(mainDt.dt)}</span>
+          <span class="dt-badge${mainDt.type==='service'?' svc':''}">${mainDt.type==='service'?'🔧':'📅'} ${fdt(mainDt.dt)}</span>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
           <span class="sbadge ${badgeCls[status]||'sw'}">${lbl(status)}</span>
