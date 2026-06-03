@@ -62,7 +62,7 @@
         <div class="benefit-card"><strong>⚡ Atendimento rápido</strong><span>Cadastro enviado diretamente para nossa central.</span></div>
         <div class="benefit-card"><strong>📍 Visita técnica</strong><span>Agendamento organizado e acompanhamento completo.</span></div>
         <div class="benefit-card"><strong>🧊 Refrigeração</strong><span>Atendimento residencial e empresarial.</span></div>
-        <div class="benefit-card"><strong>💬 WhatsApp</strong><span>Confirmação automática após o cadastro.</span></div>
+        <div class="benefit-card"><strong>🏆 30 anos</strong><span>Atendendo Dias D'Ávila e região.</span></div>
       </div>
     </div>
   </div>
@@ -80,11 +80,11 @@
     <div class="card"><label>📝 Descrição do problema <span class="req">*</span></label><textarea id="f-problema" required placeholder="Descreva o que está acontecendo..."></textarea></div>
 
     <button type="submit" class="btn-submit" id="btn-submit"><span id="btn-text">Finalizar Cadastro</span><div class="loader" id="btn-loader"></div></button>
-    <div id="success-msg">✅ Cadastro finalizado com sucesso!<br>Redirecionando para o WhatsApp...</div>
+    <div id="success-msg">✅ Cadastro finalizado com sucesso!<br>30 anos atendendo em Dias D'Ávila e região</div>
     <p class="privacy">Seus dados serão usados apenas para contato e organização da visita técnica.</p>
   </form>
 
-  <div class="footer-brand"><img src="mfc-logo.png" alt="MFC"><p>MFC Peças e Serviços — Refrigeração</p></div>
+  <div class="footer-brand"><img src="mfc-logo.png" alt="MFC"><p>MFC Peças e Serviços — Refrigeração</p><p style="font-weight:800;color:#0b63b6;margin-top:6px">30 anos atendendo em Dias D'Ávila e região</p></div>
 </div>
 
 <script type="module">
@@ -211,8 +211,6 @@
     try {
       await addDoc(collection(db, 'leads'), leadData);
       btn.style.display = 'none'; successMsg.style.display = 'block';
-      const wappMsg = encodeURIComponent("Olá! Acabei de finalizar meu cadastro para agendamento da visita técnica. Aguardo retorno para confirmação. Obrigado!");
-      setTimeout(() => { window.location.href = `https://wa.me/5571981122167?text=${wappMsg}`; }, 1500);
     } catch (err) {
       console.error(err); alert("Erro ao enviar cadastro. Tente novamente.");
       btn.disabled = false; text.style.display = 'block'; loader.style.display = 'none';

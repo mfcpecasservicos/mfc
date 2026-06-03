@@ -6,13 +6,14 @@
 <title>App Técnico — Refrigeração</title>
 <style>
 :root{--bg:#0d1117;--surface:#161b22;--surface2:#21262d;--accent:#58a6ff;--text:#e6edf3;--muted:#8b949e;--border:#30363d;--green:#3fb950;--yellow:#d29922;--orange:#db6d28;--red:#f85149;--purple:#bc8cff;--radius:12px}
+body.light{--bg:#f4f7fb;--surface:#ffffff;--surface2:#eef2f7;--accent:#2563eb;--text:#0f172a;--muted:#64748b;--border:#d8e0ea;--green:#16a34a;--yellow:#ca8a04;--orange:#ea580c;--red:#dc2626;--purple:#7c3aed}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;min-height:100vh;max-width:480px;margin:0 auto}
 #offline-banner{background:#7c3aed;color:#fff;text-align:center;padding:8px;font-size:.8rem;display:none}
 header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
 header h1{font-size:1rem;font-weight:700;flex:1}
 #conn{font-size:.85rem}
-.reload-btn{background:none;border:1px solid var(--border);border-radius:8px;color:var(--muted);padding:6px 10px;font-size:.75rem;cursor:pointer}
+.reload-btn,.theme-btn{background:none;border:1px solid var(--border);border-radius:8px;color:var(--muted);padding:6px 10px;font-size:.75rem;cursor:pointer}
 .search-wrap{padding:12px 16px 0;position:relative}
 .search-wrap input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px 10px 36px;color:var(--text);font-size:.9rem;outline:none}
 .search-wrap input:focus{border-color:var(--accent)}
@@ -22,7 +23,6 @@ header h1{font-size:1rem;font-weight:700;flex:1}
 .card:active{transform:scale(.98)}
 .card.s-waiting{border-left-color:#3b82f6}.card.s-evaluated{border-left-color:#22c55e}
 .card.s-quoted{border-left-color:#eab308}.card.s-approved{border-left-color:#f97316}
-.card.s-service_finished{border-left-color:#22c55e}.card.s-ready_delivery{border-left-color:#38bdf8}
 .card.s-absent{border-left-color:#a855f7}.card.s-rejected{border-left-color:#ef4444}
 .card.s-done{border-left-color:#22c55e;opacity:.6}
 .card-inner{padding:14px 16px;display:flex;align-items:center;gap:12px}
@@ -35,7 +35,6 @@ header h1{font-size:1rem;font-weight:700;flex:1}
 .badge{font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
 .b-waiting{background:#0d2346;color:#60a5fa}.b-evaluated{background:#0d2e1b;color:#86efac}
 .b-quoted{background:#2d1e00;color:#fcd34d}.b-approved{background:#2d1200;color:#fb923c}
-.b-service_finished{background:#0d2e1b;color:#86efac}.b-ready_delivery{background:#0c4a6e;color:#7dd3fc}
 .b-absent{background:#2d1a4a;color:#d8b4fe}.b-rejected{background:#3b1219;color:#fca5a5}
 .b-done{background:#0d2e1b;color:#4ade80}
 .paid-badge{font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:20px;background:#0d2e1b;color:#4ade80;border:1px solid #22c55e44;margin-top:4px;display:inline-block}
@@ -63,7 +62,6 @@ header h1{font-size:1rem;font-weight:700;flex:1}
 .vt-evaluated.active{background:#14532d;border-color:#22c55e}
 .vt-quoted.active{background:#451a03;border-color:#eab308}
 .vt-approved.active{background:#1c1917;border-color:#f97316}
-.vt-service_finished.active{background:#14532d;border-color:#22c55e}.vt-ready_delivery.active{background:#0c4a6e;border-color:#38bdf8}
 .vt-absent.active{background:#3b0764;border-color:#a855f7}
 .vt-rejected.active{background:#3b1219;border-color:#ef4444}
 .vt-done.active{background:#0d1f0d;border-color:#22c55e}
@@ -166,6 +164,17 @@ const db=getFirestore(app);
 const col=collection(db,'clients');
 
 let allClients=[],currentId=null,localPhotos={},currentLayerIdx=0,knownIds=null;
+function applyTheme(mode){
+  document.body.classList.toggle('light', mode==='light');
+  const b=document.getElementById('theme-btn');
+  if(b) b.textContent=mode==='light'?'🌙':'☀️';
+}
+applyTheme(localStorage.getItem('mfc-theme')||'dark');
+window.toggleTheme=()=>{
+  const next=document.body.classList.contains('light')?'dark':'light';
+  localStorage.setItem('mfc-theme', next);
+  applyTheme(next);
+};
 
 function updOnline(){document.getElementById('offline-banner').style.display=navigator.onLine?'none':'block'}
 window.addEventListener('online',updOnline);window.addEventListener('offline',updOnline);updOnline();
@@ -174,9 +183,8 @@ async function requestNotif(){if('Notification'in window&&Notification.permissio
 requestNotif();
 function sendNotif(t,b){if('Notification'in window&&Notification.permission==='granted')new Notification(t,{body:b,icon:'https://cdn.jsdelivr.net/gh/twitter/twemoji@14/assets/72x72/2744.png'})}
 
-function stKey(s){return String(s||'waiting').toLowerCase().trim()}
-function lbl(s){const k=stKey(s);return{waiting:'Aguardando visita',evaluated:'Avaliação concluída',quoted:'Orçamento enviado',approved:'Aprovado',service_finished:'Serviço finalizado',ready_delivery:'Equipamento pronto para entrega',absent:'Cliente ausente',rejected:'Orçamento rejeitado',done:'Concluído'}[k]||String(s||'Aguardando visita')}
-function icon(s){const k=stKey(s);return{waiting:'🕐',evaluated:'✅',quoted:'💰',approved:'🟠',service_finished:'✅',ready_delivery:'📦',absent:'🚫',rejected:'❌',done:'✔'}[k]||'📋'}
+function lbl(s){return{waiting:'Aguardando visita',evaluated:'Avaliação concluída',quoted:'Orçamento enviado',approved:'Aprovado',absent:'Cliente ausente',done:'Concluído'}[s]||s}
+function icon(s){return{waiting:'🕐',evaluated:'✅',quoted:'💰',approved:'🟠',absent:'🚫',done:'✔'}[s]||'❓'}
 function fdt(dt){if(!dt)return'—';try{return new Date(dt).toLocaleString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch{return dt}}
 function maps(a){return'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a)}
 function moneyNum(v){return parseFloat(String(v||'').replace(/[R$\s.]/g,'').replace(',','.'))||0}
@@ -188,7 +196,6 @@ function getLayers(c){
 function getMainDt(c){
   const layers=getLayers(c);
   const active=layers.find(l=>!l.done);
-  if(stKey(active?.status)==='ready_delivery')return{dt:active?.readyAt||active?.concludedAt||active?.approval?.serviceDate||c.datetime,type:'delivery'};
   if(active?.approval?.serviceDate)return{dt:active.approval.serviceDate,type:'service'};
   return{dt:c.datetime,type:'visit'};
 }
@@ -213,7 +220,7 @@ onSnapshot(q,snap=>{
 
 function updateDetailBadge(c){
   const badge=document.getElementById('d-badge');
-  if(badge){const sk=stKey(c.status);badge.textContent=lbl(sk);badge.className='badge b-'+sk;}
+  if(badge){badge.textContent=lbl(c.status);badge.className='badge b-'+c.status;}
 }
 
 window.renderList=()=>{
@@ -230,19 +237,17 @@ window.renderList=()=>{
   if(!clients.length){wrap.innerHTML='<div class="empty"><div class="icon">📋</div><p>Sem clientes.</p></div>';return}
   wrap.innerHTML=clients.map(c=>{
     const mainDt=getMainDt(c);
-    const sk=stKey(c.status);
-    const dtIcon=mainDt.type==='service'?'🔧':mainDt.type==='delivery'?'📦':'📅';
-    const dtCls=mainDt.type==='service'?' service':mainDt.type==='delivery'?' delivery':'';
-    return`<div class="card s-${sk}" onclick="openDetail('${c.id}')">
+    return`<div class="card s-${c.status}" onclick="openDetail('${c.id}')">
       <div class="card-inner">
-        <div class="card-icon">${icon(sk)}</div>
+        <div class="card-icon">${icon(c.status)}</div>
         <div class="card-info">
           <div class="card-name">${c.name}${getLayers(c).some(l=>l.approval?.needsMachine)?' <span title="Precisa de maquininha">💳</span>':''}</div>
           <div class="card-phone">${c.address||'—'}</div>
-          <div class="card-dt${dtCls}">${dtIcon} ${fdt(mainDt.dt)}</div>
+          <div class="card-dt${mainDt.type==='service'?' service':''}">${mainDt.type==='service'?'🔧':'📅'} ${fdt(mainDt.dt)}</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
-          <span class="badge b-${sk}">${lbl(sk)}</span>
+          <span class="badge b-${c.status}">${lbl(c.status)}</span>
+          ${getLayers(c).some(l=>!l.done && (l.approval?.workshopService||l.techReport?.needsPickup))?'<span class="paid-badge" style="background:#082f49;color:#7dd3fc;border-color:#38bdf855">🏭 Retirar equipamento</span>':''}
           ${getLayers(c).some(l=>l.approval?.paid)?'<span class="paid-badge">💰 Pago</span>':''}
         </div>
       </div>
@@ -300,6 +305,7 @@ function renderDetailFull(c){
     ${c.equip?`<div class="irow"><label>Equipamento</label><span>${c.equip}</span></div>`:''}
     ${c.notes?`<div class="irow"><label>Obs</label><span>${c.notes}</span></div>`:''}
     ${c.address?`<div class="irow"><label>Endereço</label><span>${c.address}${c.ref?' — '+c.ref:''}</span></div><a class="maps-link" href="${maps(c.address+(c.ref?' '+c.ref:''))}" target="_blank">📍 Abrir no Maps</a>`:''}
+    <button class="absent-btn" style="background:var(--red);margin-top:10px" onclick="softDeleteClient('${c.id}')">🗑 Descartar para lixeira</button>
   </div>`;
 
   // Abas
@@ -307,7 +313,7 @@ function renderDetailFull(c){
   const tabs=layers.map((ly,li)=>{
     if(ly.done)return'';
     activeNum++;
-    return`<button data-vtab="${c.id}" id="vt-${c.id}-${li}" class="v-tab vt-${stKey(ly.status)}${li===currentLayerIdx?' active':''}" onclick="switchTab('${c.id}',${li})">${icon(ly.status)} Visita ${activeNum}</button>`;
+    return`<button data-vtab="${c.id}" id="vt-${c.id}-${li}" class="v-tab vt-${ly.status}${li===currentLayerIdx?' active':''}" onclick="switchTab('${c.id}',${li})">${icon(ly.status)} Visita ${activeNum}</button>`;
   }).join('');
   const doneTab=doneLayers.length?`<button data-vtab="${c.id}" id="vt-${c.id}-done" class="v-tab vt-done" onclick="switchDoneTab('${c.id}')">✅ Concluídos (${doneLayers.length})</button>`:'';
   const addBtn=`<button class="add-visit-btn" onclick="addVisit('${c.id}')">➕</button>`;
@@ -322,7 +328,7 @@ function renderDetailFull(c){
     const isActive=li===currentLayerIdx;
     let panel='';
 
-    if(stKey(ly.status)==='waiting'){
+    if(ly.status==='waiting'){
       panel=`
         <div class="acc">
           <div class="acc-hdr open" id="ah-f-${li}" onclick="toggleAcc('ah-f-${li}','ab-f-${li}')">
@@ -332,6 +338,10 @@ function renderDetailFull(c){
           <div class="acc-body open" id="ab-f-${li}">
             <div class="fg"><label>Modelo do Equipamento</label><input id="f-model-${li}" type="text" placeholder="Ex: LG Dual Inverter 12.000 BTU" value="${ly.techReport?.model||''}"></div>
             <div class="fg"><label>Serviços a Realizar</label><textarea id="f-problem-${li}" placeholder="Descreva os serviços...">${ly.techReport?.problem||''}</textarea></div>
+            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:12px">
+              <input type="checkbox" id="f-pickup-${li}" ${(ly.techReport?.needsPickup||ly.approval?.workshopService)?'checked':''} style="width:18px;height:18px;accent-color:var(--orange)">
+              <span style="font-size:.9rem">🏭 Precisa retirar o equipamento</span>
+            </label>
             <div class="fg">
               <label>Fotos</label>
               <div class="photo-area">
@@ -351,27 +361,13 @@ function renderDetailFull(c){
       const techAcc=ly.techReport?`
         <div class="acc">
           <div class="acc-hdr" id="ah-t-${li}" onclick="toggleAcc('ah-t-${li}','ab-t-${li}')">
-            <span style="font-size:.85rem;font-weight:700;color:#06b6d4">🔧 Avaliação Enviada / Editável</span>
+            <span style="font-size:.85rem;font-weight:700;color:#06b6d4">🔧 Avaliação Enviada</span>
             <span class="acc-arrow">▼</span>
           </div>
           <div class="acc-body" id="ab-t-${li}">
-            <div class="fg"><label>Modelo do Equipamento</label><input id="edit-model-${li}" type="text" placeholder="Ex: LG Dual Inverter 12.000 BTU" value="${ly.techReport.model||''}"></div>
-            <div class="fg"><label>Serviços a Realizar</label><textarea id="edit-problem-${li}" placeholder="Descreva os serviços...">${ly.techReport.problem||''}</textarea></div>
-            <div class="fg">
-              <label>Fotos da avaliação</label>
-              <div class="photo-area">
-                <div class="photo-row">
-                  ${(ly.techReport.photos||[]).map((p,pi)=>`<div class="photo-thumb"><img src="${p}" onclick="openLb('${p}')"><button class="photo-del" onclick="event.stopPropagation();removeReportPhoto('${c.id}',${li},${pi})">✕</button></div>`).join('')}
-                </div>
-                <div class="photo-row" id="photo-row-edit-${li}"></div>
-                <div class="photo-btns">
-                  <div class="photo-btn" onclick="openCamera(${li})">📷 Adicionar câmera</div>
-                  <div class="photo-btn" onclick="openGallery(${li})">🖼️ Adicionar galeria</div>
-                </div>
-              </div>
-              <p style="font-size:.72rem;color:var(--muted)">Corrija o texto, remova fotos no ✕ ou adicione novas fotos, depois toque em salvar.</p>
-            </div>
-            <button class="submit-btn" onclick="saveReportEdit('${c.id}',${li})">💾 Salvar correção da avaliação</button>
+            <div class="irow"><label>Equipamento</label><span>${ly.techReport.model||'—'}</span></div>
+            <div class="irow"><label>Serviços</label><span>${ly.techReport.problem||'—'}</span></div>
+            ${ly.techReport.photos?.length?`<div class="photo-row">${ly.techReport.photos.map(p=>`<img src="${p}" onclick="openLb('${p}')" style="width:72px;height:72px;object-fit:cover;border-radius:8px;cursor:pointer">`).join('')}</div>`:''}
           </div>
         </div>`:'';
 
@@ -380,10 +376,8 @@ function renderDetailFull(c){
       const docBox=ly.budgetImage?.data?`<div class="doc-box"><p style="color:var(--accent);font-size:.78rem;text-transform:uppercase;margin-bottom:6px">🖼️ Imagem do orçamento</p><img class="budget-preview" src="${ly.budgetImage.data}" onclick="openLb('${ly.budgetImage.data}')"><button class="done-btn" style="margin-top:10px;background:#1e3a5f" onclick="openLb('${ly.budgetImage.data}')">🔍 Ver orçamento com zoom</button></div>`:'';
       const entry=ly.entry||{}; const total=moneyNum(ly.approval?.value); const ent=total*((entry.percent||40)/100); const rem=total-ent;
       const entryBox=entry.enabled?`<div class="entry-box"><h3 style="color:var(--green);font-size:.78rem;margin-bottom:6px">💵 Entrada / Sinal</h3><div class="entry-grid"><div><label>Total</label><span>${ly.approval?.value||fmtMoney(total)}</span></div><div><label>Entrada (${entry.percent||40}%)</label><span>${fmtMoney(ent)}</span></div><div><label>Saldo restante</label><span>${fmtMoney(rem)}</span></div><div><label>Status</label><span>${entry.received?'✅ Recebida':'⏳ Pendente'}</span></div></div><p style="font-size:.8rem;color:var(--muted);margin-top:8px">Forma: ${entry.payment||'—'}</p></div>`:'';
-      const waiting=!ly.quote&&stKey(ly.status)==='evaluated'?`<div class="waiting-msg">⏳ Aguardando orçamento...</div>`:'';
-      const waitingAppr=ly.quote&&stKey(ly.status)==='quoted'?`<div class="waiting-msg">⏳ Aguardando aprovação...</div>`:'';
-      const techFinishedBox=stKey(ly.status)==='service_finished'?`<div class="waiting-msg" style="border:1px solid #22c55e44;color:#86efac">✅ Serviço finalizado pelo técnico. Aguardando conclusão do gestor.</div>`:'';
-      const readyDeliveryBox=stKey(ly.status)==='ready_delivery'?`<div class="waiting-msg" style="border:1px solid #38bdf844;color:#7dd3fc">📦 Equipamento pronto para entrega.</div>`:'';
+      const waiting=!ly.quote&&ly.status==='evaluated'?`<div class="waiting-msg">⏳ Aguardando orçamento...</div>`:'';
+      const waitingAppr=ly.quote&&ly.status==='quoted'?`<div class="waiting-msg">⏳ Aguardando aprovação...</div>`:'';
 
       const apprBox=ly.approval?.payment?`
         <div style="background:#1a1000;border:1px solid #f9731644;border-radius:var(--radius);padding:14px">
@@ -391,19 +385,21 @@ function renderDetailFull(c){
           <p style="font-size:.9rem;margin-bottom:4px">Pagamento: <strong>${ly.approval.payment}</strong>${ly.approval.value?' — <strong>'+ly.approval.value+'</strong>':''}</p>
           ${ly.approval.needsMachine?`<p style="font-size:.88rem;color:#fb923c;margin-bottom:6px;background:#2d1200;border:1px solid #f9731644;border-radius:8px;padding:6px 10px;display:inline-block">💳 Levar maquininha</p>`:''}
           ${ly.approval.paid?`<p style="font-size:.88rem;color:#4ade80;margin-bottom:6px;background:#0d2e1b;border:1px solid #22c55e44;border-radius:8px;padding:6px 10px;display:inline-block">💰 Orçamento Pago</p>`:''}
-          ${ly.approval.workshopService?`<p style="font-size:.88rem;color:#7dd3fc;margin-bottom:6px;background:#082f49;border:1px solid #38bdf844;border-radius:8px;padding:6px 10px;display:inline-block">🏭 Serviço no galpão</p>`:''}
+          ${(ly.approval?.workshopService||ly.techReport?.needsPickup)?`<p style="font-size:.88rem;color:#7dd3fc;margin-bottom:6px;background:#082f49;border:1px solid #38bdf844;border-radius:8px;padding:6px 10px;display:inline-block">🏭 Retirar equipamento</p>`:''}
           <p style="font-size:1rem;font-weight:700;color:var(--orange)">📅 ${fdt(ly.approval.serviceDate)}</p>
           ${c.address?`<a class="maps-link" href="${maps(c.address+(c.ref?' '+c.ref:''))}" target="_blank" style="margin-top:8px">📍 Ir ao endereço</a>`:''}
         </div>
-        ${['service_finished','ready_delivery'].includes(stKey(ly.status))?'':`<div class="pay-box">
-          <h3>✔ Registrar finalização do técnico</h3>
+        <div class="pay-box">
+          <h3>✔ Registrar Conclusão</h3>
           <div class="fg" style="margin-bottom:10px"><label>Forma de pagamento (confirmar ou alterar)</label>
             <input id="done-pay-${c.id}-${li}" type="text" placeholder="Ex: Pix, Cartão..." value="${ly.approval.payment||''}">
           </div>
-          <button class="done-btn" onclick="markDone('${c.id}',${li})">✅ Serviço Concluído</button>
-        </div>`}`:'';
+          ${(ly.approval?.workshopService||ly.techReport?.needsPickup)
+            ? `<button class="done-btn" style="background:#0e7490" onclick="markReadyDelivery('${c.id}',${li})">📦 Pronto para Entrega</button>`
+            : `<button class="done-btn" onclick="markDone('${c.id}',${li})">✅ Serviço Concluído</button>`}
+        </div>`:'';
 
-      panel=`${techAcc}${absentBox}${quoteBox}${docBox}${entryBox}${apprBox}${techFinishedBox}${readyDeliveryBox}${waiting}${waitingAppr}`;
+      panel=`${techAcc}${absentBox}${quoteBox}${docBox}${entryBox}${apprBox}${waiting}${waitingAppr}`;
     }
 
     return`<div id="vp-${c.id}-${li}" data-vpanel="${c.id}" class="v-panel${isActive?' active':''}">${panel}</div>`;
@@ -463,15 +459,12 @@ window.handleFiles=input=>{
   input.value='';
 };
 function refreshPhotos(li){
-  const html=(localPhotos[li]||[]).map((p,i)=>`
+  const el=document.getElementById('photo-row-'+li);if(!el)return;
+  el.innerHTML=(localPhotos[li]||[]).map((p,i)=>`
     <div class="photo-thumb">
       <img src="${p}" onclick="openLb('${p}')">
       <button class="photo-del" onclick="removePhoto(${li},${i})">✕</button>
     </div>`).join('');
-  const el=document.getElementById('photo-row-'+li);
-  if(el) el.innerHTML=html;
-  const editEl=document.getElementById('photo-row-edit-'+li);
-  if(editEl) editEl.innerHTML=html;
 }
 window.removePhoto=(li,i)=>{localPhotos[li].splice(i,1);refreshPhotos(li)};
 
@@ -479,47 +472,16 @@ window.submitReport=async(id,li)=>{
   const model=document.getElementById('f-model-'+li)?.value?.trim();
   const problem=document.getElementById('f-problem-'+li)?.value?.trim();
   if(!model||!problem){alert('Preencha o modelo e os serviços.');return}
+  const pickup=document.getElementById('f-pickup-'+li)?.checked||false;
   const c=allClients.find(x=>x.id===id);
   const layers=[...getLayers(c)];
-  layers[li]={...layers[li],techReport:{model,problem,photos:[...(localPhotos[li]||[])]},status:'evaluated'};
+  const photos=[...(localPhotos[li]||[])];
+  layers[li]={...layers[li],techReport:{model,problem,photos,needsPickup:pickup},approval:{...(layers[li].approval||{}),workshopService:pickup},status:'evaluated'};
   delete localPhotos[li];
   const firstActive=layers.find(l=>!l.done);
   await updateDoc(doc(db,'clients',id),{layers,status:firstActive?.status||'evaluated'});
   const c2=allClients.find(x=>x.id===id);if(c2)renderDetailFull({...c2,layers});
 };
-
-window.saveReportEdit=async(id,li)=>{
-  const model=document.getElementById('edit-model-'+li)?.value?.trim();
-  const problem=document.getElementById('edit-problem-'+li)?.value?.trim();
-  if(!model||!problem){alert('Preencha o modelo e os serviços.');return}
-  const c=allClients.find(x=>x.id===id);
-  if(!c)return;
-  const layers=[...getLayers(c)];
-  const oldPhotos=layers[li]?.techReport?.photos||[];
-  const newPhotos=localPhotos[li]||[];
-  layers[li]={...layers[li],techReport:{model,problem,photos:[...oldPhotos,...newPhotos]},reportEditedAt:new Date().toISOString()};
-  delete localPhotos[li];
-  const firstActive=layers.find(l=>!l.done);
-  await updateDoc(doc(db,'clients',id),{layers,status:firstActive?.status||layers[li].status||'evaluated'});
-  const c2=allClients.find(x=>x.id===id);
-  renderDetailFull({...c,...(c2||{}),layers});
-  alert('Avaliação atualizada.');
-};
-
-window.removeReportPhoto=async(id,li,pi)=>{
-  if(!confirm('Remover esta foto da avaliação?'))return;
-  const c=allClients.find(x=>x.id===id);
-  if(!c)return;
-  const layers=[...getLayers(c)];
-  const photos=[...(layers[li]?.techReport?.photos||[])];
-  photos.splice(pi,1);
-  layers[li]={...layers[li],techReport:{...(layers[li].techReport||{}),photos},reportEditedAt:new Date().toISOString()};
-  const firstActive=layers.find(l=>!l.done);
-  await updateDoc(doc(db,'clients',id),{layers,status:firstActive?.status||layers[li].status||'evaluated'});
-  const c2=allClients.find(x=>x.id===id);
-  renderDetailFull({...c,...(c2||{}),layers});
-};
-
 
 window.markAbsent=async(id,li)=>{
   if(!confirm('Confirmar cliente ausente?'))return;
@@ -531,17 +493,26 @@ window.markAbsent=async(id,li)=>{
 };
 
 window.markDone=async(id,li)=>{
-  if(!confirm('Confirmar serviço concluído?'))return;
+  if(!confirm('Confirmar serviço finalizado pelo técnico?'))return;
   const payment=document.getElementById('done-pay-'+id+'-'+li)?.value?.trim();
   const c=allClients.find(x=>x.id===id);
   const layers=[...getLayers(c)];
-  const workshop=!!layers[li]?.approval?.workshopService;
-  const newStatus=workshop?'ready_delivery':'service_finished';
-  layers[li]={...layers[li],status:newStatus,done:false,technicianFinishedAt:new Date().toISOString(),approval:{...layers[li].approval,payment:payment||layers[li].approval?.payment||''}};
-  if(workshop) layers[li].readyAt=new Date().toISOString();
-  const firstActive=layers.find(l=>!l.done);
-  await updateDoc(doc(db,'clients',id),{layers,status:firstActive?firstActive.status:newStatus,technicianFinishedAt:new Date().toISOString()});
-  alert(workshop?'Equipamento pronto para entrega.':'Serviço finalizado. Aguardando conclusão do gestor.');
+  layers[li]={...layers[li],status:'service_finished',done:false,technicianFinishedAt:new Date().toISOString(),approval:{...layers[li].approval,payment:payment||layers[li].approval?.payment||''}};
+  await updateDoc(doc(db,'clients',id),{layers,status:'service_finished',technicianFinishedAt:new Date().toISOString()});
+};
+
+window.markReadyDelivery=async(id,li)=>{
+  if(!confirm('Marcar equipamento pronto para entrega?'))return;
+  const payment=document.getElementById('done-pay-'+id+'-'+li)?.value?.trim();
+  const c=allClients.find(x=>x.id===id);
+  const layers=[...getLayers(c)];
+  layers[li]={...layers[li],status:'ready_delivery',done:false,readyAt:new Date().toISOString(),approval:{...layers[li].approval,payment:payment||layers[li].approval?.payment||'',workshopService:true}};
+  await updateDoc(doc(db,'clients',id),{layers,status:'ready_delivery',readyAt:new Date().toISOString()});
+};
+
+window.softDeleteClient=async id=>{
+  if(!confirm('Descartar esta visita para a lixeira?'))return;
+  await updateDoc(doc(db,'clients',id),{deleted:true,deletedAt:new Date().toISOString()});
   closeDetail();
 };
 
