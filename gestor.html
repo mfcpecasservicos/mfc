@@ -75,6 +75,7 @@ textarea.fi{resize:vertical;min-height:52px}
 .sr{background:#3b121933;color:#fca5a5;border:1px solid #3b1219}.dr{background:#ef4444}
 .sd{background:#0d1f0d33;color:#4ade80;border:1px solid #0d1f0d}.dd{background:#22c55e}
 .srd{background:#0c4a6e33;color:#7dd3fc;border:1px solid #0c4a6e}.drd{background:#38bdf8}
+.swork{background:#08334433;color:#67e8f9;border:1px solid #155e75}.dwork{background:#06b6d4}
 .ssf{background:#052e1633;color:#86efac;border:1px solid #064e3b}.dsf{background:#22c55e}
 .dt-badge{display:inline-block;margin-top:4px;font-size:.73rem;font-weight:600;color:#fff;background:linear-gradient(135deg,#1e3a5f,#0f2744);border:1px solid #2d4f7c;border-radius:6px;padding:2px 8px}
 .dt-badge.svc{background:linear-gradient(135deg,#1a1000,#2d1200);border-color:#7c3d12;color:var(--orange)}
@@ -102,6 +103,7 @@ textarea.fi{resize:vertical;min-height:52px}
 .vtd.active{background:#0d1f0d;border-color:#22c55e}
 .vtrd.active{background:#0c4a6e;border-color:#38bdf8}
 .vtsf.active{background:#064e3b;border-color:#22c55e}
+.vtwork.active{background:#083344;border-color:#06b6d4}
 .vpanel{display:none}.vpanel.active{display:block}
 /* Accordion */
 .acc{border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:8px}
@@ -219,12 +221,17 @@ textarea.fi{resize:vertical;min-height:52px}
         <div><span class="fl">Status inicial</span>
           <select class="fi" id="inp-status">
             <option value="waiting">🕐 Aguardando visita</option>
+            <option value="workshop_pending">🏭 Aguardando Avaliação</option>
             <option value="evaluated">✅ Avaliação concluída</option>
             <option value="quoted">💰 Aguardando aprovação</option>
             <option value="approved">🟠 Aprovado</option>
             <option value="absent">🚫 Cliente ausente</option>
           </select>
         </div>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px">
+          <input type="checkbox" id="inp-workshop-pending" style="width:17px;height:17px;accent-color:#06b6d4;cursor:pointer">
+          <span style="font-size:.87rem">🏭 Equipamento trazido à loja</span>
+        </label>
         <div style="grid-column:1/-1"><span class="fl">Observações</span><textarea class="fi" id="inp-notes" placeholder="Observações adicionais" style="min-height:40px"></textarea></div>
       </div>
       <div class="acts">
@@ -241,6 +248,7 @@ textarea.fi{resize:vertical;min-height:52px}
     <div class="tabs" style="margin-bottom:18px">
       <button class="tab active" onclick="fTab('all',this)">Todos</button>
       <button class="tab" onclick="fTab('waiting',this)">Aguardando</button>
+      <button class="tab" onclick="fTab('workshop_pending',this)">🏭 Aguard. Avaliação</button>
       <button class="tab" onclick="fTab('evaluated',this)">Avaliados</button>
       <button class="tab" onclick="fTab('quoted',this)">Orçamento</button>
       <button class="tab" onclick="fTab('approved',this)">Aprovados</button>
@@ -358,7 +366,7 @@ leadsCol.orderBy('createdAt','desc').onSnapshot(snap => {
 }, err=>{ console.error('Erro Firestore leads:', err); if(typeof toast==='function') toast('Erro ao carregar novos cadastros: '+(err.code||err.message||'Erro'), 'var(--red)'); });
 
 // ── Helpers ───────────────────────────────────
-const lbl = s=>({waiting:'Aguardando visita',evaluated:'Avaliação concluída',quoted:'Aguardando aprovação',approved:'Aprovado',service_finished:'Serviço finalizado',ready_delivery:'Pronto para entrega',absent:'Cliente ausente',done:'Serviço Concluído'}[s]||s||'Aguardando visita');
+const lbl = s=>({waiting:'Aguardando visita',workshop_pending:'Aguardando Avaliação',evaluated:'Avaliação concluída',quoted:'Aguardando aprovação',approved:'Aprovado',service_finished:'Serviço finalizado',ready_delivery:'Pronto para entrega',absent:'Cliente ausente',done:'Serviço Concluído'}[s]||s||'Aguardando visita');
 const fdt = dt=>{ if(!dt)return'—'; try{return new Date(dt).toLocaleString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch{return dt;}};
 const fdtShort = dt=>{ if(!dt)return'—'; try{return new Date(dt).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});}catch{return dt;}};
 const maps = a=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a);
@@ -491,12 +499,14 @@ window.removeBudgetImage=async(id,li)=>{
 window.addClient=async()=>{
   const name=document.getElementById('inp-name').value.trim();
   if(!name){alert('Informe o nome.');return;}
-  const status=document.getElementById('inp-status').value;
-  const layer={status,quote:'',quoteObs:'',techReport:null,absentAt:null,approval:null,done:false,createdAt:new Date().toISOString()};
-  await col.add({name,phone:document.getElementById('inp-phone').value.trim(),address:document.getElementById('inp-address').value.trim(),ref:document.getElementById('inp-ref').value.trim(),datetime:document.getElementById('inp-datetime').value,equip:document.getElementById('inp-equip').value.trim(),notes:document.getElementById('inp-notes').value.trim(),status,layers:[layer],deleted:false,createdAt:new Date().toISOString()});
+  let status=document.getElementById('inp-status').value;
+  const workshopPending=document.getElementById('inp-workshop-pending')?.checked||false;
+  if(workshopPending) status='workshop_pending';
+  const layer={status,quote:'',quoteObs:'',techReport:null,absentAt:null,approval:null,done:false,createdAt:new Date().toISOString(),workshopPending};
+  await col.add({name,phone:document.getElementById('inp-phone').value.trim(),address:document.getElementById('inp-address').value.trim(),ref:document.getElementById('inp-ref').value.trim(),datetime:document.getElementById('inp-datetime').value,equip:document.getElementById('inp-equip').value.trim(),notes:document.getElementById('inp-notes').value.trim(),status,layers:[layer],workshopPending,deleted:false,createdAt:new Date().toISOString()});
   clearForm();toast('✅ Cliente adicionado!');
 };
-window.clearForm=()=>['inp-name','inp-phone','inp-address','inp-ref','inp-datetime','inp-equip','inp-notes'].forEach(i=>document.getElementById(i).value='');
+window.clearForm=()=>{['inp-name','inp-phone','inp-address','inp-ref','inp-datetime','inp-equip','inp-notes'].forEach(i=>document.getElementById(i).value=''); const w=document.getElementById('inp-workshop-pending'); if(w)w.checked=false;};
 window.addCompanyVisit=async()=>{
   const name=document.getElementById('emp-name').value.trim();
   const datetime=document.getElementById('emp-datetime').value;
@@ -685,8 +695,8 @@ window.calcEntry40=(id,li)=>{
 };
 
 function statusOpts(sel){
-  return['waiting','evaluated','quoted','approved','service_finished','ready_delivery','absent','done'].map(s=>{
-    const labels={waiting:'🕐 Aguardando visita',evaluated:'✅ Avaliação concluída',quoted:'💰 Aguardando aprovação',approved:'🟠 Aprovado',service_finished:'✅ Serviço finalizado',ready_delivery:'📦 Pronto para entrega',absent:'🚫 Cliente ausente',done:'✅ Serviço Concluído'};
+  return['waiting','workshop_pending','evaluated','quoted','approved','service_finished','ready_delivery','absent','done'].map(s=>{
+    const labels={waiting:'🕐 Aguardando visita',workshop_pending:'🏭 Aguardando Avaliação',evaluated:'✅ Avaliação concluída',quoted:'💰 Aguardando aprovação',approved:'🟠 Aprovado',service_finished:'✅ Serviço finalizado',ready_delivery:'📦 Pronto para entrega',absent:'🚫 Cliente ausente',done:'✅ Serviço Concluído'};
     return`<option value="${s}"${sel===s?' selected':''}>${labels[s]}</option>`;
   }).join('');
 }
@@ -704,8 +714,8 @@ function renderTrash(){
     </div>`).join('');
 }
 
-const dotCls={waiting:'dw',evaluated:'de',quoted:'dq',approved:'da',service_finished:'dsf',ready_delivery:'drd',absent:'dab',done:'dd'};
-const badgeCls={waiting:'sw',evaluated:'se',quoted:'sq',approved:'sa',service_finished:'ssf',ready_delivery:'srd',absent:'sab',done:'sd'};
+const dotCls={waiting:'dw',workshop_pending:'dwork',evaluated:'de',quoted:'dq',approved:'da',service_finished:'dsf',ready_delivery:'drd',absent:'dab',done:'dd'};
+const badgeCls={waiting:'sw',workshop_pending:'swork',evaluated:'se',quoted:'sq',approved:'sa',service_finished:'ssf',ready_delivery:'srd',absent:'sab',done:'sd'};
 
 function render(){
   const list=document.getElementById('clist');
@@ -724,11 +734,12 @@ function render(){
     const machine=hasMachine(c);
     const paid=isPaid(c);
     const workshop=getLayers(c).some(l=>!l.done && l.approval?.workshopService);
+    const inWorkshop=getStatus(c)==='workshop_pending' || c.workshopPending || getLayers(c).some(l=>!l.done && (l.status==='workshop_pending'||l.workshopPending));
     const active=layers.filter(l=>!l.done);
     const done=layers.filter(l=>l.done);
 
     let aN=0;
-    const tabsHtml=layers.map((ly,li)=>{if(ly.done)return'';aN++;const isPri=c.priorityIndex===li;const cls={waiting:'vtw',evaluated:'vte',quoted:'vtq',approved:'vta',service_finished:'vtsf',ready_delivery:'vtrd',absent:'vtab2',done:'vtd'}[ly.status]||'vtw';return`<button id="vt-${c.id}-${li}" data-vt="${c.id}" class="vtab ${cls}${isPri?' pri':''}" onclick="showVTab('${c.id}',${li})">${isPri?'⭐ ':''}Visita ${aN}${isPri?' ★':''}</button>`;}).join('');
+    const tabsHtml=layers.map((ly,li)=>{if(ly.done)return'';aN++;const isPri=c.priorityIndex===li;const cls={waiting:'vtw',workshop_pending:'vtwork',evaluated:'vte',quoted:'vtq',approved:'vta',service_finished:'vtsf',ready_delivery:'vtrd',absent:'vtab2',done:'vtd'}[ly.status]||'vtw';return`<button id="vt-${c.id}-${li}" data-vt="${c.id}" class="vtab ${cls}${isPri?' pri':''}" onclick="showVTab('${c.id}',${li})">${isPri?'⭐ ':''}Visita ${aN}${isPri?' ★':''}</button>`;}).join('');
     const doneTab=done.length?`<button id="vt-${c.id}-done" data-vt="${c.id}" class="vtab vtd" onclick="showDoneTab('${c.id}')">✅ Concluídos (${done.length})</button>`:'';
 
     aN=0;
@@ -807,6 +818,7 @@ function render(){
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
           <span class="sbadge ${badgeCls[status]||'sw'}">${lbl(status)}</span>
+          ${inWorkshop?'<span class="paid-badge" style="background:#083344;color:#67e8f9;border-color:#06b6d455">🏭 No galpão</span>':''}
           ${workshop?'<span class="paid-badge" style="background:#082f49;color:#7dd3fc;border-color:#38bdf855">🏭 Retirar equipamento</span>':''}
           ${paid?'<span class="paid-badge">💰 Pago</span>':''}
         </div>

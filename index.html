@@ -21,8 +21,9 @@ header h1{font-size:1rem;font-weight:700;flex:1}
 .list-wrap{padding:12px 16px 16px;display:flex;flex-direction:column;gap:10px}
 .card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);border-left-width:4px;cursor:pointer;transition:transform .1s}
 .card:active{transform:scale(.98)}
-.card.s-waiting{border-left-color:#3b82f6}.card.s-evaluated{border-left-color:#22c55e}
+.card.s-waiting{border-left-color:#3b82f6}.card.s-workshop_pending{border-left-color:#06b6d4}.card.s-evaluated{border-left-color:#22c55e}
 .card.s-quoted{border-left-color:#eab308}.card.s-approved{border-left-color:#f97316}
+.card.s-service_finished{border-left-color:#22c55e}.card.s-ready_delivery{border-left-color:#38bdf8}
 .card.s-absent{border-left-color:#a855f7}.card.s-rejected{border-left-color:#ef4444}
 .card.s-done{border-left-color:#22c55e;opacity:.6}
 .card-inner{padding:14px 16px;display:flex;align-items:center;gap:12px}
@@ -33,8 +34,9 @@ header h1{font-size:1rem;font-weight:700;flex:1}
 .card-dt{font-size:.78rem;font-weight:700;color:#fff;background:linear-gradient(135deg,#1e3a5f,#0f2744);border:1px solid #3b82f6;border-radius:6px;padding:3px 8px;display:inline-block;margin-top:4px}
 .card-dt.service{background:linear-gradient(135deg,#1a1000,#2d1200);border-color:var(--orange);color:var(--orange)}
 .badge{font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
-.b-waiting{background:#0d2346;color:#60a5fa}.b-evaluated{background:#0d2e1b;color:#86efac}
+.b-waiting{background:#0d2346;color:#60a5fa}.b-workshop_pending{background:#083344;color:#67e8f9}.b-evaluated{background:#0d2e1b;color:#86efac}
 .b-quoted{background:#2d1e00;color:#fcd34d}.b-approved{background:#2d1200;color:#fb923c}
+.b-service_finished{background:#064e3b;color:#86efac}.b-ready_delivery{background:#082f49;color:#67e8f9}
 .b-absent{background:#2d1a4a;color:#d8b4fe}.b-rejected{background:#3b1219;color:#fca5a5}
 .b-done{background:#0d2e1b;color:#4ade80}
 .paid-badge{font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:20px;background:#0d2e1b;color:#4ade80;border:1px solid #22c55e44;margin-top:4px;display:inline-block}
@@ -59,9 +61,12 @@ header h1{font-size:1rem;font-weight:700;flex:1}
 .v-tab{padding:6px 12px;border-radius:8px;cursor:pointer;font-size:.8rem;border:1px solid var(--border);background:var(--surface2);color:var(--muted);transition:all .2s;white-space:nowrap}
 .v-tab.active{color:#fff;font-weight:700}
 .vt-waiting.active{background:#1e3a5f;border-color:#3b82f6}
+.vt-workshop_pending.active{background:#083344;border-color:#06b6d4}
 .vt-evaluated.active{background:#14532d;border-color:#22c55e}
 .vt-quoted.active{background:#451a03;border-color:#eab308}
 .vt-approved.active{background:#1c1917;border-color:#f97316}
+.vt-service_finished.active{background:#064e3b;border-color:#22c55e}
+.vt-ready_delivery.active{background:#082f49;border-color:#38bdf8}
 .vt-absent.active{background:#3b0764;border-color:#a855f7}
 .vt-rejected.active{background:#3b1219;border-color:#ef4444}
 .vt-done.active{background:#0d1f0d;border-color:#22c55e}
@@ -183,8 +188,8 @@ async function requestNotif(){if('Notification'in window&&Notification.permissio
 requestNotif();
 function sendNotif(t,b){if('Notification'in window&&Notification.permission==='granted')new Notification(t,{body:b,icon:'https://cdn.jsdelivr.net/gh/twitter/twemoji@14/assets/72x72/2744.png'})}
 
-function lbl(s){return{waiting:'Aguardando visita',evaluated:'Avaliação concluída',quoted:'Orçamento enviado',approved:'Aprovado',absent:'Cliente ausente',done:'Concluído'}[s]||s}
-function icon(s){return{waiting:'🕐',evaluated:'✅',quoted:'💰',approved:'🟠',absent:'🚫',done:'✔'}[s]||'❓'}
+function lbl(s){return{waiting:'Aguardando visita',workshop_pending:'Aguardando Avaliação',evaluated:'Avaliação concluída',quoted:'Orçamento enviado',approved:'Aprovado',service_finished:'Serviço finalizado',ready_delivery:'Pronto para entrega',absent:'Cliente ausente',done:'Concluído'}[s]||s}
+function icon(s){return{waiting:'🕐',workshop_pending:'🏭',evaluated:'✅',quoted:'💰',approved:'🟠',service_finished:'✅',ready_delivery:'📦',absent:'🚫',done:'✔'}[s]||'❓'}
 function fdt(dt){if(!dt)return'—';try{return new Date(dt).toLocaleString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch{return dt}}
 function maps(a){return'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a)}
 function moneyNum(v){return parseFloat(String(v||'').replace(/[R$\s.]/g,'').replace(',','.'))||0}
@@ -242,6 +247,7 @@ window.renderList=()=>{
         <div class="card-icon">${icon(c.status)}</div>
         <div class="card-info">
           <div class="card-name">${c.name}${getLayers(c).some(l=>l.approval?.needsMachine)?' <span title="Precisa de maquininha">💳</span>':''}</div>
+          ${(c.status==='workshop_pending'||getLayers(c).some(l=>!l.done&&(l.status==='workshop_pending'||l.workshopPending)))?'<span class="paid-badge" style="background:#083344;color:#67e8f9;border-color:#06b6d455">🏭 No galpão</span>':''}
           <div class="card-phone">${c.address||'—'}</div>
           <div class="card-dt${mainDt.type==='service'?' service':''}">${mainDt.type==='service'?'🔧':'📅'} ${fdt(mainDt.dt)}</div>
         </div>
@@ -328,7 +334,7 @@ function renderDetailFull(c){
     const isActive=li===currentLayerIdx;
     let panel='';
 
-    if(ly.status==='waiting'){
+    if(ly.status==='waiting'||ly.status==='workshop_pending'){
       panel=`
         <div class="acc">
           <div class="acc-hdr open" id="ah-f-${li}" onclick="toggleAcc('ah-f-${li}','ab-f-${li}')">
