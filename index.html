@@ -1,8 +1,173 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>MFC</title><meta name="theme-color" content="#0d1117"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"><style>
-:root{--bg:#0d1117;--surface:#161b22;--surface2:#21262d;--accent:#58a6ff;--text:#e6edf3;--muted:#8b949e;--border:#30363d;--green:#3fb950;--yellow:#d29922;--orange:#db6d28;--red:#f85149;--purple:#bc8cff;--cyan:#38bdf8;--radius:12px}body.light{--bg:#f4f7fb;--surface:#ffffff;--surface2:#e9eef6;--text:#0f172a;--muted:#64748b;--border:#d7e0ec}*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;min-height:100vh;max-width:480px;margin:0 auto}#offline-banner{background:#7c3aed;color:#fff;text-align:center;padding:8px;font-size:.8rem;display:none}header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:100}header h1{font-size:1rem;font-weight:800;flex:1}.reload-btn,.install-btn,.theme-btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:6px 9px;font-size:.75rem;cursor:pointer}.install-btn{display:none;background:var(--accent);color:#fff}.search-wrap{padding:12px 16px 0;position:relative}.search-wrap input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:10px 14px 10px 36px;color:var(--text)}.search-icon{position:absolute;left:28px;top:52%;color:var(--muted)}.list-wrap{padding:12px 16px;display:flex;flex-direction:column;gap:10px}.card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);border-left-width:4px;cursor:pointer}.card.s-waiting{border-left-color:#3b82f6}.card.s-workshop_pending{border-left-color:#38bdf8}.card.s-evaluated{border-left-color:#22c55e}.card.s-quoted{border-left-color:#eab308}.card.s-approved{border-left-color:#f97316}.card.s-ready_delivery{border-left-color:#38bdf8}.card.s-absent{border-left-color:#a855f7}.card.s-done{border-left-color:#22c55e;opacity:.7}.card-inner{padding:14px 16px;display:flex;align-items:center;gap:12px}.card-icon{font-size:1.5rem}.card-info{flex:1;min-width:0}.card-name{font-weight:800;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.card-sub{font-size:.76rem;color:var(--muted)}.card-dt{font-size:.76rem;font-weight:800;color:#fff;background:#1e3a5f;border:1px solid #3b82f6;border-radius:6px;padding:3px 8px;display:inline-block;margin-top:4px}.badge{font-size:.66rem;font-weight:900;padding:4px 8px;border-radius:20px;text-transform:uppercase;white-space:nowrap}.b-waiting{background:#0d2346;color:#60a5fa}.b-workshop_pending{background:#083344;color:#67e8f9}.b-evaluated{background:#0d2e1b;color:#86efac}.b-quoted{background:#2d1e00;color:#fcd34d}.b-approved{background:#2d1200;color:#fb923c}.b-ready_delivery{background:#0c4a6e;color:#7dd3fc}.b-absent{background:#2d1a4a;color:#d8b4fe}.b-done{background:#0d2e1b;color:#4ade80}.empty{text-align:center;padding:60px 20px;color:var(--muted)}#detail{position:fixed;inset:0;background:var(--bg);z-index:200;display:none;flex-direction:column;max-width:480px;margin:0 auto;overflow-y:auto}#detail.open{display:flex}.detail-header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10}.back-btn{background:none;border:none;color:var(--accent);font-size:1rem;padding:6px}.detail-header h2{flex:1;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.detail-body{padding:16px;display:flex;flex-direction:column;gap:12px}.box{background:var(--surface);border-radius:var(--radius);padding:14px;border:1px solid var(--border)}.box h3{font-size:.76rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}.irow{display:flex;flex-direction:column;gap:2px;margin-bottom:10px}.irow label{font-size:.72rem;color:var(--muted)}.irow span{font-size:.9rem}.maps-link{color:var(--accent);font-size:.82rem;text-decoration:none;padding:7px 12px;background:#0d2346;border-radius:8px;display:inline-block}.v-tabs-wrap{display:flex;gap:6px;flex-wrap:wrap}.v-tab{padding:7px 12px;border-radius:8px;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-size:.8rem}.v-tab.active{color:#fff;font-weight:800}.v-panel{display:none}.v-panel.active{display:flex;flex-direction:column;gap:10px}.fg{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}.fg label{font-size:.8rem;color:var(--muted);font-weight:700}.fg input,.fg textarea{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:10px 12px;font-size:.9rem;width:100%;font-family:inherit}.fg textarea{resize:vertical;min-height:80px}.photo-area{background:var(--surface2);border-radius:10px;padding:12px}.photo-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.photo-thumb{position:relative;width:72px;height:72px}.photo-thumb img,.photo-row img{width:72px;height:72px;object-fit:cover;border-radius:8px;cursor:pointer}.photo-del{position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;border:0;border-radius:50%;width:21px;height:21px;font-weight:900}.photo-btns{display:flex;gap:8px}.photo-btn{flex:1;padding:10px;border-radius:8px;border:1px dashed var(--border);background:var(--bg);color:var(--muted);font-size:.85rem;text-align:center}.submit-btn,.done-btn,.absent-btn{color:#fff;border:none;border-radius:var(--radius);padding:13px;font-size:.95rem;font-weight:800;cursor:pointer;width:100%}.submit-btn,.done-btn{background:var(--green)}.absent-btn{background:var(--purple)}.trash-btn{background:var(--red);color:#fff;border:none;border-radius:var(--radius);padding:12px;font-weight:800}.waiting-msg{padding:14px;text-align:center;color:var(--muted);background:var(--surface);border-radius:var(--radius)}.doc-box{background:#0f172a;border:1px solid #334155;border-radius:var(--radius);padding:12px}.budget-preview{width:100%;max-height:260px;object-fit:contain;border-radius:10px;border:1px solid var(--border);background:#020617;cursor:pointer;margin-top:8px}.indicator{display:inline-block;font-size:.78rem;font-weight:800;padding:6px 9px;border-radius:12px;background:#083344;color:#67e8f9;border:1px solid #0e7490;margin-top:6px}.company-banner{background:linear-gradient(135deg,#0e7490,#1e3a5f);border-radius:var(--radius);padding:14px;border:1px solid #67e8f955}.edit-box{border:1px dashed var(--border);padding:12px;border-radius:10px;background:var(--surface2)}
-</style></head><body><div id="offline-banner">📵 Sem conexão — modo offline.</div><header><span>❄️</span><h1>MFC</h1><span id="conn">🔴</span><button class="theme-btn" onclick="toggleTheme()">☀️</button><button class="install-btn" id="install-btn">⬇</button><button class="reload-btn" onclick="location.reload()">🔄</button></header><div class="search-wrap"><span class="search-icon">🔍</span><input id="search-input" placeholder="Buscar cliente..." oninput="renderList()"></div><div class="list-wrap" id="list-wrap"><div class="empty">⏳ Carregando...</div></div><div id="detail"><div class="detail-header"><button class="back-btn" onclick="closeDetail()">←</button><h2 id="d-name"></h2><span class="badge" id="d-badge"></span></div><div class="detail-body" id="d-body"></div></div><input type="file" id="input-gallery" accept="image/*" multiple style="display:none" onchange="handleFiles(this)"><input type="file" id="input-camera" accept="image/*" capture="environment" style="display:none" onchange="handleFiles(this)">
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<!--
+  ========================================================
+  HISTÓRICO DE IMPLEMENTAÇÕES — NÃO REMOVER NENHUM ITEM
+  ========================================================
+  - [x] Status workshop_pending reconhecido com badge ciano
+  - [x] Formulário de avaliação funciona para workshop_pending
+  - [x] Checkbox "Precisa retirar o equipamento" na avaliação
+  - [x] Bug das fotos corrigido — salvas em techReport.photos no Firestore
+  - [x] Botão "Pronto para Entrega" quando "Serviço no galpão" ativo
+  - [x] Modo claro (light mode) com toggle no header + localStorage
+  - [x] Opção de descartar visita para lixeira pelo técnico
+  - [x] openLb usa window.open() — SEM lightbox, SEM zoom manual
+  ========================================================
+  AO EDITAR ESTE ARQUIVO: preserve todos os itens acima.
+  ========================================================
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>App Técnico — Refrigeração</title>
+<style>
+:root{--bg:#0d1117;--surface:#161b22;--surface2:#21262d;--accent:#58a6ff;--text:#e6edf3;--muted:#8b949e;--border:#30363d;--green:#3fb950;--yellow:#d29922;--orange:#db6d28;--red:#f85149;--purple:#bc8cff;--radius:12px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;min-height:100vh;max-width:480px;margin:0 auto}
+#offline-banner{background:#7c3aed;color:#fff;text-align:center;padding:8px;font-size:.8rem;display:none}
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+header h1{font-size:1rem;font-weight:700;flex:1}
+#conn{font-size:.85rem}
+.reload-btn{background:none;border:1px solid var(--border);border-radius:8px;color:var(--muted);padding:6px 10px;font-size:.75rem;cursor:pointer}
+.search-wrap{padding:12px 16px 0;position:relative}
+.search-wrap input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px 10px 36px;color:var(--text);font-size:.9rem;outline:none}
+.search-wrap input:focus{border-color:var(--accent)}
+.search-icon{position:absolute;left:28px;top:50%;transform:translateY(-30%);color:var(--muted);pointer-events:none}
+.list-wrap{padding:12px 16px 16px;display:flex;flex-direction:column;gap:10px}
+.card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);border-left-width:4px;cursor:pointer;transition:transform .1s}
+.card:active{transform:scale(.98)}
+.card.s-waiting{border-left-color:#3b82f6}.card.s-evaluated{border-left-color:#22c55e}
+.card.s-quoted{border-left-color:#eab308}.card.s-approved{border-left-color:#f97316}
+.card.s-absent{border-left-color:#a855f7}.card.s-rejected{border-left-color:#ef4444}
+.card.s-done{border-left-color:#22c55e;opacity:.6}
+.card-inner{padding:14px 16px;display:flex;align-items:center;gap:12px}
+.card-icon{font-size:1.5rem}
+.card-info{flex:1;min-width:0}
+.card-name{font-weight:700;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-phone{font-size:.75rem;color:var(--muted)}
+.card-dt{font-size:.78rem;font-weight:700;color:#fff;background:linear-gradient(135deg,#1e3a5f,#0f2744);border:1px solid #3b82f6;border-radius:6px;padding:3px 8px;display:inline-block;margin-top:4px}
+.card-dt.service{background:linear-gradient(135deg,#1a1000,#2d1200);border-color:var(--orange);color:var(--orange)}
+.badge{font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.b-waiting{background:#0d2346;color:#60a5fa}.b-evaluated{background:#0d2e1b;color:#86efac}
+.b-quoted{background:#2d1e00;color:#fcd34d}.b-approved{background:#2d1200;color:#fb923c}
+.b-absent{background:#2d1a4a;color:#d8b4fe}.b-rejected{background:#3b1219;color:#fca5a5}
+.b-done{background:#0d2e1b;color:#4ade80}
+.paid-badge{font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:20px;background:#0d2e1b;color:#4ade80;border:1px solid #22c55e44;margin-top:4px;display:inline-block}
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty .icon{font-size:3rem;margin-bottom:12px}
+#detail{position:fixed;inset:0;background:var(--bg);z-index:200;display:none;flex-direction:column;max-width:480px;margin:0 auto;overflow-y:auto}
+#detail.open{display:flex}
+.detail-header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10}
+.back-btn{background:none;border:none;color:var(--accent);font-size:1.1rem;cursor:pointer;padding:4px 8px}
+.detail-header h2{flex:1;font-size:1rem;font-weight:700;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.detail-body{padding:16px;display:flex;flex-direction:column;gap:12px}
+.box{background:var(--surface);border-radius:var(--radius);padding:14px;border:1px solid var(--border)}
+.box h3{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.irow{display:flex;flex-direction:column;gap:2px;margin-bottom:10px}
+.irow:last-child{margin-bottom:0}
+.irow label{font-size:.72rem;color:var(--muted)}
+.irow span{font-size:.9rem}
+.irow .dt-val{font-size:1rem;font-weight:700;color:var(--accent)}
+.maps-link{color:var(--accent);font-size:.82rem;display:inline-flex;align-items:center;gap:4px;margin-top:6px;text-decoration:none;padding:6px 12px;background:#0d2346;border-radius:8px}
+/* Abas visitas */
+.v-tabs-wrap{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.v-tab{padding:6px 12px;border-radius:8px;cursor:pointer;font-size:.8rem;border:1px solid var(--border);background:var(--surface2);color:var(--muted);transition:all .2s;white-space:nowrap}
+.v-tab.active{color:#fff;font-weight:700}
+.vt-waiting.active{background:#1e3a5f;border-color:#3b82f6}
+.vt-evaluated.active{background:#14532d;border-color:#22c55e}
+.vt-quoted.active{background:#451a03;border-color:#eab308}
+.vt-approved.active{background:#1c1917;border-color:#f97316}
+.vt-absent.active{background:#3b0764;border-color:#a855f7}
+.vt-rejected.active{background:#3b1219;border-color:#ef4444}
+.vt-done.active{background:#0d1f0d;border-color:#22c55e}
+.v-panel{display:none}.v-panel.active{display:flex;flex-direction:column;gap:10px}
+/* Accordion */
+.acc{border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.acc-hdr{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;background:var(--surface2)}
+.acc-hdr:active{background:#2a3040}
+.acc-arrow{margin-left:auto;transition:transform .2s;font-size:.8rem;color:var(--muted)}
+.acc-hdr.open .acc-arrow{transform:rotate(180deg)}
+.acc-body{display:none;padding:14px;background:var(--bg);border-top:1px solid var(--border)}
+.acc-body.open{display:block}
+.fg{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.fg label{font-size:.8rem;color:var(--muted);font-weight:600}
+.fg input,.fg textarea{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:10px 12px;font-size:.9rem;outline:none;width:100%;font-family:inherit}
+.fg input:focus,.fg textarea:focus{border-color:var(--accent)}
+.fg textarea{resize:vertical;min-height:80px}
+.photo-area{background:var(--surface2);border-radius:10px;padding:12px;margin-bottom:12px}
+.photo-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.photo-thumb{position:relative;width:72px;height:72px;flex-shrink:0}
+.photo-thumb img{width:72px;height:72px;object-fit:cover;border-radius:8px;cursor:pointer;display:block}
+.photo-del{position:absolute;top:-6px;right:-6px;background:var(--red);border:none;color:#fff;border-radius:50%;width:20px;height:20px;font-size:.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700}
+.photo-btns{display:flex;gap:8px}
+.photo-btn{flex:1;padding:10px;border-radius:8px;border:1px dashed var(--border);background:var(--bg);color:var(--muted);font-size:.85rem;cursor:pointer;text-align:center}
+.photo-btn:active{background:var(--surface2)}
+.submit-btn{background:var(--green);color:#fff;border:none;border-radius:var(--radius);padding:14px;font-size:1rem;font-weight:700;cursor:pointer;width:100%}
+.submit-btn:active{opacity:.85}
+.absent-btn{background:var(--purple);color:#fff;border:none;border-radius:var(--radius);padding:12px;font-size:.9rem;font-weight:700;cursor:pointer;width:100%}
+.done-btn{background:var(--green);color:#fff;border:none;border-radius:var(--radius);padding:12px;font-size:.9rem;font-weight:700;cursor:pointer;width:100%}
+.done-btn:active,.absent-btn:active{opacity:.85}
+.waiting-msg{text-align:center;padding:14px;color:var(--muted);font-size:.88rem;background:var(--surface);border-radius:var(--radius)}
+.pay-box{background:#0d2e1b;border:1px solid #22c55e44;border-radius:var(--radius);padding:14px}
+.pay-box h3{color:var(--green);font-size:.85rem;margin-bottom:10px;text-transform:uppercase}
+#lightbox{position:fixed;inset:0;background:#000d;z-index:900;display:none;align-items:center;justify-content:center}
+#lightbox.open{display:flex}
+#lightbox img{max-width:95vw;max-height:82vh;border-radius:10px;object-fit:contain;transform-origin:center;transition:transform .12s}
+#lb-close{position:absolute;top:16px;right:16px;color:#fff;font-size:2rem;cursor:pointer;background:none;border:none;z-index:10}
+.lb-controls{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10}
+.lb-controls button{background:#ffffff22;color:#fff;border:1px solid #ffffff44;border-radius:10px;padding:10px 14px;font-size:1rem;font-weight:700;cursor:pointer;backdrop-filter:blur(6px)}
+.add-visit-btn{background:none;border:1px dashed var(--border);border-radius:8px;color:var(--muted);padding:8px 14px;font-size:.82rem;cursor:pointer;white-space:nowrap}
+.doc-box{background:#0f172a;border:1px solid #334155;border-radius:var(--radius);padding:12px;margin-top:8px}
+.doc-box a{color:var(--accent);font-weight:700;text-decoration:none;font-size:.9rem}
+.budget-preview{width:100%;max-height:260px;object-fit:contain;border-radius:10px;border:1px solid var(--border);background:#020617;cursor:zoom-in;margin-top:8px}
+.entry-box{background:#0d2e1b;border:1px solid #22c55e33;border-radius:var(--radius);padding:12px;margin-top:8px}
+.entry-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.entry-grid div{background:var(--surface2);border-radius:8px;padding:8px}.entry-grid label{font-size:.7rem;color:var(--muted);display:block}.entry-grid span{font-weight:700}
+.company-banner{background:linear-gradient(135deg,#0e7490,#1e3a5f);border-radius:var(--radius);padding:14px;border:1px solid #67e8f955}
+.add-visit-btn:active{background:var(--surface2)}
+</style>
+</head>
+<body>
+<div id="offline-banner">📵 Sem conexão — modo offline.</div>
+<header>
+  <span style="font-size:1.4rem">❄️</span>
+  <h1>Técnico</h1>
+  <span id="conn">🔴</span>
+  <button class="reload-btn" onclick="location.reload()">🔄</button>
+</header>
+<div class="search-wrap">
+  <span class="search-icon">🔍</span>
+  <input type="text" placeholder="Buscar cliente..." oninput="renderList()" id="search-input"/>
+</div>
+<div class="list-wrap" id="list-wrap">
+  <div class="empty"><div class="icon">⏳</div><p>Carregando...</p></div>
+</div>
+<div id="detail">
+  <div class="detail-header">
+    <button class="back-btn" onclick="closeDetail()">← Voltar</button>
+    <h2 id="d-name"></h2>
+    <span class="badge" id="d-badge"></span>
+  </div>
+  <div class="detail-body" id="d-body"></div>
+</div>
+<div id="lightbox" onclick="closeLb()">
+  <button id="lb-close" onclick="closeLb()">✕</button>
+  <img id="lb-img" src="" alt="" onclick="event.stopPropagation()">
+  <div class="lb-controls" onclick="event.stopPropagation()">
+    <button onclick="zoomLb(-0.25)">−</button>
+    <button onclick="resetLb()">Reset</button>
+    <button onclick="zoomLb(0.25)">+</button>
+  </div>
+</div>
+<input type="file" id="input-gallery" accept="image/*" multiple style="display:none" onchange="handleFiles(this)">
+<input type="file" id="input-camera" accept="image/*" capture="environment" style="display:none" onchange="handleFiles(this)">
+
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";import { getFirestore, collection, onSnapshot, updateDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import { getFirestore, collection, onSnapshot, updateDoc, doc, query, orderBy }
+  from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
 const app=initializeApp({
   apiKey:"AIzaSyAUUid850sbmBAVS9JzeZ94SbC-qzkk0B8",
   authDomain:"roteiro-mfc-d3053.firebaseapp.com",
@@ -10,18 +175,348 @@ const app=initializeApp({
   storageBucket:"roteiro-mfc-d3053.firebasestorage.app",
   messagingSenderId:"1030114859934",
   appId:"1:1030114859934:web:ad353eafb55205d6b4148f"
-});const db=getFirestore(app);const col=collection(db,'clients');let allClients=[],currentId=null,currentLayerIdx=0,localPhotos={},knownIds=null;
-const STATUS={waiting:'Aguardando visita',workshop_pending:'Aguardando Avaliação',evaluated:'Avaliação concluída',quoted:'Orçamento enviado',approved:'Aprovado',ready_delivery:'Equipamento pronto para entrega',absent:'Cliente ausente',done:'Concluído'};const ICON={waiting:'🕐',workshop_pending:'🏭',evaluated:'✅',quoted:'💰',approved:'🟠',ready_delivery:'📦',absent:'🚫',done:'✔'};const st=s=>String(s||'waiting').toLowerCase().trim();const lbl=s=>STATUS[st(s)]||STATUS.waiting;const icon=s=>ICON[st(s)]||'📋';const fdt=dt=>{if(!dt)return'—';try{return new Date(dt).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}catch{return dt}};const maps=a=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a||'');function getLayers(c){return c.layers&&c.layers.length?c.layers:[{status:c.status||'waiting',techReport:c.techReport||null,approval:c.approval||null,done:c.status==='done',createdAt:c.createdAt}]}function activeLayer(c){return getLayers(c).find(l=>!l.done)||getLayers(c)[0]}function getStatus(c){return c.status||activeLayer(c)?.status||'waiting'}function serviceInWorkshop(l){return !!(l?.serviceInWorkshop||l?.approval?.serviceInWorkshop)}
-function applyTheme(){if(localStorage.getItem('mfc-theme')==='light')document.body.classList.add('light');else document.body.classList.remove('light')}window.toggleTheme=()=>{localStorage.setItem('mfc-theme',document.body.classList.contains('light')?'dark':'light');applyTheme()};applyTheme();function updOnline(){document.getElementById('offline-banner').style.display=navigator.onLine?'none':'block'}window.addEventListener('online',updOnline);window.addEventListener('offline',updOnline);updOnline();
-window.openLb=src=>{if(src)window.open(src,'_blank')};const q=query(col,orderBy('createdAt','asc'));onSnapshot(q,snap=>{allClients=snap.docs.map(d=>({id:d.id,...d.data()}));document.getElementById('conn').textContent='🟢';renderList();if(currentId){const c=allClients.find(x=>x.id===currentId);if(c)renderDetailFull(c)}},()=>document.getElementById('conn').textContent='🔴');
-window.renderList=()=>{const wrap=document.getElementById('list-wrap'),search=document.getElementById('search-input').value.toLowerCase().trim();let clients=allClients.filter(c=>!c.deleted).filter(c=>getLayers(c).some(l=>!l.done));if(search)clients=clients.filter(c=>(c.name||'').toLowerCase().includes(search)||(c.phone||'').includes(search));if(!clients.length){wrap.innerHTML='<div class="empty">📋 Sem clientes.</div>';return}wrap.innerHTML=clients.map(c=>{const s=st(getStatus(c)),l=activeLayer(c);return`<div class="card s-${s}" onclick="openDetail('${c.id}')"><div class="card-inner"><div class="card-icon">${icon(s)}</div><div class="card-info"><div class="card-name">${c.name||'—'}</div><div class="card-sub">${c.address||'—'}</div>${l?.techReport?.needsPickup?'<span class="indicator">🏭 Retirar equipamento</span>':''}${serviceInWorkshop(l)?'<span class="indicator">🏭 Serviço no galpão</span>':''}<div class="card-dt">📅 ${fdt(l?.approval?.serviceDate||c.datetime)}</div></div><span class="badge b-${s}">${lbl(s)}</span></div></div>`}).join('')};
-window.openDetail=id=>{currentId=id;localPhotos={};const c=allClients.find(x=>x.id===id);if(!c)return;const layers=getLayers(c);currentLayerIdx=Math.max(0,layers.findIndex(l=>!l.done));document.getElementById('d-name').textContent=c.name||'Cliente';document.getElementById('detail').classList.add('open');renderDetailFull(c)};window.closeDetail=()=>{document.getElementById('detail').classList.remove('open');currentId=null;localPhotos={}};
-function renderDetailFull(c){const layers=getLayers(c);document.getElementById('d-badge').textContent=lbl(getStatus(c));document.getElementById('d-badge').className='badge b-'+st(getStatus(c));let html=`<div class="box"><h3>📋 Informações</h3><div class="irow"><label>Telefone</label><span>${c.phone||'—'}</span></div><div class="irow"><label>Equipamento</label><span>${c.equip||'—'}</span></div>${c.address?`<a class="maps-link" href="${maps(c.address)}" target="_blank">📍 Abrir no Maps</a>`:''}</div>`;let activeN=0;html+=`<div class="v-tabs-wrap">${layers.map((l,i)=>l.done?'':`<button class="v-tab ${i===currentLayerIdx?'active':''}" data-vtab="${c.id}" onclick="switchTab('${c.id}',${i})">${icon(l.status)} Visita ${++activeN}</button>`).join('')}</div>`;activeN=0;html+=layers.map((l,i)=>{if(l.done)return'';const s=st(l.status),active=i===currentLayerIdx;let panel='';if(s==='waiting'||s==='workshop_pending')panel=assessmentForm(c,l,i);else panel=statusPanel(c,l,i);return`<div class="v-panel ${active?'active':''}" id="vp-${c.id}-${i}" data-vpanel="${c.id}">${panel}</div>`}).join('');document.getElementById('d-body').innerHTML=html;Object.keys(localPhotos).forEach(i=>refreshPhotos(parseInt(i)))}
-function assessmentForm(c,l,i){localPhotos[i]=[...(l.techReport?.photos||[])];return`<div class="box"><h3>🔧 Avaliação técnica</h3><div class="fg"><label>Modelo do equipamento</label><input id="f-model-${i}" value="${l.techReport?.model||''}" placeholder="Ex: LG 12.000 BTU"></div><div class="fg"><label>Serviços a realizar</label><textarea id="f-problem-${i}" placeholder="Descreva os serviços...">${l.techReport?.problem||''}</textarea></div><label style="display:flex;gap:10px;align-items:center;margin-bottom:10px"><input type="checkbox" id="f-pickup-${i}" ${l.techReport?.needsPickup||l.needsPickup?'checked':''}>Precisa retirar o equipamento</label><div class="photo-area"><div class="photo-row" id="photo-row-${i}"></div><div class="photo-btns"><div class="photo-btn" onclick="openCamera(${i})">📷 Câmera</div><div class="photo-btn" onclick="openGallery(${i})">🖼️ Galeria</div></div></div><button class="submit-btn" onclick="submitReport('${c.id}',${i})">✅ Enviar avaliação</button></div><button class="absent-btn" onclick="markAbsent('${c.id}',${i})">🚫 Cliente ausente</button><button class="trash-btn" onclick="discardClient('${c.id}')">🗑 Descartar para lixeira</button>`}
-function editAssessment(c,l,i){localPhotos[i]=[...(l.techReport?.photos||[])];return`<div class="edit-box"><h3>✏️ Editar avaliação</h3><div class="fg"><label>Modelo do equipamento</label><input id="f-model-${i}" value="${l.techReport?.model||''}"></div><div class="fg"><label>Serviços</label><textarea id="f-problem-${i}">${l.techReport?.problem||''}</textarea></div><label style="display:flex;gap:10px;align-items:center;margin-bottom:10px"><input type="checkbox" id="f-pickup-${i}" ${l.techReport?.needsPickup||l.needsPickup?'checked':''}>Precisa retirar o equipamento</label><div class="photo-area"><div class="photo-row" id="photo-row-${i}"></div><div class="photo-btns"><div class="photo-btn" onclick="openCamera(${i})">📷 Câmera</div><div class="photo-btn" onclick="openGallery(${i})">🖼️ Galeria</div></div></div><button class="submit-btn" onclick="submitReport('${c.id}',${i})">💾 Atualizar avaliação</button></div>`}
-function statusPanel(c,l,i){const photos=l.techReport?.photos||[];const s=st(l.status);let doc=l.budgetImage?.data?`<div class="doc-box"><h3>🖼️ Imagem do orçamento</h3><img class="budget-preview" src="${l.budgetImage.data}" onclick="openLb('${l.budgetImage.data}')"></div>`:'';let ready=s==='approved';return`${l.techReport?`<div class="box"><h3>🔧 Avaliação enviada</h3><div class="irow"><label>Equipamento</label><span>${l.techReport.model||'—'}</span></div><div class="irow"><label>Serviços</label><span>${l.techReport.problem||'—'}</span></div>${l.techReport.needsPickup?'<span class="indicator">🏭 Retirar equipamento</span>':''}<div class="photo-row">${photos.map(p=>`<img src="${p}" onclick="openLb('${p}')">`).join('')}</div></div>`:''}${editAssessment(c,l,i)}${l.quote?`<div class="box"><h3>💰 Orçamento</h3><p>${l.quote}</p>${l.quoteObs?`<p style="color:var(--muted);margin-top:6px">${l.quoteObs}</p>`:''}</div>`:''}${doc}${l.approval?.payment?`<div class="box"><h3>🟠 Aprovado</h3><p>Pagamento: <b>${l.approval.payment}</b>${l.approval.value?' — <b>'+l.approval.value+'</b>':''}</p><p>📅 ${fdt(l.approval.serviceDate)}</p>${serviceInWorkshop(l)?'<span class="indicator">🏭 Serviço no galpão</span>':''}</div>`:''}${st(l.status)==='approved'?(serviceInWorkshop(l)?`<button class="done-btn" onclick="markReadyDelivery('${c.id}',${i})">📦 Pronto para Entrega</button>`:`<button class="done-btn" onclick="markDone('${c.id}',${i})">✅ Serviço Concluído</button>`):''}${st(l.status)==='ready_delivery'?'<div class="waiting-msg">📦 Equipamento pronto para entrega. Aguardando conclusão do gestor.</div>':''}<button class="trash-btn" onclick="discardClient('${c.id}')">🗑 Descartar para lixeira</button>`}
-window.switchTab=(cid,i)=>{currentLayerIdx=i;document.querySelectorAll(`[data-vtab="${cid}"]`).forEach(t=>t.classList.remove('active'));document.querySelectorAll(`[data-vpanel="${cid}"]`).forEach(p=>p.classList.remove('active'));document.querySelectorAll(`[data-vtab="${cid}"]`)[i]?.classList.add('active');document.getElementById(`vp-${cid}-${i}`)?.classList.add('active')};
-let pendingLayerIdx=0;window.openCamera=i=>{pendingLayerIdx=i;document.getElementById('input-camera').click()};window.openGallery=i=>{pendingLayerIdx=i;document.getElementById('input-gallery').click()};window.handleFiles=input=>{const i=pendingLayerIdx;if(!localPhotos[i])localPhotos[i]=[];Array.from(input.files).forEach(file=>{const r=new FileReader();r.onload=e=>{localPhotos[i].push(e.target.result);refreshPhotos(i)};r.readAsDataURL(file)});input.value=''};function refreshPhotos(i){const el=document.getElementById('photo-row-'+i);if(!el)return;el.innerHTML=(localPhotos[i]||[]).map((p,k)=>`<div class="photo-thumb"><img src="${p}" onclick="openLb('${p}')"><button class="photo-del" onclick="removePhoto(${i},${k})">✕</button></div>`).join('')}window.removePhoto=(i,k)=>{localPhotos[i].splice(k,1);refreshPhotos(i)};
-window.submitReport=async(id,i)=>{const c=allClients.find(x=>x.id===id),layers=[...getLayers(c)];const model=document.getElementById('f-model-'+i)?.value.trim(),problem=document.getElementById('f-problem-'+i)?.value.trim();if(!model||!problem)return alert('Preencha modelo e serviços.');const needsPickup=document.getElementById('f-pickup-'+i)?.checked||false;layers[i]={...layers[i],techReport:{model,problem,photos:[...(localPhotos[i]||[])],needsPickup},needsPickup,status:'evaluated'};const first=layers.find(l=>!l.done);await updateDoc(doc(db,'clients',id),{layers,status:first?.status||'evaluated',updatedAt:new Date().toISOString()})};
-window.markAbsent=async(id,i)=>{if(!confirm('Confirmar cliente ausente?'))return;const c=allClients.find(x=>x.id===id),layers=[...getLayers(c)];layers[i]={...layers[i],status:'absent',absentAt:new Date().toISOString()};await updateDoc(doc(db,'clients',id),{layers,status:'absent'})};window.markReadyDelivery=async(id,i)=>{const c=allClients.find(x=>x.id===id),layers=[...getLayers(c)];layers[i]={...layers[i],status:'ready_delivery',readyDeliveryAt:new Date().toISOString()};await updateDoc(doc(db,'clients',id),{layers,status:'ready_delivery'})};window.markDone=async(id,i)=>{if(!confirm('Confirmar serviço concluído?'))return;const c=allClients.find(x=>x.id===id),layers=[...getLayers(c)];layers[i]={...layers[i],status:'done',done:true,concludedAt:new Date().toISOString()};const first=layers.find(l=>!l.done);await updateDoc(doc(db,'clients',id),{layers,status:first?.status||'done',completedAt:first?c.completedAt:new Date().toISOString()});if(!first)closeDetail()};window.discardClient=async id=>{if(!confirm('Descartar para lixeira?'))return;await updateDoc(doc(db,'clients',id),{deleted:true,deletedAt:new Date().toISOString()});closeDetail()};
-</script><script>let deferredInstallPrompt=null;const installBtn=document.getElementById('install-btn');window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;if(installBtn)installBtn.style.display='inline-block'});installBtn?.addEventListener('click',async()=>{if(!deferredInstallPrompt)return;deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice.catch(()=>null);deferredInstallPrompt=null;installBtn.style.display='none'});if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js',{scope:'./'}).then(r=>r.update()).catch(()=>null));</script></body></html>
+});
+const db=getFirestore(app);
+const col=collection(db,'clients');
+
+let allClients=[],currentId=null,localPhotos={},currentLayerIdx=0,knownIds=null;
+
+function updOnline(){document.getElementById('offline-banner').style.display=navigator.onLine?'none':'block'}
+window.addEventListener('online',updOnline);window.addEventListener('offline',updOnline);updOnline();
+
+async function requestNotif(){if('Notification'in window&&Notification.permission==='default')await Notification.requestPermission()}
+requestNotif();
+function sendNotif(t,b){if('Notification'in window&&Notification.permission==='granted')new Notification(t,{body:b,icon:'https://cdn.jsdelivr.net/gh/twitter/twemoji@14/assets/72x72/2744.png'})}
+
+function lbl(s){return{waiting:'Aguardando visita',evaluated:'Avaliação concluída',quoted:'Orçamento enviado',approved:'Aprovado',absent:'Cliente ausente',rejected:'Orçamento rejeitado',done:'Concluído'}[s]||s}
+function icon(s){return{waiting:'🕐',evaluated:'✅',quoted:'💰',approved:'🟠',absent:'🚫',rejected:'❌',done:'✔'}[s]||'❓'}
+function fdt(dt){if(!dt)return'—';try{return new Date(dt).toLocaleString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch{return dt}}
+function maps(a){return'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a)}
+function moneyNum(v){return parseFloat(String(v||'').replace(/[R$\s.]/g,'').replace(',','.'))||0}
+function fmtMoney(v){return 'R$ '+Number(v||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.')}
+function getLayers(c){
+  if(c.layers&&c.layers.length)return c.layers;
+  return[{status:c.status,quote:c.quote||'',quoteObs:'',techReport:c.techReport||null,absentAt:c.absentAt||null,approval:c.approval||null,done:false,createdAt:c.createdAt}];
+}
+function getMainDt(c){
+  const layers=getLayers(c);
+  const active=layers.find(l=>!l.done);
+  if(active?.approval?.serviceDate)return{dt:active.approval.serviceDate,type:'service'};
+  return{dt:c.datetime,type:'visit'};
+}
+
+let lbScale=1;
+function applyLbZoom(){document.getElementById('lb-img').style.transform=`scale(${lbScale})`;}
+window.openLb=src=>{lbScale=1;document.getElementById('lb-img').src=src;applyLbZoom();document.getElementById('lightbox').classList.add('open')};
+window.closeLb=()=>document.getElementById('lightbox').classList.remove('open');
+window.zoomLb=d=>{lbScale=Math.min(Math.max(lbScale+d,1),4);applyLbZoom();};
+window.resetLb=()=>{lbScale=1;applyLbZoom();};
+
+const q=query(col,orderBy('createdAt','asc'));
+onSnapshot(q,snap=>{
+  const nc=snap.docs.map(d=>({id:d.id,...d.data()}));
+  if(knownIds===null){knownIds=new Set(nc.map(c=>c.id));}
+  else{nc.forEach(c=>{if(!knownIds.has(c.id)&&!c.deleted){sendNotif('📋 Nova visita!',c.name);knownIds.add(c.id)}});}
+  allClients=nc;
+  document.getElementById('conn').textContent='🟢';
+  renderList();
+  if(currentId){const c=allClients.find(x=>x.id===currentId);if(c)updateDetailBadge(c);}
+},()=>document.getElementById('conn').textContent='🔴');
+
+function updateDetailBadge(c){
+  const badge=document.getElementById('d-badge');
+  if(badge){badge.textContent=lbl(c.status);badge.className='badge b-'+c.status;}
+}
+
+window.renderList=()=>{
+  const wrap=document.getElementById('list-wrap');
+  const search=document.getElementById('search-input').value.toLowerCase().trim();
+  // Mostrar todos exceto totalmente done e deleted
+  let clients=allClients.filter(c=>!c.deleted);
+  // Ocultar cliente se TODAS as visitas estiverem concluídas
+  clients=clients.filter(c=>{
+    const layers=getLayers(c);
+    return layers.some(l=>!l.done);
+  });
+  if(search)clients=clients.filter(c=>c.name?.toLowerCase().includes(search));
+  if(!clients.length){wrap.innerHTML='<div class="empty"><div class="icon">📋</div><p>Sem clientes.</p></div>';return}
+  wrap.innerHTML=clients.map(c=>{
+    const mainDt=getMainDt(c);
+    return`<div class="card s-${c.status}" onclick="openDetail('${c.id}')">
+      <div class="card-inner">
+        <div class="card-icon">${icon(c.status)}</div>
+        <div class="card-info">
+          <div class="card-name">${c.name}${getLayers(c).some(l=>l.approval?.needsMachine)?' <span title="Precisa de maquininha">💳</span>':''}</div>
+          <div class="card-phone">${c.address||'—'}</div>
+          <div class="card-dt${mainDt.type==='service'?' service':''}">${mainDt.type==='service'?'🔧':'📅'} ${fdt(mainDt.dt)}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+          <span class="badge b-${c.status}">${lbl(c.status)}</span>
+          ${getLayers(c).some(l=>l.approval?.paid)?'<span class="paid-badge">💰 Pago</span>':''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+};
+
+window.openDetail=id=>{
+  currentId=id;localPhotos={};currentLayerIdx=0;
+  const c=allClients.find(x=>x.id===id);if(!c)return;
+  const layers=getLayers(c);
+  // Abrir na primeira visita ativa
+  currentLayerIdx=layers.findIndex(l=>!l.done);
+  if(currentLayerIdx<0)currentLayerIdx=0;
+  document.getElementById('d-name').textContent=c.name;
+  updateDetailBadge(c);
+  renderDetailFull(c);
+  document.getElementById('detail').classList.add('open');
+  document.getElementById('detail').scrollTop=0;
+};
+
+window.closeDetail=()=>{document.getElementById('detail').classList.remove('open');currentId=null;localPhotos={};currentLayerIdx=0};
+
+function renderDetailFull(c){
+  const layers=getLayers(c);
+  if(c.companyMode||c.type==='company'){
+    const li=layers.findIndex(l=>!l.done);
+    const idx=li>=0?li:0; const ly=layers[idx]||{};
+    const html=`<div class="company-banner"><h3 style="font-size:.9rem;margin-bottom:6px">🏢 Visita empresa</h3><p style="font-size:1.05rem;font-weight:800">${c.name||'—'}</p><p style="font-size:.9rem;margin-top:4px">🕒 ${fdt(ly.approval?.serviceDate||c.datetime)}</p></div>
+      <div class="box"><h3>💰 Orçamento do técnico</h3><div class="fg"><input id="company-quote-${idx}" type="text" placeholder="Ex: R$ 350,00" value="${ly.quote||ly.approval?.value||''}"></div></div>
+      <div class="box"><h3>📷 Fotos</h3><div class="photo-area"><div class="photo-row" id="photo-row-${idx}"></div><div class="photo-btns"><div class="photo-btn" onclick="openCamera(${idx})">📷 Câmera</div><div class="photo-btn" onclick="openGallery(${idx})">🖼️ Galeria</div></div></div></div>
+      <div class="box"><h3>📝 Observação</h3><p style="font-size:.9rem;color:var(--muted)">${c.notes||ly.quoteObs||'—'}</p></div>
+      <button class="done-btn" onclick="markCompanyDone('${c.id}',${idx})">✅ Concluir visita empresa</button>`;
+    document.getElementById('d-body').innerHTML=html;
+    refreshPhotos(idx);
+    return;
+  }
+  const activeLayers=layers.filter(l=>!l.done);
+  const doneLayers=layers.filter(l=>l.done);
+  let html='';
+
+  // Info
+  const rawPhone=c.phone?c.phone.replace(/\D/g,''):'';
+  const waLink=rawPhone?`https://wa.me/55${rawPhone}`:'';
+  const callLink=rawPhone?`tel:+55${rawPhone}`:'';
+  html+=`<div class="box">
+    <h3>📋 Informações</h3>
+    <div class="irow"><label>📅 Data e Hora</label><span class="dt-val">${fdt(c.datetime)}</span></div>
+    ${c.phone?`<div class="irow"><label>Telefone</label><span style="font-size:.95rem;font-weight:600">${c.phone}</span>
+      <div style="display:flex;gap:8px;margin-top:6px">
+        <a href="${callLink}" style="flex:1;text-align:center;padding:8px;background:#1e3a5f;border:1px solid #3b82f6;border-radius:8px;color:#60a5fa;font-size:.82rem;text-decoration:none">📞 Ligar</a>
+        <a href="${waLink}" target="_blank" style="flex:1;text-align:center;padding:8px;background:#0d2e1b;border:1px solid #22c55e;border-radius:8px;color:#86efac;font-size:.82rem;text-decoration:none">💬 WhatsApp</a>
+      </div>
+    </div>`:''}
+    ${c.equip?`<div class="irow"><label>Equipamento</label><span>${c.equip}</span></div>`:''}
+    ${c.notes?`<div class="irow"><label>Obs</label><span>${c.notes}</span></div>`:''}
+    ${c.address?`<div class="irow"><label>Endereço</label><span>${c.address}${c.ref?' — '+c.ref:''}</span></div><a class="maps-link" href="${maps(c.address+(c.ref?' '+c.ref:''))}" target="_blank">📍 Abrir no Maps</a>`:''}
+  </div>`;
+
+  // Abas
+  let activeNum=0;
+  const tabs=layers.map((ly,li)=>{
+    if(ly.done)return'';
+    activeNum++;
+    return`<button data-vtab="${c.id}" id="vt-${c.id}-${li}" class="v-tab vt-${ly.status}${li===currentLayerIdx?' active':''}" onclick="switchTab('${c.id}',${li})">${icon(ly.status)} Visita ${activeNum}</button>`;
+  }).join('');
+  const doneTab=doneLayers.length?`<button data-vtab="${c.id}" id="vt-${c.id}-done" class="v-tab vt-done" onclick="switchDoneTab('${c.id}')">✅ Concluídos (${doneLayers.length})</button>`:'';
+  const addBtn=`<button class="add-visit-btn" onclick="addVisit('${c.id}')">➕</button>`;
+
+  html+=`<div class="v-tabs-wrap">${tabs}${doneTab}${addBtn}</div>`;
+
+  // Painéis ativos
+  activeNum=0;
+  html+=layers.map((ly,li)=>{
+    if(ly.done)return'';
+    activeNum++;
+    const isActive=li===currentLayerIdx;
+    let panel='';
+
+    if(ly.status==='waiting'){
+      panel=`
+        <div class="acc">
+          <div class="acc-hdr open" id="ah-f-${li}" onclick="toggleAcc('ah-f-${li}','ab-f-${li}')">
+            <span style="font-size:.85rem;font-weight:700;color:var(--accent)">🔧 Preencher Avaliação</span>
+            <span class="acc-arrow">▼</span>
+          </div>
+          <div class="acc-body open" id="ab-f-${li}">
+            <div class="fg"><label>Modelo do Equipamento</label><input id="f-model-${li}" type="text" placeholder="Ex: LG Dual Inverter 12.000 BTU" value="${ly.techReport?.model||''}"></div>
+            <div class="fg"><label>Serviços a Realizar</label><textarea id="f-problem-${li}" placeholder="Descreva os serviços...">${ly.techReport?.problem||''}</textarea></div>
+            <div class="fg">
+              <label>Fotos</label>
+              <div class="photo-area">
+                <div class="photo-row" id="photo-row-${li}"></div>
+                <div class="photo-btns">
+                  <div class="photo-btn" onclick="openCamera(${li})">📷 Câmera</div>
+                  <div class="photo-btn" onclick="openGallery(${li})">🖼️ Galeria</div>
+                </div>
+              </div>
+              <p style="font-size:.72rem;color:var(--muted)">Toque no ✕ para remover · toque na foto para ampliar</p>
+            </div>
+            <button class="submit-btn" onclick="submitReport('${c.id}',${li})">✅ Enviar Avaliação</button>
+          </div>
+        </div>
+        <button class="absent-btn" onclick="markAbsent('${c.id}',${li})">🚫 Cliente Ausente</button>`;
+    } else {
+      const techAcc=ly.techReport?`
+        <div class="acc">
+          <div class="acc-hdr" id="ah-t-${li}" onclick="toggleAcc('ah-t-${li}','ab-t-${li}')">
+            <span style="font-size:.85rem;font-weight:700;color:#06b6d4">🔧 Avaliação Enviada</span>
+            <span class="acc-arrow">▼</span>
+          </div>
+          <div class="acc-body" id="ab-t-${li}">
+            <div class="irow"><label>Equipamento</label><span>${ly.techReport.model||'—'}</span></div>
+            <div class="irow"><label>Serviços</label><span>${ly.techReport.problem||'—'}</span></div>
+            ${ly.techReport.photos?.length?`<div class="photo-row">${ly.techReport.photos.map(p=>`<img src="${p}" onclick="openLb('${p}')" style="width:72px;height:72px;object-fit:cover;border-radius:8px;cursor:pointer">`).join('')}</div>`:''}
+          </div>
+        </div>`:'';
+
+      const absentBox=ly.absentAt?`<div style="background:#1a0a2e;border:1px solid #a855f744;border-radius:var(--radius);padding:12px"><p style="color:var(--purple);font-size:.88rem">🚫 Ausente em: <strong>${fdt(ly.absentAt)}</strong></p></div>`:'';
+      const quoteBox=ly.quote?`<div style="background:#141000;border:1px solid #eab30844;border-radius:var(--radius);padding:14px"><p style="color:var(--yellow);font-size:.78rem;text-transform:uppercase;margin-bottom:6px">💰 Orçamento</p><p style="font-size:.88rem">${ly.quote}</p>${ly.quoteObs?`<p style="margin-top:6px;color:var(--muted);font-size:.82rem">💬 ${ly.quoteObs}</p>`:''}</div>`:'';
+      const docBox=ly.budgetImage?.data?`<div class="doc-box"><p style="color:var(--accent);font-size:.78rem;text-transform:uppercase;margin-bottom:6px">🖼️ Imagem do orçamento</p><img class="budget-preview" src="${ly.budgetImage.data}" onclick="openLb('${ly.budgetImage.data}')"><button class="done-btn" style="margin-top:10px;background:#1e3a5f" onclick="openLb('${ly.budgetImage.data}')">🔍 Ver orçamento com zoom</button></div>`:'';
+      const entry=ly.entry||{}; const total=moneyNum(ly.approval?.value); const ent=total*((entry.percent||40)/100); const rem=total-ent;
+      const entryBox=entry.enabled?`<div class="entry-box"><h3 style="color:var(--green);font-size:.78rem;margin-bottom:6px">💵 Entrada / Sinal</h3><div class="entry-grid"><div><label>Total</label><span>${ly.approval?.value||fmtMoney(total)}</span></div><div><label>Entrada (${entry.percent||40}%)</label><span>${fmtMoney(ent)}</span></div><div><label>Saldo restante</label><span>${fmtMoney(rem)}</span></div><div><label>Status</label><span>${entry.received?'✅ Recebida':'⏳ Pendente'}</span></div></div><p style="font-size:.8rem;color:var(--muted);margin-top:8px">Forma: ${entry.payment||'—'}</p></div>`:'';
+      const waiting=!ly.quote&&ly.status==='evaluated'?`<div class="waiting-msg">⏳ Aguardando orçamento...</div>`:'';
+      const waitingAppr=ly.quote&&ly.status==='quoted'?`<div class="waiting-msg">⏳ Aguardando aprovação...</div>`:'';
+
+      const apprBox=ly.approval?.payment?`
+        <div style="background:#1a1000;border:1px solid #f9731644;border-radius:var(--radius);padding:14px">
+          <p style="color:var(--orange);font-size:.78rem;text-transform:uppercase;margin-bottom:8px">🟠 Aprovado</p>
+          <p style="font-size:.9rem;margin-bottom:4px">Pagamento: <strong>${ly.approval.payment}</strong>${ly.approval.value?' — <strong>'+ly.approval.value+'</strong>':''}</p>
+          ${ly.approval.needsMachine?`<p style="font-size:.88rem;color:#fb923c;margin-bottom:6px;background:#2d1200;border:1px solid #f9731644;border-radius:8px;padding:6px 10px;display:inline-block">💳 Levar maquininha</p>`:''}
+          ${ly.approval.paid?`<p style="font-size:.88rem;color:#4ade80;margin-bottom:6px;background:#0d2e1b;border:1px solid #22c55e44;border-radius:8px;padding:6px 10px;display:inline-block">💰 Orçamento Pago</p>`:''}
+          <p style="font-size:1rem;font-weight:700;color:var(--orange)">📅 ${fdt(ly.approval.serviceDate)}</p>
+          ${c.address?`<a class="maps-link" href="${maps(c.address+(c.ref?' '+c.ref:''))}" target="_blank" style="margin-top:8px">📍 Ir ao endereço</a>`:''}
+        </div>
+        <div class="pay-box">
+          <h3>✔ Registrar Conclusão</h3>
+          <div class="fg" style="margin-bottom:10px"><label>Forma de pagamento (confirmar ou alterar)</label>
+            <input id="done-pay-${c.id}-${li}" type="text" placeholder="Ex: Pix, Cartão..." value="${ly.approval.payment||''}">
+          </div>
+          <button class="done-btn" onclick="markDone('${c.id}',${li})">✅ Serviço Concluído</button>
+        </div>`:'';
+
+      panel=`${techAcc}${absentBox}${quoteBox}${docBox}${entryBox}${apprBox}${waiting}${waitingAppr}`;
+    }
+
+    return`<div id="vp-${c.id}-${li}" data-vpanel="${c.id}" class="v-panel${isActive?' active':''}">${panel}</div>`;
+  }).join('');
+
+  // Painel concluídos
+  if(doneLayers.length){
+    html+=`<div id="vp-${c.id}-done" data-vpanel="${c.id}" class="v-panel">
+      ${doneLayers.map((ly,di)=>`
+        <div class="acc" style="border-color:#22c55e44">
+          <div class="acc-hdr" id="dh-${di}" onclick="toggleAcc('dh-${di}','db-${di}')">
+            <span style="font-size:.85rem;font-weight:700;color:var(--green)">✅ Visita ${di+1} — ${fdt(ly.concludedAt||ly.createdAt)}</span>
+            <span class="acc-arrow">▼</span>
+          </div>
+          <div class="acc-body" id="db-${di}">
+            ${ly.techReport?`<p style="font-size:.85rem;margin-bottom:4px"><strong>Equipamento:</strong> ${ly.techReport.model||'—'}</p><p style="font-size:.85rem;margin-bottom:8px"><strong>Serviços:</strong> ${ly.techReport.problem||'—'}</p>`:''}
+            ${ly.quote?`<p style="font-size:.85rem;margin-bottom:4px"><strong>Orçamento:</strong> ${ly.quote}</p>`:''}
+            ${ly.approval?.payment?`<p style="font-size:.85rem;color:var(--green)"><strong>Pagamento:</strong> ${ly.approval.payment}</p>`:''}
+            ${ly.techReport?.photos?.length?`<div class="photo-row" style="margin-top:8px">${ly.techReport.photos.map(p=>`<img src="${p}" onclick="openLb('${p}')" style="width:64px;height:64px;object-fit:cover;border-radius:8px;cursor:pointer">`).join('')}</div>`:''}
+          </div>
+        </div>`).join('')}
+    </div>`;
+  }
+
+  document.getElementById('d-body').innerHTML=html;
+  // Renderizar fotos locais
+  Object.keys(localPhotos).forEach(li=>refreshPhotos(parseInt(li)));
+}
+
+window.switchTab=(cid,li)=>{
+  currentLayerIdx=li;
+  document.querySelectorAll('[data-vtab="'+cid+'"]').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('[data-vpanel="'+cid+'"]').forEach(p=>p.classList.remove('active'));
+  document.getElementById('vt-'+cid+'-'+li)?.classList.add('active');
+  document.getElementById('vp-'+cid+'-'+li)?.classList.add('active');
+};
+window.switchDoneTab=(cid)=>{
+  document.querySelectorAll('[data-vtab="'+cid+'"]').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('[data-vpanel="'+cid+'"]').forEach(p=>p.classList.remove('active'));
+  document.getElementById('vt-'+cid+'-done')?.classList.add('active');
+  document.getElementById('vp-'+cid+'-done')?.classList.add('active');
+};
+window.toggleAcc=(h,b)=>{document.getElementById(h)?.classList.toggle('open');document.getElementById(b)?.classList.toggle('open')};
+
+// Câmera / galeria separadas por layer
+let pendingLayerIdx=0;
+window.openCamera=li=>{pendingLayerIdx=li;document.getElementById('input-camera').click()};
+window.openGallery=li=>{pendingLayerIdx=li;document.getElementById('input-gallery').click()};
+window.handleFiles=input=>{
+  const li=pendingLayerIdx;
+  if(!localPhotos[li])localPhotos[li]=[];
+  Array.from(input.files).forEach(file=>{
+    const r=new FileReader();
+    r.onload=e=>{localPhotos[li].push(e.target.result);refreshPhotos(li)};
+    r.readAsDataURL(file);
+  });
+  input.value='';
+};
+function refreshPhotos(li){
+  const el=document.getElementById('photo-row-'+li);if(!el)return;
+  el.innerHTML=(localPhotos[li]||[]).map((p,i)=>`
+    <div class="photo-thumb">
+      <img src="${p}" onclick="openLb('${p}')">
+      <button class="photo-del" onclick="removePhoto(${li},${i})">✕</button>
+    </div>`).join('');
+}
+window.removePhoto=(li,i)=>{localPhotos[li].splice(i,1);refreshPhotos(li)};
+
+window.submitReport=async(id,li)=>{
+  const model=document.getElementById('f-model-'+li)?.value?.trim();
+  const problem=document.getElementById('f-problem-'+li)?.value?.trim();
+  if(!model||!problem){alert('Preencha o modelo e os serviços.');return}
+  const c=allClients.find(x=>x.id===id);
+  const layers=[...getLayers(c)];
+  layers[li]={...layers[li],techReport:{model,problem,photos:[...(localPhotos[li]||[])]},status:'evaluated'};
+  delete localPhotos[li];
+  const firstActive=layers.find(l=>!l.done);
+  await updateDoc(doc(db,'clients',id),{layers,status:firstActive?.status||'evaluated'});
+  const c2=allClients.find(x=>x.id===id);if(c2)renderDetailFull({...c2,layers});
+};
+
+window.markAbsent=async(id,li)=>{
+  if(!confirm('Confirmar cliente ausente?'))return;
+  const c=allClients.find(x=>x.id===id);
+  const layers=[...getLayers(c)];
+  layers[li]={...layers[li],status:'absent',absentAt:new Date().toISOString()};
+  const firstActive=layers.find(l=>!l.done);
+  await updateDoc(doc(db,'clients',id),{layers,status:firstActive?.status||'absent'});
+};
+
+window.markDone=async(id,li)=>{
+  if(!confirm('Confirmar serviço concluído?'))return;
+  const payment=document.getElementById('done-pay-'+id+'-'+li)?.value?.trim();
+  const c=allClients.find(x=>x.id===id);
+  const layers=[...getLayers(c)];
+  layers[li]={...layers[li],status:'done',done:true,concludedAt:new Date().toISOString(),approval:{...layers[li].approval,payment:payment||layers[li].approval?.payment||''}};
+  // Status principal = primeira visita ativa restante
+  const firstActive=layers.find(l=>!l.done);
+  const mainStatus=firstActive?firstActive.status:'done';
+  await updateDoc(doc(db,'clients',id),{layers,status:mainStatus,completedAt:new Date().toISOString()});
+  // Se todas concluídas, fecha o detail
+  if(!firstActive)closeDetail();
+};
+
+
+window.markCompanyDone=async(id,li)=>{
+  if(!confirm('Concluir visita empresa?'))return;
+  const quote=document.getElementById('company-quote-'+li)?.value?.trim()||'';
+  const c=allClients.find(x=>x.id===id);
+  const layers=[...getLayers(c)];
+  layers[li]={...layers[li],quote,status:'done',done:true,concludedAt:new Date().toISOString(),techReport:{model:'Visita empresa',problem:c.notes||'',photos:[...(localPhotos[li]||[])]},approval:{...layers[li].approval,value:quote,serviceDate:layers[li].approval?.serviceDate||c.datetime}};
+  await updateDoc(doc(db,'clients',id),{layers,status:'done',completedAt:new Date().toISOString()});
+  closeDetail();
+};
+
+window.addVisit=async id=>{
+  const c=allClients.find(x=>x.id===id);
+  const layers=[...getLayers(c)];
+  layers.push({status:'waiting',quote:'',quoteObs:'',techReport:null,absentAt:null,approval:null,done:false,createdAt:new Date().toISOString()});
+  await updateDoc(doc(db,'clients',id),{layers});
+};
+</script>
+</body>
+</html>
