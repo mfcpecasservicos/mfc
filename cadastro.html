@@ -85,7 +85,7 @@
     <div class="card"><label>📝 Descrição do problema <span class="req">*</span></label><textarea id="f-problema" required placeholder="Descreva o que está acontecendo..."></textarea></div>
 
     <button type="submit" class="btn-submit" id="btn-submit"><span id="btn-text">Finalizar Cadastro</span><div class="loader" id="btn-loader"></div></button>
-    <div id="success-msg">✅ Cadastro finalizado com sucesso!<br>30 anos atendendo em Dias D'Ávila e região</div>
+    <div id="success-msg">✅ Cadastro finalizado com sucesso!<br>Redirecionando para o WhatsApp...</div>
     <p class="privacy">Seus dados serão usados apenas para contato e organização da visita técnica.</p>
   </form>
 
@@ -253,6 +253,10 @@
         await updateDoc(cadastroTokenRef,{used:true,usedAt:new Date().toISOString(),leadId:leadRef.id,leadName:leadData.name,leadPhone:leadData.phone});
       }
       btn.style.display = 'none'; successMsg.style.display = 'block';
+      const wappMsg = encodeURIComponent('Cadastro finalizado. Acabei de preencher o formulário de agendamento.');
+      setTimeout(()=>{
+        window.location.href = `https://wa.me/5571981122167?text=${wappMsg}`;
+      }, 1200);
     } catch (err) {
       console.error(err); alert("Erro ao enviar cadastro. Tente novamente.");
       btn.disabled = false; text.style.display = 'block'; loader.style.display = 'none';

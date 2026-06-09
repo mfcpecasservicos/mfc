@@ -429,15 +429,26 @@ window.generateCadastroLink=async()=>{
     const input=document.getElementById('token-link');
     input.value=link;
     box.style.display='flex';
-    try{await navigator.clipboard.writeText(link);toast('🔗 Link gerado e copiado!');}
-    catch(e){toast('🔗 Link gerado! Copie no campo.','var(--accent)');}
+    const shareText=cadastroShareText(link);
+    try{await navigator.clipboard.writeText(shareText);toast('🔗 Link e mensagem copiados!');}
+    catch(e){toast('🔗 Link gerado! Use o botão copiar.','var(--accent)');}
   }catch(e){console.error(e);toast('Erro ao gerar link de cadastro.','var(--red)');}
 };
+function cadastroShareText(link){
+  return `Para prosseguirmos com o agendamento, preencha o formulário abaixo:
+${link}`;
+}
 window.copyCadastroLink=async()=>{
   const input=document.getElementById('token-link');
   if(!input?.value)return;
-  try{await navigator.clipboard.writeText(input.value);toast('📋 Link copiado!');}
-  catch(e){input.select();document.execCommand('copy');toast('📋 Link copiado!');}
+  const shareText=cadastroShareText(input.value);
+  try{await navigator.clipboard.writeText(shareText);toast('📋 Mensagem copiada!');}
+  catch(e){
+    input.value=shareText;
+    input.select();
+    document.execCommand('copy');
+    toast('📋 Mensagem copiada!');
+  }
 };
 
 function getLayers(c){
