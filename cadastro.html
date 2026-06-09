@@ -46,6 +46,9 @@
   #success-msg{display:none;text-align:center;color:#166534;font-weight:800;font-size:1.02rem;padding:18px;background:#f0fdf4;border-radius:20px;border:1px solid #bbf7d0;line-height:1.45}
   .footer-brand{text-align:center;padding:20px 0 6px;color:#64748b;font-size:.84rem}.footer-brand img{width:88px;margin-bottom:8px;opacity:.95}
   .privacy{font-size:.76rem;color:#64748b;text-align:center;line-height:1.4;padding:0 10px 4px}
+  .gate-msg{display:none;text-align:center;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:20px;padding:22px;font-weight:800;line-height:1.45;box-shadow:0 4px 18px rgba(15,23,42,.06)}
+  .gate-msg p{font-weight:650;color:#9a3412;margin-top:7px;font-size:.92rem}
+
   @media(max-width:600px){body{padding:12px 10px 22px}.hero{border-radius:24px}.hero-cover{height:185px}.hero-content{padding:0 18px 20px}.hero-logo{width:106px;margin-top:-48px;border-radius:22px}.hero-title{font-size:1.65rem}.hero-subtitle{font-size:.94rem}.benefits{grid-template-columns:1fr}.card{padding:19px;border-radius:18px}input[type="text"],input[type="tel"],input[type="email"],textarea{font-size:16px}.btn-submit{border-radius:18px}}
 </style>
 </head>
@@ -66,6 +69,8 @@
       </div>
     </div>
   </div>
+
+  <div id="gate-msg" class="gate-msg">Link de cadastro inválido ou expirado.<p>Solicite um novo link para a MFC Peças e Serviços.</p></div>
 
   <form id="lead-form">
     <div class="card"><label>👤 Nome completo <span class="req">*</span></label><input type="text" id="f-nome" required placeholder="Seu nome completo"></div>
@@ -89,7 +94,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
   const app = initializeApp({
     apiKey: "AIzaSyAUUid850sbmBAVS9JzeZ94SbC-qzkk0B8",
@@ -100,6 +105,36 @@
     appId: "1:1030114859934:web:ad353eafb55205d6b4148f"
   });
   const db = getFirestore(app);
+  const params = new URLSearchParams(window.location.search);
+  const cadastroToken = params.get('token') || '';
+  let cadastroTokenRef = null;
+  let cadastroTokenValid = false;
+
+  function blockForm(message='Link de cadastro inválido ou expirado.'){
+    const form=document.getElementById('lead-form');
+    const msg=document.getElementById('gate-msg');
+    if(form) form.style.display='none';
+    if(msg){
+      msg.firstChild.textContent=message;
+      msg.style.display='block';
+    }
+  }
+
+  async function validateCadastroToken(){
+    if(!cadastroToken){blockForm();return false;}
+    try{
+      cadastroTokenRef=doc(db,'registrationTokens',cadastroToken);
+      const snap=await getDoc(cadastroTokenRef);
+      if(!snap.exists()){blockForm();return false;}
+      const data=snap.data();
+      const expMs=data.expiresAtMs || (data.expiresAt ? new Date(data.expiresAt).getTime() : 0);
+      if(data.used===true){blockForm('Este link de cadastro já foi utilizado.');return false;}
+      if(!expMs || Date.now()>expMs){blockForm('Este link de cadastro expirou.');return false;}
+      cadastroTokenValid=true;
+      return true;
+    }catch(e){console.error(e);blockForm('Não foi possível validar o link de cadastro.');return false;}
+  }
+  validateCadastroToken();
 
   // Padronização automática de texto e telefone
   const maskPhone = (v) => {
@@ -185,6 +220,9 @@
     const successMsg = document.getElementById('success-msg');
     btn.disabled = true; text.style.display = 'none'; loader.style.display = 'block';
 
+    const tokenOk = await validateCadastroToken();
+    if(!tokenOk){ btn.disabled = false; text.style.display = 'block'; loader.style.display = 'none'; return; }
+
     applyTextStandards();
 
     const rawCity = document.querySelector('input[name="cidade"]:checked').value;
@@ -205,11 +243,15 @@
       ref: document.getElementById('f-ref').value.trim(),
       equip: document.getElementById('f-equip').value.trim(),
       problem: document.getElementById('f-problema').value.trim(),
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      registrationToken: cadastroToken
     };
 
     try {
-      await addDoc(collection(db, 'leads'), leadData);
+      const leadRef = await addDoc(collection(db, 'leads'), leadData);
+      if(cadastroTokenRef){
+        await updateDoc(cadastroTokenRef,{used:true,usedAt:new Date().toISOString(),leadId:leadRef.id,leadName:leadData.name,leadPhone:leadData.phone});
+      }
       btn.style.display = 'none'; successMsg.style.display = 'block';
     } catch (err) {
       console.error(err); alert("Erro ao enviar cadastro. Tente novamente.");

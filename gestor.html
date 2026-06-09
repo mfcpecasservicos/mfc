@@ -160,6 +160,13 @@ textarea.fi{resize:vertical;min-height:52px}
 .file-input{font-size:.82rem;color:var(--muted);width:100%;margin-top:6px}
 .budget-preview{width:100%;max-width:260px;max-height:180px;object-fit:contain;border-radius:10px;border:1px solid var(--border);background:#020617;cursor:zoom-in;display:block;margin:8px 0}
 .budget-empty{font-size:.82rem;color:var(--muted);display:block;margin-bottom:6px}
+
+/* Link de cadastro expirável */
+.token-box{background:linear-gradient(135deg,#0f172a,#111827);border:1px solid #3b82f655;border-radius:var(--radius);padding:16px;margin-bottom:14px}
+.token-box h2{font-size:.9rem;color:var(--accent2);margin-bottom:10px}
+.token-result{margin-top:10px;display:none;gap:8px;align-items:center;flex-wrap:wrap}
+.token-result input{flex:1;min-width:260px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;color:var(--text);font-size:.84rem}
+.token-hint{font-size:.74rem;color:var(--muted);margin-top:8px;line-height:1.35}
 /* Busca de cliente */
 .client-search-results{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);max-height:200px;overflow-y:auto;margin-top:4px;display:none}
 .csr-item{padding:9px 12px;cursor:pointer;font-size:.85rem;border-bottom:1px solid var(--border)}
@@ -200,6 +207,19 @@ textarea.fi{resize:vertical;min-height:52px}
       </div>
       <div style="margin-bottom:10px"><span class="fl">Observação</span><textarea class="fi" id="emp-notes" placeholder="Observação rápida da visita" style="min-height:44px"></textarea></div>
       <button class="btn btn-cyan btn-sm" onclick="addCompanyVisit()">⚡ Enviar visita empresa</button>
+    </div>
+
+    <div class="token-box">
+      <h2>🔗 Link de cadastro expirável</h2>
+      <div class="fgrid">
+        <div><span class="fl">Validade do link</span><select class="fi" id="token-hours"><option value="24">24 horas</option><option value="48">48 horas</option><option value="72">72 horas</option><option value="168">7 dias</option></select></div>
+        <div style="display:flex;align-items:end"><button class="btn btn-blue" onclick="generateCadastroLink()">Gerar link</button></div>
+      </div>
+      <div class="token-result" id="token-result">
+        <input id="token-link" readonly>
+        <button class="btn btn-green btn-sm" onclick="copyCadastroLink()">Copiar</button>
+      </div>
+      <p class="token-hint">O link expira automaticamente e deixa de funcionar depois de usado pelo cliente.</p>
     </div>
 
     <!-- Formulário -->
@@ -325,6 +345,7 @@ const app = firebase.initializeApp({
 const db = firebase.firestore();
 const col = db.collection('clients');
 const leadsCol = db.collection('leads');
+const tokensCol = db.collection('registrationTokens');
 
 let all=[], leads=[], filter='all', editId=null, trashOpen=false, currentMainTab='clientes';
 let cleanupStarted=false;
@@ -379,6 +400,45 @@ function toast(m, c='var(--green)'){
   t.style.display='block';
   setTimeout(()=>t.style.display='none', 2500);
 }
+
+function makeToken(){
+  if(window.crypto && crypto.randomUUID) return crypto.randomUUID().replace(/-/g,'');
+  return Date.now().toString(36)+Math.random().toString(36).slice(2,12)+Math.random().toString(36).slice(2,12);
+}
+function cadastroBaseUrl(){
+  const path=location.pathname.endsWith('/') ? location.pathname+'cadastro.html' : location.pathname.replace(/[^/]*$/, 'cadastro.html');
+  return location.origin + path;
+}
+window.generateCadastroLink=async()=>{
+  try{
+    const hours=parseInt(document.getElementById('token-hours')?.value||'24',10);
+    const token=makeToken();
+    const now=new Date();
+    const expires=new Date(now.getTime()+hours*60*60*1000);
+    await tokensCol.doc(token).set({
+      token,
+      createdAt:now.toISOString(),
+      expiresAt:expires.toISOString(),
+      expiresAtMs:expires.getTime(),
+      used:false,
+      usedAt:null,
+      source:'gestor'
+    });
+    const link=`${cadastroBaseUrl()}?token=${encodeURIComponent(token)}`;
+    const box=document.getElementById('token-result');
+    const input=document.getElementById('token-link');
+    input.value=link;
+    box.style.display='flex';
+    try{await navigator.clipboard.writeText(link);toast('🔗 Link gerado e copiado!');}
+    catch(e){toast('🔗 Link gerado! Copie no campo.','var(--accent)');}
+  }catch(e){console.error(e);toast('Erro ao gerar link de cadastro.','var(--red)');}
+};
+window.copyCadastroLink=async()=>{
+  const input=document.getElementById('token-link');
+  if(!input?.value)return;
+  try{await navigator.clipboard.writeText(input.value);toast('📋 Link copiado!');}
+  catch(e){input.select();document.execCommand('copy');toast('📋 Link copiado!');}
+};
 
 function getLayers(c){
   if(c.layers&&c.layers.length)return c.layers;
