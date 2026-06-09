@@ -1,9 +1,7 @@
-const CACHE_NAME='mfc-tecnico-v8';
+const CACHE_NAME='mfc-tecnico-v6';
 const APP_SHELL=[
   './',
   './index.html',
-  './gestor.html',
-  './cadastro.html',
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png',

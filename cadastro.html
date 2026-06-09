@@ -46,9 +46,6 @@
   #success-msg{display:none;text-align:center;color:#166534;font-weight:800;font-size:1.02rem;padding:18px;background:#f0fdf4;border-radius:20px;border:1px solid #bbf7d0;line-height:1.45}
   .footer-brand{text-align:center;padding:20px 0 6px;color:#64748b;font-size:.84rem}.footer-brand img{width:88px;margin-bottom:8px;opacity:.95}
   .privacy{font-size:.76rem;color:#64748b;text-align:center;line-height:1.4;padding:0 10px 4px}
-  .gate-msg{display:none;text-align:center;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:20px;padding:22px;font-weight:800;line-height:1.45;box-shadow:0 4px 18px rgba(15,23,42,.06)}
-  .gate-msg p{font-weight:650;color:#9a3412;margin-top:7px;font-size:.92rem}
-
   @media(max-width:600px){body{padding:12px 10px 22px}.hero{border-radius:24px}.hero-cover{height:185px}.hero-content{padding:0 18px 20px}.hero-logo{width:106px;margin-top:-48px;border-radius:22px}.hero-title{font-size:1.65rem}.hero-subtitle{font-size:.94rem}.benefits{grid-template-columns:1fr}.card{padding:19px;border-radius:18px}input[type="text"],input[type="tel"],input[type="email"],textarea{font-size:16px}.btn-submit{border-radius:18px}}
 </style>
 </head>
@@ -65,12 +62,10 @@
         <div class="benefit-card"><strong>⚡ Atendimento rápido</strong><span>Cadastro enviado diretamente para nossa central.</span></div>
         <div class="benefit-card"><strong>📍 Visita técnica</strong><span>Agendamento organizado e acompanhamento completo.</span></div>
         <div class="benefit-card"><strong>🧊 Refrigeração</strong><span>Atendimento residencial e empresarial.</span></div>
-        <div class="benefit-card"><strong>🏆 30 anos</strong><span>Atendendo Dias D'Ávila e região.</span></div>
+        <div class="benefit-card"><strong>💬 WhatsApp</strong><span>Confirmação automática após o cadastro.</span></div>
       </div>
     </div>
   </div>
-
-  <div id="gate-msg" class="gate-msg">Link de cadastro inválido ou expirado.<p>Solicite um novo link para a MFC Peças e Serviços.</p></div>
 
   <form id="lead-form">
     <div class="card"><label>👤 Nome completo <span class="req">*</span></label><input type="text" id="f-nome" required placeholder="Seu nome completo"></div>
@@ -89,12 +84,12 @@
     <p class="privacy">Seus dados serão usados apenas para contato e organização da visita técnica.</p>
   </form>
 
-  <div class="footer-brand"><img src="mfc-logo.png" alt="MFC"><p>MFC Peças e Serviços — Refrigeração</p><p style="font-weight:800;color:#0b63b6;margin-top:6px">30 anos atendendo em Dias D'Ávila e região</p></div>
+  <div class="footer-brand"><img src="mfc-logo.png" alt="MFC"><p>MFC Peças e Serviços — Refrigeração</p></div>
 </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, query, where, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
   const app = initializeApp({
     apiKey: "AIzaSyAUUid850sbmBAVS9JzeZ94SbC-qzkk0B8",
@@ -105,36 +100,15 @@
     appId: "1:1030114859934:web:ad353eafb55205d6b4148f"
   });
   const db = getFirestore(app);
-  const params = new URLSearchParams(window.location.search);
-  const cadastroToken = params.get('token') || '';
-  let cadastroTokenRef = null;
-  let cadastroTokenValid = false;
 
-  function blockForm(message='Link de cadastro inválido ou expirado.'){
-    const form=document.getElementById('lead-form');
-    const msg=document.getElementById('gate-msg');
-    if(form) form.style.display='none';
-    if(msg){
-      msg.firstChild.textContent=message;
-      msg.style.display='block';
-    }
-  }
-
-  async function validateCadastroToken(){
-    if(!cadastroToken){blockForm();return false;}
-    try{
-      cadastroTokenRef=doc(db,'registrationTokens',cadastroToken);
-      const snap=await getDoc(cadastroTokenRef);
-      if(!snap.exists()){blockForm();return false;}
-      const data=snap.data();
-      const expMs=data.expiresAtMs || (data.expiresAt ? new Date(data.expiresAt).getTime() : 0);
-      if(data.used===true){blockForm('Este link de cadastro já foi utilizado.');return false;}
-      if(!expMs || Date.now()>expMs){blockForm('Este link de cadastro expirou.');return false;}
-      cadastroTokenValid=true;
-      return true;
-    }catch(e){console.error(e);blockForm('Não foi possível validar o link de cadastro.');return false;}
-  }
-  validateCadastroToken();
+  const phoneDigitsOnly = (value) => (value || '').replace(/\D/g, '').slice(0, 11);
+  const findFirstByPhone = async (collectionName, phoneDigits) => {
+    if (!phoneDigits) return null;
+    const snap = await getDocs(query(collection(db, collectionName), where('phoneDigits', '==', phoneDigits)));
+    if (snap.empty) return null;
+    const item = snap.docs[0];
+    return { id: item.id, ...item.data() };
+  };
 
   // Padronização automática de texto e telefone
   const maskPhone = (v) => {
@@ -220,19 +194,17 @@
     const successMsg = document.getElementById('success-msg');
     btn.disabled = true; text.style.display = 'none'; loader.style.display = 'block';
 
-    const tokenOk = await validateCadastroToken();
-    if(!tokenOk){ btn.disabled = false; text.style.display = 'block'; loader.style.display = 'none'; return; }
-
     applyTextStandards();
 
     const rawCity = document.querySelector('input[name="cidade"]:checked').value;
     const finalCity = rawCity === 'Outro' ? document.getElementById('f-cidade-outro').value.trim() : rawCity;
     const neighborhood = document.getElementById('f-bairro').value.trim();
+    const phoneDigits = phoneDigitsOnly(document.getElementById('f-telefone').value);
 
     const leadData = {
       name: document.getElementById('f-nome').value.trim(),
       phone: document.getElementById('f-telefone').value.trim(),
-      phoneDigits: document.getElementById('f-telefone').value.replace(/\D/g,''),
+      phoneDigits,
       email: document.getElementById('f-email').value.trim(),
       city: finalCity,
       cidade: finalCity,
@@ -243,20 +215,26 @@
       ref: document.getElementById('f-ref').value.trim(),
       equip: document.getElementById('f-equip').value.trim(),
       problem: document.getElementById('f-problema').value.trim(),
-      createdAt: new Date().toISOString(),
-      registrationToken: cadastroToken
+      createdAt: new Date().toISOString()
     };
 
     try {
-      const leadRef = await addDoc(collection(db, 'leads'), leadData);
-      if(cadastroTokenRef){
-        await updateDoc(cadastroTokenRef,{used:true,usedAt:new Date().toISOString(),leadId:leadRef.id,leadName:leadData.name,leadPhone:leadData.phone});
+      const existingLead = await findFirstByPhone('leads', phoneDigits);
+      const existingClient = await findFirstByPhone('clients', phoneDigits);
+      const finalLeadData = {
+        ...leadData,
+        existingClientId: existingClient?.id || '',
+        recurrent: !!existingClient,
+        updatedAt: new Date().toISOString()
+      };
+      if (existingLead?.id) {
+        await updateDoc(doc(db, 'leads', existingLead.id), finalLeadData);
+      } else {
+        await addDoc(collection(db, 'leads'), finalLeadData);
       }
       btn.style.display = 'none'; successMsg.style.display = 'block';
-      const wappMsg = encodeURIComponent('Cadastro finalizado. Acabei de preencher o formulário de agendamento.');
-      setTimeout(()=>{
-        window.location.href = `https://wa.me/5571981122167?text=${wappMsg}`;
-      }, 1200);
+      const wappMsg = encodeURIComponent("Cadastro finalizado. Já preenchi o formulário para continuidade do agendamento.");
+      setTimeout(() => { window.location.href = `https://wa.me/5571981122167?text=${wappMsg}`; }, 1500);
     } catch (err) {
       console.error(err); alert("Erro ao enviar cadastro. Tente novamente.");
       btn.disabled = false; text.style.display = 'block'; loader.style.display = 'none';
