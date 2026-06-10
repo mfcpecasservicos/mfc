@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mfc-tecnico-v9';
+const CACHE_NAME = 'mfc-tecnico-v10';
 const APP_SHELL = [
   './',
   './index.html',
@@ -12,28 +12,22 @@ const APP_SHELL = [
 ];
 
 self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL).catch(() => null))
-  );
+  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL).catch(() => null)));
   self.skipWaiting();
 });
 
 self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))))
-  );
+  event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))));
   self.clients.claim();
 });
 
 self.addEventListener('fetch', event => {
   const req = event.request;
-  const url = new URL(req.url);
-
   if (req.method !== 'GET') return;
-  if (url.hostname.includes('googleapis.com') || url.hostname.includes('gstatic.com') || url.hostname.includes('firebase') || url.hostname.includes('firestore') || url.hostname.includes('cdn.jsdelivr.net')) return;
+  const url = new URL(req.url);
+  if (url.origin !== self.location.origin) return;
 
-  const isHtml = req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html');
-
+  const isHtml = req.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname === '/mfc/' || url.pathname === '/mfc';
   if (isHtml) {
     event.respondWith(
       fetch(req).then(res => {

@@ -1,16 +1,18 @@
-MFC v3
+MFC v4
 
 Base confiável
-MFC v2 / repositório GitHub atual
+MFC v3 / repositório GitHub atual
 
 Arquivos principais
 - index.html
 - gestor.html
 - cadastro.html
 - service-worker.js
+- CHECKLIST_MFC.txt
+- VERSAO.txt
 
 Última alteração
-Melhoria no index do técnico: serviços por botões Corretiva/Preventiva, relatório do serviço, botões WhatsApp e Ligar, informações do cliente mais claras, botão ➕ para nova visita/orçamento, prévia das fotos com zoom nativo, botão voltar do celular retornando ao menu e ações Cliente Ausente/Descartar mais visíveis. Cache atualizado para mfc-tecnico-v9.
+Melhoria no index e gestor: abas renomeadas para Relatório, exclusão de relatório extra com mínimo de 1, informações do cliente separadas por campo, botões WhatsApp/Ligar próximos ao telefone, botão Maps próximo ao endereço, fotos abrindo no visualizador padrão do celular via Blob URL, botão voltar mantendo o técnico dentro do app e service-worker atualizado para mfc-tecnico-v10.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.

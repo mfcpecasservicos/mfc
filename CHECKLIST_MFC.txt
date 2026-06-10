@@ -16,6 +16,7 @@ Funcionalidades ativas:
 [x] Texto copiado ao gerar link: "Para prosseguirmos com o agendamento, preencha o formulário abaixo: [link]"
 [x] Conclusão final de qualquer serviço é feita pelo gestor
 [x] Clientes ordenados por data mais próxima no topo
+[x] Informações do cliente organizadas separadamente: nome, telefone, e-mail, cidade, endereço, número, bairro, referência, equipamento e problema
 
 Itens removidos:
 [x] AUSENTE: seção "Cole as informações do cliente" / paste-card / parseAndFill / paste-area
@@ -29,17 +30,23 @@ Funcionalidades ativas:
 [x] Status workshop_pending reconhecido com badge ciano e label "Aguardando Avaliação"
 [x] Formulário de avaliação disponível para workshop_pending
 [x] openLb usa window.open(src, '_blank') — sem lightbox, sem zoom manual
+[x] openLb converte fotos base64 para Blob URL para abrir no visualizador padrão do celular
 [x] Checkbox "Precisa retirar o equipamento" na avaliação
 [x] Fotos salvas em techReport.photos no Firestore ao enviar avaliação
 [x] Status approved + Serviço no galpão ativo → botão "Pronto para Entrega" → ready_delivery
 [x] Status approved sem Serviço no galpão → botão "Serviço Concluído" normal
 [x] Técnico pode descartar visita para lixeira pelo index
 [x] Clientes ordenados por data mais próxima no topo
-[x] Botões WhatsApp e Ligar no detalhe do cliente no index
-[x] Botão ➕ ao lado das abas de visita para adicionar outro orçamento
+[x] Botões WhatsApp e Ligar próximos ao número do cliente
+[x] Botão Maps próximo ao endereço do cliente
+[x] Abas de atendimento renomeadas para "Relatório 1", "Relatório 2" etc.
+[x] Botão ➕ para adicionar outro relatório/orçamento
+[x] Botão 🗑️ para excluir relatório extra, mantendo limite mínimo de 1 relatório
 [x] Botão físico voltar do celular fecha o detalhe e retorna ao menu sem sair do app
-[x] Fotos da avaliação aparecem como prévia e abrem com zoom nativo em nova aba
-[x] Melhoria visual da avaliação técnica: botão principal verde em destaque, ações destrutivas secundárias, tipo de serviço por botões Corretiva/Preventiva, relatório em texto, placeholder de modelo corrigido, câmera destacada
+[x] Fotos da avaliação aparecem como prévia e abrem com zoom nativo em nova aba/visualizador do celular
+[x] Técnico consegue editar avaliação já enviada
+[x] Melhoria visual da avaliação técnica: botão principal verde em destaque, ações Cliente Ausente/Descartar visíveis com emojis, tipo de serviço por botões Corretiva/Preventiva, relatório em texto, placeholder de modelo corrigido, câmera destacada
+[x] Informações do cliente organizadas separadamente: nome, telefone, e-mail, cidade, endereço, número, bairro, referência, equipamento e problema
 
 Itens removidos:
 [x] AUSENTE: variável deliveryBox
@@ -59,7 +66,7 @@ Itens removidos:
 [x] AUSENTE: balão/mensagem de WhatsApp automática após cadastro
 
 SERVICE WORKER (service-worker.js)
-[x] CACHE_NAME atualizado: mfc-tecnico-v9
+[x] CACHE_NAME atualizado: mfc-tecnico-v10
 [x] APP_SHELL inclui index.html, gestor.html, cadastro.html, manifest.webmanifest, icon-192.png, icon-512.png, mfc-logo.png, mfc-capa.png
 [x] Cache antigo deletado no activate
 [x] Páginas HTML: rede primeiro, cache fallback
