@@ -9,6 +9,7 @@
   - [x] REMOVIDO: balão/mensagem WhatsApp automática — NÃO RESTAURAR
   - [x] Rodapé: "30 anos atendendo em Dias D'Ávila e região"
   - [x] Validação de token ?token= com Firebase (validade 24h)
+  - [x] Validação de token corrigida para aceitar createdAtMs/expiresAtMs
   - [x] Redirecionamento para WhatsApp 5571981122167 após cadastro
   - [x] Anti-duplicação por telefone normalizado
   ========================================================
@@ -108,7 +109,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, query, where, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
   const app = initializeApp({
     apiKey: "AIzaSyAUUid850sbmBAVS9JzeZ94SbC-qzkk0B8",
@@ -150,15 +151,24 @@
     return found;
   };
 
+  const toMs = (value) => {
+    if (!value) return 0;
+    if (typeof value === 'number') return value;
+    if (value.toDate) return value.toDate().getTime();
+    const parsed = new Date(value).getTime();
+    return Number.isFinite(parsed) ? parsed : 0;
+  };
+
   const validateToken = async () => {
     if (!tokenParam) return false;
     tokenRef = doc(db, 'cadastroTokens', tokenParam);
     const snap = await getDoc(tokenRef);
     if (!snap.exists()) return false;
     const data = snap.data();
-    const created = data.createdAt?.toDate ? data.createdAt.toDate() : new Date(data.createdAt || 0);
-    const ageMs = Date.now() - created.getTime();
-    if (data.used || !created.getTime() || ageMs > 24 * 60 * 60 * 1000) return false;
+    const now = Date.now();
+    const createdMs = data.createdAtMs || toMs(data.createdAt);
+    const expiresMs = data.expiresAtMs || toMs(data.expiresAt) || (createdMs ? createdMs + 24 * 60 * 60 * 1000 : 0);
+    if (data.used || !createdMs || now > expiresMs) return false;
     return true;
   };
 
