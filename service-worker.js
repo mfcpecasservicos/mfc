@@ -1,27 +1,55 @@
-const CACHE_NAME='mfc-tecnico-v7';
-const APP_SHELL=[
+const CACHE_NAME = 'mfc-tecnico-v8';
+const APP_SHELL = [
   './',
   './index.html',
+  './gestor.html',
+  './cadastro.html',
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png',
   './mfc-logo.png',
   './mfc-capa.png'
 ];
-self.addEventListener('install',event=>{
-  event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP_SHELL).catch(()=>null)));
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL).catch(() => null))
+  );
   self.skipWaiting();
 });
-self.addEventListener('activate',event=>{
-  event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k)))));
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))))
+  );
   self.clients.claim();
 });
-self.addEventListener('fetch',event=>{
-  const req=event.request;
-  if(req.method!=='GET')return;
-  event.respondWith(fetch(req).then(res=>{
-    const copy=res.clone();
-    caches.open(CACHE_NAME).then(cache=>cache.put(req,copy)).catch(()=>{});
-    return res;
-  }).catch(()=>caches.match(req).then(cached=>cached||caches.match('./index.html'))));
+
+self.addEventListener('fetch', event => {
+  const req = event.request;
+  const url = new URL(req.url);
+
+  if (req.method !== 'GET') return;
+  if (url.hostname.includes('googleapis.com') || url.hostname.includes('gstatic.com') || url.hostname.includes('firebase') || url.hostname.includes('firestore') || url.hostname.includes('cdn.jsdelivr.net')) return;
+
+  const isHtml = req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html');
+
+  if (isHtml) {
+    event.respondWith(
+      fetch(req).then(res => {
+        const copy = res.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(req, copy)).catch(() => {});
+        return res;
+      }).catch(() => caches.match(req).then(cached => cached || caches.match('./index.html')))
+    );
+    return;
+  }
+
+  event.respondWith(
+    caches.match(req).then(cached => cached || fetch(req).then(res => {
+      const copy = res.clone();
+      caches.open(CACHE_NAME).then(cache => cache.put(req, copy)).catch(() => {});
+      return res;
+    }))
+  );
 });

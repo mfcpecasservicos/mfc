@@ -1,7 +1,7 @@
-MFC v1
+MFC v2
 
 Base confiável
-appmfc.rar
+MFC v1 / repositório GitHub atual
 
 Arquivos principais
 - index.html
@@ -10,7 +10,7 @@ Arquivos principais
 - service-worker.js
 
 Última alteração
-Sistema com checklist completo, cadastro com token, anti-duplicação, status de galpão e controle de clientes.
+Melhoria visual do app técnico: avaliação com hierarquia de botões corrigida, ações destrutivas secundárias, serviços rápidos por checkbox, placeholder do modelo corrigido e botão de câmera maior. Cache atualizado para mfc-tecnico-v8.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.

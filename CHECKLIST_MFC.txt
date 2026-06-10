@@ -34,12 +34,13 @@ Funcionalidades ativas:
 [x] Status approved + Serviço no galpão ativo → botão "Pronto para Entrega" → ready_delivery
 [x] Status approved sem Serviço no galpão → botão "Serviço Concluído" normal
 [x] Técnico pode descartar visita para lixeira pelo index
-[x] Modo claro com toggle no header e localStorage
 [x] Clientes ordenados por data mais próxima no topo
+[x] Melhoria visual da avaliação técnica: botão principal verde em destaque, ações destrutivas como links secundários, serviços rápidos por checkbox, placeholder de modelo corrigido, câmera destacada
 
 Itens removidos:
 [x] AUSENTE: variável deliveryBox
 [x] AUSENTE: lightbox com zoom manual
+[x] AUSENTE: modo claro no index
 
 CADASTRO (cadastro.html)
 Funcionalidades ativas:
@@ -54,7 +55,7 @@ Itens removidos:
 [x] AUSENTE: balão/mensagem de WhatsApp automática após cadastro
 
 SERVICE WORKER (service-worker.js)
-[x] CACHE_NAME atualizado: mfc-tecnico-v7
+[x] CACHE_NAME atualizado: mfc-tecnico-v8
 [x] APP_SHELL inclui index.html, gestor.html, cadastro.html, manifest.webmanifest, icon-192.png, icon-512.png, mfc-logo.png, mfc-capa.png
 [x] Cache antigo deletado no activate
 [x] Páginas HTML: rede primeiro, cache fallback
