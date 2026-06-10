@@ -1,0 +1,16 @@
+MFC v1
+
+Base confiável
+appmfc.rar
+
+Arquivos principais
+- index.html
+- gestor.html
+- cadastro.html
+- service-worker.js
+
+Última alteração
+Sistema com checklist completo, cadastro com token, anti-duplicação, status de galpão e controle de clientes.
+
+Regra
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
