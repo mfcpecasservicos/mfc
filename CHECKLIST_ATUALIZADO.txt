@@ -1,0 +1,61 @@
+CHECKLIST ATUALIZADO — MFC
+
+GESTOR (gestor.html)
+Funcionalidades ativas:
+[x] Status workshop_pending com label "Aguardando Avaliação" e cor ciano em badges, filtros e cards
+[x] Indicador "🏭 No galpão" nos cards com status workshop_pending
+[x] Checkbox "Equipamento trazido à loja" no formulário de novo cliente → status inicial workshop_pending
+[x] Checkbox "Entrada da aprovação (40%)" em Aprovação e Pagamento → calcula 40% em tempo real
+[x] Checkbox "Serviço no galpão" em Aprovação e Pagamento → exibe "🏭 Serviço no galpão" no card
+[x] Seleção de texto de nome e telefone nos cards fechados
+[x] Botão descartar para lixeira nos cards
+[x] Limpeza automática: lixeira 90 dias, concluídos 365 dias
+[x] Anti-duplicação por telefone normalizado
+[x] Badge "Cliente recorrente" quando telefone já existe
+[x] Botão "Gerar link de cadastro" com token Firebase válido por 24h
+[x] Texto copiado ao gerar link: "Para prosseguirmos com o agendamento, preencha o formulário abaixo: [link]"
+[x] Conclusão final de qualquer serviço é feita pelo gestor
+[x] Clientes ordenados por data mais próxima no topo
+
+Itens removidos:
+[x] AUSENTE: seção "Cole as informações do cliente" / paste-card / parseAndFill / paste-area
+[x] AUSENTE: seção "Entrada / Sinal"
+[x] AUSENTE: botão "Copiar número"
+[x] AUSENTE: status "Rejeitado"
+[x] AUSENTE: seção "Orçamento do técnico" na Visita Empresa
+
+INDEX (index.html)
+Funcionalidades ativas:
+[x] Status workshop_pending reconhecido com badge ciano e label "Aguardando Avaliação"
+[x] Formulário de avaliação disponível para workshop_pending
+[x] openLb usa window.open(src, '_blank') — sem lightbox, sem zoom manual
+[x] Checkbox "Precisa retirar o equipamento" na avaliação
+[x] Fotos salvas em techReport.photos no Firestore ao enviar avaliação
+[x] Status approved + Serviço no galpão ativo → botão "Pronto para Entrega" → ready_delivery
+[x] Status approved sem Serviço no galpão → botão "Serviço Concluído" normal
+[x] Técnico pode descartar visita para lixeira pelo index
+[x] Modo claro com toggle no header e localStorage
+[x] Clientes ordenados por data mais próxima no topo
+
+Itens removidos:
+[x] AUSENTE: variável deliveryBox
+[x] AUSENTE: lightbox com zoom manual
+
+CADASTRO (cadastro.html)
+Funcionalidades ativas:
+[x] Visual padrão profissional restaurado
+[x] Validação de token ?token= via Firebase, validade 24h, uso único
+[x] Link expirado/inválido bloqueia o formulário
+[x] Após finalizar cadastro redireciona para WhatsApp 5571981122167
+[x] Rodapé: "30 anos atendendo em Dias D'Ávila e região"
+[x] Anti-duplicação por telefone normalizado
+
+Itens removidos:
+[x] AUSENTE: balão/mensagem de WhatsApp automática após cadastro
+
+SERVICE WORKER (service-worker.js)
+[x] CACHE_NAME atualizado: mfc-tecnico-v7
+[x] APP_SHELL inclui index.html, gestor.html, cadastro.html, manifest.webmanifest, icon-192.png, icon-512.png, mfc-logo.png, mfc-capa.png
+[x] Cache antigo deletado no activate
+[x] Páginas HTML: rede primeiro, cache fallback
+[x] Firebase, Google APIs e CDNs externos não interceptados
