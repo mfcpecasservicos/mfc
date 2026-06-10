@@ -1,7 +1,7 @@
-MFC v2
+MFC v3
 
 Base confiável
-MFC v1 / repositório GitHub atual
+MFC v2 / repositório GitHub atual
 
 Arquivos principais
 - index.html
@@ -10,7 +10,7 @@ Arquivos principais
 - service-worker.js
 
 Última alteração
-Melhoria visual do app técnico: avaliação com hierarquia de botões corrigida, ações destrutivas secundárias, serviços rápidos por checkbox, placeholder do modelo corrigido e botão de câmera maior. Cache atualizado para mfc-tecnico-v8.
+Melhoria no index do técnico: serviços por botões Corretiva/Preventiva, relatório do serviço, botões WhatsApp e Ligar, informações do cliente mais claras, botão ➕ para nova visita/orçamento, prévia das fotos com zoom nativo, botão voltar do celular retornando ao menu e ações Cliente Ausente/Descartar mais visíveis. Cache atualizado para mfc-tecnico-v9.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.

@@ -35,7 +35,11 @@ Funcionalidades ativas:
 [x] Status approved sem Serviço no galpão → botão "Serviço Concluído" normal
 [x] Técnico pode descartar visita para lixeira pelo index
 [x] Clientes ordenados por data mais próxima no topo
-[x] Melhoria visual da avaliação técnica: botão principal verde em destaque, ações destrutivas como links secundários, serviços rápidos por checkbox, placeholder de modelo corrigido, câmera destacada
+[x] Botões WhatsApp e Ligar no detalhe do cliente no index
+[x] Botão ➕ ao lado das abas de visita para adicionar outro orçamento
+[x] Botão físico voltar do celular fecha o detalhe e retorna ao menu sem sair do app
+[x] Fotos da avaliação aparecem como prévia e abrem com zoom nativo em nova aba
+[x] Melhoria visual da avaliação técnica: botão principal verde em destaque, ações destrutivas secundárias, tipo de serviço por botões Corretiva/Preventiva, relatório em texto, placeholder de modelo corrigido, câmera destacada
 
 Itens removidos:
 [x] AUSENTE: variável deliveryBox
@@ -55,7 +59,7 @@ Itens removidos:
 [x] AUSENTE: balão/mensagem de WhatsApp automática após cadastro
 
 SERVICE WORKER (service-worker.js)
-[x] CACHE_NAME atualizado: mfc-tecnico-v8
+[x] CACHE_NAME atualizado: mfc-tecnico-v9
 [x] APP_SHELL inclui index.html, gestor.html, cadastro.html, manifest.webmanifest, icon-192.png, icon-512.png, mfc-logo.png, mfc-capa.png
 [x] Cache antigo deletado no activate
 [x] Páginas HTML: rede primeiro, cache fallback
