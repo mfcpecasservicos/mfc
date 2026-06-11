@@ -15,7 +15,7 @@ Funcionalidades ativas:
 [x] Botão "Gerar link de cadastro" com token Firebase válido por 24h
 [x] Texto copiado ao gerar link: "Para prosseguirmos com o agendamento, preencha o formulário abaixo: [link]"
 [x] Conclusão final de qualquer serviço é feita pelo gestor
-[x] Clientes ordenados por data e hora mais próxima no topo
+[x] Clientes ordenados por createdAt decrescente (mais recentes no topo)
 [x] Informações do cliente organizadas separadamente: nome, telefone, e-mail, cidade, endereço, número, bairro, referência, equipamento e problema
 
 Itens removidos:
@@ -36,7 +36,7 @@ Funcionalidades ativas:
 [x] Status approved + Serviço no galpão ativo → botão "Pronto para Entrega" → ready_delivery
 [x] Status approved sem Serviço no galpão → botão "Serviço Concluído" normal
 [x] Técnico pode descartar visita para lixeira pelo index
-[x] Clientes ordenados por data e hora mais próxima no topo
+[x] Clientes ordenados por createdAt decrescente (mais recentes no topo)
 [x] Botões WhatsApp e Ligar próximos ao número do cliente
 [x] Botão Maps próximo ao endereço do cliente
 [x] Abas de atendimento renomeadas para "Relatório 1", "Relatório 2" etc.
@@ -86,7 +86,8 @@ INDEX — Atualização MFC v6
 [x] Correção de relatórios no index: permite adicionar mais de dois relatórios e excluir relatório extra mantendo mínimo de 1 ativo
 
 ATUALIZAÇÃO MFC v10
-[x] Correção da ordenação por data e hora no gestor e no index: clientes são ordenados pela data/hora mais próxima entre as visitas/relatórios ativos, colocando o atendimento mais próximo no topo.
+[x] Correção anterior de ordenação por data e hora substituída posteriormente pela regra createdAt desc.
 [x] Service-worker atualizado para mfc-tecnico-v15.
 
 [x] Atualização MFC v11: index.html e gestor.html usam query orderBy(createdAt, desc) e renderização ordenada por createdAt decrescente, mantendo clientes mais recentes no topo.
+[x] Atualização MFC v12: função sortByNearestDate removida completamente; lista principal usa somente createdAt decrescente, sem datetime/serviceDate/sortDateValue para ordenar clientes.

@@ -75,20 +75,6 @@ function sortDateValue(v){
 function nearestDateValue(c){
   return sortDateValue(cardDate(c));
 }
-function sortByNearestDate(list){
-  const now=Date.now();
-  return [...list].sort((a,b)=>{
-    const da=nearestDateValue(a);
-    const db=nearestDateValue(b);
-    if(da===null&&db===null)return String(a.name||'').localeCompare(String(b.name||''),'pt-BR');
-    if(da===null)return 1;
-    if(db===null)return -1;
-    const diffA=Math.abs(da-now), diffB=Math.abs(db-now);
-    if(diffA!==diffB)return diffA-diffB;
-    if((da>=now)!==(db>=now))return da>=now?-1:1;
-    return da-db;
-  });
-}
 function updOnline(){document.getElementById('offline-banner').style.display=navigator.onLine?'none':'block'}window.addEventListener('online',updOnline);window.addEventListener('offline',updOnline);updOnline();
 function dataUrlToBlobUrl(dataUrl){try{const parts=dataUrl.split(',');const mime=(parts[0].match(/:(.*?);/)||[])[1]||'image/jpeg';const bin=atob(parts[1]);const arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);return URL.createObjectURL(new Blob([arr],{type:mime}))}catch(e){return dataUrl}}
 window.openLb=src=>{if(!src)return;const url=String(src).startsWith('data:image/')?dataUrlToBlobUrl(src):src;const w=window.open(url,'_blank');if(!w)location.href=url};

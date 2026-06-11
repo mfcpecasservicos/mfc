@@ -75,20 +75,6 @@ function sortDateValue(v){
   const t=new Date(v||'').getTime();
   return Number.isFinite(t)?t:null;
 }
-function sortByNearestDate(list){
-  const now=Date.now();
-  return [...list].sort((a,b)=>{
-    const da=sortDateValue(mainDate(a));
-    const db=sortDateValue(mainDate(b));
-    if(da===null&&db===null)return String(a.name||'').localeCompare(String(b.name||''),'pt-BR');
-    if(da===null)return 1;
-    if(db===null)return -1;
-    const diffA=Math.abs(da-now), diffB=Math.abs(db-now);
-    if(diffA!==diffB)return diffA-diffB;
-    if((da>=now)!==(db>=now))return da>=now?-1:1;
-    return da-db;
-  });
-}
 function fullAddress(c){return [c.address,c.number,c.neighborhood||c.bairro].filter(Boolean).join(', ')||c.address||''}
 function infoBlock(label,value,extra=''){return value?`<div class="iblk"><label>${label}</label><p>${value}${extra}</p></div>`:''}
 function clientInfoBlocks(c){const addr=fullAddress(c);return `<div class="igrid">${infoBlock('👤 Nome completo',c.name||'—')}${infoBlock('📞 Número de contato',c.phone||'—')}${infoBlock('✉️ E-mail',c.email||'')}${infoBlock("📍 Dias D'Ávila?",c.city||c.cidade||'')}${infoBlock('🏠 Endereço',addr,addr?` <a class="field-action" href="${maps(addr+(c.ref?' '+c.ref:''))}" target="_blank">📍 Maps</a>`:'')}${infoBlock('🔢 Número da residência',c.number||'')}${infoBlock('🏘️ Bairro',c.neighborhood||c.bairro||'')}${infoBlock('🧭 Ponto de referência',c.ref||'')}${infoBlock('🧊 Equipamento',c.equip||'')}${infoBlock('📝 Descrição do problema',c.problem||c.notes||'')}</div>`}

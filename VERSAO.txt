@@ -1,7 +1,7 @@
-MFC v11
+MFC v12
 
 Base confiável
-MFC v10 / repositório GitHub atual
+MFC v11 / repositório GitHub atual
 
 Arquivos principais
 - index.html
@@ -12,7 +12,7 @@ Arquivos principais
 - VERSAO.txt
 
 Última alteração
-No index.html e no gestor.html, a query do Firestore foi alterada para createdAt desc e a ordenação da lista passou a usar createdAt decrescente, deixando os clientes mais recentes no topo. Nenhuma outra regra de fluxo foi alterada.
+No index.html e no gestor.html, a função sortByNearestDate foi removida completamente. A lista principal agora usa somente createdAt em ordem decrescente, com Firestore orderBy('createdAt','desc') e sort por createdAt desc no render.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
