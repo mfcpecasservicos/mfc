@@ -53,9 +53,27 @@ function getLayers(c){return c.layers&&c.layers.length?c.layers:[{status:c.statu
 function activeLayer(c){return getLayers(c).find(l=>!l.done)||getLayers(c)[0]}
 function getStatus(c){return c.status||activeLayer(c)?.status||'waiting'}
 function serviceInWorkshop(l){return !!(l?.serviceInWorkshop||l?.approval?.serviceInWorkshop)}
-function cardDate(c){const l=activeLayer(c)||{};return l.readyDeliveryAt||l.deliveryDate||l.readyAt||l.approval?.serviceDate||c.datetime||c.createdAt||''}
-function sortDateValue(v){const t=new Date(v||'').getTime();return Number.isFinite(t)?t:null}
-function sortByNearestDate(list){const now=Date.now();return [...list].sort((a,b)=>{const da=sortDateValue(cardDate(a));const db=sortDateValue(cardDate(b));const ra=da===null?2:(da>=now?0:1);const rb=db===null?2:(db>=now?0:1);if(ra!==rb)return ra-rb;if(ra===0)return da-db;if(ra===1)return db-da;return new Date(a.createdAt||0)-new Date(b.createdAt||0)})}
+function cardDate(c){
+  const l=activeLayer(c)||{};
+  return l.readyDeliveryAt||l.deliveryDate||l.readyAt||l.approval?.serviceDate||c.datetime||l.createdAt||c.createdAt||'';
+}
+function sortDateValue(v){
+  const t=new Date(v||'').getTime();
+  return Number.isFinite(t)?t:null;
+}
+function sortByNearestDate(list){
+  const now=Date.now();
+  return [...list].sort((a,b)=>{
+    const da=sortDateValue(cardDate(a));
+    const db=sortDateValue(cardDate(b));
+    const groupA=da===null?2:(da>=now?0:1);
+    const groupB=db===null?2:(db>=now?0:1);
+    if(groupA!==groupB)return groupA-groupB;
+    if(groupA===0)return da-db;       // próximos agendamentos primeiro
+    if(groupA===1)return db-da;       // vencidos mais recentes depois dos próximos
+    return String(a.name||'').localeCompare(String(b.name||''),'pt-BR');
+  });
+}
 function updOnline(){document.getElementById('offline-banner').style.display=navigator.onLine?'none':'block'}window.addEventListener('online',updOnline);window.addEventListener('offline',updOnline);updOnline();
 function dataUrlToBlobUrl(dataUrl){try{const parts=dataUrl.split(',');const mime=(parts[0].match(/:(.*?);/)||[])[1]||'image/jpeg';const bin=atob(parts[1]);const arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);return URL.createObjectURL(new Blob([arr],{type:mime}))}catch(e){return dataUrl}}
 window.openLb=src=>{if(!src)return;const url=String(src).startsWith('data:image/')?dataUrlToBlobUrl(src):src;const w=window.open(url,'_blank');if(!w)location.href=url};

@@ -1,7 +1,7 @@
-MFC v8
+MFC v9
 
 Base confiável
-MFC v7 / repositório GitHub atual
+MFC v8 / repositório GitHub atual
 
 Arquivos principais
 - index.html
@@ -12,7 +12,7 @@ Arquivos principais
 - VERSAO.txt
 
 Última alteração
-No index, removida a segunda opção de adicionar relatório, desativado o aviso sonoro quando o técnico adiciona relatório, e bloqueado o envio de avaliação em branco: modelo, tipo de serviço (Corretiva ou Preventiva) e relatório agora são obrigatórios; foto continua opcional. Service worker atualizado para mfc-tecnico-v13.
+Gestor e index organizam os clientes por data e hora, colocando os agendamentos mais próximos no topo. O service-worker foi atualizado para mfc-tecnico-v14 para forçar atualização do app.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.

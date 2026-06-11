@@ -55,9 +55,29 @@ const lbl=s=>STATUS[s]||STATUS.waiting;const fdt=dt=>{if(!dt)return'—';try{ret
 function getLayers(c){return c.layers&&c.layers.length?c.layers:[{status:c.status||'waiting',quote:c.quote||'',quoteObs:c.quoteObs||'',techReport:c.techReport||null,approval:c.approval||null,done:c.status==='done',createdAt:c.createdAt||new Date().toISOString()}]}
 function activeLayer(c){return getLayers(c).find(l=>!l.done)||getLayers(c)[0]||{status:c.status||'waiting'}}function getStatus(c){return c.status||activeLayer(c).status||'waiting'}
 function hasServiceInWorkshop(c){return getLayers(c).some(l=>l.serviceInWorkshop||l.approval?.serviceInWorkshop)}function needsPickup(c){return getLayers(c).some(l=>l.needsPickup||l.techReport?.needsPickup)}function isRecurrent(c){return all.filter(x=>normPhone(x.phone) && normPhone(x.phone)===normPhone(c.phone)).length>1||c.recurrent}
-function mainDate(c){const l=activeLayer(c);if(l.status==='ready_delivery')return l.readyDeliveryAt||l.deliveryDate||l.approval?.serviceDate||c.datetime;if(l.approval?.serviceDate)return l.approval.serviceDate;return c.datetime}
-function sortDateValue(v){const t=new Date(v||'').getTime();return Number.isFinite(t)?t:null}
-function sortByNearestDate(list){const now=Date.now();return [...list].sort((a,b)=>{const da=sortDateValue(mainDate(a)),db=sortDateValue(mainDate(b));const ra=da===null?2:(da>=now?0:1),rb=db===null?2:(db>=now?0:1);if(ra!==rb)return ra-rb;if(ra===0)return da-db;if(ra===1)return db-da;return new Date(a.createdAt||0)-new Date(b.createdAt||0)})}
+function mainDate(c){
+  const l=activeLayer(c)||{};
+  if(l.status==='ready_delivery')return l.readyDeliveryAt||l.deliveryDate||l.approval?.serviceDate||c.datetime||l.createdAt||c.createdAt||'';
+  if(l.approval?.serviceDate)return l.approval.serviceDate;
+  return c.datetime||l.createdAt||c.createdAt||'';
+}
+function sortDateValue(v){
+  const t=new Date(v||'').getTime();
+  return Number.isFinite(t)?t:null;
+}
+function sortByNearestDate(list){
+  const now=Date.now();
+  return [...list].sort((a,b)=>{
+    const da=sortDateValue(mainDate(a));
+    const db=sortDateValue(mainDate(b));
+    const groupA=da===null?2:(da>=now?0:1);
+    const groupB=db===null?2:(db>=now?0:1);
+    if(groupA!==groupB)return groupA-groupB;
+    if(groupA===0)return da-db;       // próximos agendamentos primeiro
+    if(groupA===1)return db-da;       // vencidos mais recentes depois dos próximos
+    return String(a.name||'').localeCompare(String(b.name||''),'pt-BR');
+  });
+}
 function fullAddress(c){return [c.address,c.number,c.neighborhood||c.bairro].filter(Boolean).join(', ')||c.address||''}
 function infoBlock(label,value,extra=''){return value?`<div class="iblk"><label>${label}</label><p>${value}${extra}</p></div>`:''}
 function clientInfoBlocks(c){const addr=fullAddress(c);return `<div class="igrid">${infoBlock('👤 Nome completo',c.name||'—')}${infoBlock('📞 Número de contato',c.phone||'—')}${infoBlock('✉️ E-mail',c.email||'')}${infoBlock("📍 Dias D'Ávila?",c.city||c.cidade||'')}${infoBlock('🏠 Endereço',addr,addr?` <a class="field-action" href="${maps(addr+(c.ref?' '+c.ref:''))}" target="_blank">📍 Maps</a>`:'')}${infoBlock('🔢 Número da residência',c.number||'')}${infoBlock('🏘️ Bairro',c.neighborhood||c.bairro||'')}${infoBlock('🧭 Ponto de referência',c.ref||'')}${infoBlock('🧊 Equipamento',c.equip||'')}${infoBlock('📝 Descrição do problema',c.problem||c.notes||'')}</div>`}
