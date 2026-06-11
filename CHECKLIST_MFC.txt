@@ -76,7 +76,7 @@ Itens removidos:
 [x] AUSENTE: balão/mensagem de WhatsApp automática após cadastro
 
 SERVICE WORKER (service-worker.js)
-[x] CACHE_NAME atualizado: mfc-tecnico-v15
+[x] CACHE_NAME atualizado: mfc-tecnico-v16
 [x] APP_SHELL inclui index.html, gestor.html, cadastro.html, manifest.webmanifest, icon-192.png, icon-512.png, mfc-logo.png, mfc-capa.png
 [x] Cache antigo deletado no activate
 [x] Páginas HTML: rede primeiro, cache fallback
@@ -87,7 +87,14 @@ INDEX — Atualização MFC v6
 
 ATUALIZAÇÃO MFC v10
 [x] Correção anterior de ordenação por data e hora substituída posteriormente pela regra createdAt desc.
-[x] Service-worker atualizado para mfc-tecnico-v15.
+[x] Service-worker atualizado para mfc-tecnico-v16.
 
 [x] Atualização MFC v11: index.html e gestor.html usam query orderBy(createdAt, desc) e renderização ordenada por createdAt decrescente, mantendo clientes mais recentes no topo.
 [x] Atualização MFC v12: função sortByNearestDate removida completamente; lista principal usa somente createdAt decrescente, sem datetime/serviceDate/sortDateValue para ordenar clientes.
+
+ATUALIZAÇÃO MFC v13
+[x] Index: envio de avaliação confirma sucesso e retorna ao menu quando não houver outro relatório pendente.
+[x] Index: botão de atualização da avaliação renomeado para salvar avaliação, mantendo edição direta da avaliação já enviada.
+[x] Index/Gestor: efeitos sonoros removidos.
+[x] Index/Gestor: clientes ordenados pela menor data e horário ativos do atendimento, do menor para o maior.
+[x] Service-worker atualizado para mfc-tecnico-v16.
