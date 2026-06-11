@@ -55,6 +55,9 @@ Funcionalidades ativas:
 [x] Relatórios no index com rolagem horizontal e lixeira integrada
 [x] Notificação/aviso sonoro de nova visita adicionada no index e gestor [x] Correção reforçada de relatórios no index: adicionar relatórios ilimitados busca a versão atual no Firestore, botão alternativo grande foi adicionado, e exclusão usa mínimo de 1 relatório total para não bloquear indevidamente.
 
+
+[x] Correção visual/fluxo no index: botão duplicado de adicionar relatório removido, som desativado ao adicionar relatório e envio de avaliação em branco bloqueado (modelo, tipo de serviço e relatório obrigatórios; foto opcional)
+
 Itens removidos:
 [x] AUSENTE: variável deliveryBox
 [x] AUSENTE: lightbox com zoom manual
@@ -73,7 +76,7 @@ Itens removidos:
 [x] AUSENTE: balão/mensagem de WhatsApp automática após cadastro
 
 SERVICE WORKER (service-worker.js)
-[x] CACHE_NAME atualizado: mfc-tecnico-v12
+[x] CACHE_NAME atualizado: mfc-tecnico-v13
 [x] APP_SHELL inclui index.html, gestor.html, cadastro.html, manifest.webmanifest, icon-192.png, icon-512.png, mfc-logo.png, mfc-capa.png
 [x] Cache antigo deletado no activate
 [x] Páginas HTML: rede primeiro, cache fallback
