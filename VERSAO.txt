@@ -1,7 +1,7 @@
-MFC v9
+MFC v10
 
 Base confiável
-MFC v8 / repositório GitHub atual
+MFC v9 / repositório GitHub atual
 
 Arquivos principais
 - index.html
@@ -12,7 +12,7 @@ Arquivos principais
 - VERSAO.txt
 
 Última alteração
-Gestor e index organizam os clientes por data e hora, colocando os agendamentos mais próximos no topo. O service-worker foi atualizado para mfc-tecnico-v14 para forçar atualização do app.
+Correção da ordenação por data e hora no gestor e no index: agora a lista usa a data/hora mais próxima entre as visitas/relatórios ativos de cada cliente, colocando o atendimento mais próximo no topo. O service-worker foi atualizado para mfc-tecnico-v15 para forçar atualização do app.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.

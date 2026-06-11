@@ -53,25 +53,40 @@ function getLayers(c){return c.layers&&c.layers.length?c.layers:[{status:c.statu
 function activeLayer(c){return getLayers(c).find(l=>!l.done)||getLayers(c)[0]}
 function getStatus(c){return c.status||activeLayer(c)?.status||'waiting'}
 function serviceInWorkshop(l){return !!(l?.serviceInWorkshop||l?.approval?.serviceInWorkshop)}
+function layerDate(c,l){
+  return l?.readyDeliveryAt||l?.deliveryDate||l?.readyAt||l?.approval?.serviceDate||c.datetime||l?.createdAt||c.createdAt||'';
+}
 function cardDate(c){
-  const l=activeLayer(c)||{};
-  return l.readyDeliveryAt||l.deliveryDate||l.readyAt||l.approval?.serviceDate||c.datetime||l.createdAt||c.createdAt||'';
+  const now=Date.now();
+  const dates=getLayers(c).filter(l=>!l.done).map(l=>sortDateValue(layerDate(c,l))).filter(t=>t!==null);
+  if(!dates.length)return c.datetime||c.createdAt||'';
+  dates.sort((a,b)=>{
+    const da=Math.abs(a-now), db=Math.abs(b-now);
+    if(da!==db)return da-db;
+    if((a>=now)!==(b>=now))return a>=now?-1:1;
+    return a-b;
+  });
+  return new Date(dates[0]).toISOString();
 }
 function sortDateValue(v){
   const t=new Date(v||'').getTime();
   return Number.isFinite(t)?t:null;
 }
+function nearestDateValue(c){
+  return sortDateValue(cardDate(c));
+}
 function sortByNearestDate(list){
   const now=Date.now();
   return [...list].sort((a,b)=>{
-    const da=sortDateValue(cardDate(a));
-    const db=sortDateValue(cardDate(b));
-    const groupA=da===null?2:(da>=now?0:1);
-    const groupB=db===null?2:(db>=now?0:1);
-    if(groupA!==groupB)return groupA-groupB;
-    if(groupA===0)return da-db;       // próximos agendamentos primeiro
-    if(groupA===1)return db-da;       // vencidos mais recentes depois dos próximos
-    return String(a.name||'').localeCompare(String(b.name||''),'pt-BR');
+    const da=nearestDateValue(a);
+    const db=nearestDateValue(b);
+    if(da===null&&db===null)return String(a.name||'').localeCompare(String(b.name||''),'pt-BR');
+    if(da===null)return 1;
+    if(db===null)return -1;
+    const diffA=Math.abs(da-now), diffB=Math.abs(db-now);
+    if(diffA!==diffB)return diffA-diffB;
+    if((da>=now)!==(db>=now))return da>=now?-1:1;
+    return da-db;
   });
 }
 function updOnline(){document.getElementById('offline-banner').style.display=navigator.onLine?'none':'block'}window.addEventListener('online',updOnline);window.addEventListener('offline',updOnline);updOnline();
@@ -83,7 +98,7 @@ function playNotifySound(){try{const C=window.AudioContext||window.webkitAudioCo
 function notifyNewVisit(){playNotifySound();if('Notification'in window&&Notification.permission==='granted')new Notification('🛵 Nova visita adicionada ao app',{body:'Abra o app para ver o atendimento.',icon:'icon-192.png'});else if('Notification'in window&&Notification.permission==='default')Notification.requestPermission().catch(()=>{})}
 const q=query(col,orderBy('createdAt','asc'));
 onSnapshot(q,snap=>{const next=snap.docs.map(d=>({id:d.id,...d.data()}));const keys=visitKeys(next);if(firstSnapshot){knownVisitKeys=new Set(keys);firstSnapshot=false}else{if(keys.some(k=>!knownVisitKeys.has(k))){if(suppressNextVisitSound)suppressNextVisitSound=false;else notifyNewVisit()}knownVisitKeys=new Set(keys)}allClients=next;document.getElementById('conn').textContent='🟢';renderList();if(currentId){const c=allClients.find(x=>x.id===currentId);if(c){currentDetailClient=c;renderDetailFull(c)}}},()=>document.getElementById('conn').textContent='🔴');
-window.renderList=()=>{const wrap=document.getElementById('list-wrap'),search=document.getElementById('search-input').value.toLowerCase().trim();let clients=allClients.filter(c=>!c.deleted).filter(c=>getLayers(c).some(l=>!l.done));if(search)clients=clients.filter(c=>(c.name||'').toLowerCase().includes(search)||(c.phone||'').includes(search));clients=sortByNearestDate(clients);if(!clients.length){wrap.innerHTML='<div class="empty">📋 Sem clientes.</div>';return}wrap.innerHTML=clients.map(c=>{const s=st(getStatus(c)),l=activeLayer(c);return`<div class="card s-${s}" onclick="openDetail('${c.id}')"><div class="card-inner"><div class="card-icon">${icon(s)}</div><div class="card-info"><div class="card-name">${c.name||'—'}</div><div class="card-sub">${c.address||'—'}</div>${l?.techReport?.needsPickup?'<span class="indicator">🏭 Retirar equipamento</span>':''}${serviceInWorkshop(l)?'<span class="indicator">🏭 Serviço no galpão</span>':''}<div class="card-dt">📅 ${fdt(l?.approval?.serviceDate||c.datetime)}</div></div><span class="badge b-${s}">${lbl(s)}</span></div></div>`}).join('')};
+window.renderList=()=>{const wrap=document.getElementById('list-wrap'),search=document.getElementById('search-input').value.toLowerCase().trim();let clients=allClients.filter(c=>!c.deleted).filter(c=>getLayers(c).some(l=>!l.done));if(search)clients=clients.filter(c=>(c.name||'').toLowerCase().includes(search)||(c.phone||'').includes(search));clients=sortByNearestDate(clients);if(!clients.length){wrap.innerHTML='<div class="empty">📋 Sem clientes.</div>';return}wrap.innerHTML=clients.map(c=>{const s=st(getStatus(c)),l=activeLayer(c);return`<div class="card s-${s}" onclick="openDetail('${c.id}')"><div class="card-inner"><div class="card-icon">${icon(s)}</div><div class="card-info"><div class="card-name">${c.name||'—'}</div><div class="card-sub">${c.address||'—'}</div>${l?.techReport?.needsPickup?'<span class="indicator">🏭 Retirar equipamento</span>':''}${serviceInWorkshop(l)?'<span class="indicator">🏭 Serviço no galpão</span>':''}<div class="card-dt">📅 ${fdt(cardDate(c))}</div></div><span class="badge b-${s}">${lbl(s)}</span></div></div>`}).join('')};
 let detailHistory=false;
 function closeDetailInternal(){document.getElementById('detail').classList.remove('open');currentId=null;currentDetailClient=null;localPhotos={}}
 window.openDetail=id=>{currentId=id;localPhotos={};const c=allClients.find(x=>x.id===id);if(!c)return;currentDetailClient=c;const layers=getLayers(c);currentLayerIdx=Math.max(0,layers.findIndex(l=>!l.done));document.getElementById('d-name').textContent=c.name||'Cliente';if(!document.getElementById('detail').classList.contains('open')){history.pushState({mfcDetail:true},'');detailHistory=true}document.getElementById('detail').classList.add('open');renderDetailFull(c)};

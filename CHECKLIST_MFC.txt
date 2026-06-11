@@ -76,7 +76,7 @@ Itens removidos:
 [x] AUSENTE: balão/mensagem de WhatsApp automática após cadastro
 
 SERVICE WORKER (service-worker.js)
-[x] CACHE_NAME atualizado: mfc-tecnico-v14
+[x] CACHE_NAME atualizado: mfc-tecnico-v15
 [x] APP_SHELL inclui index.html, gestor.html, cadastro.html, manifest.webmanifest, icon-192.png, icon-512.png, mfc-logo.png, mfc-capa.png
 [x] Cache antigo deletado no activate
 [x] Páginas HTML: rede primeiro, cache fallback
@@ -84,3 +84,7 @@ SERVICE WORKER (service-worker.js)
 
 INDEX — Atualização MFC v6
 [x] Correção de relatórios no index: permite adicionar mais de dois relatórios e excluir relatório extra mantendo mínimo de 1 ativo
+
+ATUALIZAÇÃO MFC v10
+[x] Correção da ordenação por data e hora no gestor e no index: clientes são ordenados pela data/hora mais próxima entre as visitas/relatórios ativos, colocando o atendimento mais próximo no topo.
+[x] Service-worker atualizado para mfc-tecnico-v15.
