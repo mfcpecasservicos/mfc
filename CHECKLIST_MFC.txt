@@ -76,7 +76,7 @@ Itens removidos:
 [x] AUSENTE: balão/mensagem de WhatsApp automática após cadastro
 
 SERVICE WORKER (service-worker.js)
-[x] CACHE_NAME atualizado: mfc-tecnico-v16
+[x] CACHE_NAME atualizado: mfc-tecnico-v18
 [x] APP_SHELL inclui index.html, gestor.html, cadastro.html, manifest.webmanifest, icon-192.png, icon-512.png, mfc-logo.png, mfc-capa.png
 [x] Cache antigo deletado no activate
 [x] Páginas HTML: rede primeiro, cache fallback
@@ -100,3 +100,6 @@ ATUALIZAÇÃO MFC v13
 [x] Service-worker atualizado para mfc-tecnico-v16.
 ATUALIZAÇÃO MFC v14
 [x] Tipo de serviço separado do relatório técnico no index e no gestor: Corretiva/Preventiva agora fica em "Tipo de Serviço" e o relatório mantém apenas a especificação digitada pelo técnico, evitando duplicação ao editar e reenviar.
+ATUALIZAÇÃO MFC v15
+[x] Gestor: fotos enviadas pelo técnico em techReport.photos abrem em visualizador interno na própria tela, sem nova guia em branco.
+[x] Service-worker atualizado para mfc-tecnico-v18.

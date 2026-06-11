@@ -1,7 +1,7 @@
-MFC v14
+MFC v15
 
 Base confiável
-MFC v13 / repositório GitHub atual
+MFC v14 / repositório GitHub atual
 
 Arquivos principais
 - index.html
@@ -12,7 +12,7 @@ Arquivos principais
 - VERSAO.txt
 
 Última alteração
-Separado o tipo de serviço do relatório técnico no index e no gestor. Agora Corretiva/Preventiva fica salvo e exibido em "Tipo de Serviço", enquanto o campo "Relatório" mostra apenas a especificação digitada pelo técnico, evitando duplicação ao editar e reenviar avaliação.
+Corrigida a visualização das fotos do relatório técnico no gestor. As imagens enviadas pelo técnico agora abrem em um visualizador interno na própria tela do gestor, sem abrir nova guia em branco. O cache foi atualizado para mfc-tecnico-v18.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
