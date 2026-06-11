@@ -1,7 +1,7 @@
-MFC v4
+MFC v5
 
 Base confiável
-MFC v3 / repositório GitHub atual
+MFC v4 / repositório GitHub atual
 
 Arquivos principais
 - index.html
@@ -12,7 +12,7 @@ Arquivos principais
 - VERSAO.txt
 
 Última alteração
-Melhoria no index e gestor: abas renomeadas para Relatório, exclusão de relatório extra com mínimo de 1, informações do cliente separadas por campo, botões WhatsApp/Ligar próximos ao telefone, botão Maps próximo ao endereço, fotos abrindo no visualizador padrão do celular via Blob URL, botão voltar mantendo o técnico dentro do app e service-worker atualizado para mfc-tecnico-v10.
+Ajustes no index: botão Ligar sem +55, Maps usando apenas o endereço, remoção do título/descrição de Evidências, botão 🛻 para retirada de equipamento, relatórios com rolagem horizontal e lixeira integrada. Notificação/aviso sonoro de nova visita adicionada no index e gestor. Cache atualizado para mfc-tecnico-v11.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.

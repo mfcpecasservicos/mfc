@@ -48,6 +48,13 @@ Funcionalidades ativas:
 [x] Melhoria visual da avaliação técnica: botão principal verde em destaque, ações Cliente Ausente/Descartar visíveis com emojis, tipo de serviço por botões Corretiva/Preventiva, relatório em texto, placeholder de modelo corrigido, câmera destacada
 [x] Informações do cliente organizadas separadamente: nome, telefone, e-mail, cidade, endereço, número, bairro, referência, equipamento e problema
 
+
+[x] Botão Ligar sem +55 no link tel:
+[x] Botão Maps usa apenas o endereço do cliente
+[x] Botão 🛻 Precisa retirar o equipamento no lugar do checkbox simples
+[x] Relatórios no index com rolagem horizontal e lixeira integrada
+[x] Notificação/aviso sonoro de nova visita adicionada no index e gestor
+
 Itens removidos:
 [x] AUSENTE: variável deliveryBox
 [x] AUSENTE: lightbox com zoom manual
@@ -66,7 +73,7 @@ Itens removidos:
 [x] AUSENTE: balão/mensagem de WhatsApp automática após cadastro
 
 SERVICE WORKER (service-worker.js)
-[x] CACHE_NAME atualizado: mfc-tecnico-v10
+[x] CACHE_NAME atualizado: mfc-tecnico-v11
 [x] APP_SHELL inclui index.html, gestor.html, cadastro.html, manifest.webmanifest, icon-192.png, icon-512.png, mfc-logo.png, mfc-capa.png
 [x] Cache antigo deletado no activate
 [x] Páginas HTML: rede primeiro, cache fallback
