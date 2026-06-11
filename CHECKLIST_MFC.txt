@@ -98,3 +98,5 @@ ATUALIZAÇÃO MFC v13
 [x] Index/Gestor: efeitos sonoros removidos.
 [x] Index/Gestor: clientes ordenados pela menor data e horário ativos do atendimento, do menor para o maior.
 [x] Service-worker atualizado para mfc-tecnico-v16.
+ATUALIZAÇÃO MFC v14
+[x] Tipo de serviço separado do relatório técnico no index e no gestor: Corretiva/Preventiva agora fica em "Tipo de Serviço" e o relatório mantém apenas a especificação digitada pelo técnico, evitando duplicação ao editar e reenviar.

@@ -1,7 +1,7 @@
-MFC v13
+MFC v14
 
 Base confiável
-MFC v12 / repositório GitHub atual
+MFC v13 / repositório GitHub atual
 
 Arquivos principais
 - index.html
@@ -12,7 +12,7 @@ Arquivos principais
 - VERSAO.txt
 
 Última alteração
-No index, o envio da avaliação agora confirma o sucesso e retorna ao menu quando não houver outro relatório pendente. O botão de atualização foi renomeado para salvar avaliação, preservando edição direta da avaliação já enviada. Todos os efeitos sonoros de notificação foram removidos do index/gestor. A lista principal do index e do gestor voltou a ordenar clientes pela menor data e horário ativos do atendimento, do menor para o maior.
+Separado o tipo de serviço do relatório técnico no index e no gestor. Agora Corretiva/Preventiva fica salvo e exibido em "Tipo de Serviço", enquanto o campo "Relatório" mostra apenas a especificação digitada pelo técnico, evitando duplicação ao editar e reenviar avaliação.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
