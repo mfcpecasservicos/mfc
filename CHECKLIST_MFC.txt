@@ -73,8 +73,11 @@ Itens removidos:
 [x] AUSENTE: balão/mensagem de WhatsApp automática após cadastro
 
 SERVICE WORKER (service-worker.js)
-[x] CACHE_NAME atualizado: mfc-tecnico-v11
+[x] CACHE_NAME atualizado: mfc-tecnico-v12
 [x] APP_SHELL inclui index.html, gestor.html, cadastro.html, manifest.webmanifest, icon-192.png, icon-512.png, mfc-logo.png, mfc-capa.png
 [x] Cache antigo deletado no activate
 [x] Páginas HTML: rede primeiro, cache fallback
 [x] Firebase, Google APIs e CDNs externos não interceptados
+
+INDEX — Atualização MFC v6
+[x] Correção de relatórios no index: permite adicionar mais de dois relatórios e excluir relatório extra mantendo mínimo de 1 ativo
