@@ -1,7 +1,7 @@
-MFC v6
+MFC v7
 
 Base confiável
-MFC v5 / repositório GitHub atual
+MFC v6 / repositório GitHub atual
 
 Arquivos principais
 - index.html
@@ -12,7 +12,7 @@ Arquivos principais
 - VERSAO.txt
 
 Última alteração
-Correção no index: adicionar mais de dois relatórios agora usa a versão atual em tela como base, sem sobrescrever relatórios recém-adicionados; exclusão de relatório respeita corretamente o mínimo de 1 relatório ativo e não exibe erro indevido quando há mais de um relatório.
+Correção reforçada no index para relatórios: adicionar novo relatório agora busca a versão mais atual do cliente no Firestore antes de salvar, há um botão alternativo grande para adicionar relatório, e a exclusão permite remover qualquer relatório extra respeitando apenas o limite mínimo de 1 relatório total. Service worker atualizado para mfc-tecnico-v12.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.

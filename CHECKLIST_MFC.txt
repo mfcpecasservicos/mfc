@@ -53,7 +53,7 @@ Funcionalidades ativas:
 [x] Botão Maps usa apenas o endereço do cliente
 [x] Botão 🛻 Precisa retirar o equipamento no lugar do checkbox simples
 [x] Relatórios no index com rolagem horizontal e lixeira integrada
-[x] Notificação/aviso sonoro de nova visita adicionada no index e gestor
+[x] Notificação/aviso sonoro de nova visita adicionada no index e gestor [x] Correção reforçada de relatórios no index: adicionar relatórios ilimitados busca a versão atual no Firestore, botão alternativo grande foi adicionado, e exclusão usa mínimo de 1 relatório total para não bloquear indevidamente.
 
 Itens removidos:
 [x] AUSENTE: variável deliveryBox
