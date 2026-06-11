@@ -1,7 +1,7 @@
-MFC v10
+MFC v11
 
 Base confiável
-MFC v9 / repositório GitHub atual
+MFC v10 / repositório GitHub atual
 
 Arquivos principais
 - index.html
@@ -12,7 +12,7 @@ Arquivos principais
 - VERSAO.txt
 
 Última alteração
-Correção da ordenação por data e hora no gestor e no index: agora a lista usa a data/hora mais próxima entre as visitas/relatórios ativos de cada cliente, colocando o atendimento mais próximo no topo. O service-worker foi atualizado para mfc-tecnico-v15 para forçar atualização do app.
+No index.html e no gestor.html, a query do Firestore foi alterada para createdAt desc e a ordenação da lista passou a usar createdAt decrescente, deixando os clientes mais recentes no topo. Nenhuma outra regra de fluxo foi alterada.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
