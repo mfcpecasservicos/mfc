@@ -1,9 +1,10 @@
-MFC v15
+MFC v16
 
 Base confiável
-MFC v14 / repositório GitHub atual
+MFC v15 / repositório GitHub atual
 
 Arquivos principais
+- index.html
 - gestor.html
 - cadastro.html
 - service-worker.js
@@ -11,7 +12,7 @@ Arquivos principais
 - VERSAO.txt
 
 Última alteração
-Link de cadastro reduzido para validade de 6 horas e gestor ajustado para visualizar fotos/imagens diretamente em visualizador interno, sem abrir nova guia.
+Gestor: visualizador interno de fotos/imagens agora permite zoom com o scroll do mouse, sem abrir nova guia. Cache atualizado para mfc-tecnico-v19.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.

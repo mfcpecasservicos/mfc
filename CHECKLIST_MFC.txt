@@ -76,7 +76,7 @@ Itens removidos:
 [x] AUSENTE: balão/mensagem de WhatsApp automática após cadastro
 
 SERVICE WORKER (service-worker.js)
-[x] CACHE_NAME atualizado: mfc-tecnico-v18
+[x] CACHE_NAME atualizado: mfc-tecnico-v19
 [x] APP_SHELL inclui index.html, gestor.html, cadastro.html, manifest.webmanifest, icon-192.png, icon-512.png, mfc-logo.png, mfc-capa.png
 [x] Cache antigo deletado no activate
 [x] Páginas HTML: rede primeiro, cache fallback
@@ -105,3 +105,6 @@ ATUALIZAÇÃO MFC v15
 [x] Link de cadastro reduzido para 6 horas no gestor e no cadastro.
 [x] Gestor exibe fotos e imagens diretamente em visualizador interno, sem abrir nova guia.
 [x] Service-worker atualizado para mfc-tecnico-v18.
+ATUALIZAÇÃO MFC v16
+[x] Gestor: visualizador interno de fotos/imagens permite zoom com o scroll do mouse, sem abrir nova guia.
+[x] Service-worker atualizado para mfc-tecnico-v19.
