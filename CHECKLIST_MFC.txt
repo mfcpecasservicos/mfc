@@ -12,7 +12,7 @@ Funcionalidades ativas:
 [x] Limpeza automática: lixeira 90 dias, concluídos 365 dias
 [x] Anti-duplicação por telefone normalizado
 [x] Badge "Cliente recorrente" quando telefone já existe
-[x] Botão "Gerar link de cadastro" com token Firebase válido por 24h
+[x] Botão "Gerar link de cadastro" com token Firebase válido por 6h
 [x] Texto copiado ao gerar link: "Para prosseguirmos com o agendamento, preencha o formulário abaixo: [link]"
 [x] Conclusão final de qualquer serviço é feita pelo gestor
 [x] Clientes ordenados por createdAt decrescente (mais recentes no topo)
@@ -66,7 +66,7 @@ Itens removidos:
 CADASTRO (cadastro.html)
 Funcionalidades ativas:
 [x] Visual padrão profissional restaurado
-[x] Validação de token ?token= via Firebase, validade 24h, uso único
+[x] Validação de token ?token= via Firebase, validade 6h, uso único
 [x] Link expirado/inválido bloqueia o formulário
 [x] Após finalizar cadastro redireciona para WhatsApp 5571981122167
 [x] Rodapé: "30 anos atendendo em Dias D'Ávila e região"
@@ -100,6 +100,8 @@ ATUALIZAÇÃO MFC v13
 [x] Service-worker atualizado para mfc-tecnico-v16.
 ATUALIZAÇÃO MFC v14
 [x] Tipo de serviço separado do relatório técnico no index e no gestor: Corretiva/Preventiva agora fica em "Tipo de Serviço" e o relatório mantém apenas a especificação digitada pelo técnico, evitando duplicação ao editar e reenviar.
+
 ATUALIZAÇÃO MFC v15
-[x] Gestor: fotos enviadas pelo técnico em techReport.photos abrem em visualizador interno na própria tela, sem nova guia em branco.
+[x] Link de cadastro reduzido para 6 horas no gestor e no cadastro.
+[x] Gestor exibe fotos e imagens diretamente em visualizador interno, sem abrir nova guia.
 [x] Service-worker atualizado para mfc-tecnico-v18.

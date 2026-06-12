@@ -4,7 +4,6 @@ Base confiável
 MFC v14 / repositório GitHub atual
 
 Arquivos principais
-- index.html
 - gestor.html
 - cadastro.html
 - service-worker.js
@@ -12,7 +11,7 @@ Arquivos principais
 - VERSAO.txt
 
 Última alteração
-Corrigida a visualização das fotos do relatório técnico no gestor. As imagens enviadas pelo técnico agora abrem em um visualizador interno na própria tela do gestor, sem abrir nova guia em branco. O cache foi atualizado para mfc-tecnico-v18.
+Link de cadastro reduzido para validade de 6 horas e gestor ajustado para visualizar fotos/imagens diretamente em visualizador interno, sem abrir nova guia.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
