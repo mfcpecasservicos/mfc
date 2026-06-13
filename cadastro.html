@@ -108,7 +108,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, query, where, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
   const app = initializeApp({
     apiKey: "AIzaSyAUUid850sbmBAVS9JzeZ94SbC-qzkk0B8",
@@ -156,10 +156,20 @@
     const snap = await getDoc(tokenRef);
     if (!snap.exists()) return false;
     const data = snap.data();
-    const created = data.createdAt?.toDate ? data.createdAt.toDate() : new Date(data.createdAt || 0);
-    const ageMs = Date.now() - created.getTime();
-    if (data.used || !created.getTime() || ageMs > 6 * 60 * 60 * 1000) return false;
-    return true;
+    if (data.used) return false;
+
+    const now = Date.now();
+    const createdMs = Number(data.createdAtMs || 0);
+    const expiresMs = Number(data.expiresAtMs || 0);
+
+    // Preferir expiresAtMs criado pelo gestor. Mantém compatibilidade com tokens antigos.
+    if (expiresMs) return now <= expiresMs;
+    if (createdMs) return (now - createdMs) <= 6 * 60 * 60 * 1000;
+
+    const createdRaw = data.createdAt?.toDate ? data.createdAt.toDate() : new Date(data.createdAt || 0);
+    const createdTime = createdRaw.getTime();
+    if (!createdTime) return false;
+    return (now - createdTime) <= 6 * 60 * 60 * 1000;
   };
 
   const blockForm = () => {

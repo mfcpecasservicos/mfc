@@ -1,7 +1,7 @@
-MFC v16
+MFC v17
 
 Base confiável
-MFC v15 / repositório GitHub atual
+MFC v16 / repositório GitHub atual
 
 Arquivos principais
 - index.html
@@ -12,7 +12,7 @@ Arquivos principais
 - VERSAO.txt
 
 Última alteração
-Gestor: visualizador interno de fotos/imagens agora permite zoom com o scroll do mouse, sem abrir nova guia. Cache atualizado para mfc-tecnico-v19.
+Corrigida a validação dos links de cadastro expirável. O cadastro agora importa corretamente as funções do Firestore e valida o token usando expiresAtMs/createdAtMs, mantendo prazo ativo de 6 horas. Cache atualizado para mfc-tecnico-v20.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.

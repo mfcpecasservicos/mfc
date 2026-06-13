@@ -108,3 +108,6 @@ ATUALIZAÇÃO MFC v15
 ATUALIZAÇÃO MFC v16
 [x] Gestor: visualizador interno de fotos/imagens permite zoom com o scroll do mouse, sem abrir nova guia.
 [x] Service-worker atualizado para mfc-tecnico-v19.
+ATUALIZAÇÃO MFC v17
+[x] Cadastro: corrigida validação do token expirável — imports do Firestore restaurados e validação usa expiresAtMs/createdAtMs com prazo ativo de 6 horas.
+[x] Service-worker atualizado para mfc-tecnico-v20.
