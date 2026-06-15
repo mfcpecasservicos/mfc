@@ -1,7 +1,7 @@
-MFC v18
+MFC v19
 
 Base confiável
-MFC v17 / repositório GitHub atual
+MFC v18 / repositório GitHub atual
 
 Arquivos principais
 - index.html
@@ -12,7 +12,7 @@ Arquivos principais
 - VERSAO.txt
 
 Última alteração
-Index: corrigido envio de avaliação para evitar perda de dados quando houver falha de internet ou fotos pesadas. As fotos agora são comprimidas antes de salvar no Firestore, a tela só retorna ao menu depois da confirmação do envio, e em caso de erro os dados permanecem na tela. Cache atualizado para mfc-tecnico-v21.
+Check-up geral dos aplicativos. Corrigido no gestor o campo de busca que chamava render() sem estar exposto no escopo global do módulo, evitando erro ao digitar. Corrigida a aba Concluídos para exibir as visitas concluídas com relatório, fotos e imagem de orçamento no visualizador interno. Checklist alinhado com a ordenação atual por data/hora de atendimento. Cache atualizado para mfc-tecnico-v22.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
