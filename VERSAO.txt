@@ -1,7 +1,7 @@
-MFC v17
+MFC v18
 
 Base confiável
-MFC v16 / repositório GitHub atual
+MFC v17 / repositório GitHub atual
 
 Arquivos principais
 - index.html
@@ -12,7 +12,7 @@ Arquivos principais
 - VERSAO.txt
 
 Última alteração
-Corrigida a validação dos links de cadastro expirável. O cadastro agora importa corretamente as funções do Firestore e valida o token usando expiresAtMs/createdAtMs, mantendo prazo ativo de 6 horas. Cache atualizado para mfc-tecnico-v20.
+Index: corrigido envio de avaliação para evitar perda de dados quando houver falha de internet ou fotos pesadas. As fotos agora são comprimidas antes de salvar no Firestore, a tela só retorna ao menu depois da confirmação do envio, e em caso de erro os dados permanecem na tela. Cache atualizado para mfc-tecnico-v21.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.

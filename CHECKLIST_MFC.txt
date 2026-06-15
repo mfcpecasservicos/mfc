@@ -111,3 +111,7 @@ ATUALIZAÇÃO MFC v16
 ATUALIZAÇÃO MFC v17
 [x] Cadastro: corrigida validação do token expirável — imports do Firestore restaurados e validação usa expiresAtMs/createdAtMs com prazo ativo de 6 horas.
 [x] Service-worker atualizado para mfc-tecnico-v20.
+
+ATUALIZAÇÃO MFC v18
+[x] Index: envio de avaliação protegido contra perda de dados — fotos são comprimidas antes de salvar, o app só limpa/retorna ao menu após confirmação do Firestore, e falhas de envio mantêm os dados na tela com aviso ao técnico.
+[x] Service-worker atualizado para mfc-tecnico-v21.
