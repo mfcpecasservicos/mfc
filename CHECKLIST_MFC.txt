@@ -129,3 +129,9 @@ ATUALIZAÇÃO MFC v20
 [x] Gestor: ao anexar imagem do orçamento, também preserva os campos já digitados da visita no mesmo salvamento, evitando perda na primeira tentativa.
 [x] Index: preserva campos digitados, tipo de serviço selecionado e fotos locais durante atualizações em tempo real enquanto o técnico edita a avaliação.
 [x] Service-worker atualizado para mfc-tecnico-v23.
+
+
+ATUALIZAÇÃO MFC v21
+[x] Gestor: corrigido travamento ao selecionar nome/telefone no card do cliente; seleção de texto não bloqueia mais abrir/fechar a aba.
+[x] Gestor: clique em nome/telefone fica reservado para seleção/cópia, e a aba abre/fecha clicando nas demais áreas do cabeçalho do cliente.
+[x] Service-worker atualizado para mfc-tecnico-v24.

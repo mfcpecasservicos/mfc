@@ -1,7 +1,7 @@
-MFC v20
+MFC v21
 
 Base confiável
-MFC v19 / repositório GitHub atual
+MFC v20 / última base aprovada disponível neste ambiente
 
 Arquivos principais
 - index.html
@@ -12,7 +12,7 @@ Arquivos principais
 - VERSAO.txt
 
 Última alteração
-Corrigido o comportamento em que, ao salvar status ou anexar imagem no gestor, o Firestore atualizava a lista em tempo real e a renderização fechava a aba do cliente, causando perda visual de dados ainda digitados. O gestor agora preserva a aba aberta, relatório selecionado, acordeões abertos e campos em edição durante a atualização. Ao anexar imagem do orçamento, os campos já digitados naquela visita também são preservados no mesmo salvamento. O index também foi revisado para preservar dados e fotos locais durante atualizações em tempo real enquanto o técnico edita uma avaliação. Cache atualizado para mfc-tecnico-v23.
+Corrigido no gestor o travamento ao selecionar nome ou telefone do cliente no card. A abertura/fechamento da aba não depende mais de seleção global de texto; agora o clique em nome/telefone fica reservado para selecionar/copiar, e a aba abre/fecha clicando nas demais áreas do cabeçalho. Cache atualizado para mfc-tecnico-v24.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
