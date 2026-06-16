@@ -122,3 +122,10 @@ ATUALIZAÇÃO MFC v19
 [x] Gestor: aba Concluídos corrigida para exibir visitas concluídas, relatórios, fotos e imagem de orçamento no visualizador interno.
 [x] Checklist alinhado com a regra atual de ordenação por data/hora do atendimento.
 [x] Service-worker atualizado para mfc-tecnico-v22.
+
+ATUALIZAÇÃO MFC v20
+[x] Gestor: preserva aba do cliente aberta após salvar status, anexar/remover imagem ou receber atualização do Firestore em tempo real.
+[x] Gestor: preserva relatório selecionado, acordeões abertos e campos em edição durante nova renderização da lista.
+[x] Gestor: ao anexar imagem do orçamento, também preserva os campos já digitados da visita no mesmo salvamento, evitando perda na primeira tentativa.
+[x] Index: preserva campos digitados, tipo de serviço selecionado e fotos locais durante atualizações em tempo real enquanto o técnico edita a avaliação.
+[x] Service-worker atualizado para mfc-tecnico-v23.

@@ -1,7 +1,7 @@
-MFC v19
+MFC v20
 
 Base confiável
-MFC v18 / repositório GitHub atual
+MFC v19 / repositório GitHub atual
 
 Arquivos principais
 - index.html
@@ -12,7 +12,7 @@ Arquivos principais
 - VERSAO.txt
 
 Última alteração
-Check-up geral dos aplicativos. Corrigido no gestor o campo de busca que chamava render() sem estar exposto no escopo global do módulo, evitando erro ao digitar. Corrigida a aba Concluídos para exibir as visitas concluídas com relatório, fotos e imagem de orçamento no visualizador interno. Checklist alinhado com a ordenação atual por data/hora de atendimento. Cache atualizado para mfc-tecnico-v22.
+Corrigido o comportamento em que, ao salvar status ou anexar imagem no gestor, o Firestore atualizava a lista em tempo real e a renderização fechava a aba do cliente, causando perda visual de dados ainda digitados. O gestor agora preserva a aba aberta, relatório selecionado, acordeões abertos e campos em edição durante a atualização. Ao anexar imagem do orçamento, os campos já digitados naquela visita também são preservados no mesmo salvamento. O index também foi revisado para preservar dados e fotos locais durante atualizações em tempo real enquanto o técnico edita uma avaliação. Cache atualizado para mfc-tecnico-v23.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
