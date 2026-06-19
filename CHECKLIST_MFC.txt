@@ -76,7 +76,7 @@ Itens removidos:
 [x] AUSENTE: balão/mensagem de WhatsApp automática após cadastro
 
 SERVICE WORKER (service-worker.js)
-[x] CACHE_NAME atualizado: mfc-tecnico-v22
+[x] CACHE_NAME atualizado: mfc-tecnico-v24
 [x] APP_SHELL inclui index.html, gestor.html, cadastro.html, manifest.webmanifest, icon-192.png, icon-512.png, mfc-logo.png, mfc-capa.png
 [x] Cache antigo deletado no activate
 [x] Páginas HTML: rede primeiro, cache fallback
@@ -130,8 +130,7 @@ ATUALIZAÇÃO MFC v20
 [x] Index: preserva campos digitados, tipo de serviço selecionado e fotos locais durante atualizações em tempo real enquanto o técnico edita a avaliação.
 [x] Service-worker atualizado para mfc-tecnico-v23.
 
-
 ATUALIZAÇÃO MFC v21
-[x] Gestor: corrigido travamento ao selecionar nome/telefone no card do cliente; seleção de texto não bloqueia mais abrir/fechar a aba.
-[x] Gestor: clique em nome/telefone fica reservado para seleção/cópia, e a aba abre/fecha clicando nas demais áreas do cabeçalho do cliente.
+[x] Gestor: botão Maps usa exclusivamente a caixa de endereço do cliente, ignorando ponto de referência para não atrapalhar a rota.
+[x] Index: botão Maps usa exclusivamente a caixa de endereço do cliente, ignorando ponto de referência para não atrapalhar a rota.
 [x] Service-worker atualizado para mfc-tecnico-v24.

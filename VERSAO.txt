@@ -1,7 +1,7 @@
 MFC v21
 
 Base confiável
-MFC v20 / última base aprovada disponível neste ambiente
+MFC v20 / repositório GitHub atual
 
 Arquivos principais
 - index.html
@@ -12,7 +12,7 @@ Arquivos principais
 - VERSAO.txt
 
 Última alteração
-Corrigido no gestor o travamento ao selecionar nome ou telefone do cliente no card. A abertura/fechamento da aba não depende mais de seleção global de texto; agora o clique em nome/telefone fica reservado para selecionar/copiar, e a aba abre/fecha clicando nas demais áreas do cabeçalho. Cache atualizado para mfc-tecnico-v24.
+Ajustado o botão Maps no gestor e no index para criar rota usando somente a informação da caixa de endereço do cliente. O ponto de referência continua aparecendo na tela para consulta, mas não entra mais no link do Google Maps. Cache atualizado para mfc-tecnico-v24.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
