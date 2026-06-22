@@ -54,7 +54,7 @@ Funcionalidades ativas:
 [x] Tipo de serviço inclui Corretiva, Preventiva e Instalação
 [x] Ao abrir outro cliente, os campos de avaliação não herdam dados do cliente anterior
 [x] Novo relatório copia o modelo exato do Relatório 1 e permanece editável
-[x] Aba minimizada mostra a quantidade de relatórios preenchidos; sem relatório preenchido mostra 0 relatórios
+[x] Aba minimizada mostra a quantidade de relatórios
 [x] Botão 🛻 Precisa retirar o equipamento no lugar do checkbox simples
 [x] Relatórios no index com rolagem horizontal e lixeira integrada
 [x] Notificação/aviso sonoro de nova visita adicionada no index e gestor [x] Correção reforçada de relatórios no index: adicionar relatórios ilimitados busca a versão atual no Firestore, botão alternativo grande foi adicionado, e exclusão usa mínimo de 1 relatório total para não bloquear indevidamente.
@@ -144,10 +144,10 @@ ATUALIZAÇÃO MFC v22
 [x] Index: envio de avaliação bloqueia chamada antiga quando o cliente aberto não corresponde ao botão acionado.
 [x] Index: tipo de serviço agora inclui Instalação.
 [x] Index: novo relatório copia automaticamente o modelo exato do Relatório 1 e mantém o campo editável.
-[x] Index/Gestor: aba minimizada mostra a quantidade de relatórios preenchidos; sem relatório preenchido mostra 0 relatórios.
+[x] Index/Gestor: aba minimizada mostra a quantidade de relatórios.
 [x] Index/Gestor: opção de excluir relatório disponível, mantendo mínimo de 1 relatório.
 [x] Service-worker atualizado para mfc-tecnico-v25.
 
 ATUALIZAÇÃO MFC v23
-[x] Index/Gestor: contador da aba minimizada conta apenas relatórios preenchidos/enviados; clientes sem relatório preenchido exibem 0 relatórios.
+[x] Gestor: removido o campo de texto "Orçamento" da aba "Orçamento e Status", mantendo apenas Observação e Imagem do orçamento/print.
 [x] Service-worker atualizado para mfc-tecnico-v26.

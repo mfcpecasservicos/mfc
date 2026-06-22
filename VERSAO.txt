@@ -1,18 +1,18 @@
 MFC v23
 
 Base confiável
-MFC v22 / última versão aprovada nesta conversa
+MFC v22 / repositório GitHub atual
 
 Arquivos principais
-- index.html
 - gestor.html
-- cadastro.html
 - service-worker.js
 - CHECKLIST_MFC.txt
 - VERSAO.txt
 
 Última alteração
-A quantidade de relatórios exibida na aba minimizada do index e do gestor agora conta somente relatórios realmente preenchidos/enviados. Clientes ou visitas sem relatório preenchido passam a mostrar 0 relatórios. Cache atualizado para mfc-tecnico-v26.
+Gestor: removido o campo de texto "Orçamento" da aba "Orçamento e Status". A aba agora mantém apenas "Observação" e a imagem/print do orçamento, evitando preenchimento redundante quando o orçamento já é anexado por imagem.
+
+Cache atualizado para mfc-tecnico-v26.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
