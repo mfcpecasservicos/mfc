@@ -1,7 +1,7 @@
-MFC v22
+MFC v23
 
 Base confiável
-MFC v21 / repositório GitHub atual
+MFC v22 / última versão aprovada nesta conversa
 
 Arquivos principais
 - index.html
@@ -12,7 +12,7 @@ Arquivos principais
 - VERSAO.txt
 
 Última alteração
-Corrigido no index o vazamento de dados digitados entre clientes/relatórios, evitando que avaliação anterior apareça em outro cliente ou seja usada no envio errado. Adicionado tipo de serviço "Instalação". Ao criar um novo relatório, o modelo exato é copiado do Relatório 1 e continua editável. Index e gestor exibem a quantidade de relatórios na aba minimizada e têm opção para excluir relatório mantendo pelo menos um. Cache atualizado para mfc-tecnico-v25.
+A quantidade de relatórios exibida na aba minimizada do index e do gestor agora conta somente relatórios realmente preenchidos/enviados. Clientes ou visitas sem relatório preenchido passam a mostrar 0 relatórios. Cache atualizado para mfc-tecnico-v26.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
