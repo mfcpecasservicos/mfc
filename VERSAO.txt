@@ -1,7 +1,7 @@
-MFC v21
+MFC v22
 
 Base confiável
-MFC v20 / repositório GitHub atual
+MFC v21 / repositório GitHub atual
 
 Arquivos principais
 - index.html
@@ -12,7 +12,7 @@ Arquivos principais
 - VERSAO.txt
 
 Última alteração
-Ajustado o botão Maps no gestor e no index para criar rota usando somente a informação da caixa de endereço do cliente. O ponto de referência continua aparecendo na tela para consulta, mas não entra mais no link do Google Maps. Cache atualizado para mfc-tecnico-v24.
+Corrigido no index o vazamento de dados digitados entre clientes/relatórios, evitando que avaliação anterior apareça em outro cliente ou seja usada no envio errado. Adicionado tipo de serviço "Instalação". Ao criar um novo relatório, o modelo exato é copiado do Relatório 1 e continua editável. Index e gestor exibem a quantidade de relatórios na aba minimizada e têm opção para excluir relatório mantendo pelo menos um. Cache atualizado para mfc-tecnico-v25.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
