@@ -1,3 +1,13 @@
+MFC v28
+
+Última alteração
+Index: card do cliente — data do atendimento e indicadores de status (Retirar equipamento, Serviço no galpão, Serviço pago) agora ficam na mesma linha, data à esquerda e indicadores à direita, com altura e estilo idênticos para alinhamento simétrico.
+Gestor: novo botão "🗑 Mover para lixeira" adicionado ao lado do botão "Remover visita" já existente (ações distintas — Remover visita continua removendo apenas a camada/visita selecionada; Mover para lixeira envia o cliente para a lixeira do gestor).
+Cache atualizado para mfc-tecnico-v28.
+
+Regra
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
 MFC v25
 
 Base confiável

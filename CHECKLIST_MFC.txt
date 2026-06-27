@@ -158,3 +158,8 @@ ATUALIZAÇÃO MFC v24
 [x] Gestor: botão Serviço finalizado move somente o relatório selecionado para Concluídos, mantendo o cliente na home se existirem outros relatórios ativos.
 [x] Index: técnico não envia mais o relatório direto para Concluídos ao clicar Serviço Concluído; o status fica como Serviço finalizado aguardando o gestor.
 [x] Service-worker atualizado para mfc-tecnico-v27.
+
+ATUALIZAÇÃO MFC v28
+[x] Index: card do cliente — data e indicadores (Retirar equipamento, Serviço no galpão, Serviço pago) na mesma linha, data à esquerda e indicadores à direita, com altura/padding idênticos para alinhamento simétrico.
+[x] Gestor: botão "Remover visita" mantido sem alteração; novo botão "🗑 Mover para lixeira" adicionado ao lado, enviando o cliente para a lixeira do gestor (mesma lógica de softDelete já usada na lixeira).
+[x] Service-worker atualizado para mfc-tecnico-v28.
