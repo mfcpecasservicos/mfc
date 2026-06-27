@@ -1,4 +1,4 @@
-MFC v24
+MFC v25
 
 Base confiável
 MFC v23 / repositório GitHub atual
@@ -16,6 +16,14 @@ Gestor: ao marcar Serviço no galpão, a marcação de Retirar equipamento do re
 Index: quando o técnico toca em Serviço Concluído, o relatório fica como Serviço finalizado aguardando confirmação do gestor, sem ir direto para Concluídos. Relatórios restantes continuam ativos na home do cliente.
 
 Cache atualizado para mfc-tecnico-v27.
+
+Regra
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
+
+Última alteração
+Index: exibida informação de serviço pago para o técnico.
+Gestor: adicionada edição do relatório técnico.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
