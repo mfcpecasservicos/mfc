@@ -34,7 +34,7 @@ Funcionalidades ativas:
 [x] Checkbox "Precisa retirar o equipamento" na avaliação
 [x] Fotos salvas em techReport.photos no Firestore ao enviar avaliação
 [x] Status approved + Serviço no galpão ativo → botão "Pronto para Entrega" → ready_delivery
-[x] Status approved sem Serviço no galpão → botão "Serviço Concluído" normal
+[x] Status approved sem Serviço no galpão → botão "Serviço Concluído" muda para Serviço finalizado, aguardando confirmação do gestor
 [x] Técnico pode descartar visita para lixeira pelo index
 [x] Clientes ordenados pela menor data e horário ativos do atendimento, do menor para o maior
 [x] Botões WhatsApp e Ligar próximos ao número do cliente
@@ -80,7 +80,7 @@ Itens removidos:
 [x] AUSENTE: balão/mensagem de WhatsApp automática após cadastro
 
 SERVICE WORKER (service-worker.js)
-[x] CACHE_NAME atualizado: mfc-tecnico-v26
+[x] CACHE_NAME atualizado: mfc-tecnico-v27
 [x] APP_SHELL inclui index.html, gestor.html, cadastro.html, manifest.webmanifest, icon-192.png, icon-512.png, mfc-logo.png, mfc-capa.png
 [x] Cache antigo deletado no activate
 [x] Páginas HTML: rede primeiro, cache fallback
@@ -151,3 +151,10 @@ ATUALIZAÇÃO MFC v22
 ATUALIZAÇÃO MFC v23
 [x] Gestor: removido o campo de texto "Orçamento" da aba "Orçamento e Status", mantendo apenas Observação e Imagem do orçamento/print.
 [x] Service-worker atualizado para mfc-tecnico-v26.
+
+ATUALIZAÇÃO MFC v24
+[x] Gestor: marcar Serviço no galpão anula Retirar equipamento no salvamento do relatório.
+[x] Gestor: opção Serviço já foi pago adicionada em Aprovação e Pagamento.
+[x] Gestor: botão Serviço finalizado move somente o relatório selecionado para Concluídos, mantendo o cliente na home se existirem outros relatórios ativos.
+[x] Index: técnico não envia mais o relatório direto para Concluídos ao clicar Serviço Concluído; o status fica como Serviço finalizado aguardando o gestor.
+[x] Service-worker atualizado para mfc-tecnico-v27.

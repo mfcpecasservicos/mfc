@@ -1,18 +1,21 @@
-MFC v23
+MFC v24
 
 Base confiável
-MFC v22 / repositório GitHub atual
+MFC v23 / repositório GitHub atual
 
 Arquivos principais
+- index.html
 - gestor.html
 - service-worker.js
 - CHECKLIST_MFC.txt
 - VERSAO.txt
 
 Última alteração
-Gestor: removido o campo de texto "Orçamento" da aba "Orçamento e Status". A aba agora mantém apenas "Observação" e a imagem/print do orçamento, evitando preenchimento redundante quando o orçamento já é anexado por imagem.
+Gestor: ao marcar Serviço no galpão, a marcação de Retirar equipamento do relatório é anulada no salvamento. Adicionada a opção Serviço já foi pago em Aprovação e Pagamento. O botão do gestor para finalizar uma visita passa a aparecer como Serviço finalizado e continua movendo apenas aquele relatório para Concluídos.
 
-Cache atualizado para mfc-tecnico-v26.
+Index: quando o técnico toca em Serviço Concluído, o relatório fica como Serviço finalizado aguardando confirmação do gestor, sem ir direto para Concluídos. Relatórios restantes continuam ativos na home do cliente.
+
+Cache atualizado para mfc-tecnico-v27.
 
 Regra
 Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
