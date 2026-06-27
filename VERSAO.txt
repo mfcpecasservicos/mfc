@@ -1,13 +1,3 @@
-MFC v28
-
-Última alteração
-Index: card do cliente reorganizado — data do atendimento à esquerda e indicadores de status (Retirar equipamento, Serviço no galpão, Serviço pago) à direita, na mesma linha.
-Gestor: botão "Remover visita" renomeado para "Mover para lixeira", com mensagens de confirmação e aviso atualizadas.
-Cache atualizado para mfc-tecnico-v28.
-
-Regra
-Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
-
 MFC v25
 
 Base confiável
