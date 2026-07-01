@@ -1,3 +1,12 @@
+MFC v29
+
+Última alteração
+Gestor: corrigido bug estrutural onde as abas "Relatório do Técnico" e "Orçamento e Status" apareciam fora do card quando o cliente tinha mais de uma visita (</div> extra no template techReport fechava o vpanel prematuramente).
+Gestor: adicionado botão ✏️ no header de cada card para abrir o modal de edição completa do cadastro do cliente (nome, telefone, endereço, referência, data da visita, equipamento, observações).
+Gestor: campo "Data e hora da visita" adicionado por layer em Aprovação e Pagamento, com save imediato ao alterar.
+Gestor: checkbox "💸 Falta pagar" adicionado em Aprovação e Pagamento com indicador vermelho no card.
+Cache atualizado para mfc-tecnico-v29.
+
 MFC v28
 
 Última alteração

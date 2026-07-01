@@ -163,3 +163,10 @@ ATUALIZAÇÃO MFC v28
 [x] Index: card do cliente — data e indicadores (Retirar equipamento, Serviço no galpão, Serviço pago) na mesma linha, data à esquerda e indicadores à direita, com altura/padding idênticos para alinhamento simétrico.
 [x] Gestor: botão "Remover visita" mantido sem alteração; novo botão "🗑 Mover para lixeira" adicionado ao lado, enviando o cliente para a lixeira do gestor (mesma lógica de softDelete já usada na lixeira).
 [x] Service-worker atualizado para mfc-tecnico-v28.
+ATUALIZAÇÃO MFC v29
+[x] Gestor: bug das abas soltas corrigido — </div> extra no template techReport foi removido; acordeões agora ficam corretamente dentro do vpanel da visita correspondente.
+[x] Gestor: botão ✏️ Editar adicionado no header do card para edição completa do cadastro (nome, telefone, endereço, referência, data/hora, equipamento, observações).
+[x] Gestor: campo "Data e hora da visita" adicionado por layer (salva imediatamente ao alterar).
+[x] Gestor: checkbox "💸 Falta pagar" adicionado em Aprovação e Pagamento; indicador vermelho aparece no card quando ativo.
+[x] Service-worker atualizado para mfc-tecnico-v29.
+
