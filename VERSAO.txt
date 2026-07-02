@@ -1,3 +1,11 @@
+MFC v35
+
+Última alteração
+
+Gestor: addVisitToExisting agora filtra layers done sem concludedAt (lixo gerado pelo v33 que marcou layers como done indevidamente). Concluídos só mostra visitas que passaram pelo botão "Serviço finalizado".
+Gestor: badge "Cliente recorrente" removido.
+Cache atualizado para mfc-tecnico-v35.
+
 MFC v34
 
 Última alteração
