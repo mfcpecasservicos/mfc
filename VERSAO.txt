@@ -1,3 +1,11 @@
+MFC v34
+
+Última alteração
+
+Gestor: addVisitToExisting revertido — ao enviar cliente existente como nova visita, as layers antigas NÃO são tocadas. Concluídos só aparece via botão "Finalizar serviço".
+Index: card-tags-row reestruturado — data fica acima, indicadores (Retirar/Laudo/etc) ficam alinhados na linha de baixo, sem torção.
+Cache atualizado para mfc-tecnico-v34.
+
 MFC v33
 
 Última alteração
