@@ -1,3 +1,17 @@
+MFC v32
+
+Última alteração
+
+Gestor: editTechReport substituído — abre modal inline com campos de modelo, tipos de serviço (multi-select) e relatório; sem mais popup do browser.
+Gestor: tipo de serviço no modal e no card agora exibe todos os tipos selecionados.
+Gestor: toggleGestorServiceType agora é multi-select (toggle individual).
+Gestor: "Falta a pagar" recolocado abaixo do campo "Valor do orçamento" mostrando o saldo restante.
+Gestor: emoji 💸 removido da label e indicador "Falta pagar".
+Gestor: indicador "📋 Laudo" adicionado no card quando serviceType inclui Laudo.
+Index: Laudo movido para toggle destacado separado (estilo pickup-toggle, cor âmbar), visualmente similar ao "Retirar equipamento".
+Index: currentServiceType retorna string completa com todos os tipos selecionados.
+Cache atualizado para mfc-tecnico-v32.
+
 MFC v31
 
 Última alteração
