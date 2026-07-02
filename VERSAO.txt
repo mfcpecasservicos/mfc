@@ -1,3 +1,16 @@
+MFC v33
+
+Última alteração
+
+Index: Laudo reintegrado à grade de 4 tipos (âmbar quando ativo, alinhado com os outros).
+Index: Pickup "Precisa retirar o equipamento" movido para ANTES do campo relatório.
+Index: Botões Tirar Foto e Galeria agora 50/50 simétricos.
+Gestor: indicador "📋 Laudo" adicionado no cabeçalho do card (visível na lista).
+Gestor: ao enviar cliente existente como nova visita, layers antigas ficam marcadas como done — técnico vê só a visita nova.
+Gestor: fillFromClient usa ID direto, sem depender de match de telefone.
+Gestor: botão "🗑 Excluir relatório" adicionado ao lado de "✏️ Editar relatório" — reseta visita para Aguardando visita.
+Cache atualizado para mfc-tecnico-v33.
+
 MFC v32
 
 Última alteração
