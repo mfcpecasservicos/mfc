@@ -1,3 +1,12 @@
+MFC v31
+
+Última alteração
+
+Gestor: removido bloco "Tipo de serviço" do painel Aprovação e Pagamento.
+Gestor: removido preview "Entrada / Falta a pagar" (cálculo interno mantido, só o display foi retirado).
+Index: tipo de serviço alterado para multi-select — técnico pode selecionar mais de um simultaneamente.
+Cache atualizado para mfc-tecnico-v31.
+
 MFC v30
 
 Última alteração
