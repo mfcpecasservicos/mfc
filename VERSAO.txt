@@ -1,3 +1,21 @@
+MFC v30
+
+Última alteração
+
+Gestor: corrigido bug de persistência de data/hora — readLayerForm agora captura corretamente o campo de data/hora da visita e saveLayerDatetime também atualiza o campo raiz do cliente.
+
+Gestor: campo "Tipo de serviço" adicionado em Aprovação e Pagamento com opções Corretiva, Preventiva, Instalação e 📋 Laudo (multi-seleção via botões).
+
+Gestor: substituída a entrada fixa de 40% por input numérico livre com cálculo dinâmico de "Falta a pagar".
+
+Index: opção "📋 Laudo" adicionada ao seletor de tipo de serviço do técnico; indicador exibido no card.
+
+Cache atualizado para mfc-tecnico-v30.
+
+Regra
+
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
 MFC v29
 
 Última alteração
