@@ -1,3 +1,20 @@
+MFC v36
+
+Última alteração
+
+REDESIGN COMPLETO DO GESTOR — dashboard moderno em 3 colunas:
+- Menu lateral: logo, marca, "Menu principal", "Financeiro", "Novos Cadastros" (com badge) e "Lixeira" (destaque vermelho).
+- Lista de visitas: cards modernos com indicador colorido lateral, borda verde ao selecionar, busca por nome/endereço/telefone, botão Filtros (dropdown de status), cards de resumo (Total/Aguardando/Concluídas/Aprovadas) e paginação (8 por página).
+- Área de detalhes: cabeçalho com nome/telefone/endereço/Maps, botões Editar e Nova visita, linha de progresso (Aprovação → Em execução → Concluído → Pago), cards de Pagamento e Orçamento, Pagamento com barra de progresso (Pago/Restante/Total + % pago) e Datas importantes.
+- Acordeões: Relatório do Técnico, Orçamento e Status, Aprovação e Pagamento — mesmos IDs e lógica.
+- Botões inferiores padronizados: Salvar, Serviço finalizado, Remover visita, Mover para lixeira.
+- FINANCEIRO (novo): Embasa (Boa Esperança 1364), Coelba Belo Horizonte 105 e Coelba Almirante Tamandaré 80 — dados fixos + campos de valor da conta, vencimento e PIX salvos no Firestore (config/financeiro).
+- Lixeira agora é uma página própria no menu lateral.
+- Responsivo: 3 colunas → 2 → 1 conforme largura da tela.
+- BUGFIX: readLayerForm tinha referência a variáveis não declaradas (visitDatetime, entryValue) — o botão Salvar do gestor estava quebrado. Corrigido.
+- Toda a lógica Firebase, IDs de formulário, cálculos e fluxos preservados.
+Cache atualizado para mfc-tecnico-v36.
+
 MFC v35
 
 Última alteração

@@ -2,38 +2,397 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Painel Gestor — MFC</title>
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
 <style>
-:root{--bg:#0a0d14;--surface:#111827;--surface2:#1c2333;--surface3:#243047;--accent:#3b82f6;--accent2:#06b6d4;--text:#f1f5f9;--muted:#94a3b8;--border:#1e2d45;--green:#22c55e;--yellow:#f59e0b;--orange:#f97316;--red:#ef4444;--purple:#a855f7;--cyan:#38bdf8;--radius:14px;--radius-sm:9px;--shadow:0 4px 24px rgba(0,0,0,.38)}
+:root{--bg:#070b12;--surface:#0d1420;--surface2:#141d2e;--surface3:#1b2740;--accent:#3b82f6;--accent2:#06b6d4;--text:#f1f5f9;--muted:#8ea0b8;--border:#1c2a44;--green:#22c55e;--yellow:#f59e0b;--orange:#f97316;--red:#ef4444;--purple:#a855f7;--cyan:#38bdf8;--gold:#fbbf24;--radius:16px;--radius-sm:10px;--shadow:0 6px 28px rgba(0,0,0,.45)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;font-size:15px}
-header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:58px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:50}
-header h1{font-size:1rem;font-weight:700;flex:1}#conn{font-size:.78rem;color:var(--muted)}
-.main{max-width:1140px;margin:0 auto;padding:22px 18px}.card,.box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px}.slabel,.fl{font-size:.72rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;display:block}.fi{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;color:var(--text);font-size:.92rem;outline:none;font-family:inherit}.fi:focus{border-color:var(--accent)}textarea.fi{resize:vertical;min-height:62px}.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}.fgrid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}.acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.btn{padding:9px 15px;border-radius:var(--radius-sm);border:none;cursor:pointer;font-size:.85rem;font-weight:700;white-space:nowrap}.btn:active{transform:scale(.98)}.btn-blue{background:var(--accent);color:#fff}.btn-green{background:var(--green);color:#fff}.btn-red{background:var(--red);color:#fff}.btn-muted{background:var(--surface2);color:var(--muted);border:1px solid var(--border)}.btn-cyan{background:#0e7490;color:#fff}.btn-gold{background:#78350f;color:#fcd34d;border:1px solid #92400e}.btn-sm{padding:6px 10px;font-size:.78rem}.tabs{display:flex;gap:3px;background:var(--surface2);border-radius:var(--radius-sm);padding:4px;width:fit-content;margin-bottom:16px;flex-wrap:wrap}.tab{padding:8px 14px;border-radius:7px;cursor:pointer;font-size:.82rem;color:var(--muted);border:none;background:none}.tab.active{background:var(--surface);color:var(--text);font-weight:700}.tab.has-badge{position:relative}.tab-badge{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;font-size:.65rem;font-weight:800;border-radius:10px;padding:1px 6px;min-width:16px;text-align:center}.search-row{position:relative;margin-bottom:14px}.search-row input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px 10px 36px;color:var(--text);font-size:.9rem}.si{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}.clist{display:flex;flex-direction:column;gap:10px}.cc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}.cc-hdr{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none}.selectable{user-select:text;cursor:text}.sdot{width:10px;height:10px;border-radius:50%;flex-shrink:0}.cmeta{flex:1;min-width:0}.cmeta strong{font-size:.95rem;display:flex;align-items:center;gap:6px;flex-wrap:wrap}.csub{color:var(--muted);font-size:.78rem;margin-top:3px}.indicator{display:inline-block;margin-top:5px;margin-right:6px;font-size:.72rem;font-weight:800;padding:3px 8px;border-radius:12px;border:1px solid #0e749055;background:#083344;color:#67e8f9}.sbadge{font-size:.68rem;font-weight:800;padding:4px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}.sw{background:#1e3a5f33;color:#60a5fa;border:1px solid #1e3a5f}.dw{background:#3b82f6}.sws{background:#08334455;color:#67e8f9;border:1px solid #0e7490}.dws{background:#38bdf8}.se{background:#14532d33;color:#86efac;border:1px solid #14532d}.de{background:#22c55e}.sq{background:#451a0333;color:#fbbf24;border:1px solid #451a03}.dq{background:#f59e0b}.sa{background:#1c191733;color:#fb923c;border:1px solid #1c1917}.da{background:#f97316}.srd{background:#0c4a6e33;color:#7dd3fc;border:1px solid #0c4a6e}.drd{background:#38bdf8}.ssf{background:#052e16;color:#86efac;border:1px solid #166534}.dsf{background:#22c55e}.sd{background:#0d1f0d33;color:#4ade80;border:1px solid #0d1f0d}.dd{background:#22c55e}.sab{background:#3b076433;color:#d8b4fe;border:1px solid #3b0764}.dab{background:#a855f7}.cc-body{border-top:1px solid var(--border);padding:16px 18px;display:none;flex-direction:column;gap:12px}.cc-body.open{display:flex}.igrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}.iblk{background:var(--surface2);border-radius:var(--radius-sm);padding:10px 12px}.iblk label{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:3px}.iblk p{font-size:.86rem;user-select:text}.field-action{display:inline-flex;margin-left:6px;color:var(--accent2);text-decoration:none;font-size:.78rem;font-weight:800;padding:3px 7px;border-radius:7px;background:#0d2346;border:1px solid #3b82f633}.vtabs-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.vtabs{display:flex;gap:4px;flex-wrap:wrap}.vtab{padding:6px 12px;border-radius:7px;cursor:pointer;font-size:.78rem;border:1px solid var(--border);background:var(--surface2);color:var(--muted)}.vtab.active{color:#fff;font-weight:800}.vtw.active{background:#1e3a5f;border-color:#3b82f6}.vtws.active{background:#083344;border-color:#38bdf8}.vte.active{background:#14532d;border-color:#22c55e}.vtq.active{background:#451a03;border-color:#f59e0b}.vta.active{background:#1c1917;border-color:#f97316}.vtrd.active{background:#0c4a6e;border-color:#38bdf8}.vtd.active{background:#0d1f0d;border-color:#22c55e}.vtab2.active{background:#3b0764;border-color:#a855f7}.vpanel{display:none}.vpanel.active{display:block}.acc{border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:8px}.acc-hdr{display:flex;align-items:center;gap:8px;padding:10px 14px;cursor:pointer;background:var(--surface2)}.acc-arr{margin-left:auto;color:var(--muted)}.acc-body{display:none;padding:14px;background:var(--bg);border-top:1px solid var(--border)}.acc-body.open{display:block}.acc-hdr.open+.acc-body,.acc-body.force-open{display:block}.lead-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-bottom:8px}.lead-info{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:8px 0}.lead-info span{font-size:.76rem;color:var(--muted)}.lead-info strong{font-size:.86rem;display:block}.trash-sec{background:var(--surface);border:1px dashed var(--red);border-radius:var(--radius);padding:14px;margin-top:18px}.empty{text-align:center;padding:38px 20px;color:var(--muted)}#toast{position:fixed;bottom:20px;right:20px;background:var(--green);color:#fff;padding:10px 18px;border-radius:var(--radius-sm);font-size:.85rem;font-weight:700;display:none;z-index:999;box-shadow:var(--shadow)}.doc-box{background:#0f172a;border:1px solid #334155;border-radius:var(--radius-sm);padding:12px;margin:8px 0}.file-input{font-size:.82rem;color:var(--muted);width:100%;margin-top:6px}.budget-preview{width:100%;max-width:260px;max-height:180px;object-fit:contain;border-radius:10px;border:1px solid var(--border);background:#020617;cursor:zoom-in;display:block;margin:8px 0}.budget-empty{font-size:.82rem;color:var(--muted);display:block;margin-bottom:6px}.client-search-results{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);max-height:220px;overflow-y:auto;margin-top:4px;display:none}.csr-item{padding:10px 12px;cursor:pointer;font-size:.85rem;border-bottom:1px solid var(--border)}.csr-item:hover{background:var(--surface2)}.csr-item.deleted{opacity:.9;border-left:3px solid var(--red);padding-left:9px}.recurrent-badge{background:#451a0355;color:#fbbf24;border:1px solid #f59e0b55;border-radius:8px;padding:4px 9px;font-size:.75rem;font-weight:800}.brand-hero{overflow:hidden;border:1px solid var(--border);border-radius:22px;background:linear-gradient(135deg,#0f172a,#111827);box-shadow:var(--shadow);margin-bottom:18px}.brand-cover{width:100%;height:170px;object-fit:cover;display:block;opacity:.82}.brand-content{display:flex;align-items:center;gap:16px;padding:16px 20px;background:linear-gradient(180deg,rgba(17,24,39,.94),rgba(17,24,39,1))}.brand-logo{width:78px;height:78px;object-fit:contain;background:#fff;border-radius:18px;padding:8px;flex-shrink:0}.mbg{position:fixed;inset:0;background:#000b;z-index:500;display:none;align-items:center;justify-content:center}.mbg.open{display:flex}.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;width:90%;max-width:580px;display:flex;flex-direction:column;gap:12px;max-height:90vh;overflow-y:auto}.mact{display:flex;gap:8px;justify-content:flex-end}.value-preview{font-size:.84rem;color:#67e8f9;background:#083344;border:1px solid #0e7490;border-radius:8px;padding:8px 10px;margin:8px 0;display:none}.value-preview.show{display:block}@media(max-width:700px){.fgrid,.fgrid3{grid-template-columns:1fr}.brand-cover{height:120px}.brand-logo{width:62px;height:62px}.main{padding:16px 12px}.cc-hdr{padding:12px}}
+a{color:inherit}
+button{font-family:inherit}
 
-.img-viewer{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;display:none;align-items:center;justify-content:center;padding:18px;overflow:hidden}.img-viewer.open{display:flex}.img-viewer img{max-width:96vw;max-height:88vh;object-fit:contain;border-radius:12px;background:#fff;box-shadow:0 18px 50px rgba(0,0,0,.55);transform-origin:center center;transition:transform .08s ease;cursor:zoom-in}.img-viewer-close{position:absolute;top:14px;right:16px;background:#ef4444;color:#fff;border:0;border-radius:14px;width:48px;height:48px;font-size:1.7rem;font-weight:900;cursor:pointer}.img-viewer-hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:#111827cc;color:#fff;border:1px solid #ffffff33;border-radius:999px;padding:8px 14px;font-size:.82rem;font-weight:800;white-space:nowrap}
+/* ====== LAYOUT ====== */
+.app{display:grid;grid-template-columns:230px 420px 1fr;min-height:100vh;gap:0}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:16px 12px;display:flex;flex-direction:column;gap:14px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.list-col{border-right:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;min-height:100vh}
+.detail-col{padding:20px 20px;min-height:100vh;overflow-y:auto}
+
+/* ====== SIDEBAR ====== */
+.side-logo{display:flex;align-items:center;justify-content:center;padding:8px 4px}
+.side-logo img{width:100%;max-width:160px;border-radius:14px}
+.side-brand{display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:10px 12px}
+.side-brand img{width:42px;height:42px;border-radius:10px;background:#fff;padding:4px;object-fit:contain}
+.side-brand h2{font-size:.86rem;font-weight:800}
+.side-brand p{font-size:.68rem;color:var(--muted);line-height:1.25}
+.side-nav{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.nav-item{display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border-radius:12px;border:1px solid transparent;background:transparent;color:var(--muted);font-size:.88rem;font-weight:800;cursor:pointer;text-align:left;transition:all .18s}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:var(--surface2);border-color:var(--green);color:var(--green)}
+.nav-item.nav-trash{border:1px solid #ef444455;color:#fca5a5}
+.nav-item.nav-trash:hover{background:#3b121955}
+.nav-item.nav-trash.active{background:#3b121955;border-color:var(--red);color:#fca5a5}
+.nav-item .nbadge{margin-left:auto;background:var(--red);color:#fff;font-size:.65rem;font-weight:800;border-radius:10px;padding:2px 7px;min-width:18px;text-align:center}
+#conn{font-size:.72rem;color:var(--muted);text-align:center;margin-top:auto;padding:8px}
+
+/* ====== LIST COLUMN ====== */
+.list-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.list-head h1{font-size:1.25rem;font-weight:900}
+.btn{padding:10px 15px;border-radius:var(--radius-sm);border:none;cursor:pointer;font-size:.85rem;font-weight:800;white-space:nowrap;transition:transform .12s,filter .15s}
+.btn:hover{filter:brightness(1.1)}
+.btn:active{transform:scale(.97)}
+.btn-blue{background:var(--accent);color:#fff}
+.btn-green{background:var(--green);color:#fff}
+.btn-red{background:var(--red);color:#fff}
+.btn-muted{background:var(--surface2);color:var(--muted);border:1px solid var(--border)}
+.btn-cyan{background:#0e7490;color:#fff}
+.btn-outline-blue{background:#0d2346;color:#60a5fa;border:1px solid #3b82f666}
+.btn-outline-red{background:#3b121955;color:#fca5a5;border:1px solid #ef444466}
+.btn-sm{padding:7px 11px;font-size:.78rem}
+.search-filter-row{display:flex;gap:8px;margin-bottom:14px}
+.search-wrap{position:relative;flex:1}
+.search-wrap input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:11px 14px 11px 36px;color:var(--text);font-size:.88rem;outline:none}
+.search-wrap input:focus{border-color:var(--accent)}
+.search-wrap .si{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.filter-wrap{position:relative}
+.filter-menu{position:absolute;right:0;top:calc(100% + 6px);background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:8px;display:none;flex-direction:column;gap:4px;z-index:80;min-width:230px;box-shadow:var(--shadow)}
+.filter-menu.open{display:flex}
+.filter-menu button{background:transparent;border:none;color:var(--muted);text-align:left;padding:8px 10px;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer}
+.filter-menu button:hover{background:var(--surface2);color:var(--text)}
+.filter-menu button.active{background:var(--surface2);color:var(--green)}
+
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px 8px;text-align:center;transition:transform .15s}
+.stat-card:hover{transform:translateY(-2px)}
+.stat-card .num{font-size:1.35rem;font-weight:900;line-height:1.1}
+.stat-card .lbl{font-size:.68rem;color:var(--muted);font-weight:700;margin-top:3px}
+.stat-total .num{color:#fff}.stat-wait .num{color:var(--yellow)}.stat-done .num{color:var(--green)}.stat-appr .num{color:var(--accent)}
+
+.clist{display:flex;flex-direction:column;gap:10px;flex:1}
+.vcard{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--border);border-radius:14px;padding:14px 16px;cursor:pointer;transition:all .18s;position:relative}
+.vcard:hover{background:var(--surface2)}
+.vcard.selected{border-color:var(--green);border-left-color:var(--green);background:var(--surface2);box-shadow:0 0 0 1px var(--green) inset}
+.vcard .vc-top{display:flex;align-items:center;gap:8px}
+.vcard .vc-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.vcard .vc-name{font-weight:800;font-size:.92rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vcard .vc-phone{font-size:.74rem;color:var(--muted);font-weight:400}
+.vcard .vc-sub{font-size:.76rem;color:var(--muted);margin-top:4px}
+.vcard .vc-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;flex-wrap:wrap}
+.vcard .vc-dt{font-size:.72rem;font-weight:800;color:#fff;background:#1e3a5f;border:1px solid #3b82f6;border-radius:6px;padding:3px 8px;display:inline-flex;align-items:center;gap:4px}
+.vcard .vc-arrow{color:var(--muted);font-size:.8rem}
+.indicator{display:inline-flex;align-items:center;font-size:.68rem;font-weight:800;padding:3px 8px;border-radius:12px;border:1px solid #0e749055;background:#083344;color:#67e8f9;margin-right:4px;margin-top:4px}
+.ind-laudo{background:#2d1f00 !important;color:#fbbf24 !important;border-color:#92400e !important}
+.ind-owes{background:#4a1c1c !important;color:#fca5a5 !important;border-color:#7f1d1d !important}
+.sbadge{font-size:.62rem;font-weight:800;padding:4px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.sw{background:#1e3a5f33;color:#60a5fa;border:1px solid #1e3a5f}.sws{background:#08334455;color:#67e8f9;border:1px solid #0e7490}.se{background:#14532d33;color:#86efac;border:1px solid #14532d}.sq{background:#451a0333;color:#fbbf24;border:1px solid #451a03}.sa{background:#1c191733;color:#fb923c;border:1px solid #f9731655}.srd{background:#0c4a6e33;color:#7dd3fc;border:1px solid #0c4a6e}.ssf{background:#052e16;color:#86efac;border:1px solid #166534}.sd{background:#0d1f0d33;color:#4ade80;border:1px solid #0d1f0d}.sab{background:#3b076433;color:#d8b4fe;border:1px solid #3b0764}
+.dw{background:#3b82f6}.dws{background:#38bdf8}.de{background:#22c55e}.dq{background:#f59e0b}.da{background:#f97316}.drd{background:#38bdf8}.dsf{background:#22c55e}.dd{background:#22c55e}.dab{background:#a855f7}
+.pagination{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:16px}
+.pg-btn{min-width:36px;height:36px;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-weight:800;cursor:pointer;font-size:.82rem}
+.pg-btn:hover{background:var(--surface2)}
+.pg-btn.active{border-color:var(--yellow);color:var(--yellow)}
+.pg-btn:disabled{opacity:.4;cursor:default}
+.empty{text-align:center;padding:38px 20px;color:var(--muted)}
+
+/* ====== DETAIL COLUMN ====== */
+.detail-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.detail-head h1{font-size:1.25rem;font-weight:900}
+.detail-actions{display:flex;gap:8px}
+.client-hero{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.client-hero .ch-name{font-size:1.05rem;font-weight:900}
+.client-hero .ch-phone{font-size:.8rem;color:var(--muted);font-weight:400}
+.client-hero .ch-addr{font-size:.8rem;color:var(--muted);margin-top:4px;display:flex;align-items:center;gap:6px}
+.field-action{display:inline-flex;color:var(--accent2);text-decoration:none;font-size:.74rem;font-weight:800;padding:3px 8px;border-radius:7px;background:#0d2346;border:1px solid #3b82f633}
+
+/* timeline */
+.timeline{display:flex;align-items:flex-start;justify-content:space-between;margin:20px 0 24px;position:relative}
+.tl-step{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;position:relative;z-index:2}
+.tl-icon{width:52px;height:52px;border-radius:50%;border:2px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:1.2rem;transition:all .2s}
+.tl-step.done .tl-icon{border-color:var(--green);color:var(--green)}
+.tl-step.current .tl-icon{border-color:var(--gold);color:var(--gold);box-shadow:0 0 14px rgba(251,191,36,.25)}
+.tl-lbl{font-size:.8rem;font-weight:800}
+.tl-sub{font-size:.68rem;color:var(--muted)}
+.tl-step.current .tl-lbl{color:var(--gold)}
+.tl-step.done .tl-lbl{color:var(--green)}
+.tl-line{position:absolute;top:26px;left:calc(12.5% + 26px);right:calc(12.5% + 26px);border-top:2px dashed var(--border);z-index:1}
+
+/* cards */
+.dcards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px}
+.dcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;transition:transform .15s}
+.dcard:hover{transform:translateY(-2px)}
+.dcard h3{font-size:.82rem;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.dcard h3 .ic{width:28px;height:28px;border-radius:8px;background:var(--surface2);display:inline-flex;align-items:center;justify-content:center;font-size:.9rem}
+.big-money{font-size:1.5rem;font-weight:900;color:var(--green)}
+.mini-lbl{font-size:.68rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;display:block}
+.pay-bar{height:9px;border-radius:6px;background:var(--surface3);overflow:hidden;margin:10px 0}
+.pay-bar>div{height:100%;background:linear-gradient(90deg,var(--yellow),var(--gold));border-radius:6px;transition:width .3s}
+.pay-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;text-align:center}
+.pay-grid .pg-lbl{font-size:.68rem;color:var(--muted);font-weight:700}
+.pay-grid .pg-val{font-size:.85rem;font-weight:900}
+.pct-badge{font-size:.66rem;font-weight:800;background:#451a03;color:var(--gold);border:1px solid #92400e;border-radius:10px;padding:3px 8px;float:right}
+.date-blk{display:flex;align-items:center;gap:10px;background:var(--surface2);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.date-blk .di{width:36px;height:36px;border-radius:9px;background:#0d2346;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.date-blk .dd-l{font-size:.68rem;color:var(--muted);font-weight:700}
+.date-blk .dd-v{font-size:.95rem;font-weight:900}
+.date-blk .dd-t{font-size:.72rem;color:var(--muted)}
+
+/* accordions */
+.acc{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:12px;background:var(--surface)}
+.acc-hdr{display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;font-size:.86rem;font-weight:800;user-select:none}
+.acc-hdr .ic{width:28px;height:28px;border-radius:8px;background:var(--surface2);display:inline-flex;align-items:center;justify-content:center;font-size:.9rem}
+.acc-arr{margin-left:auto;color:var(--muted);transition:transform .2s}
+.acc-hdr.open .acc-arr{transform:rotate(180deg)}
+.acc-body{display:none;padding:16px;border-top:1px solid var(--border)}
+.acc-body.open{display:block}
+.fl{font-size:.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;display:block}
+.fi{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;color:var(--text);font-size:.9rem;outline:none;font-family:inherit}
+.fi:focus{border-color:var(--accent)}
+textarea.fi{resize:vertical;min-height:64px}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.chk-row{display:flex;gap:10px;align-items:center;margin-bottom:8px;font-size:.88rem;cursor:pointer}
+.chk-row input{width:17px;height:17px;accent-color:var(--green)}
+.value-preview{font-size:.84rem;color:#67e8f9;background:#083344;border:1px solid #0e7490;border-radius:8px;padding:8px 10px;margin:8px 0;display:none}
+.value-preview.show{display:block}
+.doc-box{background:#0f172a;border:1px solid #334155;border-radius:var(--radius-sm);padding:12px;margin:8px 0}
+.file-input{font-size:.82rem;color:var(--muted);width:100%;margin-top:6px}
+.budget-preview{width:100%;max-width:240px;max-height:170px;object-fit:contain;border-radius:10px;border:1px solid var(--border);background:#020617;cursor:zoom-in;display:block;margin:8px 0}
+.budget-empty{font-size:.82rem;color:var(--muted);display:block;margin-bottom:6px}
+
+.vtabs-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.vtabs{display:flex;gap:4px;flex-wrap:wrap}
+.vtab{padding:7px 13px;border-radius:8px;cursor:pointer;font-size:.78rem;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-weight:700}
+.vtab.active{color:#fff;font-weight:800}
+.vtw.active{background:#1e3a5f;border-color:#3b82f6}.vtws.active{background:#083344;border-color:#38bdf8}.vte.active{background:#14532d;border-color:#22c55e}.vtq.active{background:#451a03;border-color:#f59e0b}.vta.active{background:#1c1917;border-color:#f97316}.vtrd.active{background:#0c4a6e;border-color:#38bdf8}.vtd.active{background:#0d1f0d;border-color:#22c55e}.vtab2.active{background:#3b0764;border-color:#a855f7}
+.vpanel{display:none}.vpanel.active{display:block}
+.bottom-acts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+.bottom-acts .btn{height:46px;font-size:.85rem;display:flex;align-items:center;justify-content:center;gap:6px}
+.detail-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;color:var(--muted);gap:10px}
+.detail-empty .de-ic{font-size:3rem;opacity:.5}
+.igrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;margin-bottom:14px}
+.iblk{background:var(--surface2);border-radius:var(--radius-sm);padding:10px 12px;border:1px solid var(--border)}
+.iblk label{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:3px}
+.iblk p{font-size:.85rem;user-select:text}
+
+/* ====== FINANCEIRO ====== */
+.fin-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.fin-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
+.fin-card h3{font-size:.95rem;font-weight:900;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.fin-card h3 .ic{width:32px;height:32px;border-radius:9px;background:var(--surface2);display:inline-flex;align-items:center;justify-content:center}
+.fin-info{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:14px;display:flex;flex-direction:column;gap:6px}
+.fin-info div{font-size:.84rem;display:flex;justify-content:space-between;gap:10px}
+.fin-info span{color:var(--muted);font-weight:700;font-size:.74rem;text-transform:uppercase;letter-spacing:.04em}
+.fin-info b{user-select:text;text-align:right;word-break:break-all}
+.fin-fields{display:flex;flex-direction:column;gap:10px}
+
+/* ====== TRASH ====== */
+.trash-item{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px}
+.trash-item span{flex:1;font-size:.88rem}
+
+/* ====== MODALS ====== */
+.mbg{position:fixed;inset:0;background:#000c;z-index:500;display:none;align-items:center;justify-content:center;padding:16px}
+.mbg.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;width:100%;max-width:640px;display:flex;flex-direction:column;gap:12px;max-height:92vh;overflow-y:auto}
+.modal h3{font-size:1rem;font-weight:900}
+.mact{display:flex;gap:8px;justify-content:flex-end}
+#etr-modal{display:none;position:fixed;inset:0;background:#000c;z-index:9999;align-items:center;justify-content:center;padding:16px}
+#etr-modal .etr-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;width:100%;max-width:480px;display:flex;flex-direction:column;gap:12px}
+#etr-types{display:flex;gap:8px;flex-wrap:wrap}
+.company-box{background:var(--surface2);border:1px dashed var(--cyan);border-radius:12px;padding:14px;margin-top:6px}
+.client-search-results{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);max-height:200px;overflow-y:auto;margin-top:4px;display:none}
+.csr-item{padding:10px 12px;cursor:pointer;font-size:.85rem;border-bottom:1px solid var(--border)}
+.csr-item:hover{background:var(--surface3)}
+.csr-item.deleted{opacity:.9;border-left:3px solid var(--red);padding-left:9px}
+.csr-item strong{display:block}.csr-item span{font-size:.75rem;color:var(--muted)}
+
+/* leads */
+.lead-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px}
+.lead-card h4{margin-bottom:8px}
+.lead-info{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin:8px 0}
+.lead-info span{font-size:.72rem;color:var(--muted)}
+.lead-info strong{font-size:.85rem;display:block}
+.acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+#toast{position:fixed;bottom:20px;right:20px;background:var(--green);color:#fff;padding:11px 18px;border-radius:var(--radius-sm);font-size:.85rem;font-weight:800;display:none;z-index:9999;box-shadow:var(--shadow)}
+
+.img-viewer{position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:99999;display:none;align-items:center;justify-content:center;padding:18px;overflow:hidden}
+.img-viewer.open{display:flex}
+.img-viewer img{max-width:96vw;max-height:88vh;object-fit:contain;border-radius:12px;background:#fff;box-shadow:0 18px 50px rgba(0,0,0,.55);transform-origin:center center;transition:transform .08s ease;cursor:zoom-in}
+.img-viewer-close{position:absolute;top:14px;right:16px;background:var(--red);color:#fff;border:0;border-radius:14px;width:48px;height:48px;font-size:1.7rem;font-weight:900;cursor:pointer}
+.img-viewer-hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:#111827cc;color:#fff;border:1px solid #ffffff33;border-radius:999px;padding:8px 14px;font-size:.82rem;font-weight:800;white-space:nowrap}
+
+/* ====== RESPONSIVE ====== */
+@media(max-width:1200px){
+  .app{grid-template-columns:210px 1fr}
+  .detail-col{grid-column:1/-1;border-top:1px solid var(--border)}
+  .dcards{grid-template-columns:1fr 1fr}
+}
+@media(max-width:820px){
+  .app{grid-template-columns:1fr}
+  .sidebar{position:static;height:auto;flex-direction:row;align-items:center;flex-wrap:wrap;border-right:none;border-bottom:1px solid var(--border);padding:10px 12px}
+  .side-logo{display:none}
+  .side-brand{flex:1;min-width:200px}
+  .side-nav{flex-direction:row;flex:1;margin-top:0}
+  .nav-item{padding:9px 12px;font-size:.78rem}
+  #conn{margin-top:0}
+  .list-col{border-right:none;min-height:auto}
+  .detail-col{min-height:auto}
+  .dcards{grid-template-columns:1fr}
+  .fin-grid{grid-template-columns:1fr}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .bottom-acts{grid-template-columns:1fr 1fr}
+  .timeline{overflow-x:auto}
+}
 </style>
 </head>
 <body>
-<header><span style="font-size:1.3rem">❄️</span><h1>Painel Gestor — MFC</h1><span id="conn">🔴 Conectando...</span></header>
-<div class="main">
-  <div class="brand-hero"><img class="brand-cover" src="mfc-capa.png" alt="MFC"><div class="brand-content"><img class="brand-logo" src="mfc-logo.png" alt="Logo"><div><h2>Painel Gestor MFC</h2><p>Controle de clientes, visitas, orçamentos e serviços.</p></div></div></div>
-  <div class="tabs" id="main-tabs"><button class="tab active" onclick="mainTab('clientes',this)">Clientes</button><button class="tab has-badge" onclick="mainTab('leads',this)">Novos Cadastros<span class="tab-badge" id="leads-count" style="display:none">0</span></button></div>
-  <div id="view-clientes">
-    <div class="company-box card"><div class="slabel">🏢 Modo visita empresa</div><div class="fgrid"><div><span class="fl">Nome da empresa</span><input class="fi" id="emp-name" placeholder="Empresa"></div><div><span class="fl">Horário da visita</span><input type="datetime-local" class="fi" id="emp-datetime"></div></div><div style="margin-bottom:10px"><span class="fl">Observação</span><textarea class="fi" id="emp-notes" placeholder="Observação rápida"></textarea></div><button class="btn btn-cyan btn-sm" onclick="addCompanyVisit()">⚡ Enviar visita empresa</button></div>
-    <div class="card"><div class="slabel">🔗 Link de cadastro</div><div class="acts"><button class="btn btn-cyan" onclick="generateCadastroLink()">Gerar link de cadastro</button></div></div>
-    <div class="card"><div style="margin-bottom:14px"><span class="fl">➕ Novo cliente ou buscar existente</span><input class="fi" id="client-search" placeholder="Digite nome ou telefone..." oninput="searchClients(this.value)"><div class="client-search-results" id="csr"></div></div><div class="fgrid"><div><span class="fl">Nome</span><input class="fi" id="inp-name" placeholder="Nome completo"></div><div><span class="fl">Telefone</span><input class="fi" id="inp-phone" placeholder="(71) 9 0000-0000" oninput="phoneMask(this)"></div><div><span class="fl">Ponto de referência</span><input class="fi" id="inp-ref" placeholder="Referência"></div><div><span class="fl">Equipamento</span><input class="fi" id="inp-equip" placeholder="Ex: Geladeira Brastemp"></div><div style="grid-column:1/-1"><span class="fl">Endereço</span><input class="fi" id="inp-address" placeholder="Rua, número, bairro"></div><div><span class="fl">📅 Data e Hora</span><input type="datetime-local" class="fi" id="inp-datetime"></div><div><span class="fl">Status inicial</span><select class="fi" id="inp-status"><option value="waiting">🕐 Aguardando visita</option><option value="workshop_pending">🏭 Aguardando Avaliação</option><option value="evaluated">✅ Avaliação concluída</option><option value="quoted">💰 Aguardando aprovação</option><option value="approved">🟠 Aprovado</option><option value="ready_delivery">📦 Pronto para entrega</option><option value="service_finished">✅ Serviço finalizado</option><option value="absent">🚫 Cliente ausente</option></select></div><div style="grid-column:1/-1"><label style="display:flex;align-items:center;gap:10px;cursor:pointer;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px"><input type="checkbox" id="inp-workshop" style="width:18px;height:18px;accent-color:var(--cyan)"><span>🏭 Equipamento trazido à loja</span></label></div><div style="grid-column:1/-1"><span class="fl">Observações</span><textarea class="fi" id="inp-notes" placeholder="Observações adicionais"></textarea></div></div><div class="acts"><button class="btn btn-blue" onclick="addClient()">Enviar para o Técnico</button><button class="btn btn-muted btn-sm" onclick="clearForm()">Limpar</button></div></div>
-    <div class="search-row"><span class="si">🔍</span><input id="search-input" placeholder="Buscar cliente por nome ou telefone..." oninput="render()"></div>
-    <div class="tabs"><button class="tab active" onclick="fTab('all',this)">Todos</button><button class="tab" onclick="fTab('waiting',this)">Aguardando</button><button class="tab" onclick="fTab('workshop_pending',this)">Aguard. Avaliação</button><button class="tab" onclick="fTab('evaluated',this)">Avaliados</button><button class="tab" onclick="fTab('quoted',this)">Orçamento</button><button class="tab" onclick="fTab('approved',this)">Aprovados</button><button class="tab" onclick="fTab('ready_delivery',this)">Pronto entrega</button><button class="tab" onclick="fTab('service_finished',this)">Finalizados</button><button class="tab" onclick="fTab('absent',this)">Ausente</button><button class="tab" onclick="fTab('done',this)">Concluídos</button></div>
-    <div class="clist" id="clist"><div class="empty">⏳ Carregando...</div></div>
-    <div class="trash-sec" id="trash-sec" style="display:none"><h3 onclick="toggleTrash()">🗑 Lixeira <span id="tarr">▼</span></h3><div id="trash-list" style="display:none;flex-direction:column;gap:6px"></div></div>
-  </div>
-  <div id="view-leads" style="display:none"><div class="slabel">Novos cadastros recebidos pelo formulário</div><div id="leads-list"><div class="empty">⏳ Carregando...</div></div></div>
+<div class="app">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar">
+    <div class="side-logo"><img src="mfc-capa.png" alt="MFC" onerror="this.style.display='none'"></div>
+    <div class="side-brand"><img src="mfc-logo.png" alt="MFC" onerror="this.style.display='none'"><div><h2>Painel Gestor MFC</h2><p>Controle de clientes, visitas, orçamentos e serviços.</p></div></div>
+    <nav class="side-nav">
+      <button class="nav-item active" id="nav-main" onclick="switchView('main')">📋 <span>Menu principal</span></button>
+      <button class="nav-item" id="nav-fin" onclick="switchView('fin')">💰 <span>Financeiro</span></button>
+      <button class="nav-item" id="nav-leads" onclick="switchView('leads')">📥 <span>Novos Cadastros</span><span class="nbadge" id="leads-count" style="display:none">0</span></button>
+      <button class="nav-item nav-trash" id="nav-trash" onclick="switchView('trash')">🗑️ <span>Lixeira</span></button>
+    </nav>
+    <span id="conn">🔴 Conectando...</span>
+  </aside>
+
+  <!-- ===== LIST COLUMN ===== -->
+  <section class="list-col" id="list-col">
+    <div class="list-head"><h1 id="list-title">Visitas</h1><button class="btn btn-green btn-sm" id="btn-new-visit" onclick="openNewVisit()">＋ Nova visita</button></div>
+    <div class="search-filter-row" id="search-row">
+      <div class="search-wrap"><span class="si">🔍</span><input id="search-input" placeholder="Buscar por nome, endereço, telefone..." oninput="page=1;render()"></div>
+      <div class="filter-wrap">
+        <button class="btn btn-muted btn-sm" onclick="document.getElementById('filter-menu').classList.toggle('open')">⚙️ Filtros</button>
+        <div class="filter-menu" id="filter-menu"></div>
+      </div>
+    </div>
+    <div class="stats-row" id="stats-row"></div>
+    <div class="clist" id="clist"></div>
+    <div class="pagination" id="pagination"></div>
+  </section>
+
+  <!-- ===== DETAIL COLUMN ===== -->
+  <section class="detail-col">
+    <div id="view-detail"><div class="detail-empty"><div class="de-ic">👈</div><p>Selecione uma visita na lista para ver os detalhes.</p></div></div>
+
+    <div id="view-fin" style="display:none">
+      <div class="detail-head"><h1>💰 Financeiro</h1></div>
+      <p style="color:var(--muted);font-size:.85rem;margin-bottom:6px">Contas de consumo — dados fixos e campos editáveis salvos automaticamente.</p>
+      <div class="fin-grid">
+        <div class="fin-card">
+          <h3><span class="ic">💧</span>Embasa</h3>
+          <div class="fin-info">
+            <div><span>Endereço</span><b>Boa Esperança, 1364</b></div>
+            <div><span>Código do cliente</span><b>073469912</b></div>
+            <div><span>CPF/CNPJ</span><b>814.064.605-91</b></div>
+          </div>
+          <div class="fin-fields">
+            <div><span class="fl">Valor da conta</span><input class="fi" id="fin-embasa-valor" placeholder="R$ 0,00" onchange="saveFin()"></div>
+            <div><span class="fl">Data de vencimento</span><input type="date" class="fi" id="fin-embasa-venc" onchange="saveFin()"></div>
+            <div><span class="fl">PIX de pagamento</span><input class="fi" id="fin-embasa-pix" placeholder="Chave / código PIX" onchange="saveFin()"></div>
+          </div>
+        </div>
+        <div class="fin-card">
+          <h3><span class="ic">⚡</span>Coelba — Belo Horizonte</h3>
+          <div class="fin-info">
+            <div><span>Endereço</span><b>Belo Horizonte, 105</b></div>
+            <div><span>Código do cliente</span><b>230958084</b></div>
+            <div><span>CPF/CNPJ</span><b>40.628.562/0001-07</b></div>
+          </div>
+          <div class="fin-fields">
+            <div><span class="fl">Valor da conta</span><input class="fi" id="fin-coelba1-valor" placeholder="R$ 0,00" onchange="saveFin()"></div>
+            <div><span class="fl">Data de vencimento</span><input type="date" class="fi" id="fin-coelba1-venc" onchange="saveFin()"></div>
+            <div><span class="fl">PIX de pagamento</span><input class="fi" id="fin-coelba1-pix" placeholder="Chave / código PIX" onchange="saveFin()"></div>
+          </div>
+        </div>
+        <div class="fin-card">
+          <h3><span class="ic">⚡</span>Coelba — Almirante Tamandaré</h3>
+          <div class="fin-info">
+            <div><span>Endereço</span><b>Almirante Tamandaré, 80</b></div>
+            <div><span>Código do cliente</span><b>34519307</b></div>
+            <div><span>CPF/CNPJ</span><b>385.599.865-53</b></div>
+          </div>
+          <div class="fin-fields">
+            <div><span class="fl">Valor da conta</span><input class="fi" id="fin-coelba2-valor" placeholder="R$ 0,00" onchange="saveFin()"></div>
+            <div><span class="fl">Data de vencimento</span><input type="date" class="fi" id="fin-coelba2-venc" onchange="saveFin()"></div>
+            <div><span class="fl">PIX de pagamento</span><input class="fi" id="fin-coelba2-pix" placeholder="Chave / código PIX" onchange="saveFin()"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-leads" style="display:none">
+      <div class="detail-head"><h1>📥 Novos Cadastros</h1><button class="btn btn-outline-blue btn-sm" onclick="generateCadastroLink()">🔗 Gerar link de cadastro</button></div>
+      <div id="leads-list"><div class="empty">⏳ Carregando...</div></div>
+    </div>
+
+    <div id="view-trash" style="display:none">
+      <div class="detail-head"><h1>🗑️ Lixeira</h1></div>
+      <p style="color:var(--muted);font-size:.85rem;margin-bottom:12px">Itens são excluídos permanentemente após 90 dias.</p>
+      <div id="trash-list"><div class="empty">Lixeira vazia.</div></div>
+    </div>
+  </section>
 </div>
-<div class="mbg" id="edit-modal"><div class="modal"><h3>✏️ Editar Cadastro do Cliente</h3><div class="fgrid"><div><span class="fl">Nome</span><input class="fi" id="e-name"></div><div><span class="fl">Telefone</span><input class="fi" id="e-phone" oninput="phoneMask(this)"></div><div><span class="fl">Endereço</span><input class="fi" id="e-address"></div><div><span class="fl">Referência</span><input class="fi" id="e-ref"></div><div><span class="fl">📅 Data e hora da visita</span><input type="datetime-local" class="fi" id="e-datetime"></div><div><span class="fl">Equipamento</span><input class="fi" id="e-equip"></div></div><div><span class="fl">Observações</span><textarea class="fi" id="e-notes"></textarea></div><div class="mact"><button class="btn btn-muted" onclick="closeEdit()">Cancelar</button><button class="btn btn-blue" onclick="saveEdit()">Salvar</button></div></div></div>
+
+<!-- ===== MODAL NOVA VISITA ===== -->
+<div class="mbg" id="newvisit-modal">
+  <div class="modal">
+    <h3>➕ Nova visita</h3>
+    <div><span class="fl">Buscar cliente existente</span><input class="fi" id="client-search" placeholder="Digite nome ou telefone..." oninput="searchClients(this.value)"><div class="client-search-results" id="csr"></div></div>
+    <div class="fgrid">
+      <div><span class="fl">Nome</span><input class="fi" id="inp-name" placeholder="Nome completo"></div>
+      <div><span class="fl">Telefone</span><input class="fi" id="inp-phone" placeholder="(71) 9 0000-0000" oninput="phoneMask(this)"></div>
+      <div><span class="fl">Ponto de referência</span><input class="fi" id="inp-ref" placeholder="Referência"></div>
+      <div><span class="fl">Equipamento</span><input class="fi" id="inp-equip" placeholder="Ex: Geladeira Brastemp"></div>
+      <div style="grid-column:1/-1"><span class="fl">Endereço</span><input class="fi" id="inp-address" placeholder="Rua, número, bairro"></div>
+      <div><span class="fl">📅 Data e Hora</span><input type="datetime-local" class="fi" id="inp-datetime"></div>
+      <div><span class="fl">Status inicial</span><select class="fi" id="inp-status"><option value="waiting">🕐 Aguardando visita</option><option value="workshop_pending">🏭 Aguardando Avaliação</option><option value="evaluated">✅ Avaliação concluída</option><option value="quoted">💰 Aguardando aprovação</option><option value="approved">🟠 Aprovado</option><option value="ready_delivery">📦 Pronto para entrega</option><option value="service_finished">✅ Serviço finalizado</option><option value="absent">🚫 Cliente ausente</option></select></div>
+      <div style="grid-column:1/-1"><label class="chk-row" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px"><input type="checkbox" id="inp-workshop"><span>🏭 Equipamento trazido à loja</span></label></div>
+      <div style="grid-column:1/-1"><span class="fl">Observações</span><textarea class="fi" id="inp-notes" placeholder="Observações adicionais"></textarea></div>
+    </div>
+    <div class="company-box">
+      <span class="fl">🏢 Modo visita empresa</span>
+      <div class="fgrid" style="margin-bottom:8px">
+        <div><span class="fl">Nome da empresa</span><input class="fi" id="emp-name" placeholder="Empresa"></div>
+        <div><span class="fl">Horário da visita</span><input type="datetime-local" class="fi" id="emp-datetime"></div>
+      </div>
+      <div style="margin-bottom:8px"><span class="fl">Observação</span><textarea class="fi" id="emp-notes" placeholder="Observação rápida"></textarea></div>
+      <button class="btn btn-cyan btn-sm" onclick="addCompanyVisit();closeNewVisit()">⚡ Enviar visita empresa</button>
+    </div>
+    <div class="mact">
+      <button class="btn btn-muted" onclick="closeNewVisit()">Cancelar</button>
+      <button class="btn btn-muted btn-sm" onclick="clearForm()">Limpar</button>
+      <button class="btn btn-blue" onclick="addClient().then(()=>closeNewVisit())">Enviar para o Técnico</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL EDIT ===== -->
+<div class="mbg" id="edit-modal">
+  <div class="modal">
+    <h3>✏️ Editar cliente</h3>
+    <div class="fgrid">
+      <div><span class="fl">Nome</span><input class="fi" id="e-name"></div>
+      <div><span class="fl">Telefone</span><input class="fi" id="e-phone" oninput="phoneMask(this)"></div>
+      <div style="grid-column:1/-1"><span class="fl">Endereço</span><input class="fi" id="e-address"></div>
+      <div><span class="fl">Ponto de referência</span><input class="fi" id="e-ref"></div>
+      <div><span class="fl">Equipamento</span><input class="fi" id="e-equip"></div>
+      <div><span class="fl">📅 Data e Hora</span><input type="datetime-local" class="fi" id="e-datetime"></div>
+    </div>
+    <div><span class="fl">Observações</span><textarea class="fi" id="e-notes"></textarea></div>
+    <div class="mact"><button class="btn btn-muted" onclick="closeEdit()">Cancelar</button><button class="btn btn-green" onclick="saveEdit()">Salvar</button></div>
+  </div>
+</div>
+
+<!-- ===== MODAL EDITAR RELATÓRIO ===== -->
+<div id="etr-modal"><div class="etr-box"><h3>✏️ Editar Relatório do Técnico</h3><div><span class="fl">Modelo exato</span><input class="fi" id="etr-model" placeholder="Ex: Brastemp BMS45"></div><div><span class="fl">Tipo de serviço</span><div id="etr-types"></div></div><div><span class="fl">Relatório</span><textarea class="fi" id="etr-report" style="min-height:80px"></textarea></div><div class="acts"><button class="btn btn-green btn-sm" onclick="saveEtrModal()">💾 Salvar</button><button class="btn btn-muted btn-sm" onclick="closeEtrModal()">Cancelar</button></div></div></div>
+
 <div id="toast"></div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
 import { getFirestore, collection, addDoc, onSnapshot, updateDoc, deleteDoc, doc, query, orderBy, getDocs, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
@@ -46,22 +405,25 @@ const app=initializeApp({
   appId:"1:1030114859934:web:ad353eafb55205d6b4148f"
 });
 const db=getFirestore(app);const col=collection(db,'clients');const leadsCol=collection(db,'leads');const tokenCol=collection(db,'cadastroTokens');
-let all=[],leads=[],filter='all',editId=null,trashOpen=false,cleanupDone=false;
+let all=[],leads=[],filter='all',editId=null,cleanupDone=false,selectedId=null,page=1;
+const PAGE_SIZE=8;
+
+/* ===== UI STATE PRESERVATION ===== */
 function captureGestorUiState(){
-  const state={fields:{},openCards:[],openAccs:[],activePanels:{}};
-  document.querySelectorAll('.cc-body.open[id^="body-"]').forEach(el=>state.openCards.push(el.id.replace('body-','')));
-  document.querySelectorAll('.acc-body.open[id]').forEach(el=>state.openAccs.push(el.id));
-  document.querySelectorAll('.vpanel.active[id^="vp-"]').forEach(el=>{const m=el.id.match(/^vp-(.+)-(\d+)$/);if(m)state.activePanels[m[1]]=Number(m[2]);});
-  document.querySelectorAll('#clist input[id],#clist textarea[id],#clist select[id]').forEach(el=>{if(el.type==='file')return;state.fields[el.id]={value:el.value,checked:!!el.checked,type:el.type};});
+  const state={fields:{},openAccs:[],activePanel:null};
+  document.querySelectorAll('#view-detail .acc-body.open[id]').forEach(el=>state.openAccs.push(el.id));
+  document.querySelectorAll('#view-detail .vpanel.active[id^="vp-"]').forEach(el=>{const m=el.id.match(/^vp-(.+)-(\d+)$/);if(m)state.activePanel=Number(m[2]);});
+  document.querySelectorAll('#view-detail input[id],#view-detail textarea[id],#view-detail select[id]').forEach(el=>{if(el.type==='file')return;state.fields[el.id]={value:el.value,checked:!!el.checked,type:el.type};});
   return state;
 }
 function restoreGestorUiState(state){
   if(!state)return;
-  (state.openCards||[]).forEach(id=>document.getElementById('body-'+id)?.classList.add('open'));
-  Object.entries(state.activePanels||{}).forEach(([id,i])=>window.showVTab?.(id,Number(i)));
+  if(state.activePanel!==null&&selectedId)window.showVTab?.(selectedId,Number(state.activePanel));
   (state.openAccs||[]).forEach(id=>{const b=document.getElementById(id);if(b){b.classList.add('open');b.previousElementSibling?.classList.add('open');}});
   Object.entries(state.fields||{}).forEach(([id,data])=>{const el=document.getElementById(id);if(!el)return;if(el.type==='checkbox')el.checked=!!data.checked;else el.value=data.value;});
 }
+
+/* ===== LAYER FORM ===== */
 function readLayerForm(id,li,base={}){
   const getVal=(suffix,fallback='')=>{const el=document.getElementById(`${suffix}-${id}-${li}`);return el?String(el.value||'').trim():fallback};
   const getRaw=(suffix,fallback='')=>{const el=document.getElementById(`${suffix}-${id}-${li}`);return el?(el.value||''):fallback};
@@ -70,12 +432,16 @@ function readLayerForm(id,li,base={}){
   const pay=getVal('ly-pay',base.approval?.payment||'');
   const val=getVal('ly-val',base.approval?.value||'');
   const svc=getRaw('ly-svc',base.approval?.serviceDate||'');
+  const visitDatetime=getRaw('ly-datetime',base.datetime||'');
   const ent=getChk('ly-entry-approval',base.approval?.entryApproval||base.entryApproval||false);
+  const entryValue=getVal('ly-entry-value',base.approval?.entryValue||'');
   const galpao=getChk('ly-service-workshop',base.serviceInWorkshop||base.approval?.serviceInWorkshop||false);
   const paid=getChk('ly-paid',base.approval?.paid||false);const owes=getChk('ly-owes',base.approval?.owes||false);
   const techReport=base.techReport?{...base.techReport,needsPickup:galpao?false:!!base.techReport.needsPickup}:base.techReport;
-  const serviceTypes=Array.from(document.querySelectorAll(`[data-stype='${id}-${li}'].stype-active`)).map(el=>el.dataset.stvalue).filter(Boolean);const serviceTypeSaved=serviceTypes.length?serviceTypes.join(', '):(base.approval?.serviceType||'');return {...base,status:st,datetime:visitDatetime||base.datetime||'',quote:base.quote||'',quoteObs:getVal('ly-obs',base.quoteObs||''),techReport,needsPickup:galpao?false:!!base.needsPickup,approval:{...(base.approval||{}),payment:pay,value:val,serviceDate:svc,entryApproval:ent,entryValue,serviceInWorkshop:galpao,paid,owes,serviceType:serviceTypeSaved},serviceInWorkshop:galpao,entryApproval:ent};
+  return {...base,status:st,datetime:visitDatetime||base.datetime||'',quote:base.quote||'',quoteObs:getVal('ly-obs',base.quoteObs||''),techReport,needsPickup:galpao?false:!!base.needsPickup,approval:{...(base.approval||{}),payment:pay,value:val,serviceDate:svc,entryApproval:ent,entryValue,serviceInWorkshop:galpao,paid,owes},serviceInWorkshop:galpao,entryApproval:ent};
 }
+
+/* ===== CONSTANTS / HELPERS ===== */
 const STATUS={waiting:'Aguardando visita',workshop_pending:'Aguardando Avaliação',evaluated:'Avaliação concluída',quoted:'Aguardando aprovação',approved:'Aprovado',ready_delivery:'Equipamento pronto para entrega',service_finished:'Serviço finalizado',absent:'Cliente ausente',done:'Serviço Concluído'};
 function serviceTypeLabel(value){const v=String(value||'').trim();if(!v)return '';if(v.includes('Preventiva'))return '🧽 Preventiva';if(v.includes('Corretiva'))return '🔧 Corretiva';return v}
 function inferServiceType(text){const t=String(text||'');if(t.includes('Preventiva'))return '🧽 Preventiva';if(t.includes('Corretiva'))return '🔧 Corretiva';return ''}
@@ -87,7 +453,10 @@ const dotCls={waiting:'dw',workshop_pending:'dws',evaluated:'de',quoted:'dq',app
 const badgeCls={waiting:'sw',workshop_pending:'sws',evaluated:'se',quoted:'sq',approved:'sa',ready_delivery:'srd',service_finished:'ssf',absent:'sab',done:'sd'};
 function normPhone(v){let n=String(v||'').replace(/\D/g,'');if(n.length===8)n='71'+n;if(n.length===9)n='71'+n;if(n.startsWith('55')&&n.length>11)n=n.slice(2);return n;}
 function toast(m,c='var(--green)'){const t=document.getElementById('toast');t.textContent=m;t.style.background=c;t.style.display='block';setTimeout(()=>t.style.display='none',3000)}
-const lbl=s=>STATUS[s]||STATUS.waiting;const fdt=dt=>{if(!dt)return'—';try{return new Date(dt).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}catch{return dt}};const maps=a=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a||'');
+const lbl=s=>STATUS[s]||STATUS.waiting;const fdt=dt=>{if(!dt)return'—';try{return new Date(dt).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}catch{return dt}};
+const fd=dt=>{if(!dt)return'—';try{return new Date(dt).toLocaleDateString('pt-BR')}catch{return dt}};
+const ft=dt=>{if(!dt)return'';try{return new Date(dt).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}catch{return ''}};
+const maps=a=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a||'');
 function getLayers(c){return c.layers&&c.layers.length?c.layers:[{status:c.status||'waiting',quote:c.quote||'',quoteObs:c.quoteObs||'',techReport:c.techReport||null,approval:c.approval||null,done:c.status==='done',createdAt:c.createdAt||new Date().toISOString()}]}
 function activeLayer(c){return getLayers(c).find(l=>!l.done)||getLayers(c)[0]||{status:c.status||'waiting'}}function getStatus(c){return c.status||activeLayer(c).status||'waiting'}
 function layerServiceInWorkshop(l){return !!(l?.serviceInWorkshop||l?.approval?.serviceInWorkshop)}function hasServiceInWorkshop(c){return getLayers(c).some(l=>layerServiceInWorkshop(l))}function needsPickup(c){return getLayers(c).some(l=>!layerServiceInWorkshop(l)&&(l.needsPickup||l.techReport?.needsPickup))}function hasPaidService(c){return getLayers(c).some(l=>l.approval?.paid)}function hasLaudo(c){return getLayers(c).some(l=>!l.done&&(l.techReport?.serviceType||'').includes('Laudo'))}function hasOwesService(c){return getLayers(c).some(l=>!l.done&&l.approval?.owes)}function isRecurrent(c){return all.filter(x=>normPhone(x.phone) && normPhone(x.phone)===normPhone(c.phone)).length>1||c.recurrent}
@@ -101,10 +470,7 @@ function mainDate(c){
   dates.sort((a,b)=>a-b);
   return new Date(dates[0]).toISOString();
 }
-function sortDateValue(v){
-  const t=new Date(v||'').getTime();
-  return Number.isFinite(t)?t:null;
-}
+function sortDateValue(v){const t=new Date(v||'').getTime();return Number.isFinite(t)?t:null;}
 function appointmentSortValue(c){
   const dates=getLayers(c).filter(l=>!l.done).map(l=>sortDateValue(layerMainDate(c,l))).filter(t=>t!==null);
   if(dates.length)return Math.min(...dates);
@@ -115,14 +481,33 @@ function infoBlock(label,value,extra=''){return value?`<div class="iblk"><label>
 function clientInfoBlocks(c){const addr=fullAddress(c);const routeAddress=String(c.address||'').trim();return `<div class="igrid">${infoBlock('👤 Nome completo',c.name||'—')}${infoBlock('📞 Número de contato',c.phone||'—')}${infoBlock('✉️ E-mail',c.email||'')}${infoBlock("📍 Dias D'Ávila?",c.city||c.cidade||'')}${infoBlock('🏠 Endereço',addr,routeAddress?` <a class="field-action" href="${maps(routeAddress)}" target="_blank">📍 Maps</a>`:'')}${infoBlock('🔢 Número da residência',c.number||'')}${infoBlock('🏘️ Bairro',c.neighborhood||c.bairro||'')}${infoBlock('🧭 Ponto de referência',c.ref||'')}${infoBlock('🧊 Equipamento',c.equip||'')}${infoBlock('📝 Descrição do problema',c.problem||c.notes||'')}</div>`}
 function setConn(t){document.getElementById('conn').textContent=t}
 function cleanupOld(){if(cleanupDone)return;cleanupDone=true;const now=Date.now();all.forEach(async c=>{const delAge=c.deletedAt?now-new Date(c.deletedAt).getTime():0;const doneAge=(c.completedAt||activeLayer(c).concludedAt)?now-new Date(c.completedAt||activeLayer(c).concludedAt).getTime():0;if(c.deleted&&delAge>90*86400000)await deleteDoc(doc(db,'clients',c.id));else if(getStatus(c)==='done'&&doneAge>365*86400000)await deleteDoc(doc(db,'clients',c.id));})}
+
+/* ===== SNAPSHOTS ===== */
 onSnapshot(query(col,orderBy('createdAt','desc')),snap=>{all=snap.docs.map(d=>({id:d.id,...d.data()}));setConn('🟢 Conectado');cleanupOld();render();renderTrash();renderLeads();},err=>{console.error(err);setConn('🔴 Erro')});
 onSnapshot(query(leadsCol,orderBy('createdAt','desc')),snap=>{leads=snap.docs.map(d=>({id:d.id,...d.data()}));const b=document.getElementById('leads-count');b.textContent=leads.length;b.style.display=leads.length?'inline':'none';renderLeads();});
+
+/* ===== FINANCEIRO ===== */
+const finRef=doc(db,'config','financeiro');
+const FIN_KEYS=['embasa','coelba1','coelba2'];
+onSnapshot(finRef,snap=>{const d=snap.exists()?snap.data():{};FIN_KEYS.forEach(k=>{const o=d[k]||{};const v=document.getElementById(`fin-${k}-valor`),ve=document.getElementById(`fin-${k}-venc`),p=document.getElementById(`fin-${k}-pix`);if(v&&document.activeElement!==v)v.value=o.valor||'';if(ve&&document.activeElement!==ve)ve.value=o.venc||'';if(p&&document.activeElement!==p)p.value=o.pix||'';});});
+window.saveFin=async()=>{const data={};FIN_KEYS.forEach(k=>{data[k]={valor:document.getElementById(`fin-${k}-valor`)?.value||'',venc:document.getElementById(`fin-${k}-venc`)?.value||'',pix:document.getElementById(`fin-${k}-pix`)?.value||''};});await setDoc(finRef,{...data,updatedAt:new Date().toISOString()},{merge:true});toast('💾 Financeiro salvo')};
+
+/* ===== NAV ===== */
+window.switchView=v=>{
+  ['main','fin','leads','trash'].forEach(x=>document.getElementById('nav-'+x)?.classList.toggle('active',x===v));
+  document.getElementById('view-detail').style.display=v==='main'?'block':'none';
+  document.getElementById('view-fin').style.display=v==='fin'?'block':'none';
+  document.getElementById('view-leads').style.display=v==='leads'?'block':'none';
+  document.getElementById('view-trash').style.display=v==='trash'?'block':'none';
+};
+
+/* ===== BASIC WINDOW FNS ===== */
 window.phoneMask=el=>{let v=el.value.replace(/\D/g,'');if(v.length>11)v=v.slice(0,11);if(v.length<=2)el.value=v;else if(v.length<=7)el.value=v.slice(0,2)+' '+v.slice(2);else if(v.length<=10)el.value=v.slice(0,2)+' '+v.slice(2,6)+'-'+v.slice(6);else el.value=v.slice(0,2)+' '+v.slice(2,3)+' '+v.slice(3,7)+'-'+v.slice(7)};
-window.mainTab=(tab,el)=>{document.querySelectorAll('#main-tabs .tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById('view-clientes').style.display=tab==='clientes'?'block':'none';document.getElementById('view-leads').style.display=tab==='leads'?'block':'none'};
-window.fTab=(f,el)=>{filter=f;el.parentElement.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');render()};
+window.openNewVisit=()=>document.getElementById('newvisit-modal').classList.add('open');
+window.closeNewVisit=()=>document.getElementById('newvisit-modal').classList.remove('open');
 window.searchClients=val=>{const csr=document.getElementById('csr');if(!val||val.length<2){csr.style.display='none';return}const q=val.toLowerCase(),qd=normPhone(val);const results=all.filter(c=>(c.name||'').toLowerCase().includes(q)||(qd&&normPhone(c.phone).includes(qd))).slice(0,12);if(!results.length){csr.style.display='none';return}csr.style.display='block';csr.innerHTML=results.map(c=>`<div class="csr-item ${c.deleted?'deleted':''}" onclick="fillFromClient('${c.id}')"><strong>${c.name||'—'} ${c.deleted?'<span style="color:var(--red);font-size:.72rem">🗑 Lixeira</span>':''}</strong><span>${c.phone||''} ${c.address?'· '+c.address:''}</span></div>`).join('')};
 window.fillFromClient=id=>{window._selectedClientId=id;const c=all.find(x=>x.id===id);if(!c)return;['name','phone','address','ref','equip'].forEach(f=>{const el=document.getElementById('inp-'+f);if(el)el.value=c[f]||''});document.getElementById('client-search').value='';document.getElementById('csr').style.display='none';toast('✅ Dados preenchidos')};
-document.addEventListener('click',e=>{if(!e.target.closest('#csr')&&!e.target.matches('#client-search'))document.getElementById('csr').style.display='none'});
+document.addEventListener('click',e=>{if(!e.target.closest('#csr')&&!e.target.matches('#client-search'))document.getElementById('csr').style.display='none';if(!e.target.closest('.filter-wrap'))document.getElementById('filter-menu').classList.remove('open')});
 function makeLayer(status,datetime=''){return {status,quote:'',quoteObs:'',techReport:null,approval:null,done:false,createdAt:new Date().toISOString(),datetime}}
 async function addVisitToExisting(c,data,status){const layers=[...getLayers(c).filter(l=>!l.done||!!l.concludedAt),makeLayer(status,data.datetime)];await updateDoc(doc(db,'clients',c.id),{...data,phoneNorm:normPhone(data.phone),deleted:false,recurrent:true,layers,status,updatedAt:new Date().toISOString()})}
 async function createOrAppendClient(data,status){if(window._selectedClientId){const byId=all.find(c=>c.id===window._selectedClientId);window._selectedClientId=null;if(byId){await addVisitToExisting(byId,data,status);toast('🔄 Cliente recorrente: nova visita adicionada','var(--yellow)');return}}const p=normPhone(data.phone);const existing=all.find(c=>p&&normPhone(c.phone)===p);if(existing){await addVisitToExisting(existing,data,status);toast('🔄 Cliente recorrente: nova visita adicionada','var(--yellow)');return}await addDoc(col,{...data,phoneNorm:p,status,layers:[makeLayer(status,data.datetime)],deleted:false,createdAt:new Date().toISOString()});toast('✅ Cliente adicionado')}
@@ -132,64 +517,192 @@ window.addCompanyVisit=async()=>{const name=document.getElementById('emp-name').
 window.generateCadastroLink=async()=>{const token=Math.random().toString(36).slice(2,8).toUpperCase()+Date.now().toString(36).slice(-4).toUpperCase();const now=Date.now();await setDoc(doc(db,'cadastroTokens',token),{token,createdAt:new Date(now).toISOString(),createdAtMs:now,expiresAt:new Date(now+6*60*60*1000).toISOString(),expiresAtMs:now+6*60*60*1000,used:false});const link=`https://mfcpecasservicos.github.io/mfc/cadastro.html?token=${token}`;const msg=`Para prosseguirmos com o agendamento, preencha o formulário abaixo: ${link}`;try{await navigator.clipboard.writeText(msg);toast('🔗 Link copiado')}catch{prompt('Copie o link:',msg);toast('🔗 Link gerado')}};
 window.openEdit=id=>{const c=all.find(x=>x.id===id);if(!c)return;editId=id;['name','phone','address','ref','datetime','equip','notes'].forEach(f=>document.getElementById('e-'+f).value=c[f]||'');document.getElementById('edit-modal').classList.add('open')};window.closeEdit=()=>{editId=null;document.getElementById('edit-modal').classList.remove('open')};window.saveEdit=async()=>{if(!editId)return;const phone=document.getElementById('e-phone').value.trim();await updateDoc(doc(db,'clients',editId),{name:document.getElementById('e-name').value.trim(),phone,phoneNorm:normPhone(phone),address:document.getElementById('e-address').value.trim(),ref:document.getElementById('e-ref').value.trim(),datetime:document.getElementById('e-datetime').value,equip:document.getElementById('e-equip').value.trim(),notes:document.getElementById('e-notes').value.trim()});closeEdit();toast('✅ Atualizado')};
 window.addLayer=async id=>{const c=all.find(x=>x.id===id);const layers=[...getLayers(c),makeLayer('waiting')];await updateDoc(doc(db,'clients',id),{layers,status:'waiting'});toast('➕ Nova visita')};
-window.deleteTechReport=async(id,li)=>{if(!confirm('Excluir relatório? A visita volta para Aguardando visita.'))return;const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];layers[li]={...layers[li],techReport:null,needsPickup:false,status:'waiting',approval:null};const first=layers.find(l=>!l.done);await updateDoc(doc(db,'clients',id),{layers,status:first?first.status:'done',updatedAt:new Date().toISOString()});toast('🗑 Relatório excluído')};window.editTechReport=(id,li)=>{const c=all.find(x=>x.id===id);if(!c)return;const layers=getLayers(c);const l=layers[li];if(!l?.techReport)return;const modal=document.getElementById('etr-modal');const TYPES=['🔧 Corretiva','🧽 Preventiva','🧰 Instalação','📋 Laudo'];const saved=(l.techReport.serviceType||'').split(',').map(s=>s.trim()).filter(Boolean);modal.querySelector('#etr-model').value=l.techReport.model||'';modal.querySelector('#etr-report').value=reportTextOnly(l.techReport)||'';const btns=modal.querySelector('#etr-types');btns.innerHTML=TYPES.map(t=>`<button type="button" class="btn btn-sm ${saved.includes(t)?'btn-cyan etr-active':'btn-muted'}" data-etr="${t}" onclick="this.classList.toggle('btn-cyan');this.classList.toggle('btn-muted');this.classList.toggle('etr-active')">${t}</button>`).join('');modal.dataset.id=id;modal.dataset.li=li;modal.style.display='flex';};window.closeEtrModal=()=>{document.getElementById('etr-modal').style.display='none';};window.saveEtrModal=async()=>{const modal=document.getElementById('etr-modal');const id=modal.dataset.id;const li=parseInt(modal.dataset.li);const c=all.find(x=>x.id===id);if(!c)return;const layers=[...getLayers(c)];const model=modal.querySelector('#etr-model').value.trim();const report=modal.querySelector('#etr-report').value.trim();const types=Array.from(modal.querySelectorAll('[data-etr].etr-active')).map(b=>b.dataset.etr);if(!model)return alert('Preencha o modelo.');layers[li]={...layers[li],techReport:{...layers[li].techReport,model,problem:report,serviceType:types.join(', ')}};await updateDoc(doc(db,'clients',id),{layers});modal.style.display='none';toast('✏️ Relatório atualizado')};
+window.deleteTechReport=async(id,li)=>{if(!confirm('Excluir relatório? A visita volta para Aguardando visita.'))return;const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];layers[li]={...layers[li],techReport:null,needsPickup:false,status:'waiting',approval:null};const first=layers.find(l=>!l.done);await updateDoc(doc(db,'clients',id),{layers,status:first?first.status:'done',updatedAt:new Date().toISOString()});toast('🗑 Relatório excluído')};
+window.editTechReport=(id,li)=>{const c=all.find(x=>x.id===id);if(!c)return;const layers=getLayers(c);const l=layers[li];if(!l?.techReport)return;const modal=document.getElementById('etr-modal');const TYPES=['🔧 Corretiva','🧽 Preventiva','🧰 Instalação','📋 Laudo'];const saved=(l.techReport.serviceType||'').split(',').map(s=>s.trim()).filter(Boolean);modal.querySelector('#etr-model').value=l.techReport.model||'';modal.querySelector('#etr-report').value=reportTextOnly(l.techReport)||'';const btns=modal.querySelector('#etr-types');btns.innerHTML=TYPES.map(t=>`<button type="button" class="btn btn-sm ${saved.includes(t)?'btn-cyan etr-active':'btn-muted'}" data-etr="${t}" onclick="this.classList.toggle('btn-cyan');this.classList.toggle('btn-muted');this.classList.toggle('etr-active')">${t}</button>`).join('');modal.dataset.id=id;modal.dataset.li=li;modal.style.display='flex';};
+window.closeEtrModal=()=>{document.getElementById('etr-modal').style.display='none';};
+window.saveEtrModal=async()=>{const modal=document.getElementById('etr-modal');const id=modal.dataset.id;const li=parseInt(modal.dataset.li);const c=all.find(x=>x.id===id);if(!c)return;const layers=[...getLayers(c)];const model=modal.querySelector('#etr-model').value.trim();const report=modal.querySelector('#etr-report').value.trim();const types=Array.from(modal.querySelectorAll('[data-etr].etr-active')).map(b=>b.dataset.etr);if(!model)return alert('Preencha o modelo.');layers[li]={...layers[li],techReport:{...layers[li].techReport,model,problem:report,serviceType:types.join(', ')}};await updateDoc(doc(db,'clients',id),{layers});modal.style.display='none';toast('✏️ Relatório atualizado')};
 window.concludeLayer=async(id,li)=>{if(!confirm('Mover este serviço para a aba de concluídos?'))return;const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];layers[li]={...layers[li],status:'done',done:true,concludedAt:new Date().toISOString()};const first=layers.find(l=>!l.done);await updateDoc(doc(db,'clients',id),{layers,status:first?first.status:'done',completedAt:first?c.completedAt:new Date().toISOString()});toast('✅ Serviço finalizado')};
 window.saveLayer=async(id,li)=>{const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];layers[li]=readLayerForm(id,li,layers[li]);const first=layers.find(l=>!l.done);await updateDoc(doc(db,'clients',id),{layers,status:first?first.status:'done',updatedAt:new Date().toISOString()});toast('💾 Salvo')};
-window.softDelete=async id=>{if(!confirm('Descartar para lixeira?'))return;await updateDoc(doc(db,'clients',id),{deleted:true,deletedAt:new Date().toISOString()});toast('🗑 Enviado para lixeira','var(--red)')};window.restoreClient=async id=>{await updateDoc(doc(db,'clients',id),{deleted:false,deletedAt:null});toast('♻️ Restaurado')};window.hardDelete=async id=>{if(!confirm('Tem certeza que deseja excluir permanentemente? Essa ação não pode ser desfeita.'))return;await deleteDoc(doc(db,'clients',id));toast('🗑 Excluído')};window.toggleTrash=()=>{trashOpen=!trashOpen;const el=document.getElementById('trash-list');el.style.display=trashOpen?'flex':'none';document.getElementById('tarr').textContent=trashOpen?'▲':'▼'};
-window.approveLead=async id=>{const lead=leads.find(x=>x.id===id);if(!lead)return;const dt=document.getElementById('lead-dt-'+id)?.value||'';const status='waiting';const data={name:lead.name||'',phone:lead.phone||'',address:[lead.address,lead.number,lead.neighborhood||lead.bairro].filter(Boolean).join(', '),ref:lead.ref||'',equip:lead.equip||'',notes:lead.problem||'',datetime:dt,fromLead:true};await createOrAppendClient(data,status);await deleteDoc(doc(db,'leads',id))};window.deleteLead=async id=>{if(!confirm('Remover cadastro?'))return;await deleteDoc(doc(db,'leads',id));toast('🗑 Removido')};
+window.softDelete=async id=>{if(!confirm('Descartar para lixeira?'))return;await updateDoc(doc(db,'clients',id),{deleted:true,deletedAt:new Date().toISOString()});if(selectedId===id)selectedId=null;toast('🗑 Enviado para lixeira','var(--red)')};
+window.restoreClient=async id=>{await updateDoc(doc(db,'clients',id),{deleted:false,deletedAt:null});toast('♻️ Restaurado')};
+window.hardDelete=async id=>{if(!confirm('Tem certeza que deseja excluir permanentemente? Essa ação não pode ser desfeita.'))return;await deleteDoc(doc(db,'clients',id));toast('🗑 Excluído')};
+window.approveLead=async id=>{const lead=leads.find(x=>x.id===id);if(!lead)return;const dt=document.getElementById('lead-dt-'+id)?.value||'';const status='waiting';const data={name:lead.name||'',phone:lead.phone||'',address:[lead.address,lead.number,lead.neighborhood||lead.bairro].filter(Boolean).join(', '),ref:lead.ref||'',equip:lead.equip||'',notes:lead.problem||'',datetime:dt,fromLead:true};await createOrAppendClient(data,status);await deleteDoc(doc(db,'leads',id))};
+window.deleteLead=async id=>{if(!confirm('Remover cadastro?'))return;await deleteDoc(doc(db,'leads',id));toast('🗑 Removido')};
 function renderLeads(){const el=document.getElementById('leads-list');if(!el)return;if(!leads.length){el.innerHTML='<div class="empty">📋 Nenhum cadastro novo.</div>';return}el.innerHTML=leads.map(l=>{const p=normPhone(l.phone);const ex=all.find(c=>p&&normPhone(c.phone)===p);return`<div class="lead-card"><h4>👤 ${l.name||'—'} </h4><div class="lead-info"><div><span>Telefone</span><strong>${l.phone||'—'}</strong></div><div><span>Endereço</span><strong>${[l.address,l.number,l.neighborhood||l.bairro].filter(Boolean).join(', ')||'—'}</strong></div><div><span>Equipamento</span><strong>${l.equip||'—'}</strong></div><div><span>Problema</span><strong>${l.problem||'—'}</strong></div></div><div class="acts"><input type="datetime-local" class="fi" id="lead-dt-${l.id}" style="max-width:230px"><button class="btn btn-green btn-sm" onclick="approveLead('${l.id}')">Enviar para Técnico</button><button class="btn btn-muted btn-sm" onclick="deleteLead('${l.id}')">Remover</button></div></div>`}).join('')};
-window.showVTab=(cid,li)=>{document.querySelectorAll(`[data-vt="${cid}"]`).forEach(t=>t.classList.remove('active'));document.querySelectorAll(`[data-vp="${cid}"]`).forEach(p=>p.classList.remove('active'));document.getElementById(`vt-${cid}-${li}`)?.classList.add('active');document.getElementById(`vp-${cid}-${li}`)?.classList.add('active')};window.toggleCard=id=>{const body=document.getElementById('body-'+id);body?.classList.toggle('open');if(body?.classList.contains('open')){const c=all.find(x=>x.id===id);const i=Math.max(0,getLayers(c).findIndex(l=>!l.done));setTimeout(()=>showVTab(id,i),10)}};window.toggleAcc=(h,b)=>{document.getElementById(h)?.classList.toggle('open');document.getElementById(b)?.classList.toggle('open')};
+window.showVTab=(cid,li)=>{document.querySelectorAll(`[data-vt="${cid}"]`).forEach(t=>t.classList.remove('active'));document.querySelectorAll(`[data-vp="${cid}"]`).forEach(p=>p.classList.remove('active'));document.getElementById(`vt-${cid}-${li}`)?.classList.add('active');document.getElementById(`vp-${cid}-${li}`)?.classList.add('active')};
+window.toggleAcc=(h,b)=>{document.getElementById(h)?.classList.toggle('open');document.getElementById(b)?.classList.toggle('open')};
+
+/* ===== IMAGE VIEWER ===== */
 let imgViewerScale=1;
-function applyImageViewerZoom(){
-  const img=document.getElementById('img-viewer-img');
-  if(!img)return;
-  img.style.transform=`scale(${imgViewerScale})`;
-  img.style.cursor=imgViewerScale>1?'zoom-out':'zoom-in';
-}
+function applyImageViewerZoom(){const img=document.getElementById('img-viewer-img');if(!img)return;img.style.transform=`scale(${imgViewerScale})`;img.style.cursor=imgViewerScale>1?'zoom-out':'zoom-in';}
 function ensureImageViewer(){
   let viewer=document.getElementById('img-viewer');
   if(viewer)return viewer;
   viewer=document.createElement('div');
-  viewer.id='img-viewer';
-  viewer.className='img-viewer';
+  viewer.id='img-viewer';viewer.className='img-viewer';
   viewer.innerHTML='<button class="img-viewer-close" type="button" onclick="closeLb()">×</button><img id="img-viewer-img" alt="Foto do relatório"><div class="img-viewer-hint">Use o scroll do mouse para aproximar/afastar</div>';
   viewer.addEventListener('click',e=>{if(e.target===viewer)closeLb();});
-  viewer.addEventListener('wheel',e=>{
-    e.preventDefault();
-    imgViewerScale+=e.deltaY<0?0.18:-0.18;
-    imgViewerScale=Math.min(Math.max(imgViewerScale,1),6);
-    applyImageViewerZoom();
-  },{passive:false});
+  viewer.addEventListener('wheel',e=>{e.preventDefault();imgViewerScale+=e.deltaY<0?0.18:-0.18;imgViewerScale=Math.min(Math.max(imgViewerScale,1),6);applyImageViewerZoom();},{passive:false});
   document.body.appendChild(viewer);
   return viewer;
 }
-window.openLb=src=>{
-  if(!src)return;
-  const viewer=ensureImageViewer();
-  const img=document.getElementById('img-viewer-img');
-  imgViewerScale=1;
-  img.removeAttribute('src');
-  img.src=src;
-  applyImageViewerZoom();
-  viewer.classList.add('open');
-  document.body.style.overflow='hidden';
-};
-window.closeLb=()=>{
-  const viewer=document.getElementById('img-viewer');
-  if(viewer){
-    viewer.classList.remove('open');
-    imgViewerScale=1;
-    const img=document.getElementById('img-viewer-img');
-    if(img){img.removeAttribute('src');img.style.transform='scale(1)';}
-  }
-  document.body.style.overflow='';
-};
+window.openLb=src=>{if(!src)return;const viewer=ensureImageViewer();const img=document.getElementById('img-viewer-img');imgViewerScale=1;img.removeAttribute('src');img.src=src;applyImageViewerZoom();viewer.classList.add('open');document.body.style.overflow='hidden';};
+window.closeLb=()=>{const viewer=document.getElementById('img-viewer');if(viewer){viewer.classList.remove('open');imgViewerScale=1;const img=document.getElementById('img-viewer-img');if(img){img.removeAttribute('src');img.style.transform='scale(1)';}}document.body.style.overflow='';};
 document.addEventListener('keydown',e=>{if(e.key==='Escape')window.closeLb();});
-window.toggleGestorServiceType=btn=>{btn.classList.toggle('btn-cyan');btn.classList.toggle('btn-muted');btn.classList.toggle('stype-active');};function moneyNum(v){return parseFloat(String(v||'').replace(/[R$\s.]/g,'').replace(',','.'))||0}function fmtMoney(v){return 'R$ '+Number(v||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.')}window.calcEntryApproval=(id,li)=>{const total=moneyNum(document.getElementById(`ly-val-${id}-${li}`)?.value);const entrada=moneyNum(document.getElementById(`ly-entry-value-${id}-${li}`)?.value);const box=document.getElementById(`entry-approval-box-${id}-${li}`);if(box&&total>0&&entrada>=0){const falta=total-entrada;box.innerHTML='<b>Entrada:</b> '+fmtMoney(entrada)+'&nbsp;&nbsp;<b>Falta a pagar:</b> <span style="color:#fca5a5">'+fmtMoney(falta<0?0:falta)+'</span>';box.classList.add('show')}else if(box){box.classList.remove('show');}};
+
+window.toggleGestorServiceType=btn=>{btn.classList.toggle('btn-cyan');btn.classList.toggle('btn-muted');btn.classList.toggle('stype-active');};
+function moneyNum(v){return parseFloat(String(v||'').replace(/[R$\s.]/g,'').replace(',','.'))||0}
+function fmtMoney(v){return 'R$ '+Number(v||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.')}
+window.calcEntryApproval=(id,li)=>{const total=moneyNum(document.getElementById(`ly-val-${id}-${li}`)?.value);const entrada=moneyNum(document.getElementById(`ly-entry-value-${id}-${li}`)?.value);const box=document.getElementById(`entry-approval-box-${id}-${li}`);if(box&&total>0&&entrada>=0){const falta=total-entrada;box.innerHTML='Falta a pagar: <b style="color:#fca5a5">'+fmtMoney(falta<0?0:falta)+'</b>';box.classList.add('show')}else if(box){box.classList.remove('show');}};
 function statusOpts(sel){return Object.keys(STATUS).map(s=>`<option value="${s}" ${sel===s?'selected':''}>${ICON[s]} ${STATUS[s]}</option>`).join('')}
-function renderTrash(){const deleted=all.filter(c=>c.deleted);const sec=document.getElementById('trash-sec');if(!deleted.length){sec.style.display='none';return}sec.style.display='block';document.getElementById('trash-list').innerHTML=deleted.map(c=>`<div style="display:flex;align-items:center;gap:8px;background:var(--surface2);border-radius:9px;padding:9px 12px"><span style="flex:1">${c.name||'—'} — ${c.phone||''}</span><button class="btn btn-muted btn-sm" onclick="restoreClient('${c.id}')">Restaurar</button><button class="btn btn-red btn-sm" onclick="hardDelete('${c.id}')">Excluir permanentemente</button></div>`).join('')}
-function render(){const uiState=captureGestorUiState();const list=document.getElementById('clist');const q=(document.getElementById('search-input').value||'').toLowerCase();let clients=all.filter(c=>!c.deleted);if(filter==='all')clients=clients.filter(c=>getStatus(c)!=='done');else clients=clients.filter(c=>getStatus(c)===filter);if(q)clients=clients.filter(c=>(c.name||'').toLowerCase().includes(q)||normPhone(c.phone).includes(normPhone(q)));clients=[...clients].sort((a,b)=>appointmentSortValue(a)-appointmentSortValue(b));if(!clients.length){list.innerHTML='<div class="empty">📋 Nenhum cliente.</div>';restoreGestorUiState(uiState);return}list.innerHTML=clients.map(c=>{const layers=getLayers(c),status=getStatus(c),active=layers.filter(l=>!l.done),done=layers.filter(l=>l.done),main=activeLayer(c);let n=0;const tabs=layers.map((l,i)=>l.done?'':`<button id="vt-${c.id}-${i}" data-vt="${c.id}" class="vtab ${{waiting:'vtw',workshop_pending:'vtws',evaluated:'vte',quoted:'vtq',approved:'vta',ready_delivery:'vtrd',service_finished:'vte',absent:'vtab2',done:'vtd'}[l.status]||'vtw'}" onclick="showVTab('${c.id}',${i})">Visita ${++n}</button>`).join('');const doneTab=done.length?`<button class="vtab vtd" data-vt="${c.id}" onclick="showDoneTab('${c.id}')">Concluídos (${done.length})</button>`:'';n=0;const panels=layers.map((l,i)=>{if(l.done)return'';const first=i===layers.findIndex(x=>!x.done);const bimg=l.budgetImage?.data||'';const photos=l.techReport?.photos||[];return`<div id="vp-${c.id}-${i}" data-vp="${c.id}" class="vpanel ${first?'active':''}">${l.techReport?`<div class="acc"><div class="acc-hdr" id="th${c.id}${i}" onclick="toggleAcc('th${c.id}${i}','tb${c.id}${i}')">🔧 Relatório do Técnico<span class="acc-arr">▼</span></div><div class="acc-body" id="tb${c.id}${i}"><p><b>Equipamento:</b> ${l.techReport.model||'—'}</p><p><b>Tipo de Serviço:</b> ${reportServiceType(l.techReport)}</p><p><b>Relatório:</b> ${reportTextOnly(l.techReport)}</p>${l.techReport.needsPickup&&!layerServiceInWorkshop(l)?'<p class="indicator">🏭 Retirar equipamento</p>':''}${(l.techReport.serviceType||'').includes('Laudo')?'<p class="indicator" style="background:#2d1f00;color:#fbbf24;border-color:#92400e">📋 Laudo</p>':''}<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">${photos.map(p=>`<img src="${p}" onclick="openLb('${p}')" style="width:70px;height:70px;object-fit:cover;border-radius:8px;cursor:pointer">`).join('')}</div><button class="btn btn-muted btn-sm" onclick="editTechReport('${c.id}',${i})">✏️ Editar relatório</button><button class="btn btn-red btn-sm" onclick="deleteTechReport('${c.id}',${i})">🗑 Excluir relatório</button></div></div>`:''}<div class="acc"><div class="acc-hdr open" id="qh${c.id}${i}" onclick="toggleAcc('qh${c.id}${i}','qb${c.id}${i}')">💰 Orçamento e Status<span class="acc-arr">▼</span></div><div class="acc-body open" id="qb${c.id}${i}"><div style="margin-bottom:10px"><span class="fl">Status desta visita</span><select class="fi" id="ly-st-${c.id}-${i}">${statusOpts(l.status)}</select></div><div style="margin-bottom:10px"><span class="fl">Observação</span><textarea class="fi" id="ly-obs-${c.id}-${i}" placeholder="Observação sobre o orçamento/status">${l.quoteObs||''}</textarea></div><div class="doc-box"><span class="fl">Imagem do orçamento / print</span>${bimg?`<img class="budget-preview" src="${bimg}" onclick="openLb('${bimg}')"><button class="btn btn-muted btn-sm" onclick="removeBudgetImage('${c.id}',${i})">Remover</button>`:'<span class="budget-empty">Nenhuma imagem anexada.</span>'}<input class="file-input" type="file" accept="image/*" onchange="uploadBudgetImage('${c.id}',${i},this)"></div><div class="acc"><div class="acc-hdr" id="ah${c.id}${i}" onclick="toggleAcc('ah${c.id}${i}','ab${c.id}${i}')">✅ Aprovação e Pagamento<span class="acc-arr">▼</span></div><div class="acc-body" id="ab${c.id}${i}"><div style="margin-bottom:10px"><span class="fl">Valor da entrada pago</span><input type="number" class="fi" id="ly-entry-value-${c.id}-${i}" placeholder="0,00" value="${l.approval?.entryValue||''}" oninput="calcEntryApproval('${c.id}',${i})"></div><label style="display:flex;gap:10px;align-items:center;margin-bottom:8px"><input type="checkbox" id="ly-service-workshop-${c.id}-${i}" ${l.serviceInWorkshop||l.approval?.serviceInWorkshop?'checked':''}>Serviço no galpão</label><label style="display:flex;gap:10px;align-items:center;margin-bottom:8px"><input type="checkbox" id="ly-paid-${c.id}-${i}" ${l.approval?.paid?'checked':''}>Serviço já foi pago</label><label style="display:flex;gap:10px;align-items:center;margin-bottom:8px"><input type="checkbox" id="ly-owes-${c.id}-${i}" ${l.approval?.owes?'checked':''}>Falta pagar</label><div class="fgrid"><div><span class="fl">Forma de pagamento</span><input class="fi" id="ly-pay-${c.id}-${i}" value="${l.approval?.payment||''}"></div><div><span class="fl">Valor do orçamento</span><input class="fi" id="ly-val-${c.id}-${i}" value="${l.approval?.value||''}" oninput="calcEntryApproval('${c.id}',${i})"></div></div><div id="entry-approval-box-${c.id}-${i}" class="value-preview ${(l.approval?.entryValue&&moneyNum(l.approval?.value)>0)?'show':''}">Falta a pagar: <b style="color:#fca5a5">${fmtMoney(Math.max(0,moneyNum(l.approval?.value)-moneyNum(l.approval?.entryValue)))}</b></div><div><span class="fl">Data e hora da visita</span><input type="datetime-local" class="fi" id="ly-datetime-${c.id}-${i}" value="${l.datetime||c.datetime||''}" onchange="saveLayerDatetime('${c.id}',${i},this.value)"></div><div><span class="fl">Data e hora do serviço</span><input type="datetime-local" class="fi" id="ly-svc-${c.id}-${i}" value="${l.approval?.serviceDate||''}"></div></div></div><div class="acts"><button class="btn btn-green btn-sm" onclick="saveLayer('${c.id}',${i})">Salvar</button><button class="btn btn-sm btn-green" onclick="concludeLayer('${c.id}',${i})">Serviço finalizado</button><button class="btn btn-muted btn-sm" onclick="removeLayer('${c.id}',${i})">Remover visita</button><button class="btn btn-muted btn-sm" onclick="softDelete('${c.id}')">🗑 Mover para lixeira</button></div></div></div></div>`}).join('');return`<div class="cc"><div class="cc-hdr" onclick="if(!window.getSelection().toString())toggleCard('${c.id}')"><div class="sdot ${dotCls[status]||'dw'}"></div><div class="cmeta"><strong><span class="selectable">${c.name||'—'}</span> ${c.phone?`<span class="selectable" style="font-size:.78rem;color:var(--muted);font-weight:400">· ${c.phone}</span>`:''}</strong><div class="csub">${c.address||''}</div>${status==='workshop_pending'?'<span class="indicator">🏭 No galpão</span>':''}${hasServiceInWorkshop(c)?'<span class="indicator">🏭 Serviço no galpão</span>':''}${needsPickup(c)?'<span class="indicator">🏭 Retirar equipamento</span>':''}${hasPaidService(c)?'<span class="indicator">💳 Serviço pago</span>':''}${hasLaudo(c)?'<span class="indicator" style="background:#2d1f00;color:#fbbf24;border-color:#92400e">📋 Laudo</span>':''}${hasOwesService(c)?'<span class="indicator" style="background:#4a1c1c;color:#fca5a5;border-color:#7f1d1d">Falta pagar</span>':''}<div class="csub">📅 ${fdt(mainDate(c))}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px"><button class="btn btn-muted btn-sm" onclick="event.stopPropagation();openEdit('${c.id}')" style="font-size:.72rem;padding:3px 8px">✏️</button><span class="sbadge ${badgeCls[status]||'sw'}">${lbl(status)}</span></div></div><div class="cc-body" id="body-${c.id}">${clientInfoBlocks(c)}<div class="vtabs-row"><div class="vtabs">${tabs}${doneTab}</div><button class="btn btn-muted btn-sm" onclick="addLayer('${c.id}')">➕ Nova visita</button></div>${panels}<div class="acts"></div></div></div>`}).join('');restoreGestorUiState(uiState)}
+
+/* ===== FILTER MENU ===== */
+const FILTERS=[['all','📋 Todos (ativos)'],['waiting','🕐 Aguardando visita'],['workshop_pending','🏭 Aguardando Avaliação'],['evaluated','✅ Avaliação concluída'],['quoted','💰 Aguardando aprovação'],['approved','🟠 Aprovado'],['ready_delivery','📦 Pronto para entrega'],['service_finished','✅ Serviço finalizado'],['absent','🚫 Cliente ausente'],['done','✔ Concluídos']];
+function renderFilterMenu(){document.getElementById('filter-menu').innerHTML=FILTERS.map(([f,l])=>`<button class="${filter===f?'active':''}" onclick="setFilter('${f}')">${l}</button>`).join('')}
+window.setFilter=f=>{filter=f;page=1;document.getElementById('filter-menu').classList.remove('open');render()};
+
+/* ===== TIMELINE ===== */
+function timelineHtml(l){
+  const s=l.status||'waiting';
+  const paid=!!(l.approval?.paid);
+  // step index: 0 aprovação, 1 execução, 2 concluído, 3 pago
+  let step=0;
+  if(['approved'].includes(s))step=1;
+  if(['ready_delivery','service_finished'].includes(s))step=2;
+  if(s==='done'||l.done)step=2;
+  if(paid)step=3;
+  const steps=[['🕐','Aprovação',['waiting','workshop_pending','evaluated','quoted'].includes(s)?lbl(s):'Concluída'],['🔧','Em execução',step>=1?(step===1?'Em andamento':'Concluída'):'Pendente'],['✔','Concluído',step>=2?(step===2&&!paid?'Atual':'Concluída'):'Pendente'],['💳','Pago',paid?'Pago':'Pendente']];
+  return `<div class="timeline"><div class="tl-line"></div>${steps.map((st,i)=>{
+    const cls=i<step?'done':(i===step?'current':'');
+    return `<div class="tl-step ${cls}"><div class="tl-icon">${st[0]}</div><div class="tl-lbl">${st[1]}</div><div class="tl-sub">${st[2]}</div></div>`;
+  }).join('')}</div>`;
+}
+
+/* ===== STATS ===== */
+function renderStats(clients){
+  const total=all.filter(c=>!c.deleted).length;
+  const waiting=all.filter(c=>!c.deleted&&['waiting','workshop_pending'].includes(getStatus(c))).length;
+  const concluded=all.filter(c=>!c.deleted).reduce((n,c)=>n+getLayers(c).filter(l=>l.done).length,0);
+  const approved=all.filter(c=>!c.deleted&&getStatus(c)==='approved').length;
+  document.getElementById('stats-row').innerHTML=`
+    <div class="stat-card stat-total"><div class="num">${total}</div><div class="lbl">Total</div></div>
+    <div class="stat-card stat-wait"><div class="num">${waiting}</div><div class="lbl">Aguardando</div></div>
+    <div class="stat-card stat-done"><div class="num">${concluded}</div><div class="lbl">Concluídas</div></div>
+    <div class="stat-card stat-appr"><div class="num">${approved}</div><div class="lbl">Aprovadas</div></div>`;
+}
+
+/* ===== LIST RENDER ===== */
+function render(){
+  renderFilterMenu();
+  const uiState=captureGestorUiState();
+  const list=document.getElementById('clist');
+  const q=(document.getElementById('search-input').value||'').toLowerCase();
+  let clients=all.filter(c=>!c.deleted);
+  if(filter==='all')clients=clients.filter(c=>getStatus(c)!=='done');
+  else clients=clients.filter(c=>getStatus(c)===filter);
+  if(q)clients=clients.filter(c=>(c.name||'').toLowerCase().includes(q)||(c.address||'').toLowerCase().includes(q)||normPhone(c.phone).includes(normPhone(q)));
+  clients=[...clients].sort((a,b)=>appointmentSortValue(a)-appointmentSortValue(b));
+  renderStats(clients);
+  const totalPages=Math.max(1,Math.ceil(clients.length/PAGE_SIZE));
+  if(page>totalPages)page=totalPages;
+  const pageClients=clients.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
+  if(!clients.length){list.innerHTML='<div class="empty">📋 Nenhum cliente.</div>';document.getElementById('pagination').innerHTML='';renderDetail();return}
+  list.innerHTML=pageClients.map(c=>{
+    const status=getStatus(c);
+    const tags=`${needsPickup(c)?'<span class="indicator">🏭 Retirar equipamento</span>':''}${hasLaudo(c)?'<span class="indicator ind-laudo">📋 Laudo</span>':''}${hasServiceInWorkshop(c)?'<span class="indicator">🏭 Serviço no galpão</span>':''}${hasPaidService(c)?'<span class="indicator">💳 Serviço pago</span>':''}${hasOwesService(c)?'<span class="indicator ind-owes">Falta pagar</span>':''}`;
+    return `<div class="vcard ${selectedId===c.id?'selected':''}" onclick="selectClient('${c.id}')">
+      <div class="vc-top"><div class="vc-dot ${dotCls[status]||'dw'}"></div><div class="vc-name">${c.name||'—'} ${c.phone?`<span class="vc-phone">· ${c.phone}</span>`:''}</div><span class="vc-arrow">${selectedId===c.id?'▾':'›'}</span></div>
+      ${c.address?`<div class="vc-sub">${c.address}</div>`:''}
+      <div class="vc-bottom"><span class="vc-dt">📅 ${fdt(mainDate(c))}</span><span class="sbadge ${badgeCls[status]||'sw'}">${lbl(status)}</span></div>
+      ${tags?`<div>${tags}</div>`:''}
+    </div>`;
+  }).join('');
+  // pagination
+  let pgHtml='';
+  if(totalPages>1){
+    pgHtml+=`<button class="pg-btn" ${page===1?'disabled':''} onclick="gotoPage(${page-1})">‹</button>`;
+    for(let p=1;p<=totalPages;p++){
+      if(totalPages>7&&p>2&&p<totalPages-1&&Math.abs(p-page)>1){if(!pgHtml.endsWith('…</span>'))pgHtml+='<span style="color:var(--muted);padding:0 4px">…</span>';continue}
+      pgHtml+=`<button class="pg-btn ${p===page?'active':''}" onclick="gotoPage(${p})">${p}</button>`;
+    }
+    pgHtml+=`<button class="pg-btn" ${page===totalPages?'disabled':''} onclick="gotoPage(${page+1})">›</button>`;
+  }
+  document.getElementById('pagination').innerHTML=pgHtml;
+  renderDetail();
+  restoreGestorUiState(uiState);
+}
+window.gotoPage=p=>{page=p;render()};
+window.selectClient=id=>{selectedId=selectedId===id?null:id;switchView('main');render()};
 window.render=render;
+
+/* ===== DETAIL RENDER ===== */
+function renderDetail(){
+  const wrap=document.getElementById('view-detail');
+  const c=all.find(x=>x.id===selectedId&&!x.deleted);
+  if(!c){wrap.innerHTML='<div class="detail-empty"><div class="de-ic">👈</div><p>Selecione uma visita na lista para ver os detalhes.</p></div>';return}
+  const layers=getLayers(c),status=getStatus(c);
+  const done=layers.filter(l=>l.done);
+  const main=activeLayer(c);
+  const routeAddress=String(c.address||'').trim();
+  let n=0;
+  const tabs=layers.map((l,i)=>l.done?'':`<button id="vt-${c.id}-${i}" data-vt="${c.id}" class="vtab ${{waiting:'vtw',workshop_pending:'vtws',evaluated:'vte',quoted:'vtq',approved:'vta',ready_delivery:'vtrd',service_finished:'vte',absent:'vtab2',done:'vtd'}[l.status]||'vtw'}" onclick="showVTab('${c.id}',${i})">Visita ${++n}</button>`).join('');
+  const doneTab=done.length?`<button class="vtab vtd" data-vt="${c.id}" onclick="showDoneTab('${c.id}')">Concluídos (${done.length})</button>`:'';
+  const panels=layers.map((l,i)=>{
+    if(l.done)return'';
+    const first=i===layers.findIndex(x=>!x.done);
+    const bimg=l.budgetImage?.data||'';
+    const photos=l.techReport?.photos||[];
+    const total=moneyNum(l.approval?.value);
+    const entrada=l.approval?.paid?total:moneyNum(l.approval?.entryValue);
+    const pct=total>0?Math.min(100,Math.round(entrada/total*100)):0;
+    const restante=Math.max(0,total-entrada);
+    return `<div id="vp-${c.id}-${i}" data-vp="${c.id}" class="vpanel ${first?'active':''}">
+      ${timelineHtml(l)}
+      <div class="dcards">
+        <div class="dcard"><h3><span class="ic">💵</span>Pagamento e Orçamento</h3><span class="mini-lbl">Valor do orçamento</span><div class="big-money">${total>0?fmtMoney(total):'—'}</div><div style="margin-top:12px"><span class="mini-lbl">Forma de pagamento</span><div style="font-weight:800;font-size:.9rem">${l.approval?.payment||'—'}</div></div></div>
+        <div class="dcard"><h3><span class="ic">💰</span>Pagamento ${total>0?`<span class="pct-badge">${pct}% pago</span>`:''}</h3><div class="pay-bar"><div style="width:${pct}%"></div></div><div class="pay-grid"><div><div class="pg-lbl">Pago</div><div class="pg-val" style="color:var(--gold)">${fmtMoney(entrada)}</div></div><div><div class="pg-lbl">Restante</div><div class="pg-val" style="color:#fca5a5">${fmtMoney(restante)}</div></div><div><div class="pg-lbl">Total</div><div class="pg-val">${fmtMoney(total)}</div></div></div></div>
+        <div class="dcard"><h3><span class="ic">📅</span>Datas importantes</h3><div class="date-blk"><div class="di">📆</div><div><div class="dd-l">Data da visita</div><div class="dd-v">${fd(l.datetime||c.datetime)}</div><div class="dd-t">🕐 ${ft(l.datetime||c.datetime)||'—'}</div></div></div><div class="date-blk"><div class="di">🛠️</div><div><div class="dd-l">Data do serviço</div><div class="dd-v">${fd(l.approval?.serviceDate)}</div><div class="dd-t">🕐 ${ft(l.approval?.serviceDate)||'—'}</div></div></div></div>
+      </div>
+      ${l.techReport?`<div class="acc"><div class="acc-hdr" id="th${c.id}${i}" onclick="toggleAcc('th${c.id}${i}','tb${c.id}${i}')"><span class="ic">🔧</span>Relatório do Técnico<span class="acc-arr">▼</span></div><div class="acc-body" id="tb${c.id}${i}"><p><b>Equipamento:</b> ${l.techReport.model||'—'}</p><p><b>Tipo de Serviço:</b> ${reportServiceType(l.techReport)}</p><p><b>Relatório:</b> ${reportTextOnly(l.techReport)}</p>${l.techReport.needsPickup&&!layerServiceInWorkshop(l)?'<p class="indicator">🏭 Retirar equipamento</p>':''}${(l.techReport.serviceType||'').includes('Laudo')?'<p class="indicator ind-laudo">📋 Laudo</p>':''}<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">${photos.map(p=>`<img src="${p}" onclick="openLb('${p}')" style="width:70px;height:70px;object-fit:cover;border-radius:8px;cursor:pointer">`).join('')}</div><div class="acts" style="margin-top:10px"><button class="btn btn-muted btn-sm" onclick="editTechReport('${c.id}',${i})">✏️ Editar relatório</button><button class="btn btn-red btn-sm" onclick="deleteTechReport('${c.id}',${i})">🗑 Excluir relatório</button></div></div></div>`:''}
+      <div class="acc"><div class="acc-hdr open" id="qh${c.id}${i}" onclick="toggleAcc('qh${c.id}${i}','qb${c.id}${i}')"><span class="ic">💰</span>Orçamento e Status<span class="acc-arr">▼</span></div><div class="acc-body open" id="qb${c.id}${i}">
+        <div style="margin-bottom:10px"><span class="fl">Status desta visita</span><select class="fi" id="ly-st-${c.id}-${i}">${statusOpts(l.status)}</select></div>
+        <div style="margin-bottom:10px"><span class="fl">Observação</span><textarea class="fi" id="ly-obs-${c.id}-${i}" placeholder="Observação sobre o orçamento/status">${l.quoteObs||''}</textarea></div>
+        <div class="doc-box"><span class="fl">Imagem do orçamento / print</span>${bimg?`<img class="budget-preview" src="${bimg}" onclick="openLb('${bimg}')"><button class="btn btn-muted btn-sm" onclick="removeBudgetImage('${c.id}',${i})">Remover</button>`:'<span class="budget-empty">Nenhuma imagem anexada.</span>'}<input class="file-input" type="file" accept="image/*" onchange="uploadBudgetImage('${c.id}',${i},this)"></div>
+      </div></div>
+      <div class="acc"><div class="acc-hdr open" id="ah${c.id}${i}" onclick="toggleAcc('ah${c.id}${i}','ab${c.id}${i}')"><span class="ic">✅</span>Aprovação e Pagamento<span class="acc-arr">▼</span></div><div class="acc-body open" id="ab${c.id}${i}">
+        <label class="chk-row"><input type="checkbox" id="ly-service-workshop-${c.id}-${i}" ${l.serviceInWorkshop||l.approval?.serviceInWorkshop?'checked':''}>Serviço no galpão</label>
+        <label class="chk-row"><input type="checkbox" id="ly-paid-${c.id}-${i}" ${l.approval?.paid?'checked':''}>Serviço já foi pago</label>
+        <label class="chk-row" style="margin-bottom:12px"><input type="checkbox" id="ly-owes-${c.id}-${i}" ${l.approval?.owes?'checked':''}>Falta pagar</label>
+        <div class="fgrid">
+          <div><span class="fl">Forma de pagamento</span><input class="fi" id="ly-pay-${c.id}-${i}" value="${l.approval?.payment||''}"></div>
+          <div><span class="fl">Valor do orçamento</span><input class="fi" id="ly-val-${c.id}-${i}" value="${l.approval?.value||''}" oninput="calcEntryApproval('${c.id}',${i})"></div>
+          <div><span class="fl">Valor da entrada pago</span><input type="number" class="fi" id="ly-entry-value-${c.id}-${i}" placeholder="0,00" value="${l.approval?.entryValue||''}" oninput="calcEntryApproval('${c.id}',${i})"></div>
+          <div style="display:flex;align-items:flex-end"><div id="entry-approval-box-${c.id}-${i}" class="value-preview ${(l.approval?.entryValue&&total>0)?'show':''}" style="margin:0;width:100%">Falta a pagar: <b style="color:#fca5a5">${fmtMoney(restante)}</b></div></div>
+          <div><span class="fl">Data e hora da visita</span><input type="datetime-local" class="fi" id="ly-datetime-${c.id}-${i}" value="${l.datetime||c.datetime||''}" onchange="saveLayerDatetime('${c.id}',${i},this.value)"></div>
+          <div><span class="fl">Data e hora do serviço</span><input type="datetime-local" class="fi" id="ly-svc-${c.id}-${i}" value="${l.approval?.serviceDate||''}"></div>
+        </div>
+      </div></div>
+      <div class="bottom-acts">
+        <button class="btn btn-green" onclick="saveLayer('${c.id}',${i})">💾 Salvar</button>
+        <button class="btn btn-outline-blue" onclick="concludeLayer('${c.id}',${i})">✅ Serviço finalizado</button>
+        <button class="btn btn-muted" onclick="removeLayer('${c.id}',${i})">➖ Remover visita</button>
+        <button class="btn btn-outline-red" onclick="softDelete('${c.id}')">🗑 Mover para lixeira</button>
+      </div>
+    </div>`;
+  }).join('');
+  wrap.innerHTML=`
+    <div class="detail-head"><h1>Detalhes da visita</h1><div class="detail-actions"><button class="btn btn-muted btn-sm" onclick="openEdit('${c.id}')">✏️ Editar</button><button class="btn btn-muted btn-sm" onclick="addLayer('${c.id}')">➕ Nova visita</button></div></div>
+    <div class="client-hero">
+      <div><div class="ch-name">${c.name||'—'} ${c.phone?`<span class="ch-phone">· ${c.phone}</span>`:''}</div>${routeAddress?`<div class="ch-addr">📍 ${fullAddress(c)} <a class="field-action" href="${maps(routeAddress)}" target="_blank">Maps</a></div>`:''}</div>
+      <span class="sbadge ${badgeCls[status]||'sw'}">${lbl(status)}</span>
+    </div>
+    ${clientInfoBlocks(c)}
+    <div id="body-${c.id}">
+      <div class="vtabs-row"><div class="vtabs">${tabs}${doneTab}</div></div>
+      ${panels}
+    </div>`;
+}
+
 window.showDoneTab=cid=>{
   document.querySelectorAll(`[data-vt="${cid}"]`).forEach(t=>t.classList.remove('active'));
   document.querySelectorAll(`[data-vp="${cid}"]`).forEach(p=>p.classList.remove('active'));
@@ -211,12 +724,23 @@ window.showDoneTab=cid=>{
   panel.innerHTML=doneLayers.length?doneLayers.map((l,idx)=>{
     const photos=l.techReport?.photos||[];
     const bimg=l.budgetImage?.data||'';
-    return `<div class="acc"><div class="acc-hdr open">✅ Concluído ${idx+1}<span class="acc-arr">▼</span></div><div class="acc-body open"><p><b>Equipamento:</b> ${l.techReport?.model||'—'}</p><p><b>Tipo de Serviço:</b> ${reportServiceType(l.techReport)}</p><p><b>Relatório:</b> ${reportTextOnly(l.techReport)}</p>${l.concludedAt?`<p><b>Concluído em:</b> ${fdt(l.concludedAt)}</p>`:''}${photos.length?`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">${photos.map(p=>`<img src="${p}" onclick="openLb('${p}')" style="width:70px;height:70px;object-fit:cover;border-radius:8px;cursor:pointer">`).join('')}</div>`:''}${bimg?`<div class="doc-box" style="margin-top:8px"><span class="fl">Imagem do orçamento / print</span><img class="budget-preview" src="${bimg}" onclick="openLb('${bimg}')"></div>`:''}</div></div>`;
+    return `<div class="acc"><div class="acc-hdr open"><span class="ic">✅</span>Concluído ${idx+1}<span class="acc-arr">▼</span></div><div class="acc-body open"><p><b>Equipamento:</b> ${l.techReport?.model||'—'}</p><p><b>Tipo de Serviço:</b> ${reportServiceType(l.techReport)}</p><p><b>Relatório:</b> ${reportTextOnly(l.techReport)}</p>${l.concludedAt?`<p><b>Concluído em:</b> ${fdt(l.concludedAt)}</p>`:''}${photos.length?`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">${photos.map(p=>`<img src="${p}" onclick="openLb('${p}')" style="width:70px;height:70px;object-fit:cover;border-radius:8px;cursor:pointer">`).join('')}</div>`:''}${bimg?`<div class="doc-box" style="margin-top:8px"><span class="fl">Imagem do orçamento / print</span><img class="budget-preview" src="${bimg}" onclick="openLb('${bimg}')"></div>`:''}</div></div>`;
   }).join(''):'<div class="empty">Nenhuma visita concluída.</div>';
   panel.classList.add('active');
 };
-window.saveLayerDatetime=async(id,li,val)=>{const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];layers[li]={...layers[li],datetime:val};const first=layers.find(l=>!l.done);const upd={layers,updatedAt:new Date().toISOString()};if(li===0)upd.datetime=val;await updateDoc(doc(db,'clients',id),upd);toast('📅 Data da visita atualizada')};window.removeLayer=async(id,li)=>{const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];if(layers.length<=1)return alert('Não é possível remover a única visita.');if(!confirm('Remover esta visita?'))return;layers.splice(li,1);const first=layers.find(l=>!l.done);await updateDoc(doc(db,'clients',id),{layers,status:first?first.status:'done'});toast('🗑 Visita removida')};
+
+/* ===== TRASH ===== */
+function renderTrash(){
+  const deleted=all.filter(c=>c.deleted);
+  const el=document.getElementById('trash-list');
+  if(!deleted.length){el.innerHTML='<div class="empty">Lixeira vazia.</div>';return}
+  el.innerHTML=deleted.map(c=>`<div class="trash-item"><span>${c.name||'—'} — ${c.phone||''}</span><button class="btn btn-muted btn-sm" onclick="restoreClient('${c.id}')">♻️ Restaurar</button><button class="btn btn-red btn-sm" onclick="hardDelete('${c.id}')">Excluir permanentemente</button></div>`).join('');
+}
+
+window.saveLayerDatetime=async(id,li,val)=>{const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];layers[li]={...layers[li],datetime:val};const first=layers.find(l=>!l.done);const upd={layers,updatedAt:new Date().toISOString()};if(li===0)upd.datetime=val;await updateDoc(doc(db,'clients',id),upd);toast('📅 Data da visita atualizada')};
+window.removeLayer=async(id,li)=>{const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];if(layers.length<=1)return alert('Não é possível remover a única visita.');if(!confirm('Remover esta visita?'))return;layers.splice(li,1);const first=layers.find(l=>!l.done);await updateDoc(doc(db,'clients',id),{layers,status:first?first.status:'done'});toast('🗑 Visita removida')};
 function resizeImageFile(file,maxW=1400,quality=.78){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>{const sc=Math.min(1,maxW/img.width);const c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);c.getContext('2d').drawImage(img,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',quality))};img.onerror=rej;img.src=r.result};r.onerror=rej;r.readAsDataURL(file)})}
-window.uploadBudgetImage=async(id,li,input)=>{const file=input.files?.[0];if(!file)return;if(!file.type.startsWith('image/'))return alert('Envie apenas imagem.');const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];const data=await resizeImageFile(file);layers[li]={...readLayerForm(id,li,layers[li]),budgetImage:{data,name:file.name,type:'image/jpeg',uploadedAt:new Date().toISOString()}};const first=layers.find(l=>!l.done);await updateDoc(doc(db,'clients',id),{layers,status:first?first.status:'done',updatedAt:new Date().toISOString()});input.value='';toast('🖼️ Imagem anexada')};window.removeBudgetImage=async(id,li)=>{const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];layers[li].budgetImage=null;await updateDoc(doc(db,'clients',id),{layers})};
+window.uploadBudgetImage=async(id,li,input)=>{const file=input.files?.[0];if(!file)return;if(!file.type.startsWith('image/'))return alert('Envie apenas imagem.');const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];const data=await resizeImageFile(file);layers[li]={...readLayerForm(id,li,layers[li]),budgetImage:{data,name:file.name,type:'image/jpeg',uploadedAt:new Date().toISOString()}};const first=layers.find(l=>!l.done);await updateDoc(doc(db,'clients',id),{layers,status:first?first.status:'done',updatedAt:new Date().toISOString()});input.value='';toast('🖼️ Imagem anexada')};
+window.removeBudgetImage=async(id,li)=>{const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];layers[li].budgetImage=null;await updateDoc(doc(db,'clients',id),{layers})};
 </script>
-<style>#etr-modal{display:none;position:fixed;inset:0;background:#000b;z-index:9999;align-items:center;justify-content:center;padding:16px}#etr-modal .etr-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;width:100%;max-width:480px;display:flex;flex-direction:column;gap:12px}#etr-modal h3{margin:0;font-size:.95rem}#etr-types{display:flex;gap:8px;flex-wrap:wrap}</style><div id="etr-modal"><div class="etr-box"><h3>✏️ Editar Relatório do Técnico</h3><div><span class="fl">Modelo exato</span><input class="fi" id="etr-model" placeholder="Ex: Brastemp BMS45"></div><div><span class="fl">Tipo de serviço</span><div id="etr-types"></div></div><div><span class="fl">Relatório</span><textarea class="fi" id="etr-report" style="min-height:80px"></textarea></div><div class="acts"><button class="btn btn-green btn-sm" onclick="saveEtrModal()">💾 Salvar</button><button class="btn btn-muted btn-sm" onclick="closeEtrModal()">Cancelar</button></div></div></div></body></html>
+</body></html>
