@@ -402,14 +402,14 @@ function isoDateToBr(iso){if(!iso)return'';const m=String(iso).match(/^(\d{4})-(
 function captureGestorUiState(){
   const state={fields:{},openAccs:[],activePanel:null,clientId:selectedId};
   document.querySelectorAll('#view-detail .acc-body.open[id]').forEach(el=>state.openAccs.push(el.id));
-  document.querySelectorAll('#view-detail .vpanel.active[id^="vp-"]').forEach(el=>{const m=el.id.match(/^vp-(.+)-(\d+)$/);if(m)state.activePanel=Number(m[2]);});
+  document.querySelectorAll('#view-detail .vpanel.active[id^="vp-"]').forEach(el=>{const m=el.id.match(/^vp-(.+)-(\d+)$/);if(m&&m[1]===String(selectedId))state.activePanel=Number(m[2]);});
   document.querySelectorAll('#view-detail input[id],#view-detail textarea[id],#view-detail select[id]').forEach(el=>{if(el.type==='file')return;state.fields[el.id]={value:el.value,checked:!!el.checked,type:el.type};});
   return state;
 }
 function restoreGestorUiState(state){
   if(!state)return;
   if(state.clientId!==selectedId)return;
-  if(state.activePanel!==null&&selectedId)window.showVTab?.(selectedId,Number(state.activePanel));
+  if(state.activePanel!==null&&selectedId&&document.getElementById('vp-'+selectedId+'-'+state.activePanel))window.showVTab?.(selectedId,Number(state.activePanel));
   (state.openAccs||[]).forEach(id=>{const b=document.getElementById(id);if(b){b.classList.add('open');b.previousElementSibling?.classList.add('open');}});
   Object.entries(state.fields||{}).forEach(([id,data])=>{const el=document.getElementById(id);if(!el)return;if(el.type==='checkbox'){el.checked=!!data.checked;syncToggleBtn(el.id)}else el.value=data.value;});
 }

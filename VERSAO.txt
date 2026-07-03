@@ -1,3 +1,10 @@
+MFC v44
+
+Última alteração
+
+Bugfix: aba vazia ao clicar no cliente. Causa: ao trocar de cliente, o índice de aba do cliente ANTERIOR era capturado e reaplicado no novo — se o índice não existisse, todas as abas ficavam desativadas. Agora a captura só registra a aba se pertencer ao cliente atual e a restauração confere se o painel existe antes de trocar. Sem estado válido, abre a visita fixada (📌) ou a primeira disponível — nunca vazio.
+Cache atualizado para mfc-tecnico-v44.
+
 MFC v43
 
 Última alteração
