@@ -1,3 +1,13 @@
+MFC v38
+
+Última alteração
+
+Cards da lista de visitas redesenhados: nome maior em negrito na linha 1 com chevron › à direita (animado no hover), data + badge de status na mesma linha 2, chips de ação (Retirar equipamento etc.) só quando existem, barra colorida fina na lateral esquerda conforme o status, cards ~15% mais compactos.
+Financeiro: valor total de todas as contas exibido no final da lista; botão "➕ Adicionar conta" abre modal para escolher Coelba/Embasa com endereço, código do cliente e CPF/CNPJ — a nova conta entra na lista com o mesmo comportamento (contas, atrasadas, copiáveis) e pode ser removida.
+Orçamento e Status: Observação e Imagem do orçamento agora dividem o mesmo espaço lado a lado, simétricos.
+Visualizador de imagem: botão X reposicionado junto à página do print, alinhado ao canto da imagem.
+Cache atualizado para mfc-tecnico-v38.
+
 MFC v37
 
 Última alteração

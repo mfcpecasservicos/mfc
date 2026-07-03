@@ -53,13 +53,13 @@ button{font-family:inherit}
 .btn-outline-red{background:#3b121955;color:#fca5a5;border:1px solid #ef444466}
 .btn-sm{padding:7px 11px;font-size:.78rem}
 .clist{display:flex;flex-direction:column;gap:10px;flex:1;overflow-y:auto}
-.vcard{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--border);border-radius:14px;padding:13px 14px;cursor:pointer;transition:all .18s}
+.vcard{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--border);border-radius:14px;padding:10px 30px 10px 14px;cursor:pointer;transition:all .18s;position:relative}
 .vcard:hover{background:var(--surface2)}
 .vcard.selected{border-color:var(--green);border-left-color:var(--green);background:var(--surface2);box-shadow:0 0 0 1px var(--green) inset}
 .vcard .vc-top{display:flex;align-items:center;gap:8px}
 .vcard .vc-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-.vcard .vc-name{font-weight:800;font-size:.9rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.vcard .vc-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;flex-wrap:wrap}
+.vcard .vc-name{font-weight:900;font-size:1rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vcard .vc-bottom{display:flex;align-items:center;justify-content:flex-start;gap:8px;margin-top:6px;flex-wrap:wrap}.vc-chevron{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#8ea0b8;font-size:1rem;transition:transform .15s}.vcard:hover .vc-chevron{transform:translateY(-50%) translateX(3px);color:var(--text)}
 .vcard .vc-dt{font-size:.72rem;font-weight:800;color:#fff;background:#1e3a5f;border:1px solid #3b82f6;border-radius:6px;padding:3px 8px;display:inline-flex;align-items:center;gap:4px}
 .indicator{display:inline-flex;align-items:center;font-size:.66rem;font-weight:800;padding:3px 8px;border-radius:12px;border:1px solid #0e749055;background:#083344;color:#67e8f9;margin-right:4px;margin-top:4px}
 .ind-laudo{background:#2d1f00 !important;color:#fbbf24 !important;border-color:#92400e !important}
@@ -226,7 +226,7 @@ textarea.fi{resize:vertical;min-height:64px}
 .img-viewer{position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:99999;display:none;align-items:center;justify-content:center;padding:18px;overflow:hidden}
 .img-viewer.open{display:flex}
 .img-viewer img{max-width:96vw;max-height:88vh;object-fit:contain;border-radius:12px;background:#fff;box-shadow:0 18px 50px rgba(0,0,0,.55);transform-origin:center center;transition:transform .08s ease;cursor:zoom-in}
-.img-viewer-close{position:absolute;top:14px;right:16px;background:var(--red);color:#fff;border:0;border-radius:14px;width:48px;height:48px;font-size:1.7rem;font-weight:900;cursor:pointer}
+.img-frame{position:relative;display:inline-flex}.img-viewer-close{position:absolute;top:-16px;right:-16px;background:var(--red);color:#fff;border:0;border-radius:50%;width:40px;height:40px;font-size:1.4rem;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;z-index:2;box-shadow:0 4px 14px rgba(0,0,0,.5)}
 .img-viewer-hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:#111827cc;color:#fff;border:1px solid #ffffff33;border-radius:999px;padding:8px 14px;font-size:.82rem;font-weight:800;white-space:nowrap}
 
 @media(max-width:1200px){
@@ -328,6 +328,18 @@ textarea.fi{resize:vertical;min-height:64px}
     </div>
     <div><span class="fl">Observação</span><textarea class="fi" id="emp-notes" placeholder="Observação rápida"></textarea></div>
     <div class="mact"><button class="btn btn-muted" onclick="closeCompany()">Cancelar</button><button class="btn btn-cyan" onclick="addCompanyVisit().then(()=>closeCompany())">⚡ Enviar visita empresa</button></div>
+  </div>
+</div>
+
+<!-- ===== MODAL ADICIONAR CONTA (FINANCEIRO) ===== -->
+<div class="mbg" id="addres-modal">
+  <div class="modal" style="max-width:440px">
+    <h3>➕ Adicionar conta</h3>
+    <div><span class="fl">Tipo</span><select class="fi" id="ar-tipo"><option value="coelba">⚡ Coelba</option><option value="embasa">💧 Embasa</option></select></div>
+    <div><span class="fl">Endereço</span><input class="fi" id="ar-end" placeholder="Rua, número"></div>
+    <div><span class="fl">Código do cliente</span><input class="fi" id="ar-cod" placeholder="Código"></div>
+    <div><span class="fl">CPF/CNPJ</span><input class="fi" id="ar-doc" placeholder="CPF ou CNPJ"></div>
+    <div class="mact"><button class="btn btn-muted" onclick="closeAddRes()">Cancelar</button><button class="btn btn-blue" onclick="saveNewRes()">Salvar</button></div>
   </div>
 </div>
 
@@ -475,6 +487,29 @@ function todayIso(){const d=new Date();return `${d.getFullYear()}-${String(d.get
 function getContas(key){return (finData[key]?.contas||[]).slice()}
 function isOverdue(conta){return conta.venc&&conta.venc<todayIso()}
 function overdueSum(key){return getContas(key).filter(isOverdue).reduce((s,c)=>s+moneyNum(c.valor),0)}
+function totalSum(key){return getContas(key).reduce((s,c)=>s+moneyNum(c.valor),0)}
+function getAllRes(){const custom=(finData.customResidencias||[]).map(r=>({key:r.key,nome:r.tipo==='embasa'?'Embasa':'Coelba',icon:r.tipo==='embasa'?'💧':'⚡',end:r.end||'',cod:r.cod||'',doc:r.doc||'',custom:true}));return [...RES,...custom]}
+window.openAddRes=()=>document.getElementById('addres-modal').classList.add('open');
+window.closeAddRes=()=>document.getElementById('addres-modal').classList.remove('open');
+window.saveNewRes=async()=>{
+  const tipo=document.getElementById('ar-tipo').value;
+  const end=document.getElementById('ar-end').value.trim();
+  const cod=document.getElementById('ar-cod').value.trim();
+  const docv=document.getElementById('ar-doc').value.trim();
+  if(!cod||!docv)return alert('Preencha código do cliente e CPF/CNPJ.');
+  const custom=[...(finData.customResidencias||[])];
+  custom.push({key:'custom_'+Date.now().toString(36),tipo,end,cod,doc:docv});
+  await setDoc(finRef,{customResidencias:custom},{merge:true});
+  ['ar-end','ar-cod','ar-doc'].forEach(i=>document.getElementById(i).value='');
+  closeAddRes();toast('➕ Conta adicionada');
+};
+window.removeRes=async key=>{
+  if(!confirm('Remover esta conta? As contas pendentes dela também serão removidas.'))return;
+  const custom=(finData.customResidencias||[]).filter(r=>r.key!==key);
+  await setDoc(finRef,{customResidencias:custom,[key]:{contas:[]}},{merge:true});
+  if(selectedFin===key)selectedFin=null;
+  toast('🗑 Conta removida');
+};
 window.copyTxt=async(txt)=>{try{await navigator.clipboard.writeText(String(txt).replace(/[^\d]/g,'')||txt);toast('📋 Copiado')}catch{prompt('Copie:',txt)}};
 window.selectFin=key=>{selectedFin=selectedFin===key?null:key;renderFin()};
 window.addConta=async key=>{
@@ -498,7 +533,9 @@ function renderFin(){
   // list column: residências
   document.getElementById('list-title').textContent='Financeiro';
   const list=document.getElementById('clist');
-  list.innerHTML=RES.map(r=>{
+  const ALLRES=getAllRes();
+  const grandTotal=ALLRES.reduce((s,r)=>s+totalSum(r.key),0);
+  list.innerHTML=ALLRES.map(r=>{
     const sum=overdueSum(r.key);
     const nAtras=getContas(r.key).filter(isOverdue).length;
     return `<div class="rescard ${selectedFin===r.key?'selected':''}" onclick="selectFin('${r.key}')">
@@ -507,12 +544,15 @@ function renderFin(){
       <div class="res-row"><span>Código do cliente</span><b>${r.cod} <button class="copy-btn" onclick="event.stopPropagation();copyTxt('${r.cod}')">📋</button></b></div>
       <div class="res-row"><span>CPF/CNPJ</span><b>${r.doc} <button class="copy-btn" onclick="event.stopPropagation();copyTxt('${r.doc}')">📋</button></b></div>
       ${sum>0?`<div class="overdue-badge">⚠️ ${nAtras} atrasada${nAtras>1?'s':''} — ${fmtMoney(sum)}</div>`:''}
+      ${r.custom?`<button class="copy-btn" style="margin-top:8px;color:#fca5a5" onclick="event.stopPropagation();removeRes('${r.key}')">🗑 Remover conta</button>`:''}
     </div>`;
-  }).join('');
+  }).join('')+`
+    <button class="btn btn-outline-blue" style="width:100%;height:46px" onclick="openAddRes()">➕ Adicionar conta</button>
+    <div class="rescard" style="cursor:default;border-left-color:var(--gold)"><div class="res-row" style="border-top:none;padding-top:0"><span>💰 Total de todas as contas</span><b style="color:var(--gold);font-size:1rem">${fmtMoney(grandTotal)}</b></div></div>`;
   document.getElementById('pagination').innerHTML='';
   // detail
   const wrap=document.getElementById('view-fin');
-  const r=RES.find(x=>x.key===selectedFin);
+  const r=ALLRES.find(x=>x.key===selectedFin);
   if(!r){wrap.innerHTML='<div class="detail-head"><h1>💰 Financeiro</h1></div><div class="empty" style="padding-top:80px">👈 Selecione uma residência na lista para ver as contas.</div>';return}
   const contas=getContas(r.key).sort((a,b)=>{
     const ao=isOverdue(a)?0:1,bo=isOverdue(b)?0:1;
@@ -604,7 +644,7 @@ function ensureImageViewer(){
   if(viewer)return viewer;
   viewer=document.createElement('div');
   viewer.id='img-viewer';viewer.className='img-viewer';
-  viewer.innerHTML='<button class="img-viewer-close" type="button" onclick="closeLb()">×</button><img id="img-viewer-img" alt="Foto do relatório"><div class="img-viewer-hint">Use o scroll do mouse para aproximar/afastar</div>';
+  viewer.innerHTML='<div class="img-frame"><button class="img-viewer-close" type="button" onclick="closeLb()">×</button><img id="img-viewer-img" alt="Foto do relatório"></div><div class="img-viewer-hint">Use o scroll do mouse para aproximar/afastar</div>';
   viewer.addEventListener('click',e=>{if(e.target===viewer)closeLb();});
   viewer.addEventListener('wheel',e=>{e.preventDefault();imgViewerScale+=e.deltaY<0?0.18:-0.18;imgViewerScale=Math.min(Math.max(imgViewerScale,1),6);applyImageViewerZoom();},{passive:false});
   document.body.appendChild(viewer);
@@ -667,10 +707,12 @@ function render(){
   list.innerHTML=pageClients.map(c=>{
     const status=getStatus(c);
     const tags=`${needsPickup(c)?'<span class="indicator">🏭 Retirar equipamento</span>':''}${hasLaudo(c)?'<span class="indicator ind-laudo">📋 Laudo</span>':''}${hasServiceInWorkshop(c)?'<span class="indicator">🏭 Serviço no galpão</span>':''}${hasPaidService(c)?'<span class="indicator">💳 Serviço pago</span>':''}${hasOwesService(c)?'<span class="indicator ind-owes">Falta pagar</span>':''}`;
-    return `<div class="vcard ${selectedId===c.id?'selected':''}" onclick="selectClient('${c.id}')">
+    const blColor={dw:'#3b82f6',dws:'#38bdf8',de:'#22c55e',dq:'#f59e0b',da:'#f97316',drd:'#38bdf8',dsf:'#22c55e',dd:'#22c55e',dab:'#a855f7'}[dotCls[status]||'dw'];
+    return `<div class="vcard ${selectedId===c.id?'selected':''}" style="border-left-color:${blColor}" onclick="selectClient('${c.id}')">
       <div class="vc-top"><div class="vc-dot ${dotCls[status]||'dw'}"></div><div class="vc-name">${c.name||'—'}</div></div>
       <div class="vc-bottom"><span class="vc-dt">📅 ${fdt(mainDate(c))}</span><span class="sbadge ${badgeCls[status]||'sw'}">${lbl(status)}</span></div>
       ${tags?`<div>${tags}</div>`:''}
+      <span class="vc-chevron">›</span>
     </div>`;
   }).join('');
   let pgHtml='';
@@ -735,8 +777,10 @@ function renderDetail(){
       ${l.techReport?`<div class="acc"><div class="acc-hdr" id="th${c.id}${i}" onclick="toggleAcc('th${c.id}${i}','tb${c.id}${i}')"><span class="ic">🔧</span>Relatório do Técnico<span class="acc-arr">▼</span></div><div class="acc-body" id="tb${c.id}${i}"><p><b>Equipamento:</b> ${l.techReport.model||'—'}</p><p><b>Tipo de Serviço:</b> ${reportServiceType(l.techReport)}</p><p><b>Relatório:</b> ${reportTextOnly(l.techReport)}</p>${l.techReport.needsPickup&&!layerServiceInWorkshop(l)?'<p class="indicator">🏭 Retirar equipamento</p>':''}${(l.techReport.serviceType||'').includes('Laudo')?'<p class="indicator ind-laudo">📋 Laudo</p>':''}<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">${photos.map(p=>`<img src="${p}" onclick="openLb('${p}')" style="width:70px;height:70px;object-fit:cover;border-radius:8px;cursor:pointer">`).join('')}</div><div class="acts" style="margin-top:10px"><button class="btn btn-muted btn-sm" onclick="editTechReport('${c.id}',${i})">✏️ Editar relatório</button><button class="btn btn-red btn-sm" onclick="deleteTechReport('${c.id}',${i})">🗑 Excluir relatório</button></div></div></div>`:''}
       <div class="acc"><div class="acc-hdr open" id="qh${c.id}${i}" onclick="toggleAcc('qh${c.id}${i}','qb${c.id}${i}')"><span class="ic">💰</span>Orçamento e Status<span class="acc-arr">▼</span></div><div class="acc-body open" id="qb${c.id}${i}">
         <div style="margin-bottom:10px"><span class="fl">Status desta visita</span><select class="fi" id="ly-st-${c.id}-${i}">${statusOpts(l.status)}</select></div>
-        <div style="margin-bottom:10px"><span class="fl">Observação</span><textarea class="fi" id="ly-obs-${c.id}-${i}" placeholder="Observação sobre o orçamento/status">${l.quoteObs||''}</textarea></div>
-        <div class="doc-box"><span class="fl">Imagem do orçamento / print</span>${bimg?`<img class="budget-preview" src="${bimg}" onclick="openLb('${bimg}')"><button class="btn btn-muted btn-sm" onclick="removeBudgetImage('${c.id}',${i})">Remover</button>`:'<span class="budget-empty">Nenhuma imagem anexada.</span>'}<input class="file-input" type="file" accept="image/*" onchange="uploadBudgetImage('${c.id}',${i},this)"></div>
+        <div class="fgrid" style="margin-bottom:0;align-items:stretch">
+          <div><span class="fl">Observação</span><textarea class="fi" id="ly-obs-${c.id}-${i}" placeholder="Observação sobre o orçamento/status" style="min-height:120px;height:calc(100% - 24px)">${l.quoteObs||''}</textarea></div>
+          <div class="doc-box" style="margin:0"><span class="fl">Imagem do orçamento / print</span>${bimg?`<img class="budget-preview" src="${bimg}" onclick="openLb('${bimg}')"><button class="btn btn-muted btn-sm" onclick="removeBudgetImage('${c.id}',${i})">Remover</button>`:'<span class="budget-empty">Nenhuma imagem anexada.</span>'}<input class="file-input" type="file" accept="image/*" onchange="uploadBudgetImage('${c.id}',${i},this)"></div>
+        </div>
       </div></div>
       <div class="acc"><div class="acc-hdr open" id="ah${c.id}${i}" onclick="toggleAcc('ah${c.id}${i}','ab${c.id}${i}')"><span class="ic">✅</span>Aprovação e Pagamento<span class="acc-arr">▼</span></div><div class="acc-body open" id="ab${c.id}${i}">
         <input type="checkbox" id="ly-service-workshop-${c.id}-${i}" ${l.serviceInWorkshop||l.approval?.serviceInWorkshop?'checked':''} style="display:none">
