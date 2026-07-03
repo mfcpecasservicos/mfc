@@ -1,3 +1,10 @@
+MFC v42
+
+Última alteração
+
+Gestor: toggle "🛻 Precisa retirar o equipamento" adicionado ao modal Editar Relatório do Técnico — carrega o estado atual e salva em techReport.needsPickup e na layer.
+Cache atualizado para mfc-tecnico-v42.
+
 MFC v41
 
 Última alteração
