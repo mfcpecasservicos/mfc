@@ -185,3 +185,11 @@ ATUALIZAÇÃO MFC v30
 
 NOTA TÉCNICA — Upload de imagens (item 3 solicitado):
 Não é possível forçar um diretório padrão no seletor de arquivos do navegador via código. Essa é uma restrição de segurança do browser (Chrome/Edge/Firefox) que impede sites de pré-selecionar pastas do sistema operacional. Isso não é um bug do app — é um limite da Web Platform.
+
+
+ATUALIZAÇÃO MFC v37
+[x] Home estilo Chrome no Menu principal (link cadastro / nova visita / visita empresa + busca + filtro, tudo simétrico).
+[x] Financeiro com contas por residência: atrasadas no topo + aviso, soma de atrasadas, código/CPF/CNPJ/PIX copiáveis, botão Pago exclui a conta.
+[x] Datas digitáveis com máscara em todo o sistema.
+[x] Toggles visíveis (galpão/pago/falta pagar) e forma de pagamento em select com parcelas de crédito.
+[x] Lista recolhível (‹/›), cards sem telefone/endereço, sem stats redundantes, sem capa duplicada, sem cabeçalho repetido no detalhe.

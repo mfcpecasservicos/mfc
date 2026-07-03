@@ -1,3 +1,18 @@
+MFC v37
+
+Última alteração
+
+MENU PRINCIPAL (home estilo Chrome): ao clicar em "Menu principal" ou sem cliente selecionado, a área de detalhes mostra logo + três botões simétricos (Gerar link de cadastro | + Nova visita | Visita de empresa) + barra de busca de clientes existentes com resultados em dropdown + botão Filtro. Barra lateral fica só com os clientes.
+Cards da lista: removidos telefone e endereço — só nome, data e status.
+Removidos: cards de resumo Total/Aguardando/Concluídas/Aprovadas (redundantes), capa MFC do topo do menu lateral (ficou só o bloco de marca), e o cabeçalho repetido nome/telefone/endereço no detalhe (ficaram só os quadradinhos).
+Divisória entre lista e detalhe com botão ‹ / › para ocultar/expandir a lista de visitas.
+FINANCEIRO reformulado: lista lateral mostra as residências (Embasa e as duas Coelba) com endereço, código do cliente e CPF/CNPJ copiáveis (botão 📋) e soma das contas atrasadas. Ao selecionar, abre painel com TODAS as contas da residência — atrasadas no topo com aviso ATRASADA — cada uma com valor, vencimento, PIX copiável e botão "✅ Pago" que exclui a conta. Formulário para adicionar conta (valor / vencimento / PIX). Dados em config/financeiro no Firestore.
+DATAS DIGITÁVEIS: todos os campos de data (gestor e financeiro) agora são texto com máscara dd/mm/aaaa hh:mm (ou dd/mm/aaaa) — digita direto, sem depender de calendário. Conversão automática para o formato interno.
+Aprovação e Pagamento: checkboxes viraram 3 botões grandes e simétricos com emoji (🏭 Serviço no galpão | 💳 Serviço já foi pago | 🔴 Falta pagar).
+Forma de pagamento agora é seleção: 💵 Espécie / ⚡ Pix / 💳 Débito / 💳 Crédito (com campo "Quantas vezes?" quando Crédito).
+Visita de empresa virou modal próprio; modal Nova visita ficou só com o formulário do cliente.
+Cache atualizado para mfc-tecnico-v37.
+
 MFC v36
 
 Última alteração
