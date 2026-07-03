@@ -1,3 +1,11 @@
+MFC v43
+
+Última alteração
+
+Bugfix: indicadores do card na lista (Retirar equipamento, Laudo, Serviço no galpão, Serviço pago, Falta pagar) agora seguem a visita FIXADA quando houver uma — a visita 1 não vaza mais seus indicadores com a visita 2 fixada. Sem fixada, consideram apenas as visitas ativas (não concluídas).
+Timeline: etapa "Em execução" renomeada para "Para executar" (a execução não é em tempo real).
+Cache atualizado para mfc-tecnico-v43.
+
 MFC v42
 
 Última alteração

@@ -467,7 +467,7 @@ const maps=a=>'https://www.google.com/maps/search/?api=1&query='+encodeURICompon
 function getLayers(c){return c.layers&&c.layers.length?c.layers:[{status:c.status||'waiting',quote:c.quote||'',quoteObs:c.quoteObs||'',techReport:c.techReport||null,approval:c.approval||null,done:c.status==='done',createdAt:c.createdAt||new Date().toISOString()}]}
 function activeLayer(c){return getLayers(c).find(l=>!l.done)||getLayers(c)[0]||{status:c.status||'waiting'}}function getStatus(c){return c.status||activeLayer(c).status||'waiting'}
 function displayStatus(c){const act=getLayers(c).filter(l=>!l.done);if(!act.length)return 'done';const pin=act.find(l=>l.pinned);if(pin)return pin.status||'waiting';const PRIO=['waiting','workshop_pending','quoted','evaluated','approved','ready_delivery','service_finished','absent'];for(const s of PRIO){if(act.some(l=>(l.status||'waiting')===s))return s}return act[0].status||'waiting'}
-function layerServiceInWorkshop(l){return !!(l?.serviceInWorkshop||l?.approval?.serviceInWorkshop)}function hasServiceInWorkshop(c){return getLayers(c).some(l=>layerServiceInWorkshop(l))}function needsPickup(c){return getLayers(c).some(l=>!layerServiceInWorkshop(l)&&(l.needsPickup||l.techReport?.needsPickup))}function hasPaidService(c){return getLayers(c).some(l=>l.approval?.paid)}function hasLaudo(c){return getLayers(c).some(l=>!l.done&&(l.techReport?.serviceType||'').includes('Laudo'))}function hasOwesService(c){return getLayers(c).some(l=>!l.done&&l.approval?.owes)}
+function layerServiceInWorkshop(l){return !!(l?.serviceInWorkshop||l?.approval?.serviceInWorkshop)}function indLayers(c){const act=getLayers(c).filter(l=>!l.done);const pin=act.find(l=>l.pinned);return pin?[pin]:act}function hasServiceInWorkshop(c){return indLayers(c).some(l=>layerServiceInWorkshop(l))}function needsPickup(c){return indLayers(c).some(l=>!layerServiceInWorkshop(l)&&(l.needsPickup||l.techReport?.needsPickup))}function hasPaidService(c){return indLayers(c).some(l=>l.approval?.paid)}function hasLaudo(c){return indLayers(c).some(l=>(l.techReport?.serviceType||'').includes('Laudo'))}function hasOwesService(c){return indLayers(c).some(l=>l.approval?.owes)}
 function layerMainDate(c,l){
   if(l?.status==='ready_delivery')return l.readyDeliveryAt||l.deliveryDate||l.approval?.serviceDate||c.datetime||l.createdAt||c.createdAt||'';
   return l?.approval?.serviceDate||l?.deliveryDate||l?.readyDeliveryAt||c.datetime||l?.createdAt||c.createdAt||'';
@@ -708,7 +708,7 @@ function timelineHtml(l){
   if(['ready_delivery','service_finished'].includes(s))step=2;
   if(s==='done'||l.done)step=2;
   if(paid)step=3;
-  const steps=[['🕐','Aprovação',['waiting','workshop_pending','evaluated','quoted'].includes(s)?lbl(s):'Concluída'],['🔧','Em execução',step>=1?(step===1?'Em andamento':'Concluída'):'Pendente'],['✔','Concluído',step>=2?(step===2&&!paid?'Atual':'Concluída'):'Pendente'],['💳','Pago',paid?'Pago':'Pendente']];
+  const steps=[['🕐','Aprovação',['waiting','workshop_pending','evaluated','quoted'].includes(s)?lbl(s):'Concluída'],['🔧','Para executar',step>=1?(step===1?'Em andamento':'Concluída'):'Pendente'],['✔','Concluído',step>=2?(step===2&&!paid?'Atual':'Concluída'):'Pendente'],['💳','Pago',paid?'Pago':'Pendente']];
   return `<div class="timeline"><div class="tl-line"></div>${steps.map((st,i)=>{
     const cls=i<step?'done':(i===step?'current':'');
     return `<div class="tl-step ${cls}"><div class="tl-icon">${st[0]}</div><div class="tl-lbl">${st[1]}</div><div class="tl-sub">${st[2]}</div></div>`;
