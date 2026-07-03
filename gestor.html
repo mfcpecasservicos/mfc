@@ -67,7 +67,7 @@ button{font-family:inherit}
 .sbadge{font-size:.6rem;font-weight:800;padding:4px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
 .sw{background:#1e3a5f33;color:#60a5fa;border:1px solid #1e3a5f}.sws{background:#08334455;color:#67e8f9;border:1px solid #0e7490}.se{background:#14532d33;color:#86efac;border:1px solid #14532d}.sq{background:#451a0333;color:#fbbf24;border:1px solid #451a03}.sa{background:#1c191733;color:#fb923c;border:1px solid #f9731655}.srd{background:#0c4a6e33;color:#7dd3fc;border:1px solid #0c4a6e}.ssf{background:#052e16;color:#86efac;border:1px solid #166534}.sd{background:#0d1f0d33;color:#4ade80;border:1px solid #0d1f0d}.sab{background:#3b076433;color:#d8b4fe;border:1px solid #3b0764}
 .dw{background:#3b82f6}.dws{background:#38bdf8}.de{background:#22c55e}.dq{background:#f59e0b}.da{background:#f97316}.drd{background:#38bdf8}.dsf{background:#22c55e}.dd{background:#22c55e}.dab{background:#a855f7}
-.pagination{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px}.fin-total{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:14px;padding:13px 16px;position:sticky;bottom:0}.fin-total span{font-size:.72rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.05em}.fin-total b{color:var(--gold);font-size:1.05rem;font-weight:900;white-space:nowrap}.fin-total span{white-space:nowrap}
+.pagination{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px}.fin-total{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:14px;padding:13px 16px;position:sticky;bottom:0}.fin-total span{font-size:.7rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.05em;line-height:1;display:flex;align-items:center;gap:6px}.fin-total b{color:var(--gold);font-size:1.05rem;font-weight:900;white-space:nowrap;line-height:1;display:flex;align-items:center}.fin-total span{white-space:nowrap}
 .pg-btn{min-width:34px;height:34px;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-weight:800;cursor:pointer;font-size:.8rem}
 .pg-btn:hover{background:var(--surface2)}
 .pg-btn.active{border-color:var(--yellow);color:var(--yellow)}
@@ -400,7 +400,7 @@ function isoDateToBr(iso){if(!iso)return'';const m=String(iso).match(/^(\d{4})-(
 
 /* ===== UI STATE ===== */
 function captureGestorUiState(){
-  const state={fields:{},openAccs:[],activePanel:null};
+  const state={fields:{},openAccs:[],activePanel:null,clientId:selectedId};
   document.querySelectorAll('#view-detail .acc-body.open[id]').forEach(el=>state.openAccs.push(el.id));
   document.querySelectorAll('#view-detail .vpanel.active[id^="vp-"]').forEach(el=>{const m=el.id.match(/^vp-(.+)-(\d+)$/);if(m)state.activePanel=Number(m[2]);});
   document.querySelectorAll('#view-detail input[id],#view-detail textarea[id],#view-detail select[id]').forEach(el=>{if(el.type==='file')return;state.fields[el.id]={value:el.value,checked:!!el.checked,type:el.type};});
@@ -408,6 +408,7 @@ function captureGestorUiState(){
 }
 function restoreGestorUiState(state){
   if(!state)return;
+  if(state.clientId!==selectedId)return;
   if(state.activePanel!==null&&selectedId)window.showVTab?.(selectedId,Number(state.activePanel));
   (state.openAccs||[]).forEach(id=>{const b=document.getElementById(id);if(b){b.classList.add('open');b.previousElementSibling?.classList.add('open');}});
   Object.entries(state.fields||{}).forEach(([id,data])=>{const el=document.getElementById(id);if(!el)return;if(el.type==='checkbox'){el.checked=!!data.checked;syncToggleBtn(el.id)}else el.value=data.value;});
@@ -465,7 +466,7 @@ const ft=dt=>{if(!dt)return'';try{return new Date(dt).toLocaleTimeString('pt-BR'
 const maps=a=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a||'');
 function getLayers(c){return c.layers&&c.layers.length?c.layers:[{status:c.status||'waiting',quote:c.quote||'',quoteObs:c.quoteObs||'',techReport:c.techReport||null,approval:c.approval||null,done:c.status==='done',createdAt:c.createdAt||new Date().toISOString()}]}
 function activeLayer(c){return getLayers(c).find(l=>!l.done)||getLayers(c)[0]||{status:c.status||'waiting'}}function getStatus(c){return c.status||activeLayer(c).status||'waiting'}
-function displayStatus(c){const act=getLayers(c).filter(l=>!l.done);if(!act.length)return 'done';const PRIO=['waiting','workshop_pending','quoted','evaluated','approved','ready_delivery','service_finished','absent'];for(const s of PRIO){if(act.some(l=>(l.status||'waiting')===s))return s}return act[0].status||'waiting'}
+function displayStatus(c){const act=getLayers(c).filter(l=>!l.done);if(!act.length)return 'done';const pin=act.find(l=>l.pinned);if(pin)return pin.status||'waiting';const PRIO=['waiting','workshop_pending','quoted','evaluated','approved','ready_delivery','service_finished','absent'];for(const s of PRIO){if(act.some(l=>(l.status||'waiting')===s))return s}return act[0].status||'waiting'}
 function layerServiceInWorkshop(l){return !!(l?.serviceInWorkshop||l?.approval?.serviceInWorkshop)}function hasServiceInWorkshop(c){return getLayers(c).some(l=>layerServiceInWorkshop(l))}function needsPickup(c){return getLayers(c).some(l=>!layerServiceInWorkshop(l)&&(l.needsPickup||l.techReport?.needsPickup))}function hasPaidService(c){return getLayers(c).some(l=>l.approval?.paid)}function hasLaudo(c){return getLayers(c).some(l=>!l.done&&(l.techReport?.serviceType||'').includes('Laudo'))}function hasOwesService(c){return getLayers(c).some(l=>!l.done&&l.approval?.owes)}
 function layerMainDate(c,l){
   if(l?.status==='ready_delivery')return l.readyDeliveryAt||l.deliveryDate||l.approval?.serviceDate||c.datetime||l.createdAt||c.createdAt||'';
@@ -643,12 +644,13 @@ window.generateCadastroLink=async()=>{const token=Math.random().toString(36).sli
 window.openEdit=id=>{const c=all.find(x=>x.id===id);if(!c)return;editId=id;['name','phone','address','ref','equip','notes'].forEach(f=>document.getElementById('e-'+f).value=c[f]||'');document.getElementById('e-datetime').value=isoToBr(c.datetime||'');document.getElementById('edit-modal').classList.add('open')};
 window.closeEdit=()=>{editId=null;document.getElementById('edit-modal').classList.remove('open')};
 window.saveEdit=async()=>{if(!editId)return;const phone=document.getElementById('e-phone').value.trim();await updateDoc(doc(db,'clients',editId),{name:document.getElementById('e-name').value.trim(),phone,phoneNorm:normPhone(phone),address:document.getElementById('e-address').value.trim(),ref:document.getElementById('e-ref').value.trim(),datetime:brToIso(document.getElementById('e-datetime').value)||all.find(x=>x.id===editId)?.datetime||'',equip:document.getElementById('e-equip').value.trim(),notes:document.getElementById('e-notes').value.trim()});closeEdit();toast('✅ Atualizado')};
+window.togglePin=async(id,li)=>{const c=all.find(x=>x.id===id);const layers=getLayers(c).map((l,i)=>({...l,pinned:i===li?!l.pinned:false}));const idx=all.findIndex(x=>x.id===id);if(idx>-1){all[idx]={...all[idx],layers};render()}await updateDoc(doc(db,'clients',id),{layers,updatedAt:new Date().toISOString()});toast(layers[li].pinned?'📌 Visita fixada':'Visita desafixada')};
 window.addLayer=async id=>{const c=all.find(x=>x.id===id);const layers=[...getLayers(c),makeLayer('waiting')];await updateDoc(doc(db,'clients',id),{layers,status:'waiting'});toast('➕ Nova visita')};
 window.deleteTechReport=async(id,li)=>{if(!confirm('Excluir relatório? A visita volta para Aguardando visita.'))return;const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];layers[li]={...layers[li],techReport:null,needsPickup:false,status:'waiting',approval:null};const first=layers.find(l=>!l.done);await updateDoc(doc(db,'clients',id),{layers,status:first?first.status:'done',updatedAt:new Date().toISOString()});toast('🗑 Relatório excluído')};
 window.editTechReport=(id,li)=>{const c=all.find(x=>x.id===id);if(!c)return;const layers=getLayers(c);const l=layers[li];if(!l?.techReport)return;const modal=document.getElementById('etr-modal');const TYPES=['🔧 Corretiva','🧽 Preventiva','🧰 Instalação','📋 Laudo'];const saved=(l.techReport.serviceType||'').split(',').map(s=>s.trim()).filter(Boolean);modal.querySelector('#etr-model').value=l.techReport.model||'';modal.querySelector('#etr-report').value=reportTextOnly(l.techReport)||'';const btns=modal.querySelector('#etr-types');btns.innerHTML=TYPES.map(t=>`<button type="button" class="btn btn-sm ${saved.includes(t)?'btn-cyan etr-active':'btn-muted'}" data-etr="${t}" onclick="this.classList.toggle('btn-cyan');this.classList.toggle('btn-muted');this.classList.toggle('etr-active')">${t}</button>`).join('');modal.dataset.id=id;modal.dataset.li=li;modal.style.display='flex';};
 window.closeEtrModal=()=>{document.getElementById('etr-modal').style.display='none';};
 window.saveEtrModal=async()=>{const modal=document.getElementById('etr-modal');const id=modal.dataset.id;const li=parseInt(modal.dataset.li);const c=all.find(x=>x.id===id);if(!c)return;const layers=[...getLayers(c)];const model=modal.querySelector('#etr-model').value.trim();const report=modal.querySelector('#etr-report').value.trim();const types=Array.from(modal.querySelectorAll('[data-etr].etr-active')).map(b=>b.dataset.etr);if(!model)return alert('Preencha o modelo.');layers[li]={...layers[li],techReport:{...layers[li].techReport,model,problem:report,serviceType:types.join(', ')}};await updateDoc(doc(db,'clients',id),{layers});modal.style.display='none';toast('✏️ Relatório atualizado')};
-window.concludeLayer=async(id,li)=>{if(!confirm('Mover este serviço para a aba de concluídos?'))return;const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];layers[li]={...layers[li],status:'done',done:true,concludedAt:new Date().toISOString()};const first=layers.find(l=>!l.done);await updateDoc(doc(db,'clients',id),{layers,status:first?first.status:'done',completedAt:first?c.completedAt:new Date().toISOString()});toast('✅ Serviço finalizado')};
+window.concludeLayer=async(id,li)=>{if(!confirm('Mover este serviço para a aba de concluídos?'))return;const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];layers[li]={...layers[li],status:'done',done:true,pinned:false,concludedAt:new Date().toISOString()};const first=layers.find(l=>!l.done);await updateDoc(doc(db,'clients',id),{layers,status:first?first.status:'done',completedAt:first?c.completedAt:new Date().toISOString()});toast('✅ Serviço finalizado')};
 window.saveLayer=async(id,li)=>{const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];layers[li]=readLayerForm(id,li,layers[li]);const first=layers.find(l=>!l.done);const newStatus=first?first.status:'done';const idx=all.findIndex(x=>x.id===id);if(idx>-1){all[idx]={...all[idx],layers,status:newStatus};render()}await updateDoc(doc(db,'clients',id),{layers,status:newStatus,updatedAt:new Date().toISOString()});toast('💾 Salvo')};
 window.softDelete=async id=>{if(!confirm('Descartar para lixeira?'))return;await updateDoc(doc(db,'clients',id),{deleted:true,deletedAt:new Date().toISOString()});if(selectedId===id)selectedId=null;toast('🗑 Enviado para lixeira','var(--red)')};
 window.restoreClient=async id=>{await updateDoc(doc(db,'clients',id),{deleted:false,deletedAt:null});toast('♻️ Restaurado')};
@@ -778,22 +780,27 @@ function renderDetail(){
   if(!c){wrap.innerHTML=homeHtml();return}
   const layers=getLayers(c);
   const done=layers.filter(l=>l.done);
-  const headL=layers.find(l=>!l.done);
+  const pinIdx=layers.findIndex(l=>!l.done&&l.pinned);
+  const firstActIdx=layers.findIndex(l=>!l.done);
+  const defaultIdx=pinIdx>=0?pinIdx:firstActIdx;
+  const headL=defaultIdx>=0?layers[defaultIdx]:null;
   const status=headL?headL.status||'waiting':'done';
   let n=0;
-  const tabs=layers.map((l,i)=>l.done?'':`<button id="vt-${c.id}-${i}" data-vt="${c.id}" class="vtab ${{waiting:'vtw',workshop_pending:'vtws',evaluated:'vte',quoted:'vtq',approved:'vta',ready_delivery:'vtrd',service_finished:'vte',absent:'vtab2',done:'vtd'}[l.status]||'vtw'}" onclick="showVTab('${c.id}',${i})">Visita ${++n}</button>`).join('');
+  const tabs=layers.map((l,i)=>l.done?'':`<button id="vt-${c.id}-${i}" data-vt="${c.id}" class="vtab ${i===defaultIdx?'active':''} ${{waiting:'vtw',workshop_pending:'vtws',evaluated:'vte',quoted:'vtq',approved:'vta',ready_delivery:'vtrd',service_finished:'vte',absent:'vtab2',done:'vtd'}[l.status]||'vtw'}" onclick="showVTab('${c.id}',${i})">Visita ${++n}${l.pinned?' 📌':''}</button>`).join('');
   const doneTab=done.length?`<button class="vtab vtd" data-vt="${c.id}" onclick="showDoneTab('${c.id}')">Concluídos (${done.length})</button>`:'';
   const panels=layers.map((l,i)=>{
     if(l.done)return'';
-    const first=i===layers.findIndex(x=>!x.done);
+    const first=i===defaultIdx;
     const bimg=l.budgetImage?.data||'';
     const photos=l.techReport?.photos||[];
     const total=moneyNum(l.approval?.value);
     const pagSumL=pagsOf(l).reduce((s,p)=>s+moneyNum(p.valor),0);
-    const entrada=l.approval?.paid?total:pagSumL;
+    const entrada=l.approval?.paid?total:0;
     const pct=total>0?Math.min(100,Math.round(entrada/total*100)):0;
     const restante=Math.max(0,total-entrada);
+    const faltaForm=Math.max(0,total-pagSumL);
     return `<div id="vp-${c.id}-${i}" data-vp="${c.id}" class="vpanel ${first?'active':''}">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:2px"><button type="button" class="btn btn-sm ${l.pinned?'btn-cyan':'btn-muted'}" onclick="togglePin('${c.id}',${i})">${l.pinned?'📌 Visita fixada':'📌 Fixar visita'}</button></div>
       ${timelineHtml(l)}
       <div class="dcards">
         <div class="dcard"><h3><span class="ic">💵</span>Pagamento e Orçamento</h3><span class="mini-lbl">Valor do orçamento</span><div class="big-money">${total>0?fmtMoney(total):'—'}</div><div style="margin-top:12px"><span class="mini-lbl">Forma de pagamento</span><div style="font-weight:800;font-size:.9rem">${l.approval?.payment||'—'}</div></div></div>
@@ -819,7 +826,7 @@ function renderDetail(){
         </div>
         <div style="margin-bottom:12px"><span class="fl">Valor do orçamento</span><input class="fi" id="ly-val-${c.id}-${i}" value="${l.approval?.value||''}" oninput="recalcPag('${c.id}',${i})"></div>
         <div style="margin-bottom:4px"><span class="fl">Pagamentos</span><div id="pag-list-${c.id}-${i}">${pagsOf(l).map(p=>pagRowHtml(c.id,i,p)).join('')}</div><button type="button" class="btn btn-muted btn-sm" onclick="addPagRow('${c.id}',${i})">＋ Adicionar forma de pagamento</button></div>
-        <div id="entry-approval-box-${c.id}-${i}" class="value-preview ${total>0?'show':''}" style="margin:12px 0;width:100%;display:${total>0?'flex':'none'};align-items:center;justify-content:space-between"><span style="color:var(--muted);font-weight:800;text-transform:uppercase;font-size:.68rem;letter-spacing:.05em">Falta a pagar</span> <b style="color:#fca5a5;font-size:1rem">${fmtMoney(restante)}</b></div>
+        <div id="entry-approval-box-${c.id}-${i}" class="value-preview ${total>0?'show':''}" style="margin:12px 0;width:100%;display:${total>0?'flex':'none'};align-items:center;justify-content:space-between"><span style="color:var(--muted);font-weight:800;text-transform:uppercase;font-size:.68rem;letter-spacing:.05em">Falta a pagar</span> <b style="color:#fca5a5;font-size:1rem">${fmtMoney(faltaForm)}</b></div>
         <div class="fgrid">
           <div><span class="fl">Data e hora da visita</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="ly-datetime-${c.id}-${i}" placeholder="dd/mm/aaaa hh:mm" value="${isoToBr(l.datetime||c.datetime||'')}" oninput="dtMask(this)" onchange="saveLayerDatetime('${c.id}',${i},this.value)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px" onclick="openPicker('pk-dt-${c.id}-${i}')">📅</button><input type="datetime-local" id="pk-dt-${c.id}-${i}" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'ly-datetime-${c.id}-${i}',true)"></div></div>
           <div><span class="fl">Data e hora do serviço</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="ly-svc-${c.id}-${i}" placeholder="dd/mm/aaaa hh:mm" value="${isoToBr(l.approval?.serviceDate||'')}" oninput="dtMask(this)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px" onclick="openPicker('pk-svc-${c.id}-${i}')">📅</button><input type="datetime-local" id="pk-svc-${c.id}-${i}" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'ly-svc-${c.id}-${i}',false)"></div></div>

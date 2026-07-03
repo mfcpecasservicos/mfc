@@ -1,3 +1,14 @@
+MFC v41
+
+Última alteração
+
+Financeiro: total do rodapé com label e valor verticalmente centrados de verdade (line-height:1 nos dois lados).
+Pagamento: valores digitados na lista de pagamentos NÃO contam mais como pago. A barra "Pago"/% só enche quando o botão "💳 Serviço já foi pago" é acionado. "Falta a pagar" do formulário continua = orçamento − soma dos lançamentos (conferência da divisão). "Falta pagar" (vermelho) segue sendo o marcador de serviço finalizado sem pagamento.
+Visita fixada (📌): botão "Fixar visita" em cada painel. A visita fixada dita o status do cliente na lista lateral e vira a aba/badge padrão ao abrir o cliente. Ao finalizar o serviço dela, o pin sai e a próxima visita assume automaticamente. Só uma fixada por cliente.
+Bugfix: a aba da visita não recebia destaque ao abrir o cliente (painel ativava, aba não) — corrigido; a aba padrão (fixada ou primeira ativa) já abre selecionada e o badge do topo mostra só o status dela.
+Bugfix: estado de interface (aba/campos abertos) de um cliente vazava para outro ao trocar de cliente — restauração agora só acontece para o mesmo cliente.
+Cache atualizado para mfc-tecnico-v41.
+
 MFC v40
 
 Última alteração
