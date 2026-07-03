@@ -67,7 +67,7 @@ button{font-family:inherit}
 .sbadge{font-size:.6rem;font-weight:800;padding:4px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
 .sw{background:#1e3a5f33;color:#60a5fa;border:1px solid #1e3a5f}.sws{background:#08334455;color:#67e8f9;border:1px solid #0e7490}.se{background:#14532d33;color:#86efac;border:1px solid #14532d}.sq{background:#451a0333;color:#fbbf24;border:1px solid #451a03}.sa{background:#1c191733;color:#fb923c;border:1px solid #f9731655}.srd{background:#0c4a6e33;color:#7dd3fc;border:1px solid #0c4a6e}.ssf{background:#052e16;color:#86efac;border:1px solid #166534}.sd{background:#0d1f0d33;color:#4ade80;border:1px solid #0d1f0d}.sab{background:#3b076433;color:#d8b4fe;border:1px solid #3b0764}
 .dw{background:#3b82f6}.dws{background:#38bdf8}.de{background:#22c55e}.dq{background:#f59e0b}.da{background:#f97316}.drd{background:#38bdf8}.dsf{background:#22c55e}.dd{background:#22c55e}.dab{background:#a855f7}
-.pagination{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px}
+.pagination{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px}.fin-total{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:14px;padding:13px 16px;position:sticky;bottom:0}.fin-total span{font-size:.72rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.05em}.fin-total b{color:var(--gold);font-size:1.05rem;font-weight:900}
 .pg-btn{min-width:34px;height:34px;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-weight:800;cursor:pointer;font-size:.8rem}
 .pg-btn:hover{background:var(--surface2)}
 .pg-btn.active{border-color:var(--yellow);color:var(--yellow)}
@@ -547,9 +547,8 @@ function renderFin(){
       ${r.custom?`<button class="copy-btn" style="margin-top:8px;color:#fca5a5" onclick="event.stopPropagation();removeRes('${r.key}')">🗑 Remover conta</button>`:''}
     </div>`;
   }).join('')+`
-    <button class="btn btn-outline-blue" style="width:100%;height:46px" onclick="openAddRes()">➕ Adicionar conta</button>
-    <div class="rescard" style="cursor:default;border-left-color:var(--gold)"><div class="res-row" style="border-top:none;padding-top:0"><span>💰 Total de todas as contas</span><b style="color:var(--gold);font-size:1rem">${fmtMoney(grandTotal)}</b></div></div>`;
-  document.getElementById('pagination').innerHTML='';
+    <button class="btn btn-outline-blue" style="width:100%;height:46px" onclick="openAddRes()">➕ Adicionar conta</button>`;
+  document.getElementById('pagination').innerHTML=`<div class="fin-total"><span>💰 Total de todas as contas</span><b>${fmtMoney(grandTotal)}</b></div>`;
   // detail
   const wrap=document.getElementById('view-fin');
   const r=ALLRES.find(x=>x.key===selectedFin);

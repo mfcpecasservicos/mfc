@@ -1,3 +1,10 @@
+MFC v39
+
+Última alteração
+
+Financeiro: "Total de todas as contas" saiu do meio da lista e agora fica fixo no rodapé da coluna (sticky), sempre visível.
+Cache atualizado para mfc-tecnico-v39.
+
 MFC v38
 
 Última alteração
