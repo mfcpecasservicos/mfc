@@ -1,3 +1,17 @@
+MFC v40
+
+Última alteração
+
+Financeiro: botão WhatsApp (ícone verde) no canto superior de cada card — Embasa abre wa.me/7197170999 e Coelba wa.me/7133706350, ambos com "Olá" pré-preenchido, em nova aba, identificando o tipo automaticamente.
+Financeiro: campo "apelido" nas contas — no formulário Adicionar conta e editável nas existentes pelo botão ✏️ do card. Aparece no título: Embasa (Casa da mãe).
+Financeiro: total do rodapé alinhado (sem quebra torta).
+Aprovação e Pagamento: "Forma de pagamento" + "Valor da entrada" substituídos por LISTA DE PAGAMENTOS PARCIAIS — linhas [forma ▾][valor][🗑] + botão "＋ Adicionar forma de pagamento". Salvo como approval.pagamentos[] no Firestore ({forma, valor, data}). "Falta a pagar" = orçamento − soma dos pagamentos, em tempo real; "% pago" do card também soma o array. Compatibilidade: visitas antigas com payment/entryValue são convertidas para 1 lançamento na leitura, sem quebrar dados. Campos payment/entryValue continuam sendo gravados (derivados) para compatibilidade com o painel do técnico.
+"Falta a pagar" realinhado — barra própria, largura total, label e valor nas extremidades.
+Datas: campos digitáveis mantidos + botão 📅 que abre o calendário nativo (os dois juntos), na visita, no serviço e nos modais.
+Status por visita: cada visita usa seu próprio status do array; o badge do topo reflete a ABA aberta e troca ao mudar de Visita 1/2/Concluídos; a lista lateral usa regra de prioridade (pendente primeiro: aguardando > avaliação > aprovação > ... ). Ao salvar, o estado local re-renderiza na hora, sem esperar o Firestore.
+Marca: moldura branca removida da logo (sidebar e home), descrição removida — sidebar mostra só (Logo) Painel de gestão; home mostra só a logo.
+Cache atualizado para mfc-tecnico-v40.
+
 MFC v39
 
 Última alteração
