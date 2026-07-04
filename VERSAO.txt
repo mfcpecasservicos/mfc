@@ -1,3 +1,10 @@
+MFC v48
+
+Última alteração
+
+Gestor: chips do card da lista (data, status e indicadores) empilhados em coluna e ordenados por tamanho do texto — o menor em cima, o maior embaixo.
+Cache atualizado para mfc-tecnico-v48.
+
 MFC v47
 
 Última alteração
