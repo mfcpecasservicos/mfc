@@ -6,8 +6,9 @@
 <title>Painel Gestor — MFC</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
+<link rel="stylesheet" href="fontawesome/css/all.min.css">
 <style>
-:root{--bg:#070b12;--surface:#0d1420;--surface2:#141d2e;--surface3:#1b2740;--accent:#3b82f6;--accent2:#06b6d4;--text:#f1f5f9;--muted:#8ea0b8;--border:#1c2a44;--green:#22c55e;--yellow:#f59e0b;--orange:#f97316;--red:#ef4444;--purple:#a855f7;--cyan:#38bdf8;--gold:#fbbf24;--radius:16px;--radius-sm:10px;--shadow:0 6px 28px rgba(0,0,0,.45)}
+:root{--bg:#0B1120;--surface:#121B2D;--surface2:#17233A;--surface3:#1E2A45;--accent:#3B82F6;--accent2:#06b6d4;--text:#FFFFFF;--muted:#94A3B8;--border:#1f2b47;--green:#22C55E;--yellow:#F59E0B;--orange:#f97316;--red:#EF4444;--purple:#8B5CF6;--cyan:#38bdf8;--gold:#fbbf24;--radius:16px;--radius-sm:12px;--shadow:0 6px 28px rgba(0,0,0,.45)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;font-size:15px}
 a{color:inherit}
@@ -41,9 +42,9 @@ button{font-family:inherit}
 /* ====== LIST COLUMN ====== */
 .list-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
 .list-head h1{font-size:1.15rem;font-weight:900}
-.btn{padding:10px 15px;border-radius:var(--radius-sm);border:none;cursor:pointer;font-size:.85rem;font-weight:800;white-space:nowrap;transition:transform .12s,filter .15s}
-.btn:hover{filter:brightness(1.12)}
-.btn:active{transform:scale(.97)}
+.btn{height:42px;padding:0 18px;display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:12px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;white-space:nowrap;transition:all .2s ease-in-out;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.btn:hover{filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.3)}
+.btn:active{transform:scale(.98)}
 .btn-blue{background:var(--accent);color:#fff}
 .btn-green{background:var(--green);color:#fff}
 .btn-red{background:var(--red);color:#fff}
@@ -51,7 +52,7 @@ button{font-family:inherit}
 .btn-cyan{background:#0e7490;color:#fff}
 .btn-outline-blue{background:#0d2346;color:#60a5fa;border:1px solid #3b82f666}
 .btn-outline-red{background:#3b121955;color:#fca5a5;border:1px solid #ef444466}
-.btn-sm{padding:7px 11px;font-size:.78rem}
+.btn-sm{height:34px;padding:0 12px;font-size:.78rem}.pag-row .btn{height:44px}
 .clist{display:flex;flex-direction:column;gap:10px;flex:1;overflow-y:auto}
 .vcard{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--border);border-radius:14px;padding:10px 30px 10px 14px;cursor:pointer;transition:all .18s;position:relative}
 .vcard:hover{background:var(--surface2)}
@@ -116,8 +117,11 @@ button{font-family:inherit}
 .filter-menu button.active{background:var(--surface2);color:var(--green)}
 
 /* ====== DETAIL ====== */
-.detail-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.detail-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px;flex-wrap:wrap}
 .detail-head h1{font-size:1.2rem;font-weight:900}
+.dh-left{display:flex;align-items:center;gap:12px}
+.dh-ic{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#1e3a5f,#3B82F6);display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:#fff;box-shadow:0 4px 14px rgba(59,130,246,.3)}
+.dh-sub{font-size:.74rem;color:var(--muted);margin-top:2px}
 .detail-actions{display:flex;gap:8px;align-items:center}
 .field-action{display:inline-flex;color:var(--accent2);text-decoration:none;font-size:.74rem;font-weight:800;padding:3px 8px;border-radius:7px;background:#0d2346;border:1px solid #3b82f633}
 .timeline{display:flex;align-items:flex-start;justify-content:space-between;margin:18px 0 22px;position:relative}
@@ -156,9 +160,10 @@ button{font-family:inherit}
 .acc-body{display:none;padding:16px;border-top:1px solid var(--border)}
 .acc-body.open{display:block}
 .fl{font-size:.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;display:block}
-.fi{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;color:var(--text);font-size:.9rem;outline:none;font-family:inherit}
-.fi:focus{border-color:var(--accent)}
-textarea.fi{resize:vertical;min-height:64px}
+.fi{width:100%;height:44px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:0 14px;color:var(--text);font-size:.9rem;outline:none;font-family:inherit;transition:border-color .2s ease-in-out}
+.fi:focus{border-color:#3B82F6}
+.fi::placeholder{color:#94A3B8aa}
+textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-height:1.55}
 .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
 .value-preview{font-size:.84rem;color:#67e8f9;background:#083344;border:1px solid #0e7490;border-radius:8px;padding:8px 10px;margin:8px 0;display:none}
 .value-preview.show{display:block}.pag-row{display:grid;grid-template-columns:1fr 130px 44px;gap:8px;margin-bottom:8px;align-items:center}
@@ -166,10 +171,14 @@ textarea.fi{resize:vertical;min-height:64px}
 .file-input{font-size:.82rem;color:var(--muted);width:100%;margin-top:6px}
 .budget-preview{width:100%;max-width:240px;max-height:170px;object-fit:contain;border-radius:10px;border:1px solid var(--border);background:#020617;cursor:zoom-in;display:block;margin:8px 0}
 .budget-empty{font-size:.82rem;color:var(--muted);display:block;margin-bottom:6px}
-.vtabs-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.vtabs{display:flex;gap:4px;flex-wrap:wrap}
-.vtab{padding:7px 13px;border-radius:8px;cursor:pointer;font-size:.78rem;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-weight:700}
-.vtab.active{color:#fff;font-weight:800}
+.vtabs-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.vtabs-row::-webkit-scrollbar{display:none}
+.vtabs{display:flex;gap:8px;flex-wrap:nowrap;align-items:center}
+.vtab{height:42px;padding:0 18px;display:inline-flex;align-items:center;gap:6px;border-radius:12px;cursor:pointer;font-size:.82rem;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-weight:600;white-space:nowrap;transition:all .2s ease-in-out;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.vtab:hover{background:var(--surface2);transform:translateY(-2px)}
+.vtab.active{color:#fff;font-weight:700;box-shadow:0 0 14px rgba(59,130,246,.22)}
+.vtab-new{background:transparent;border:1px dashed #8B5CF6;color:#a78bfa}
+.vtab-new:hover{background:#8B5CF618;box-shadow:0 0 14px rgba(139,92,246,.2)}
 .vtw.active{background:#1e3a5f;border-color:#3b82f6}.vtws.active{background:#083344;border-color:#38bdf8}.vte.active{background:#14532d;border-color:#22c55e}.vtq.active{background:#451a03;border-color:#f59e0b}.vta.active{background:#1c1917;border-color:#f97316}.vtrd.active{background:#0c4a6e;border-color:#38bdf8}.vtd.active{background:#0d1f0d;border-color:#22c55e}.vtab2.active{background:#3b0764;border-color:#a855f7}
 .vpanel{display:none}.vpanel.active{display:block}
 .toggle3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
@@ -180,10 +189,18 @@ textarea.fi{resize:vertical;min-height:64px}
 .tg-owes.active{background:#4a1c1c;border-color:var(--red);color:#fca5a5}
 .bottom-acts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
 .bottom-acts .btn{height:46px;font-size:.85rem;display:flex;align-items:center;justify-content:center;gap:6px}
-.igrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;margin-bottom:14px}
-.iblk{background:var(--surface2);border-radius:var(--radius-sm);padding:10px 12px;border:1px solid var(--border)}
-.iblk label{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:3px}
-.iblk p{font-size:.85rem;user-select:text}
+.igrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-bottom:16px}
+.iblk{background:linear-gradient(160deg,#121B2D,#0f1728);border-radius:18px;padding:18px;border:1px solid var(--border);box-shadow:0 4px 16px rgba(0,0,0,.25);transition:all .2s ease-in-out;position:relative}
+.iblk:hover{background:linear-gradient(160deg,#17233A,#121B2D);transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,0,0,.35)}
+.ib-ic{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.95rem;margin-bottom:12px}
+.iblk label{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px;font-weight:600}
+.iblk p{font-size:.95rem;font-weight:600;user-select:text;line-height:1.55}
+.iblk-problem p{max-height:150px;overflow-y:auto;line-height:1.7;font-weight:500;padding-right:6px;scrollbar-width:thin;scrollbar-color:var(--surface3) transparent}
+.iblk-problem p::-webkit-scrollbar{width:5px}
+.iblk-problem p::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:4px}
+@media(min-width:760px){.iblk-problem{grid-column:span 2}}
+.maps-btn{display:inline-flex;align-items:center;gap:6px;margin-top:10px;height:34px;padding:0 14px;border-radius:12px;background:#0d2346;border:1px solid #3b82f655;color:#60a5fa;font-size:.78rem;font-weight:600;text-decoration:none;transition:all .2s ease-in-out}
+.maps-btn:hover{background:#12315f;transform:translateY(-2px);box-shadow:0 4px 12px rgba(59,130,246,.25)}
 
 /* ====== FINANCEIRO DETAIL ====== */
 .contas-list{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
@@ -213,7 +230,7 @@ textarea.fi{resize:vertical;min-height:64px}
 /* modals */
 .mbg{position:fixed;inset:0;background:#000c;z-index:500;display:none;align-items:center;justify-content:center;padding:16px}
 .mbg.open{display:flex}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;width:100%;max-width:640px;display:flex;flex-direction:column;gap:12px;max-height:92vh;overflow-y:auto}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:22px;width:100%;max-width:640px;display:flex;flex-direction:column;gap:12px;max-height:92vh;overflow-y:auto}
 .modal h3{font-size:1rem;font-weight:900}
 .mact{display:flex;gap:8px;justify-content:flex-end}
 #etr-modal{display:none;position:fixed;inset:0;background:#000c;z-index:9999;align-items:center;justify-content:center;padding:16px}
@@ -485,8 +502,8 @@ function appointmentSortValue(c){
   return sortDateValue(c.createdAt)||Number.MAX_SAFE_INTEGER;
 }
 function fullAddress(c){return [c.address,c.number,c.neighborhood||c.bairro].filter(Boolean).join(', ')||c.address||''}
-function infoBlock(label,value,extra=''){return value?`<div class="iblk"><label>${label}</label><p>${value}${extra}</p></div>`:''}
-function clientInfoBlocks(c){const addr=fullAddress(c);const routeAddress=String(c.address||'').trim();return `<div class="igrid">${infoBlock('👤 Nome completo',c.name||'—')}${infoBlock('📞 Número de contato',c.phone||'—')}${infoBlock('✉️ E-mail',c.email||'')}${infoBlock("📍 Dias D'Ávila?",c.city||c.cidade||'')}${infoBlock('🏠 Endereço',addr,routeAddress?` <a class="field-action" href="${maps(routeAddress)}" target="_blank">📍 Maps</a>`:'')}${infoBlock('🔢 Número da residência',c.number||'')}${infoBlock('🏘️ Bairro',c.neighborhood||c.bairro||'')}${infoBlock('🧭 Ponto de referência',c.ref||'')}${infoBlock('🧊 Equipamento',c.equip||'')}${infoBlock('📝 Descrição do problema',c.problem||c.notes||'')}</div>`}
+function infoCard(icon,color,label,value,extra='',cls=''){return value?`<div class="iblk ${cls}"><div class="ib-ic" style="background:${color}22;color:${color}"><i class="fa-solid ${icon}"></i></div><label>${label}</label><p>${value}</p>${extra}</div>`:''}
+function clientInfoBlocks(c){const addr=fullAddress(c);const routeAddress=String(c.address||'').trim();return `<div class="igrid">${infoCard('fa-user','#3B82F6','Nome completo',c.name||'—')}${infoCard('fa-phone','#22C55E','Número de contato',c.phone||'—')}${infoCard('fa-envelope','#8B5CF6','E-mail',c.email||'')}${infoCard('fa-city','#38bdf8',"Dias D'Ávila?",c.city||c.cidade||'')}${infoCard('fa-location-dot','#F59E0B','Endereço',addr,routeAddress?`<a class="maps-btn" href="${maps(routeAddress)}" target="_blank"><i class="fa-solid fa-location-dot"></i> Ver no Maps</a>`:'')}${infoCard('fa-hashtag','#94A3B8','Número da residência',c.number||'')}${infoCard('fa-house','#94A3B8','Bairro',c.neighborhood||c.bairro||'')}${infoCard('fa-crosshairs','#F59E0B','Ponto de referência',c.ref||'')}${infoCard('fa-cube','#3B82F6','Equipamento',c.equip||'')}${infoCard('fa-triangle-exclamation','#EF4444','Descrição do problema',c.problem||c.notes||'','','iblk-problem')}</div>`}
 function setConn(t){document.getElementById('conn').textContent=t}
 function cleanupOld(){if(cleanupDone)return;cleanupDone=true;const now=Date.now();all.forEach(async c=>{const delAge=c.deletedAt?now-new Date(c.deletedAt).getTime():0;const doneAge=(c.completedAt||activeLayer(c).concludedAt)?now-new Date(c.completedAt||activeLayer(c).concludedAt).getTime():0;if(c.deleted&&delAge>90*86400000)await deleteDoc(doc(db,'clients',c.id));else if(getStatus(c)==='done'&&doneAge>365*86400000)await deleteDoc(doc(db,'clients',c.id));})}
 
@@ -841,10 +858,10 @@ function renderDetail(){
     </div>`;
   }).join('');
   wrap.innerHTML=`
-    <div class="detail-head"><h1>Detalhes da visita</h1><div class="detail-actions"><span class="sbadge ${badgeCls[status]||'sw'}" id="head-badge-${c.id}">${lbl(status)}</span><button class="btn btn-muted btn-sm" onclick="openEdit('${c.id}')">✏️ Editar</button><button class="btn btn-muted btn-sm" onclick="addLayer('${c.id}')">➕ Nova visita</button></div></div>
+    <div class="detail-head"><div class="dh-left"><div class="dh-ic"><i class="fa-solid fa-clipboard-list"></i></div><div><h1>Detalhes da visita</h1><p class="dh-sub">Informações completas da visita registrada</p></div></div><div class="detail-actions"><span class="sbadge ${badgeCls[status]||'sw'}" id="head-badge-${c.id}">${lbl(status)}</span><button class="btn btn-muted btn-sm" onclick="openEdit('${c.id}')"><i class="fa-solid fa-pen"></i> Editar</button></div></div>
     ${clientInfoBlocks(c)}
     <div id="body-${c.id}">
-      <div class="vtabs-row"><div class="vtabs">${tabs}${doneTab}</div></div>
+      <div class="vtabs-row"><div class="vtabs">${tabs}${doneTab}<button class="vtab vtab-new" onclick="addLayer('${c.id}')"><i class="fa-solid fa-plus"></i> Nova visita</button></div></div>
       ${panels}
     </div>`;
 }

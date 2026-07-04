@@ -1,3 +1,25 @@
+MFC v46
+
+Última alteração
+
+Font Awesome agora é LOCAL (pasta /fontawesome com CSS + fontes woff2, ~356 KB) em vez de CDN — ícones funcionam offline. Adicionado ao APP_SHELL do service worker para cache.
+IMPORTANTE: subir a pasta fontawesome/ inteira junto com os arquivos, e subir o service-worker.js (o do site está preso na v30 — não é atualizado desde a v31).
+Cache atualizado para mfc-tecnico-v46.
+
+MFC v45
+
+Última alteração
+
+REDESIGN "Detalhes da Visita" + Design System global (só HTML/CSS — lógica, IDs, Firebase e eventos intocados):
+- Paleta atualizada: fundo #0B1120, cards #121B2D, hover #17233A, texto secundário #94A3B8.
+- Cabeçalho novo: ícone em destaque + "Detalhes da visita" + subtítulo "Informações completas da visita registrada"; à direita badge de status + Editar. Botão "Nova visita" REMOVIDO do cabeçalho.
+- Barra de abas de visitas redesenhada (estilo Chrome/VS Code): abas de 42px, cantos 12px, ativa destacada com brilho, inativas discretas, rolagem horizontal suave com barra escondida. Botão "+ Nova visita" (outline roxo tracejado) SEMPRE ao lado da última aba.
+- Cards de informação premium: degradê sutil, cantos 18px, sombra, hover com elevação, ícone circular colorido (Font Awesome: fa-user, fa-phone, fa-location-dot, fa-crosshairs, fa-cube, fa-triangle-exclamation), título pequeno cinza, informação em destaque. Grid repeat(auto-fit, minmax(260px,1fr)).
+- Card Endereço com botão "📍 Ver no Maps" de verdade (não link simples).
+- Card Descrição do problema ocupa 2 colunas no desktop, com scroll interno elegante e line-height maior.
+- Design System: botões 42px/12px com hover de elevação (translateY -2px) e clique scale .98; inputs 44px/12px com foco azul; cards 16-18px; modais 18px; transições padronizadas 0.2s ease-in-out; Font Awesome adicionado via CDN.
+Cache atualizado para mfc-tecnico-v45.
+
 MFC v44
 
 Última alteração

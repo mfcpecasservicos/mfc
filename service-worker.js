@@ -8,7 +8,11 @@ const APP_SHELL = [
   './icon-192.png',
   './icon-512.png',
   './mfc-logo.png',
-  './mfc-capa.png'
+  './mfc-capa.png',
+  './fontawesome/css/all.min.css',
+  './fontawesome/webfonts/fa-solid-900.woff2',
+  './fontawesome/webfonts/fa-regular-400.woff2',
+  './fontawesome/webfonts/fa-brands-400.woff2'
 ];
 
 self.addEventListener('install', event => {
