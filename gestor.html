@@ -61,11 +61,11 @@ button{font-family:inherit}
 .vcard .vc-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
 .vcard .vc-name{font-weight:900;font-size:1rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .vcard .vc-bottom{display:flex;align-items:center;justify-content:flex-start;gap:8px;margin-top:6px;flex-wrap:wrap}.vc-chevron{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#8ea0b8;font-size:1rem;transition:transform .15s}.vcard:hover .vc-chevron{transform:translateY(-50%) translateX(3px);color:var(--text)}
-.vcard .vc-dt{font-size:.72rem;font-weight:800;color:#fff;background:#1e3a5f;border:1px solid #3b82f6;border-radius:6px;padding:3px 8px;display:inline-flex;align-items:center;gap:4px}
-.indicator{display:inline-flex;align-items:center;font-size:.66rem;font-weight:800;padding:3px 8px;border-radius:12px;border:1px solid #0e749055;background:#083344;color:#67e8f9;margin-right:4px;margin-top:4px}
+.vcard .vc-dt{font-size:.72rem;font-weight:800;color:#fff;background:#1e3a5f;border:1px solid #3b82f6;border-radius:8px;height:26px;padding:0 10px;display:inline-flex;align-items:center;gap:5px}
+.indicator{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:800;height:26px;padding:0 10px;border-radius:8px;border:1px solid #0e749055;background:#083344;color:#67e8f9;margin-right:4px;margin-top:4px}
 .ind-laudo{background:#2d1f00 !important;color:#fbbf24 !important;border-color:#92400e !important}
 .ind-owes{background:#4a1c1c !important;color:#fca5a5 !important;border-color:#7f1d1d !important}
-.sbadge{font-size:.6rem;font-weight:800;padding:4px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.sbadge{font-size:.66rem;font-weight:800;height:26px;padding:0 10px;border-radius:8px;display:inline-flex;align-items:center;gap:5px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
 .sw{background:#1e3a5f33;color:#60a5fa;border:1px solid #1e3a5f}.sws{background:#08334455;color:#67e8f9;border:1px solid #0e7490}.se{background:#14532d33;color:#86efac;border:1px solid #14532d}.sq{background:#451a0333;color:#fbbf24;border:1px solid #451a03}.sa{background:#1c191733;color:#fb923c;border:1px solid #f9731655}.srd{background:#0c4a6e33;color:#7dd3fc;border:1px solid #0c4a6e}.ssf{background:#052e16;color:#86efac;border:1px solid #166534}.sd{background:#0d1f0d33;color:#4ade80;border:1px solid #0d1f0d}.sab{background:#3b076433;color:#d8b4fe;border:1px solid #3b0764}
 .dw{background:#3b82f6}.dws{background:#38bdf8}.de{background:#22c55e}.dq{background:#f59e0b}.da{background:#f97316}.drd{background:#38bdf8}.dsf{background:#22c55e}.dd{background:#22c55e}.dab{background:#a855f7}
 .pagination{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px}.fin-total{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:14px;padding:13px 16px;position:sticky;bottom:0}.fin-total span{font-size:.7rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.05em;line-height:1;display:flex;align-items:center;gap:6px}.fin-total b{color:var(--gold);font-size:1.05rem;font-weight:900;white-space:nowrap;line-height:1;display:flex;align-items:center}.fin-total span{white-space:nowrap}
@@ -86,7 +86,7 @@ button{font-family:inherit}
 .res-row b{user-select:text;display:flex;align-items:center;gap:6px}
 .copy-btn{background:var(--surface3);border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:2px 7px;font-size:.68rem;cursor:pointer;font-weight:800}
 .copy-btn:hover{color:var(--text)}.wa-btn{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;background:#0d2e1b;border:1px solid #14532d;text-decoration:none;transition:filter .15s}.wa-btn:hover{filter:brightness(1.3)}
-.overdue-badge{background:#4a1c1c;color:#fca5a5;border:1px solid #7f1d1d;border-radius:10px;padding:3px 9px;font-size:.68rem;font-weight:900;display:inline-flex;align-items:center;gap:5px;margin-top:8px}
+.overdue-badge{background:#4a1c1c;color:#fca5a5;border:1px solid #7f1d1d;border-radius:8px;height:26px;padding:0 10px;font-size:.68rem;font-weight:900;display:inline-flex;align-items:center;gap:5px;margin-top:8px}
 
 /* ====== TOOLBAR (home Chrome-style) ====== */
 .home-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;gap:18px}
@@ -146,7 +146,7 @@ button{font-family:inherit}
 .pay-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;text-align:center}
 .pay-grid .pg-lbl{font-size:.68rem;color:var(--muted);font-weight:700}
 .pay-grid .pg-val{font-size:.85rem;font-weight:900}
-.pct-badge{font-size:.66rem;font-weight:800;background:#451a03;color:var(--gold);border:1px solid #92400e;border-radius:10px;padding:3px 8px;float:right}
+.pct-badge{font-size:.66rem;font-weight:800;background:#451a03;color:var(--gold);border:1px solid #92400e;border-radius:8px;height:26px;padding:0 10px;display:inline-flex;align-items:center;margin-left:auto}
 .date-blk{display:flex;align-items:center;gap:10px;background:var(--surface2);border-radius:12px;padding:10px 12px;margin-bottom:8px}
 .date-blk .di{width:36px;height:36px;border-radius:9px;background:#0d2346;display:flex;align-items:center;justify-content:center;font-size:1rem}
 .date-blk .dd-l{font-size:.68rem;color:var(--muted);font-weight:700}
@@ -211,7 +211,7 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 .conta-item .cvenc span{color:var(--muted);font-size:.66rem;font-weight:700;text-transform:uppercase;display:block}
 .conta-item .cpix{flex:1;min-width:160px;font-size:.8rem;word-break:break-all}
 .conta-item .cpix span{color:var(--muted);font-size:.66rem;font-weight:700;text-transform:uppercase;display:block}
-.atras-flag{background:#7f1d1d;color:#fecaca;border-radius:8px;padding:2px 8px;font-size:.66rem;font-weight:900;display:inline-block;margin-left:6px}
+.atras-flag{background:#7f1d1d;color:#fecaca;border-radius:8px;height:26px;padding:0 10px;font-size:.66rem;font-weight:900;display:inline-flex;align-items:center;margin-left:6px}
 .add-conta{background:var(--surface);border:1px dashed var(--border);border-radius:14px;padding:16px}
 .add-conta .fgrid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
 

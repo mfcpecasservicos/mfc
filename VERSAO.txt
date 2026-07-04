@@ -1,3 +1,10 @@
+MFC v47
+
+Última alteração
+
+Gestor: TODOS os badges, status e avisos padronizados no mesmo quadrado arredondado (26px de altura, cantos 8px, mesmo padding, alinhados verticalmente): data do card, badge de status, indicadores (Retirar equipamento, Laudo, etc.), aviso de atrasada do financeiro, flag ATRASADA e % pago.
+Service worker: v47 (ATENÇÃO: o arquivo no site ainda estava na v30 — subir o service-worker.js deste ZIP).
+
 MFC v46
 
 Última alteração
