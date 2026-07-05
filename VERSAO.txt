@@ -1,3 +1,21 @@
+MFC v50
+
+Última alteração
+
+INDEX:
+- Botões Salvar Avaliação + Descartar agora ficam juntos no rodapé fixo (sticky) — acompanham a rolagem. Descartar Visita centralizado abaixo do Salvar, não mais no canto (aplicado na avaliação, edição e painel de status; duplicata removida).
+- Hora da visita agora fica na MESMA LINHA que "Retirar equipamento" (hora primeiro, à esquerda) — as tags saíram de dentro da coluna de texto e viraram um rodapé de largura total do card.
+- Badges de status com fundo levemente mais claro que o fundo, mantendo a cor do texto.
+GESTOR:
+- Cards agrupados por dia com cabeçalhos "QUINTA-FEIRA, 26/06/2026" + linha divisória (igual ao index). Data removida de dentro do card — só a hora, em pill vazada com relógio, SEMPRE em primeiro; os demais chips continuam ordenados por tamanho.
+- Tag "Retirar equipamento" com bandeira verde de contorno verde (igual index).
+- Badges de status com fundo mais claro.
+- Timeline: molduras quadradas arredondadas; emojis 3D trocados por ícones flat (relógio, chave/ferramenta no "Para executar", check minimalista, cifrão $ no lugar do cartão) — todos Font Awesome local.
+- Abas renomeadas: "Visita 1" → "1ª Visita", "2ª Visita", etc.
+- Acordeão "Aprovação e Pagamento" EXTINTO — todo o conteúdo foi para "Orçamento e Status" na ordem: Status da visita → Equipamento no galpão | Serviço já pago | Falta pagar → Data e hora do serviço → Valor do orçamento → Pagamentos → Falta a pagar → Observação | Imagem (lado a lado).
+- Campo "Data e hora da visita" removido do painel (redundante — edita-se no cadastro do cliente). Dados preservados.
+Cache atualizado para mfc-tecnico-v50.
+
 MFC v49
 
 Última alteração
