@@ -1,3 +1,55 @@
+MFC v49
+
+Última alteração
+
+INDEX (redesign completo do técnico, lógica 100% preservada):
+- Cabeçalho: "Roteiro" com a logo da MFC no lugar do ❄️; barra de pesquisa removida.
+- Lista agrupada por dia com cabeçalhos "QUINTA-FEIRA, 26/06/2026" + divisor.
+- Ícones flat (Font Awesome local): $ para orçamento, ✓ minimalista, relógio, documento outline nos relatórios; chevron › no canto do card.
+- Data removida de dentro do card; horário isolado em pill vazada com relógio (sempre primeiro, antes das tags).
+- Tag "Retirar equipamento" com bandeira verde e contorno verde; status em pills padronizadas.
+- Paleta: fundo #0F172A, cards #1E293B, verde #10B981, azul #3B82F6 — alto contraste para sol na tela.
+- Detalhe: cabeçalho com botão voltar quadrado arredondado, nome + status e avatar (inicial) quadrado arredondado.
+- Card cliente com labels sem emoji; botões WhatsApp/Ligar/📍 Maps.
+- "Ação do serviço" como título; grid 2x2 dos tipos; selecionado em verde (Laudo continua âmbar).
+- "Precisa retirar o equipamento" virou linha com ícone + texto + switch à direita.
+- Um único título "✍️ Relatório" (duplicata removida); textarea grande.
+- Fotos: Tirar Foto / Galeria com ícones flat; rodapé sticky com Salvar (verde) + Descartar (cinza/vermelho).
+- FUNÇÃO "CLIENTE AUSENTE" REMOVIDA (botão e código).
+GESTOR:
+- Busca: cliente na lixeira aparece como "Nome (Lixeira)"; clicar no resultado abre o modal Nova visita JÁ PREENCHIDO (só colocar data/hora) em vez de ir para a lixeira. Cliente da lixeira é restaurado ao enviar.
+- Retenção: concluídos vão para a lixeira após 120 dias da conclusão; lixeira exclui definitivamente após 90 dias.
+- "Serviço no galpão" renomeado para "Equipamento no galpão" (gestor e index).
+- Avatar com a inicial do cliente no lugar da prancheta.
+- Cards de informação: título ao lado do ícone.
+Cache atualizado para mfc-tecnico-v49.
+
+MFC v49
+
+Última alteração
+
+INDEX (redesign completo do técnico, lógica 100% preservada):
+- Cabeçalho: "Roteiro" com a logo da MFC no lugar do ❄️; barra de pesquisa removida.
+- Lista agrupada por dia com cabeçalhos "QUINTA-FEIRA, 26/06/2026" + divisor.
+- Ícones flat (Font Awesome local): $ para orçamento, ✓ minimalista, relógio, documento outline nos relatórios; chevron › no canto do card.
+- Data removida de dentro do card; horário isolado em pill vazada com relógio (sempre primeiro, antes das tags).
+- Tag "Retirar equipamento" com bandeira verde e contorno verde; status em pills padronizadas.
+- Paleta: fundo #0F172A, cards #1E293B, verde #10B981, azul #3B82F6 — alto contraste para sol na tela.
+- Detalhe: cabeçalho com botão voltar quadrado arredondado, nome + status e avatar (inicial) quadrado arredondado.
+- Card cliente com labels sem emoji; botões WhatsApp/Ligar/📍 Maps.
+- "Ação do serviço" como título; grid 2x2 dos tipos; selecionado em verde (Laudo continua âmbar).
+- "Precisa retirar o equipamento" virou linha com ícone + texto + switch à direita.
+- Um único título "✍️ Relatório" (duplicata removida); textarea grande.
+- Fotos: Tirar Foto / Galeria com ícones flat; rodapé sticky com Salvar (verde) + Descartar (cinza/vermelho).
+- FUNÇÃO "CLIENTE AUSENTE" REMOVIDA (botão e código).
+GESTOR:
+- Busca do menu principal: cliente na lixeira aparece como "Nome (Lixeira)"; clicar no resultado agora abre o modal Nova visita JÁ PREENCHIDO com os dados do cliente (só colocar data/hora) em vez de levar para a lixeira. Cliente da lixeira é restaurado automaticamente ao enviar.
+- Retenção: concluídos vão para a lixeira após 120 dias da conclusão; lixeira exclui definitivamente após 90 dias.
+- "Serviço no galpão" renomeado para "Equipamento no galpão" (botão, indicadores e painéis, gestor e index).
+- Avatar com a inicial do cliente no lugar da prancheta no cabeçalho do detalhe.
+- Cards de informação: título ao lado do ícone (ícone + label na mesma linha).
+Cache atualizado para mfc-tecnico-v49.
+
 MFC v48
 
 Última alteração
