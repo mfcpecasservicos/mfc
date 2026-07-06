@@ -1,3 +1,10 @@
+MFC v58
+
+Última alteração
+
+Gestor: card "Observações" voltou pro grid junto dos outros (Nome, Telefone, Endereço etc.), lado a lado com "Descrição do problema" — parou de ficar jogado numa linha separada embaixo de tudo.
+Cache atualizado para mfc-tecnico-v58.
+
 MFC v57
 
 Última alteração
