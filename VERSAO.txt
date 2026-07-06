@@ -1,3 +1,11 @@
+MFC v60
+
+Última alteração
+
+"Bug" do glow virou feature: modo cyberpunk permanente nos cards de visita (gestor e index) — glow oklch sempre ativo (não só ao selecionar/hover), badge com brilho externo, bolinha de status com glow reforçado, timeline com glow no ícone atual/concluído.
+Index: ícone quadrado removido, substituído pela bolinha de status com glow (igual gestor).
+Cache atualizado para mfc-tecnico-v60.
+
 MFC v59
 
 Última alteração
