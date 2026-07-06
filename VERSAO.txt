@@ -1,3 +1,15 @@
+MFC v59
+
+Última alteração
+
+Redesign dos cards de visita (gestor + index), cores geradas via oklch em vez de hex fixo:
+- Cor do status vira variável CSS (--sc) aplicada no card: barra lateral de 3px, wash de gradiente sutil (6% opacidade), bolinha com glow (só gestor, index mantém o ícone quadrado como pedido), badge em pílula com fundo/anel derivados da mesma cor (color-mix).
+- Chips (hora, pagamento, falta pagar) com classes próprias: hora em fonte monoespaçada, pagamento em teal, falta pagar em vermelho — todos com nowrap garantido.
+- Hover: card sobe 2px, borda ganha tom da cor do status, sombra mais profunda. Selecionado: glow interno + sombra externa na cor do status.
+- Cabeçalho de grupo por dia com régua fina alinhada à direita do texto.
+- Index: endereço removido do card (ficou só nome + contagem de relatórios); ícone quadrado mantido como estava.
+Cache atualizado para mfc-tecnico-v59.
+
 MFC v58
 
 Última alteração
