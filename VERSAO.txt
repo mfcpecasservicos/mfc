@@ -1,3 +1,13 @@
+MFC v56
+
+Última alteração
+
+Bugfix estrutural: campo "Observações" do modal Editar Cliente estava gravando no MESMO campo (notes) usado para exibir "Descrição do problema" — um sobrescrevia o outro. Agora são dois campos separados: notes (Descrição do problema, o que o cliente relatou) e o novo gestorObs (Observações, texto livre do gestor).
+Modal Editar Cliente: campo renomeado para "Descrição do problema" (o que já era) + novo campo "Observações" abaixo dele.
+Index: card "Observações" corrigido — antes lia o campo errado (quoteObs, observação por visita do Orçamento e Status); agora lê gestorObs (o texto novo do cliente), exibido como card próprio logo abaixo de "Descrição do problema".
+Gestor: mesmo card "Observações" adicionado na tela de detalhes, para paridade.
+Cache atualizado para mfc-tecnico-v56.
+
 MFC v55
 
 Última alteração
