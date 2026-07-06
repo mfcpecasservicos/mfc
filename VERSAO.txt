@@ -1,3 +1,17 @@
+MFC v64
+
+Última alteração
+
+BUGFIX: puxar cliente da lixeira pela barra de busca (Nova visita) estava reaproveitando o documento antigo — trazia relatório, orçamento e histórico de visitas anteriores junto, e desmarcava "deleted" sozinho sem passar pela lixeira. Agora cliente deletado só tem nome/telefone/endereço/referência/equipamento pré-preenchidos; ao salvar, cria um cadastro NOVO e em branco, e o antigo continua intacto na lixeira (recuperável separadamente pelo botão Restaurar). Anti-duplicação por telefone também passou a ignorar clientes deletados, então não gruda mais em um cliente da lixeira por coincidência de número.
+Cache atualizado para mfc-tecnico-v64.
+
+MFC v63
+
+Última alteração
+
+Index: fim do formulário de edição fixo grudado embaixo de cada relatório enviado — virou popup, igual o gestor. Botão "✏️ Editar relatório" dentro do accordion "Avaliação enviada" abre um modal com modelo/tipo de serviço/relatório/fotos; salva e fecha sozinho.
+Cache atualizado para mfc-tecnico-v63.
+
 MFC v62
 
 Última alteração
