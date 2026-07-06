@@ -1,3 +1,12 @@
+MFC v61
+
+Última alteração
+
+Glow cyberpunk aplicado em TODO quadrado de informação e preenchimento, não só nos cards de visita:
+- Gestor: cards de informação (Nome, Contato, Endereço etc.), Pagamento/Datas importantes, acordeões, cards do Financeiro, área de imagem do orçamento, modais — todos com glow permanente + intensifica no hover; campos de formulário brilham ao focar.
+- Index: blocos de informação do cliente, card de Avaliação Técnica, edição, imagem do orçamento — mesmo tratamento; campos de texto brilham ao focar.
+Cache atualizado para mfc-tecnico-v61.
+
 MFC v60
 
 Última alteração
