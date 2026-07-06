@@ -850,7 +850,7 @@ function renderDetail(){
   const headL=defaultIdx>=0?layers[defaultIdx]:null;
   const status=headL?headL.status||'waiting':'done';
   let n=0;
-  const tabs=layers.map((l,i)=>l.done?'':`<button id="vt-${c.id}-${i}" data-vt="${c.id}" class="vtab ${i===defaultIdx?'active':''} ${{waiting:'vtw',workshop_pending:'vtws',evaluated:'vte',quoted:'vtq',approved:'vta',ready_delivery:'vtrd',service_finished:'vte',absent:'vtab2',done:'vtd'}[l.status]||'vtw'}" onclick="showVTab('${c.id}',${i})">Relatório ${++n}${l.pinned?' 📌':''}</button>`).join('');
+  const tabs=layers.map((l,i)=>l.done?'':`<button id="vt-${c.id}-${i}" data-vt="${c.id}" class="vtab ${i===defaultIdx?'active':''} ${{waiting:'vtw',workshop_pending:'vtws',evaluated:'vte',quoted:'vtq',approved:'vta',ready_delivery:'vtrd',service_finished:'vte',absent:'vtab2',done:'vtd'}[l.status]||'vtw'}" onclick="showVTab('${c.id}',${i})">${++n}ª Visita${l.pinned?' 📌':''}</button>`).join('');
   const doneTab=done.length?`<button class="vtab vtd" data-vt="${c.id}" onclick="showDoneTab('${c.id}')">Concluídos (${done.length})</button>`:'';
   const panels=layers.map((l,i)=>{
     if(l.done)return'';
