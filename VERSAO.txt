@@ -1,3 +1,12 @@
+MFC v62
+
+Última alteração
+
+Gestor: abas "1ª Visita"/"2ª Visita" renomeadas para "Relatório 1"/"Relatório 2" — igual ao index.
+Index: ao clicar no card do cliente, a visita FIXADA (📌) no gestor agora tem prioridade e abre primeiro (antes só pegava a primeira não concluída, ignorando o pin).
+Index: bloco "Aprovado" agora detalha o pagamento de verdade — ex: "Valor do orçamento: R$ 573,00" + "Pagamento R$ 300,00 em espécie e R$ 273,00 no crédito 1x", usando entrada/saldo/forma de cada um. Antes só mostrava a forma de pagamento genérica.
+Cache atualizado para mfc-tecnico-v62.
+
 MFC v61
 
 Última alteração
