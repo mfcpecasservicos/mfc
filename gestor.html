@@ -340,7 +340,7 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
     </div>
     <div class="mact">
       <button class="btn btn-muted" onclick="closeNewVisit()">Cancelar</button>
-      <button class="btn btn-muted btn-sm" onclick="clearForm()">Limpar</button>
+      <button class="btn btn-muted" onclick="clearForm()">Limpar</button>
       <button class="btn btn-blue" onclick="addClient().then(()=>closeNewVisit())">Enviar para o Técnico</button>
     </div>
   </div>
@@ -467,6 +467,8 @@ function readLayerForm(id,li,base={}){
   const pay=[entryPayment,balancePayment].filter(Boolean).join(', ');
   const svcBr=getRaw('ly-svc','');
   const svc=svcBr?(brToIso(svcBr)||base.approval?.serviceDate||''):(base.approval?.serviceDate||'');
+  const paydateBr=getRaw('ly-paydate','');
+  const paymentDate=paydateBr?(brToIsoDate(paydateBr)||base.approval?.paymentDate||''):(base.approval?.paymentDate||'');
   const dtBr=getRaw('ly-datetime','');
   const visitDatetime=dtBr?(brToIso(dtBr)||base.datetime||''):(base.datetime||'');
   const ent=getChk('ly-entry-approval',base.approval?.entryApproval||base.entryApproval||false);
@@ -474,7 +476,7 @@ function readLayerForm(id,li,base={}){
   const galpao=getChk('ly-service-workshop',base.serviceInWorkshop||base.approval?.serviceInWorkshop||false);
   const paid=getChk('ly-paid',base.approval?.paid||false);const owes=getChk('ly-owes',base.approval?.owes||false);
   const techReport=base.techReport?{...base.techReport,needsPickup:galpao?false:!!base.techReport.needsPickup}:base.techReport;
-  return {...base,status:st,datetime:visitDatetime,quote:base.quote||'',quoteObs:getVal('ly-obs',base.quoteObs||''),techReport,needsPickup:galpao?false:!!base.needsPickup,approval:{...(base.approval||{}),payment:pay,value:val,serviceDate:svc,entryApproval:ent,entryValue,entryPayment,balancePayment,pagamentos,serviceInWorkshop:galpao,paid,owes},serviceInWorkshop:galpao,entryApproval:ent};
+  return {...base,status:st,datetime:visitDatetime,quote:base.quote||'',quoteObs:getVal('ly-obs',base.quoteObs||''),techReport,needsPickup:galpao?false:!!base.needsPickup,approval:{...(base.approval||{}),payment:pay,value:val,serviceDate:svc,paymentDate,entryApproval:ent,entryValue,entryPayment,balancePayment,pagamentos,serviceInWorkshop:galpao,paid,owes},serviceInWorkshop:galpao,entryApproval:ent};
 }
 
 /* ===== CONSTANTS ===== */
@@ -686,12 +688,13 @@ window.restoreClient=async id=>{await updateDoc(doc(db,'clients',id),{deleted:fa
 window.hardDelete=async id=>{if(!confirm('Tem certeza que deseja excluir permanentemente? Essa ação não pode ser desfeita.'))return;await deleteDoc(doc(db,'clients',id));toast('🗑 Excluído')};
 window.approveLead=async id=>{const lead=leads.find(x=>x.id===id);if(!lead)return;const dtBr=document.getElementById('lead-dt-'+id)?.value||'';const dt=brToIso(dtBr);const status='waiting';const data={name:lead.name||'',phone:lead.phone||'',address:[lead.address,lead.number,lead.neighborhood||lead.bairro].filter(Boolean).join(', '),ref:lead.ref||'',equip:lead.equip||'',notes:lead.problem||'',datetime:dt,fromLead:true};await createOrAppendClient(data,status);await deleteDoc(doc(db,'leads',id))};
 window.deleteLead=async id=>{if(!confirm('Remover cadastro?'))return;await deleteDoc(doc(db,'leads',id));toast('🗑 Removido')};
-function renderLeads(){const el=document.getElementById('leads-list');if(!el)return;if(!leads.length){el.innerHTML='<div class="empty">📋 Nenhum cadastro novo.</div>';return}el.innerHTML=leads.map(l=>{return`<div class="lead-card"><h4>👤 ${l.name||'—'} </h4><div class="lead-info"><div><span>Telefone</span><strong>${l.phone||'—'}</strong></div><div><span>Endereço</span><strong>${[l.address,l.number,l.neighborhood||l.bairro].filter(Boolean).join(', ')||'—'}</strong></div><div><span>Equipamento</span><strong>${l.equip||'—'}</strong></div><div><span>Problema</span><strong>${l.problem||'—'}</strong></div></div><div class="acts"><input class="fi" id="lead-dt-${l.id}" placeholder="dd/mm/aaaa hh:mm" oninput="dtMask(this)" style="max-width:200px"><button class="btn btn-green btn-sm" onclick="approveLead('${l.id}')">Enviar para Técnico</button><button class="btn btn-muted btn-sm" onclick="deleteLead('${l.id}')">Remover</button></div></div>`}).join('')};
+function renderLeads(){const el=document.getElementById('leads-list');if(!el)return;if(!leads.length){el.innerHTML='<div class="empty">📋 Nenhum cadastro novo.</div>';return}el.innerHTML=leads.map(l=>{return`<div class="lead-card"><h4>👤 ${l.name||'—'} </h4><div class="lead-info"><div><span>Telefone</span><strong>${l.phone||'—'}</strong></div><div><span>Endereço</span><strong>${[l.address,l.number,l.neighborhood||l.bairro].filter(Boolean).join(', ')||'—'}</strong></div><div><span>Equipamento</span><strong>${l.equip||'—'}</strong></div><div><span>Problema</span><strong>${l.problem||'—'}</strong></div></div><div class="acts"><div style="display:flex;gap:6px;position:relative;max-width:230px"><input class="fi" id="lead-dt-${l.id}" placeholder="dd/mm/aaaa hh:mm" oninput="dtMask(this)"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px" onclick="openPicker('pk-lead-${l.id}')">📅</button><input type="datetime-local" id="pk-lead-${l.id}" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'lead-dt-${l.id}',false)"></div><button class="btn btn-green btn-sm" onclick="approveLead('${l.id}')">Enviar para Técnico</button><button class="btn btn-muted btn-sm" onclick="deleteLead('${l.id}')">Remover</button></div></div>`}).join('')};
 window.showVTab=(cid,li)=>{document.querySelectorAll(`[data-vt="${cid}"]`).forEach(t=>t.classList.remove('active'));document.querySelectorAll(`[data-vp="${cid}"]`).forEach(p=>p.classList.remove('active'));document.getElementById(`vt-${cid}-${li}`)?.classList.add('active');document.getElementById(`vp-${cid}-${li}`)?.classList.add('active');const c2=all.find(x=>x.id===cid);if(c2){const l2=getLayers(c2)[li];const hb=document.getElementById('head-badge-'+cid);if(hb&&l2){hb.className='sbadge '+(badgeCls[l2.status]||'sw');hb.textContent=lbl(l2.status||'waiting')}}};
 window.toggleAcc=(h,b)=>{document.getElementById(h)?.classList.toggle('open');document.getElementById(b)?.classList.toggle('open')};
 window.toggleChk=(chkId,btn)=>{const el=document.getElementById(chkId);if(!el)return;el.checked=!el.checked;btn.classList.toggle('active',el.checked)};
 window.openPicker=id=>{const el=document.getElementById(id);if(!el)return;try{el.showPicker()}catch{el.click()}};
 window.pickToText=(picker,targetId,fire)=>{const t=document.getElementById(targetId);if(!t||!picker.value)return;t.value=isoToBr(picker.value);if(fire)t.dispatchEvent(new Event('change'))};
+window.pickDateToText=(picker,targetId)=>{const t=document.getElementById(targetId);if(!t||!picker.value)return;t.value=isoDateToBr(picker.value)};
 
 
 /* ===== IMAGE VIEWER ===== */
@@ -767,6 +770,7 @@ function render(){
     if(hasServiceInWorkshop(c))chips.push({t:'Equipamento no galpão',h:'<span class="indicator">🏭 Equipamento no galpão</span>'});
     if(hasPaidService(c))chips.push({t:'Serviço pago',h:'<span class="indicator">💳 Serviço pago</span>'});
     if(hasOwesService(c))chips.push({t:'Falta pagar',h:'<span class="indicator ind-owes">Falta pagar</span>'});
+    if(c.companyMode||c.type==='company'){const pinL=getLayers(c).find(l=>!l.done&&l.pinned)||getLayers(c).find(l=>!l.done);const pd=pinL?.approval?.paymentDate;if(pd)chips.push({t:'Pagamento: '+isoDateToBr(pd),h:'<span class="indicator">💰 Pagamento: '+isoDateToBr(pd)+'</span>'});}
     chips.sort((a,b)=>a.t.length-b.t.length);
     if(hh)chips.unshift({t:hh,h:`<span class="vc-dt"><i class="fa-regular fa-clock"></i> ${hh}</span>`});
     const blColor={dw:'#3b82f6',dws:'#38bdf8',de:'#22c55e',dq:'#f59e0b',da:'#f97316',drd:'#38bdf8',dsf:'#22c55e',dd:'#22c55e',dab:'#a855f7'}[dotCls[status]||'dw'];
@@ -856,7 +860,10 @@ function renderDetail(){
         </div>
         <div class="os-grid">
           <div class="os-left">
-            <div style="margin-bottom:12px"><span class="fl">Data e hora do serviço</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="ly-svc-${c.id}-${i}" placeholder="dd/mm/aaaa hh:mm" value="${isoToBr(l.approval?.serviceDate||'')}" oninput="dtMask(this)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px;height:44px" onclick="openPicker('pk-svc-${c.id}-${i}')">📅</button><input type="datetime-local" id="pk-svc-${c.id}-${i}" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'ly-svc-${c.id}-${i}',false)"></div></div>
+            <div class="fgrid" style="margin-bottom:12px">
+              <div><span class="fl">Data e hora do serviço</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="ly-svc-${c.id}-${i}" placeholder="dd/mm/aaaa hh:mm" value="${isoToBr(l.approval?.serviceDate||'')}" oninput="dtMask(this)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px;height:44px" onclick="openPicker('pk-svc-${c.id}-${i}')">📅</button><input type="datetime-local" id="pk-svc-${c.id}-${i}" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'ly-svc-${c.id}-${i}',false)"></div></div>
+              <div><span class="fl">Data de pagamento</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="ly-paydate-${c.id}-${i}" placeholder="dd/mm/aaaa" value="${isoDateToBr(l.approval?.paymentDate||'')}" oninput="dMask(this)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px;height:44px" onclick="openPicker('pk-pd-${c.id}-${i}')">📅</button><input type="date" id="pk-pd-${c.id}-${i}" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickDateToText(this,'ly-paydate-${c.id}-${i}')"></div></div>
+            </div>
             <div style="margin-bottom:12px"><span class="fl">Valor do orçamento</span><input class="fi" id="ly-val-${c.id}-${i}" placeholder="R$ 0,00" value="${l.approval?.value||''}" oninput="recalcPag('${c.id}',${i})"></div>
             <div class="fgrid" style="margin-bottom:12px">
               <div><span class="fl">Valor de entrada</span><input type="number" step="0.01" class="fi" id="ly-entry-value-${c.id}-${i}" placeholder="R$ 0,00" value="${l.approval?.entryValue||''}" oninput="recalcPag('${c.id}',${i})"></div>

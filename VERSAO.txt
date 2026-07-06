@@ -1,3 +1,14 @@
+MFC v54
+
+Última alteração
+
+Index: sombra verde esquisita atrás do botão SALVAR AVALIAÇÃO removida.
+Index: nova aba "Observações (Gestor)" nos cards de informação — exibe a observação escrita pelo gestor (campo Observação de Orçamento e Status), somente leitura, para o técnico ver.
+Gestor: campo "Data de pagamento" adicionado ao lado de "Data e hora do serviço" (só data, com seletor de calendário). Quando o cliente é visita empresa, essa data aparece como chip no card da lista.
+Gestor: botão de calendário adicionado ao campo de data em "Novos Cadastros".
+Gestor: botão "Limpar" do modal Nova Visita ajustado para o mesmo tamanho dos outros botões.
+Cache atualizado para mfc-tecnico-v54.
+
 MFC v53
 
 Última alteração
