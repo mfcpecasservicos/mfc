@@ -1,3 +1,11 @@
+MFC v57
+
+Última alteração
+
+Gestor: campo "Observações" saiu do modal Editar Cliente e virou textarea direto no card de detalhes — escreve e sai do campo (onblur), salva sozinho, aparece "Salvo ✓" por 2s. Zero cliques extras.
+Index: card "Observações" agora SEMPRE aparece (mesmo vazio, mostra "Sem observações." em itálico) — parou de sumir quando não tinha conteúdo.
+Cache atualizado para mfc-tecnico-v57.
+
 MFC v56
 
 Última alteração
