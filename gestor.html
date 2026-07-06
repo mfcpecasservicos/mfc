@@ -279,6 +279,7 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
   .add-conta .fgrid3{grid-template-columns:1fr}
 }
 .sbadge{background:var(--surface3)}
+.switch{width:44px;height:24px;border-radius:14px;background:var(--surface3);border:1px solid var(--border);position:relative;transition:all .2s;flex-shrink:0}.switch::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#94A3B8;transition:all .2s}.tg-btn.active .switch{background:#10B98144;border-color:#10B981}.tg-btn.active .switch::after{left:22px;background:#10B981}
 </style>
 </head>
 <body>
@@ -335,7 +336,7 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
       <div style="grid-column:1/-1"><span class="fl">Endereço</span><input class="fi" id="inp-address" placeholder="Rua, número, bairro"></div>
       <div><span class="fl">📅 Data e Hora (dd/mm/aaaa hh:mm)</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="inp-datetime" placeholder="dd/mm/aaaa hh:mm" oninput="dtMask(this)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px" onclick="openPicker('pk-inp-datetime')">📅</button><input type="datetime-local" id="pk-inp-datetime" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'inp-datetime',false)"></div></div>
       <div><span class="fl">Status inicial</span><select class="fi" id="inp-status"><option value="waiting">🕐 Aguardando visita</option><option value="workshop_pending">🏭 Aguardando Avaliação</option><option value="evaluated">✅ Avaliação concluída</option><option value="quoted">💰 Aguardando aprovação</option><option value="approved">🟠 Aprovado</option><option value="ready_delivery">📦 Pronto para entrega</option><option value="service_finished">✅ Serviço finalizado</option><option value="absent">🚫 Cliente ausente</option></select></div>
-      <div style="grid-column:1/-1"><label class="chk-row" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px"><input type="checkbox" id="inp-workshop"><span>🏭 Equipamento trazido à loja</span></label></div>
+      <div style="grid-column:1/-1"><input type="checkbox" id="inp-workshop" style="display:none"><button type="button" class="tg-btn tg-galpao" onclick="toggleChk('inp-workshop',this)" style="width:100%">🏭<span style="flex:1;text-align:left">Equipamento trazido à loja</span><span class="switch"></span></button></div>
       <div style="grid-column:1/-1"><span class="fl">Observações</span><textarea class="fi" id="inp-notes" placeholder="Observações adicionais"></textarea></div>
     </div>
     <div class="mact">

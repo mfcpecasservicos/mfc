@@ -1,3 +1,12 @@
+MFC v55
+
+Última alteração
+
+Gestor: "Equipamento trazido à loja" virou switch (era checkbox), mesmo padrão visual dos outros toggles.
+Index: sombra do botão SALVAR AVALIAÇÃO removida DE VERDADE (o CSS no ar ainda tinha o box-shadow antigo — verifique se o v54 subiu completo no seu deploy anterior).
+Index: rodapé com Salvar + Descartar deixou de ser fixo (sticky) — agora rola junto com a página normalmente.
+Cache atualizado para mfc-tecnico-v55.
+
 MFC v54
 
 Última alteração
