@@ -1,3 +1,13 @@
+MFC v52
+
+Última alteração
+
+Bugfix real: .indicator e .vc-dt no gestor não tinham white-space:nowrap — por isso "Retirar equipamento" e outros chips quebravam texto sozinhos quando o espaço apertava. Adicionado nowrap; agora só o badge de status pode quebrar linha (e só quando precisar).
+
+Gestor e Index: card reorganizado em 3 linhas fixas — (1) nome completo + chevron no topo, (2) status em linha própria alinhado à direita, (3) hora + tags numa linha só, sem quebra forçada. No index o endereço continua abaixo do nome, antes do status.
+
+Cache atualizado para mfc-tecnico-v52.
+
 MFC v51
 
 Última alteração

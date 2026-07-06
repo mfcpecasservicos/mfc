@@ -54,15 +54,15 @@ button{font-family:inherit}
 .btn-outline-red{background:#3b121955;color:#fca5a5;border:1px solid #ef444466}
 .btn-sm{height:34px;padding:0 12px;font-size:.78rem}.pag-row .btn{height:44px}
 .clist{display:flex;flex-direction:column;gap:10px;flex:1;overflow-y:auto}
-.vcard{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--border);border-radius:14px;padding:10px 30px 10px 14px;cursor:pointer;transition:all .18s;position:relative}
+.vcard{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--border);border-radius:14px;padding:12px 34px 12px 14px;cursor:pointer;transition:all .18s;position:relative}
 .vcard:hover{background:var(--surface2)}
 .vcard.selected{border-color:var(--green);border-left-color:var(--green);background:var(--surface2);box-shadow:0 0 0 1px var(--green) inset}
 .vcard .vc-top{display:flex;align-items:center;gap:8px}
 .vcard .vc-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
 .vcard .vc-name{font-weight:900;font-size:1rem;flex:1;min-width:0;line-height:1.3;word-break:break-word}
-.vcard .vc-bottom{display:flex;align-items:center;justify-content:flex-start;gap:8px;margin-top:6px;flex-wrap:wrap}.vc-row{display:flex;align-items:center;gap:10px}.vc-left{flex:1;min-width:0}.vc-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px;align-items:center}.vc-chips .indicator{margin:0}.vc-row>.sbadge{margin-right:16px;flex-shrink:0;white-space:normal;text-align:center;height:auto;min-height:26px;line-height:1.25;padding:4px 10px;max-width:132px;justify-content:center}.day-head{font-size:.7rem;font-weight:900;color:var(--muted);letter-spacing:.08em;margin:8px 0 0;padding-bottom:6px;border-bottom:1px solid var(--border)}.ind-flag{background:transparent !important;color:#34d399 !important;border:1px solid #10B981 !important}.vc-chevron{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#8ea0b8;font-size:1rem;transition:transform .15s}.vcard:hover .vc-chevron{transform:translateY(-50%) translateX(3px);color:var(--text)}
-.vcard .vc-dt{font-size:.72rem;font-weight:800;color:#93c5fd;background:transparent;border:1px solid #3b82f6;border-radius:8px;height:26px;padding:0 10px;display:inline-flex;align-items:center;gap:5px}
-.indicator{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:800;height:26px;padding:0 10px;border-radius:8px;border:1px solid #0e749055;background:#083344;color:#67e8f9;margin-right:4px;margin-top:4px}
+.vcard .vc-bottom{display:flex;align-items:center;justify-content:flex-start;gap:8px;margin-top:6px;flex-wrap:wrap}.vc-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;align-items:center}.vc-chips .indicator{margin:0;white-space:nowrap}.vc-status-row{display:flex;justify-content:flex-end;margin-top:6px}.vc-status-row .sbadge{white-space:normal;text-align:right;height:auto;min-height:26px;line-height:1.3;padding:4px 10px;max-width:80%;justify-content:center}.day-head{font-size:.7rem;font-weight:900;color:var(--muted);letter-spacing:.08em;margin:8px 0 0;padding-bottom:6px;border-bottom:1px solid var(--border)}.ind-flag{background:transparent !important;color:#34d399 !important;border:1px solid #10B981 !important}.vc-chevron{position:absolute;right:12px;top:14px;color:#8ea0b8;font-size:1rem;transition:transform .15s}.vcard:hover .vc-chevron{transform:translateY(-50%) translateX(3px);color:var(--text)}
+.vcard .vc-dt{font-size:.72rem;font-weight:800;color:#93c5fd;background:transparent;border:1px solid #3b82f6;border-radius:8px;height:26px;padding:0 10px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;flex-shrink:0}
+.indicator{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:800;height:26px;padding:0 10px;border-radius:8px;border:1px solid #0e749055;background:#083344;color:#67e8f9;margin-right:4px;margin-top:4px;white-space:nowrap;flex-shrink:0}
 .ind-laudo{background:#2d1f00 !important;color:#fbbf24 !important;border-color:#92400e !important}
 .ind-owes{background:#4a1c1c !important;color:#fca5a5 !important;border-color:#7f1d1d !important}
 .sbadge{font-size:.66rem;font-weight:800;height:26px;padding:0 10px;border-radius:8px;display:inline-flex;align-items:center;gap:5px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
@@ -771,7 +771,9 @@ function render(){
     if(hh)chips.unshift({t:hh,h:`<span class="vc-dt"><i class="fa-regular fa-clock"></i> ${hh}</span>`});
     const blColor={dw:'#3b82f6',dws:'#38bdf8',de:'#22c55e',dq:'#f59e0b',da:'#f97316',drd:'#38bdf8',dsf:'#22c55e',dd:'#22c55e',dab:'#a855f7'}[dotCls[status]||'dw'];
     listHtml+=`<div class="vcard ${selectedId===c.id?'selected':''}" style="border-left-color:${blColor}" onclick="selectClient('${c.id}')">
-      <div class="vc-row"><div class="vc-left"><div class="vc-top"><div class="vc-dot ${dotCls[status]||'dw'}"></div><div class="vc-name">${c.name||'—'}</div></div>${chips.length?`<div class="vc-chips">${chips.map(x=>x.h).join('')}</div>`:''}</div><span class="sbadge ${badgeCls[status]||'sw'}">${lbl(status)}</span></div>
+      <div class="vc-top"><div class="vc-dot ${dotCls[status]||'dw'}"></div><div class="vc-name">${c.name||'—'}</div></div>
+      <div class="vc-status-row"><span class="sbadge ${badgeCls[status]||'sw'}">${lbl(status)}</span></div>
+      ${chips.length?`<div class="vc-chips">${chips.map(x=>x.h).join('')}</div>`:''}
       <span class="vc-chevron">›</span>
     </div>`;
   });
