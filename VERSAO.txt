@@ -1,3 +1,10 @@
+MFC v53
+
+Última alteração
+
+Ordem das visitas invertida: mais recente primeiro (era mais antiga primeiro), no gestor e no index.
+Cache atualizado para mfc-tecnico-v53.
+
 MFC v52
 
 Última alteração

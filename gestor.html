@@ -748,7 +748,7 @@ function render(){
   let clients=all.filter(c=>!c.deleted);
   if(filter==='all')clients=clients.filter(c=>displayStatus(c)!=='done');
   else clients=clients.filter(c=>displayStatus(c)===filter);
-  clients=[...clients].sort((a,b)=>appointmentSortValue(a)-appointmentSortValue(b));
+  clients=[...clients].sort((a,b)=>appointmentSortValue(b)-appointmentSortValue(a));
   const totalPages=Math.max(1,Math.ceil(clients.length/PAGE_SIZE));
   if(page>totalPages)page=totalPages;
   const pageClients=clients.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
