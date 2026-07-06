@@ -59,8 +59,8 @@ button{font-family:inherit}
 .vcard.selected{border-color:var(--green);border-left-color:var(--green);background:var(--surface2);box-shadow:0 0 0 1px var(--green) inset}
 .vcard .vc-top{display:flex;align-items:center;gap:8px}
 .vcard .vc-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-.vcard .vc-name{font-weight:900;font-size:1rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.vcard .vc-bottom{display:flex;align-items:center;justify-content:flex-start;gap:8px;margin-top:6px;flex-wrap:wrap}.vc-stack{display:flex;flex-direction:column;align-items:flex-start;gap:5px;margin-top:7px}.vc-stack .indicator{margin:0}.day-head{font-size:.7rem;font-weight:900;color:var(--muted);letter-spacing:.08em;margin:8px 0 0;padding-bottom:6px;border-bottom:1px solid var(--border)}.ind-flag{background:transparent !important;color:#34d399 !important;border:1px solid #10B981 !important}.vc-chevron{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#8ea0b8;font-size:1rem;transition:transform .15s}.vcard:hover .vc-chevron{transform:translateY(-50%) translateX(3px);color:var(--text)}
+.vcard .vc-name{font-weight:900;font-size:1rem;flex:1;min-width:0;line-height:1.3;word-break:break-word}
+.vcard .vc-bottom{display:flex;align-items:center;justify-content:flex-start;gap:8px;margin-top:6px;flex-wrap:wrap}.vc-row{display:flex;align-items:center;gap:10px}.vc-left{flex:1;min-width:0}.vc-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px;align-items:center}.vc-chips .indicator{margin:0}.vc-row>.sbadge{margin-right:16px;flex-shrink:0;white-space:normal;text-align:center;height:auto;min-height:26px;line-height:1.25;padding:4px 10px;max-width:132px;justify-content:center}.day-head{font-size:.7rem;font-weight:900;color:var(--muted);letter-spacing:.08em;margin:8px 0 0;padding-bottom:6px;border-bottom:1px solid var(--border)}.ind-flag{background:transparent !important;color:#34d399 !important;border:1px solid #10B981 !important}.vc-chevron{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#8ea0b8;font-size:1rem;transition:transform .15s}.vcard:hover .vc-chevron{transform:translateY(-50%) translateX(3px);color:var(--text)}
 .vcard .vc-dt{font-size:.72rem;font-weight:800;color:#93c5fd;background:transparent;border:1px solid #3b82f6;border-radius:8px;height:26px;padding:0 10px;display:inline-flex;align-items:center;gap:5px}
 .indicator{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:800;height:26px;padding:0 10px;border-radius:8px;border:1px solid #0e749055;background:#083344;color:#67e8f9;margin-right:4px;margin-top:4px}
 .ind-laudo{background:#2d1f00 !important;color:#fbbf24 !important;border-color:#92400e !important}
@@ -134,7 +134,7 @@ button{font-family:inherit}
 .tl-step.current .tl-lbl{color:var(--gold)}
 .tl-step.done .tl-lbl{color:var(--green)}
 .tl-line{position:absolute;top:26px;left:calc(12.5% + 26px);right:calc(12.5% + 26px);border-top:2px dashed var(--border);z-index:1}
-.dcards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px}
+.dcards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
 .dcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;transition:transform .15s}
 .dcard:hover{transform:translateY(-2px)}
 .dcard h3{font-size:.82rem;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:12px}
@@ -166,7 +166,17 @@ button{font-family:inherit}
 textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-height:1.55}
 .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
 .value-preview{font-size:.84rem;color:#67e8f9;background:#083344;border:1px solid #0e7490;border-radius:8px;padding:8px 10px;margin:8px 0;display:none}
-.value-preview.show{display:block}.pag-row{display:grid;grid-template-columns:1fr 130px 44px;gap:8px;margin-bottom:8px;align-items:center}
+.value-preview.show{display:block}
+.os-grid{display:grid;grid-template-columns:1.18fr .82fr;gap:16px;align-items:stretch}
+.os-right{display:flex;flex-direction:column;gap:8px}
+.img-drop{flex:1;min-height:300px;border:1px dashed var(--border);border-radius:14px;background:#0f172a;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:10px}
+.img-empty{display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--muted)}
+.img-empty i{font-size:2rem;opacity:.7}
+.img-empty p{font-size:.84rem}
+.img-hint{font-size:.7rem;color:var(--muted);opacity:.7}
+.budget-preview-big{max-width:100%;max-height:100%;object-fit:contain;border-radius:10px;cursor:zoom-in}
+.img-acts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:900px){.os-grid{grid-template-columns:1fr}.img-drop{min-height:220px}}
 .doc-box{background:#0f172a;border:1px solid #334155;border-radius:var(--radius-sm);padding:12px;margin:8px 0}
 .file-input{font-size:.82rem;color:var(--muted);width:100%;margin-top:6px}
 .budget-preview{width:100%;max-width:240px;max-height:170px;object-fit:contain;border-radius:10px;border:1px solid var(--border);background:#020617;cursor:zoom-in;display:block;margin:8px 0}
@@ -444,26 +454,27 @@ function readLayerForm(id,li,base={}){
   const getChk=(suffix,fallback=false)=>{const el=document.getElementById(`${suffix}-${id}-${li}`);return el?!!el.checked:!!fallback};
   const st=getRaw('ly-st',base.status||'waiting');
   const val=getVal('ly-val',base.approval?.value||'');
-  const pagList=document.getElementById(`pag-list-${id}-${li}`);
-  let pagamentos;
-  if(pagList){
-    const basePags=Array.isArray(base.approval?.pagamentos)?base.approval.pagamentos:[];
-    pagamentos=Array.from(pagList.querySelectorAll(`[data-pgrow="${id}-${li}"]`)).map((row,idx)=>({forma:row.querySelector('.pg-forma')?.value||'',valor:String(row.querySelector('.pg-valor')?.value||'').trim(),data:basePags[idx]?.data||new Date().toISOString()})).filter(p=>p.forma||moneyNum(p.valor)>0);
-  }else{
-    pagamentos=Array.isArray(base.approval?.pagamentos)?base.approval.pagamentos:pagsOf(base);
-  }
-  const pagSum=pagamentos.reduce((s,p)=>s+moneyNum(p.valor),0);
-  const pay=pagamentos.map(p=>p.forma).filter(Boolean).join(', ');
+  const entEl=document.getElementById(`ly-entry-value-${id}-${li}`);
+  const entrada=entEl?String(entEl.value||'').trim():String(base.approval?.entryValue||'');
+  const entryPayment=getRaw('ly-pay-ent',base.approval?.entryPayment||'');
+  const balancePayment=getRaw('ly-pay-sal',base.approval?.balancePayment||'');
+  const totalNum=moneyNum(getVal('ly-val',base.approval?.value||''));
+  const saldoNum=Math.max(0,totalNum-moneyNum(entrada));
+  const pagamentos=[];
+  if(moneyNum(entrada)>0||entryPayment)pagamentos.push({forma:entryPayment,valor:entrada,tipo:'entrada'});
+  if(saldoNum>0||balancePayment)pagamentos.push({forma:balancePayment,valor:saldoNum?String(saldoNum.toFixed(2)):'',tipo:'saldo'});
+  const pagSum=moneyNum(entrada);
+  const pay=[entryPayment,balancePayment].filter(Boolean).join(', ');
   const svcBr=getRaw('ly-svc','');
   const svc=svcBr?(brToIso(svcBr)||base.approval?.serviceDate||''):(base.approval?.serviceDate||'');
   const dtBr=getRaw('ly-datetime','');
   const visitDatetime=dtBr?(brToIso(dtBr)||base.datetime||''):(base.datetime||'');
   const ent=getChk('ly-entry-approval',base.approval?.entryApproval||base.entryApproval||false);
-  const entryValue=pagSum>0?String(pagSum):'';
+  const entryValue=entrada;
   const galpao=getChk('ly-service-workshop',base.serviceInWorkshop||base.approval?.serviceInWorkshop||false);
   const paid=getChk('ly-paid',base.approval?.paid||false);const owes=getChk('ly-owes',base.approval?.owes||false);
   const techReport=base.techReport?{...base.techReport,needsPickup:galpao?false:!!base.techReport.needsPickup}:base.techReport;
-  return {...base,status:st,datetime:visitDatetime,quote:base.quote||'',quoteObs:getVal('ly-obs',base.quoteObs||''),techReport,needsPickup:galpao?false:!!base.needsPickup,approval:{...(base.approval||{}),payment:pay,value:val,serviceDate:svc,entryApproval:ent,entryValue,pagamentos,serviceInWorkshop:galpao,paid,owes},serviceInWorkshop:galpao,entryApproval:ent};
+  return {...base,status:st,datetime:visitDatetime,quote:base.quote||'',quoteObs:getVal('ly-obs',base.quoteObs||''),techReport,needsPickup:galpao?false:!!base.needsPickup,approval:{...(base.approval||{}),payment:pay,value:val,serviceDate:svc,entryApproval:ent,entryValue,entryPayment,balancePayment,pagamentos,serviceInWorkshop:galpao,paid,owes},serviceInWorkshop:galpao,entryApproval:ent};
 }
 
 /* ===== CONSTANTS ===== */
@@ -703,15 +714,10 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')window.closeLb();});
 
 function moneyNum(v){return parseFloat(String(v||'').replace(/[R$\s.]/g,'').replace(',','.'))||0}
 function fmtMoney(v){return 'R$ '+Number(v||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.')}
-window.recalcPag=(id,li)=>{const total=moneyNum(document.getElementById(`ly-val-${id}-${li}`)?.value);let sum=0;document.querySelectorAll(`#pag-list-${id}-${li} .pg-valor`).forEach(el=>sum+=moneyNum(el.value));const box=document.getElementById(`entry-approval-box-${id}-${li}`);if(box&&total>0){const falta=total-sum;box.innerHTML='<span style="color:var(--muted);font-weight:800;text-transform:uppercase;font-size:.68rem;letter-spacing:.05em">Falta a pagar</span> <b style="color:#fca5a5;font-size:1rem">'+fmtMoney(falta<0?0:falta)+'</b>';box.classList.add('show')}else if(box){box.classList.remove('show');}};
+window.recalcPag=(id,li)=>{const total=moneyNum(document.getElementById(`ly-val-${id}-${li}`)?.value);const ent=moneyNum(document.getElementById(`ly-entry-value-${id}-${li}`)?.value);const sal=Math.max(0,total-ent);const el=document.getElementById(`ly-saldo-${id}-${li}`);if(el)el.value=sal>0?sal.toFixed(2).replace('.',','):'';};
 function statusOpts(sel){return Object.keys(STATUS).map(s=>`<option value="${s}" ${sel===s?'selected':''}>${ICON[s]} ${STATUS[s]}</option>`).join('')}
-const PAG_OPTS=['💵 Espécie','⚡ Pix','💳 Débito',...Array.from({length:12},(_,n)=>`💳 Crédito ${n+1}x`)];
+const PAG_OPTS=['','💵 Espécie','⚡ Pix','💳 Débito',...Array.from({length:12},(_,n)=>`💳 Crédito ${n+1}x`)];
 function pagsOf(l){const a=l?.approval;if(Array.isArray(a?.pagamentos)&&a.pagamentos.length)return a.pagamentos;if(moneyNum(a?.entryValue)>0||a?.payment)return [{forma:a?.payment||'',valor:a?.entryValue||'',data:a?.serviceDate||''}];return []}
-function pagRowHtml(id,li,p={}){
-  const opts=PAG_OPTS.map(o=>`<option ${o===(p.forma||'')?'selected':''}>${o}</option>`).join('')+(p.forma&&!PAG_OPTS.includes(p.forma)?`<option selected>${p.forma}</option>`:'');
-  return `<div class="pag-row" data-pgrow="${id}-${li}"><select class="fi pg-forma">${opts}</select><input class="fi pg-valor" type="number" step="0.01" placeholder="0,00" value="${p.valor||''}" oninput="recalcPag('${id}',${li})"><button type="button" class="btn btn-red btn-sm" onclick="this.parentElement.remove();recalcPag('${id}',${li})">🗑</button></div>`;
-}
-window.addPagRow=(id,li)=>{document.getElementById(`pag-list-${id}-${li}`)?.insertAdjacentHTML('beforeend',pagRowHtml(id,li));recalcPag(id,li)};
 
 /* ===== FILTER MENU ===== */
 const FILTERS=[['all','📋 Todos (ativos)'],['waiting','🕐 Aguardando visita'],['workshop_pending','🏭 Aguardando Avaliação'],['evaluated','✅ Avaliação concluída'],['quoted','💰 Aguardando aprovação'],['approved','🟠 Aprovado'],['ready_delivery','📦 Pronto para entrega'],['service_finished','✅ Serviço finalizado'],['absent','🚫 Cliente ausente'],['done','✔ Concluídos']];
@@ -755,9 +761,7 @@ function render(){
     const dk=gDayKey(mainDate(c));
     if(dk!==lastDay){listHtml+=`<div class="day-head">${dk}</div>`;lastDay=dk}
     const hh=gHourOf(mainDate(c));
-    const chips=[
-      {t:lbl(status),h:`<span class="sbadge ${badgeCls[status]||'sw'}">${lbl(status)}</span>`}
-    ];
+    const chips=[];
     if(needsPickup(c))chips.push({t:'Retirar equipamento',h:'<span class="indicator ind-flag"><i class="fa-solid fa-flag"></i> Retirar equipamento</span>'});
     if(hasLaudo(c))chips.push({t:'Laudo',h:'<span class="indicator ind-laudo">📋 Laudo</span>'});
     if(hasServiceInWorkshop(c))chips.push({t:'Equipamento no galpão',h:'<span class="indicator">🏭 Equipamento no galpão</span>'});
@@ -767,8 +771,7 @@ function render(){
     if(hh)chips.unshift({t:hh,h:`<span class="vc-dt"><i class="fa-regular fa-clock"></i> ${hh}</span>`});
     const blColor={dw:'#3b82f6',dws:'#38bdf8',de:'#22c55e',dq:'#f59e0b',da:'#f97316',drd:'#38bdf8',dsf:'#22c55e',dd:'#22c55e',dab:'#a855f7'}[dotCls[status]||'dw'];
     listHtml+=`<div class="vcard ${selectedId===c.id?'selected':''}" style="border-left-color:${blColor}" onclick="selectClient('${c.id}')">
-      <div class="vc-top"><div class="vc-dot ${dotCls[status]||'dw'}"></div><div class="vc-name">${c.name||'—'}</div></div>
-      <div class="vc-stack">${chips.map(x=>x.h).join('')}</div>
+      <div class="vc-row"><div class="vc-left"><div class="vc-top"><div class="vc-dot ${dotCls[status]||'dw'}"></div><div class="vc-name">${c.name||'—'}</div></div>${chips.length?`<div class="vc-chips">${chips.map(x=>x.h).join('')}</div>`:''}</div><span class="sbadge ${badgeCls[status]||'sw'}">${lbl(status)}</span></div>
       <span class="vc-chevron">›</span>
     </div>`;
   });
@@ -831,13 +834,11 @@ function renderDetail(){
     const entrada=l.approval?.paid?total:0;
     const pct=total>0?Math.min(100,Math.round(entrada/total*100)):0;
     const restante=Math.max(0,total-entrada);
-    const faltaForm=Math.max(0,total-pagSumL);
     return `<div id="vp-${c.id}-${i}" data-vp="${c.id}" class="vpanel ${first?'active':''}">
       <div style="display:flex;justify-content:flex-end;margin-bottom:2px"><button type="button" class="btn btn-sm ${l.pinned?'btn-cyan':'btn-muted'}" onclick="togglePin('${c.id}',${i})">${l.pinned?'📌 Visita fixada':'📌 Fixar visita'}</button></div>
       ${timelineHtml(l)}
       <div class="dcards">
-        <div class="dcard"><h3><span class="ic">💵</span>Pagamento e Orçamento</h3><span class="mini-lbl">Valor do orçamento</span><div class="big-money">${total>0?fmtMoney(total):'—'}</div><div style="margin-top:12px"><span class="mini-lbl">Forma de pagamento</span><div style="font-weight:800;font-size:.9rem">${l.approval?.payment||'—'}</div></div></div>
-        <div class="dcard"><h3><span class="ic">💰</span>Pagamento ${total>0?`<span class="pct-badge">${pct}% pago</span>`:''}</h3><div class="pay-bar"><div style="width:${pct}%"></div></div><div class="pay-grid"><div><div class="pg-lbl">Pago</div><div class="pg-val" style="color:var(--gold)">${fmtMoney(entrada)}</div></div><div><div class="pg-lbl">Restante</div><div class="pg-val" style="color:#fca5a5">${fmtMoney(restante)}</div></div><div><div class="pg-lbl">Total</div><div class="pg-val">${fmtMoney(total)}</div></div></div></div>
+                <div class="dcard"><h3><span class="ic">💰</span>Pagamento ${total>0?`<span class="pct-badge">${pct}% pago</span>`:''}</h3><div class="pay-bar"><div style="width:${pct}%"></div></div><div class="pay-grid"><div><div class="pg-lbl">Pago</div><div class="pg-val" style="color:var(--gold)">${fmtMoney(entrada)}</div></div><div><div class="pg-lbl">Restante</div><div class="pg-val" style="color:#fca5a5">${fmtMoney(restante)}</div></div><div><div class="pg-lbl">Total</div><div class="pg-val">${fmtMoney(total)}</div></div></div></div>
         <div class="dcard"><h3><span class="ic">📅</span>Datas importantes</h3><div class="date-blk"><div class="di">📆</div><div><div class="dd-l">Data da visita</div><div class="dd-v">${fd(l.datetime||c.datetime)}</div><div class="dd-t">🕐 ${ft(l.datetime||c.datetime)||'—'}</div></div></div><div class="date-blk"><div class="di">🛠️</div><div><div class="dd-l">Data do serviço</div><div class="dd-v">${fd(l.approval?.serviceDate)}</div><div class="dd-t">🕐 ${ft(l.approval?.serviceDate)||'—'}</div></div></div></div>
       </div>
       ${l.techReport?`<div class="acc"><div class="acc-hdr" id="th${c.id}${i}" onclick="toggleAcc('th${c.id}${i}','tb${c.id}${i}')"><span class="ic">🔧</span>Relatório do Técnico<span class="acc-arr">▼</span></div><div class="acc-body" id="tb${c.id}${i}"><p><b>Equipamento:</b> ${l.techReport.model||'—'}</p><p><b>Tipo de Serviço:</b> ${reportServiceType(l.techReport)}</p><p><b>Relatório:</b> ${reportTextOnly(l.techReport)}</p>${l.techReport.needsPickup&&!layerServiceInWorkshop(l)?'<p class="indicator">🏭 Retirar equipamento</p>':''}${(l.techReport.serviceType||'').includes('Laudo')?'<p class="indicator ind-laudo">📋 Laudo</p>':''}<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">${photos.map(p=>`<img src="${p}" onclick="openLb('${p}')" style="width:70px;height:70px;object-fit:cover;border-radius:8px;cursor:pointer">`).join('')}</div><div class="acts" style="margin-top:10px"><button class="btn btn-muted btn-sm" onclick="editTechReport('${c.id}',${i})">✏️ Editar relatório</button><button class="btn btn-red btn-sm" onclick="deleteTechReport('${c.id}',${i})">🗑 Excluir relatório</button></div></div></div>`:''}
@@ -851,13 +852,26 @@ function renderDetail(){
           <button type="button" class="tg-btn tg-paid ${l.approval?.paid?'active':''}" data-chk="ly-paid-${c.id}-${i}" onclick="toggleChk('ly-paid-${c.id}-${i}',this)">💳 Serviço já foi pago</button>
           <button type="button" class="tg-btn tg-owes ${l.approval?.owes?'active':''}" data-chk="ly-owes-${c.id}-${i}" onclick="toggleChk('ly-owes-${c.id}-${i}',this)">🔴 Falta pagar</button>
         </div>
-        <div style="margin-bottom:12px"><span class="fl">Data e hora do serviço</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="ly-svc-${c.id}-${i}" placeholder="dd/mm/aaaa hh:mm" value="${isoToBr(l.approval?.serviceDate||'')}" oninput="dtMask(this)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px;height:44px" onclick="openPicker('pk-svc-${c.id}-${i}')">📅</button><input type="datetime-local" id="pk-svc-${c.id}-${i}" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'ly-svc-${c.id}-${i}',false)"></div></div>
-        <div style="margin-bottom:12px"><span class="fl">Valor do orçamento</span><input class="fi" id="ly-val-${c.id}-${i}" value="${l.approval?.value||''}" oninput="recalcPag('${c.id}',${i})"></div>
-        <div style="margin-bottom:4px"><span class="fl">Pagamentos</span><div id="pag-list-${c.id}-${i}">${pagsOf(l).map(p=>pagRowHtml(c.id,i,p)).join('')}</div><button type="button" class="btn btn-muted btn-sm" onclick="addPagRow('${c.id}',${i})">＋ Adicionar forma de pagamento</button></div>
-        <div id="entry-approval-box-${c.id}-${i}" class="value-preview ${total>0?'show':''}" style="margin:12px 0;width:100%;display:${total>0?'flex':'none'};align-items:center;justify-content:space-between"><span style="color:var(--muted);font-weight:800;text-transform:uppercase;font-size:.68rem;letter-spacing:.05em">Falta a pagar</span> <b style="color:#fca5a5;font-size:1rem">${fmtMoney(faltaForm)}</b></div>
-        <div class="fgrid" style="margin-bottom:0;align-items:stretch">
-          <div><span class="fl">Observação</span><textarea class="fi" id="ly-obs-${c.id}-${i}" placeholder="Observação sobre o orçamento/status" style="min-height:120px;height:calc(100% - 24px)">${l.quoteObs||''}</textarea></div>
-          <div class="doc-box" style="margin:0"><span class="fl">Imagem do orçamento / print</span>${bimg?`<img class="budget-preview" src="${bimg}" onclick="openLb('${bimg}')"><button class="btn btn-muted btn-sm" onclick="removeBudgetImage('${c.id}',${i})">Remover</button>`:'<span class="budget-empty">Nenhuma imagem anexada.</span>'}<input class="file-input" type="file" accept="image/*" onchange="uploadBudgetImage('${c.id}',${i},this)"></div>
+        <div class="os-grid">
+          <div class="os-left">
+            <div style="margin-bottom:12px"><span class="fl">Data e hora do serviço</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="ly-svc-${c.id}-${i}" placeholder="dd/mm/aaaa hh:mm" value="${isoToBr(l.approval?.serviceDate||'')}" oninput="dtMask(this)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px;height:44px" onclick="openPicker('pk-svc-${c.id}-${i}')">📅</button><input type="datetime-local" id="pk-svc-${c.id}-${i}" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'ly-svc-${c.id}-${i}',false)"></div></div>
+            <div style="margin-bottom:12px"><span class="fl">Valor do orçamento</span><input class="fi" id="ly-val-${c.id}-${i}" placeholder="R$ 0,00" value="${l.approval?.value||''}" oninput="recalcPag('${c.id}',${i})"></div>
+            <div class="fgrid" style="margin-bottom:12px">
+              <div><span class="fl">Valor de entrada</span><input type="number" step="0.01" class="fi" id="ly-entry-value-${c.id}-${i}" placeholder="R$ 0,00" value="${l.approval?.entryValue||''}" oninput="recalcPag('${c.id}',${i})"></div>
+              <div><span class="fl">Forma de pagamento</span><select class="fi" id="ly-pay-ent-${c.id}-${i}">${PAG_OPTS.map(o=>`<option ${o===(l.approval?.entryPayment||'')?'selected':''}>${o}</option>`).join('')}</select></div>
+              <div><span class="fl">Saldo a receber (automático)</span><input class="fi" id="ly-saldo-${c.id}-${i}" placeholder="R$ 0,00" value="${(moneyNum(l.approval?.value)-moneyNum(l.approval?.entryValue))>0?(moneyNum(l.approval?.value)-moneyNum(l.approval?.entryValue)).toFixed(2).replace('.',','):''}" readonly style="opacity:.85"></div>
+              <div><span class="fl">Forma de pagamento</span><select class="fi" id="ly-pay-sal-${c.id}-${i}">${PAG_OPTS.map(o=>`<option ${o===(l.approval?.balancePayment||'')?'selected':''}>${o}</option>`).join('')}</select></div>
+            </div>
+            <div><span class="fl">Observação</span><textarea class="fi" id="ly-obs-${c.id}-${i}" placeholder="Observação sobre o orçamento/status" style="min-height:110px">${l.quoteObs||''}</textarea></div>
+          </div>
+          <div class="os-right">
+            <span class="fl">Imagem do orçamento / print</span>
+            <div class="img-drop ${bimg?'has-img':''}">
+              ${bimg?`<img class="budget-preview-big" src="${bimg}" onclick="openLb('${bimg}')">`:`<div class="img-empty"><i class="fa-regular fa-file-image"></i><p>Nenhuma imagem anexada.</p><button type="button" class="btn btn-muted btn-sm" onclick="document.getElementById('bud-file-${c.id}-${i}').click()">Escolher arquivo</button><span class="img-hint">PNG ou JPG</span></div>`}
+            </div>
+            <input type="file" id="bud-file-${c.id}-${i}" accept="image/*" style="display:none" onchange="uploadBudgetImage('${c.id}',${i},this)">
+            ${bimg?`<div class="img-acts"><button type="button" class="btn btn-outline-blue btn-sm" onclick="document.getElementById('bud-file-${c.id}-${i}').click()"><i class="fa-solid fa-upload"></i> Substituir imagem</button><button type="button" class="btn btn-outline-red btn-sm" onclick="removeBudgetImage('${c.id}',${i})"><i class="fa-regular fa-trash-can"></i> Remover imagem</button></div>`:''}
+          </div>
         </div>
       </div></div>
       <div class="bottom-acts">

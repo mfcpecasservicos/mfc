@@ -1,3 +1,19 @@
+MFC v51
+
+Última alteração
+
+INDEX:
+- Botão "Descartar Visita" virou só o ícone de lixeira (quadrado) ao lado do SALVAR AVALIAÇÃO, na mesma linha.
+- Nome do cliente sempre completo no card (quebra de linha em vez de cortar com "...").
+- Badge de status quebra o texto quando necessário e ganhou folga do chevron › (nada mais colado/torto).
+GESTOR:
+- Card reorganizado: status à DIREITA, centralizado verticalmente, com quebra de texto quando o nome for grande; nome completo com quebra; hora na frente com "Retirar equipamento" AO LADO (linha de chips, igual index).
+- Card verde gigante "Pagamento e Orçamento" (R$ em destaque) REMOVIDO; dcards em 2 colunas.
+- "Orçamento e Status" refatorado em duas colunas: ESQUERDA = Data e hora do serviço, Valor do orçamento, [Valor de entrada | Forma de pagamento] e [Saldo a receber (automático) | Forma de pagamento do saldo] em grade 2x2, e Observação. DIREITA (um pouco mais estreita) = área exclusiva da Imagem do orçamento/print: moldura tracejada, "Nenhuma imagem anexada" + Escolher arquivo quando vazia, prévia ocupando toda a área com zoom ao clicar, e botões "Substituir imagem" / "Remover imagem".
+- Lista de pagamentos parciais substituída por Entrada + Saldo automático (valor do orçamento − entrada), cada um com sua forma de pagamento. Compatível com dados antigos (entryValue preservado; pagamentos[] continua sendo gravado com entrada e saldo).
+- Status da visita, botões de toggle, observação, tema e cabeçalho mantidos como estavam.
+Cache atualizado para mfc-tecnico-v51.
+
 MFC v50
 
 Última alteração
