@@ -1,3 +1,14 @@
+MFC v62
+
+Última alteração
+
+Gestor: abas de visita renomeadas de "Nª Visita" para "Relatório N" (paridade com o index).
+Index: ao abrir um cliente, se o gestor tiver fixado (📌) um relatório, o index já abre direto nele — só o gestor consegue fixar/desafixar.
+Index: seção "Avaliação enviada" virou accordion (mostrar/ocultar), igual ao "Relatório do Técnico" do gestor.
+Index: caixa de edição do relatório já enviado — "Editar avaliação" virou "Editar Relatório", "Ação do serviço" virou "Tipo de serviço", título "✍️ Relatório" removido (emojis fora).
+Index: card "Aprovado" agora mostra "Valor total do orçamento" e o detalhamento da forma de pagamento (ex: "R$ 300 em espécie e R$ 273,00 no crédito 1x"), no mesmo formato de entrada/saldo já usado no gestor.
+Cache atualizado para mfc-tecnico-v62.
+
 MFC v61
 
 Última alteração

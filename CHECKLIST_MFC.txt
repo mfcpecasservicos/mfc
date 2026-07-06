@@ -187,6 +187,14 @@ NOTA TÉCNICA — Upload de imagens (item 3 solicitado):
 Não é possível forçar um diretório padrão no seletor de arquivos do navegador via código. Essa é uma restrição de segurança do browser (Chrome/Edge/Firefox) que impede sites de pré-selecionar pastas do sistema operacional. Isso não é um bug do app — é um limite da Web Platform.
 
 
+ATUALIZAÇÃO MFC v62
+[x] Gestor: abas de visita renomeadas para "Relatório 1", "Relatório 2" etc (era "1ª Visita").
+[x] Index: pin do gestor (📌) manda no relatório que abre por padrão ao abrir o cliente; index não tem controle próprio de fixar.
+[x] Index: "Avaliação enviada" virou accordion mostrar/ocultar, igual ao "Relatório do Técnico" do gestor.
+[x] Index: caixa de editar relatório enviado renomeada ("Editar Relatório", "Tipo de serviço"), título "Relatório" com emoji removido.
+[x] Index: card "Aprovado" detalha "Valor total do orçamento" + forma de pagamento por extenso (entrada/saldo, no mesmo padrão do gestor).
+[x] Service-worker atualizado para mfc-tecnico-v62.
+
 ATUALIZAÇÃO MFC v37
 [x] Home estilo Chrome no Menu principal (link cadastro / nova visita / visita empresa + busca + filtro, tudo simétrico).
 [x] Financeiro com contas por residência: atrasadas no topo + aviso, soma de atrasadas, código/CPF/CNPJ/PIX copiáveis, botão Pago exclui a conta.
