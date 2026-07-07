@@ -43,6 +43,7 @@ button{font-family:inherit}
 .list-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
 .list-head h1{font-size:1.15rem;font-weight:900}
 .btn{height:42px;padding:0 18px;display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:12px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;white-space:nowrap;transition:all .2s ease-in-out;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.btn-wrap{height:auto;min-height:42px;padding:10px 14px;white-space:normal;text-align:center;line-height:1.2}
 .btn:hover{filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.3)}
 .btn:active{transform:scale(.98)}
 .btn-blue{background:var(--accent);color:#fff}
@@ -908,8 +909,8 @@ function renderDetail(){
       <div class="bottom-acts">
         <button class="btn btn-green" onclick="saveLayer('${c.id}',${i})">💾 Salvar</button>
         <button class="btn btn-outline-blue" onclick="concludeLayer('${c.id}',${i})">✅ Serviço finalizado</button>
-        <button class="btn btn-muted" onclick="removeLayer('${c.id}',${i})">➖ Remover visita</button>
-        <button class="btn btn-outline-red" onclick="softDelete('${c.id}')">🗑 Mover para lixeira</button>
+        <button class="btn btn-muted btn-wrap" onclick="removeLayer('${c.id}',${i})">➖ Remover visita/relatório</button>
+        <button class="btn btn-outline-red btn-wrap" onclick="softDelete('${c.id}')">🗑 Mover cliente para a lixeira</button>
       </div>
     </div>`;
   }).join('');

@@ -1,3 +1,10 @@
+MFC v65
+
+Última alteração
+
+Gestor: renomeado "Remover visita" para "Remover visita/relatório" e "Mover para lixeira" para "Mover cliente para a lixeira" — texto agora quebra linha se não couber no botão.
+Cache atualizado para mfc-tecnico-v65.
+
 MFC v64
 
 Última alteração
