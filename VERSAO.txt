@@ -1,3 +1,14 @@
+MFC v67
+
+Última alteração
+
+Gestor: barra de busca adicionada dentro da Lixeira (filtra por nome/telefone/endereço).
+Gestor: tanto na busca da home quanto na busca da Lixeira, cada resultado agora mostra dois botões separados — "➕ Nova visita" (cria cadastro novo em branco, zera orçamento/avaliação) e "♻️ Restaurar" (só aparece pra quem tá na lixeira, traz tudo de volta exatamente como estava).
+Gestor: Lixeira agora detecta duplicados pelo telefone e mostra "🔗 Unificar N duplicados" — junta todos os relatórios/layers num único cliente e apaga os registros extras (ação permanente, pede confirmação).
+Cache atualizado para mfc-tecnico-v67.
+
+Observação: "restoreClient" nunca mexeu em layers/relatório — só troca a flag "deleted". Se um restaurado veio sem avaliação técnica, o mais provável é ter restaurado o duplicado errado (o cadastro em branco criado por engano via "Nova visita" e descartado de novo). A unificação de duplicados resolve isso na raiz.
+
 MFC v66
 
 Última alteração

@@ -114,7 +114,7 @@ button{font-family:inherit}
 .home-search .si{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:var(--muted)}
 .home-results{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:16px;max-height:280px;overflow-y:auto;display:none;z-index:90;box-shadow:var(--shadow)}
 .home-results.open{display:block}
-.csr-item{padding:11px 16px;cursor:pointer;font-size:.86rem;border-bottom:1px solid var(--border)}
+.csr-item{padding:11px 16px;font-size:.86rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
 .csr-item:last-child{border-bottom:none}
 .csr-item:hover{background:var(--surface2)}
 .csr-item.deleted{opacity:.9;border-left:3px solid var(--red)}
@@ -241,7 +241,7 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 .add-conta .fgrid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
 
 /* trash */
-.trash-item{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px}
+.trash-item{display:flex;align-items:center;flex-wrap:wrap;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px}
 .trash-item span{flex:1;font-size:.88rem}
 
 /* leads */
@@ -340,6 +340,7 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
     <div id="view-trash" style="display:none">
       <div class="detail-head"><h1>🗑️ Lixeira</h1></div>
       <p style="color:var(--muted);font-size:.85rem;margin-bottom:12px">Itens são excluídos permanentemente após 90 dias.</p>
+      <div class="home-search" style="margin-bottom:14px"><span class="si">🔍</span><input id="trash-search-input" placeholder="Buscar na lixeira..." oninput="renderTrash()" autocomplete="off"></div>
       <div id="trash-list"><div class="empty">Lixeira vazia.</div></div>
     </div>
   </section>
@@ -684,7 +685,7 @@ window.openNewVisit=()=>document.getElementById('newvisit-modal').classList.add(
 window.closeNewVisit=()=>document.getElementById('newvisit-modal').classList.remove('open');
 window.openCompany=()=>document.getElementById('company-modal').classList.add('open');
 window.closeCompany=()=>document.getElementById('company-modal').classList.remove('open');
-window.homeSearch=val=>{const box=document.getElementById('home-results');if(!box)return;if(!val||val.length<2){box.classList.remove('open');return}const q=val.toLowerCase(),qd=normPhone(val);const results=all.filter(c=>(c.name||'').toLowerCase().includes(q)||(qd&&normPhone(c.phone).includes(qd))||(c.address||'').toLowerCase().includes(q)).slice(0,12);if(!results.length){box.classList.remove('open');return}box.classList.add('open');box.innerHTML=results.map(c=>`<div class="csr-item ${c.deleted?'deleted':''}" onclick="pickClient('${c.id}')"><strong>${c.name||'—'}${c.deleted?' <span style="color:var(--red)">(Lixeira)</span>':''}</strong><span>${c.phone||''} ${c.address?'· '+c.address:''}</span></div>`).join('')};
+window.homeSearch=val=>{const box=document.getElementById('home-results');if(!box)return;if(!val||val.length<2){box.classList.remove('open');return}const q=val.toLowerCase(),qd=normPhone(val);const results=all.filter(c=>(c.name||'').toLowerCase().includes(q)||(qd&&normPhone(c.phone).includes(qd))||(c.address||'').toLowerCase().includes(q)).slice(0,12);if(!results.length){box.classList.remove('open');return}box.classList.add('open');box.innerHTML=results.map(c=>`<div class="csr-item ${c.deleted?'deleted':''}"><div style="flex:1;min-width:0"><strong>${c.name||'—'}${c.deleted?' <span style="color:var(--red)">(Lixeira)</span>':''}</strong><span>${c.phone||''} ${c.address?'· '+c.address:''}</span></div><div style="display:flex;gap:6px;flex-shrink:0"><button type="button" class="btn btn-outline-blue btn-sm" onclick="event.stopPropagation();pickClient('${c.id}')">➕ Nova visita</button>${c.deleted?`<button type="button" class="btn btn-muted btn-sm" onclick="event.stopPropagation();restoreClient('${c.id}');document.getElementById('home-results').classList.remove('open');document.getElementById('home-search-input').value=''">♻️ Restaurar</button>`:''}</div></div>`).join('')};
 window.pickClient=id=>{const c=all.find(x=>x.id===id);if(!c)return;if(!c.deleted)window._selectedClientId=id;['name','phone','address','ref','equip'].forEach(f=>{const el=document.getElementById('inp-'+f);if(el)el.value=c[f]||''});document.getElementById('inp-datetime').value='';document.getElementById('home-results')?.classList.remove('open');const si=document.getElementById('home-search-input');if(si)si.value='';openNewVisit()};
 document.addEventListener('click',e=>{if(!e.target.closest('.home-search'))document.getElementById('home-results')?.classList.remove('open');if(!e.target.closest('.filter-wrap'))document.getElementById('filter-menu')?.classList.remove('open')});
 function makeLayer(status,datetime=''){return {status,quote:'',quoteObs:'',techReport:null,approval:null,done:false,createdAt:new Date().toISOString(),datetime}}
@@ -951,11 +952,33 @@ window.showDoneTab=cid=>{
 };
 
 function renderTrash(){
-  const deleted=all.filter(c=>c.deleted);
+  const q=(document.getElementById('trash-search-input')?.value||'').toLowerCase().trim();
+  const qd=normPhone(q);
+  let deleted=all.filter(c=>c.deleted);
+  if(q)deleted=deleted.filter(c=>(c.name||'').toLowerCase().includes(q)||(qd&&normPhone(c.phone).includes(qd))||(c.address||'').toLowerCase().includes(q));
   const el=document.getElementById('trash-list');
-  if(!deleted.length){el.innerHTML='<div class="empty">Lixeira vazia.</div>';return}
-  el.innerHTML=deleted.map(c=>`<div class="trash-item"><span>${c.name||'—'} — ${c.phone||''}</span><button class="btn btn-muted btn-sm" onclick="restoreClient('${c.id}')">♻️ Restaurar</button><button class="btn btn-red btn-sm" onclick="hardDelete('${c.id}')">Excluir permanentemente</button></div>`).join('');
+  if(!deleted.length){el.innerHTML=`<div class="empty">${q?'Nada encontrado.':'Lixeira vazia.'}</div>`;return}
+  const groups={};
+  deleted.forEach(c=>{const k=normPhone(c.phone)||c.id;(groups[k]=groups[k]||[]).push(c)});
+  el.innerHTML=Object.values(groups).map(grp=>{
+    const c=grp[0];
+    const dupBtn=grp.length>1?`<button class="btn btn-outline-blue btn-sm" onclick="mergeTrashDuplicates('${normPhone(c.phone)}')">🔗 Unificar ${grp.length} duplicados</button>`:'';
+    return `<div class="trash-item"><span>${c.name||'—'} — ${c.phone||''}${grp.length>1?` <span style="color:var(--red)">(${grp.length}x duplicado)</span>`:''}</span>${dupBtn}<button class="btn btn-outline-blue btn-sm" onclick="pickClient('${c.id}')">➕ Nova visita</button><button class="btn btn-muted btn-sm" onclick="restoreClient('${c.id}')">♻️ Restaurar</button><button class="btn btn-red btn-sm" onclick="hardDelete('${c.id}')">Excluir permanentemente</button></div>`;
+  }).join('');
 }
+
+window.mergeTrashDuplicates=async(phone)=>{
+  const dupes=all.filter(c=>c.deleted&&normPhone(c.phone)===phone).sort((a,b)=>new Date(a.createdAt||0)-new Date(b.createdAt||0));
+  if(dupes.length<2)return;
+  if(!confirm(`Unificar ${dupes.length} clientes duplicados em um só, juntando todos os relatórios? Os registros extras serão excluídos permanentemente.`))return;
+  const primary=dupes[0];
+  const mergedLayers=dupes.flatMap(d=>getLayers(d));
+  const pick=field=>dupes.map(d=>d[field]).find(v=>v)||'';
+  const merged={name:pick('name'),phone:pick('phone'),address:pick('address'),ref:pick('ref'),equip:pick('equip'),email:pick('email'),city:pick('city'),cidade:pick('cidade'),number:pick('number'),neighborhood:pick('neighborhood'),bairro:pick('bairro'),gestorObs:pick('gestorObs'),layers:mergedLayers,deleted:true,deletedAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+  await updateDoc(doc(db,'clients',primary.id),merged);
+  for(const d of dupes.slice(1))await deleteDoc(doc(db,'clients',d.id));
+  toast('🔗 Duplicados unificados');
+};
 
 window.saveLayerDatetime=async(id,li,brVal)=>{const iso=brToIso(brVal);if(!iso)return;const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];layers[li]={...layers[li],datetime:iso};const first=layers.find(l=>!l.done);const upd={layers,updatedAt:new Date().toISOString()};if(li===0)upd.datetime=iso;await updateDoc(doc(db,'clients',id),upd);toast('📅 Data da visita atualizada')};
 window.removeLayer=async(id,li)=>{const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];if(layers.length<=1)return alert('Não é possível remover a única visita.');if(!confirm('Remover esta visita?'))return;layers.splice(li,1);const first=layers.find(l=>!l.done);await updateDoc(doc(db,'clients',id),{layers,status:first?first.status:'done'});toast('🗑 Visita removida')};
