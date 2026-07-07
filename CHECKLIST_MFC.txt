@@ -187,6 +187,11 @@ NOTA TÉCNICA — Upload de imagens (item 3 solicitado):
 Não é possível forçar um diretório padrão no seletor de arquivos do navegador via código. Essa é uma restrição de segurança do browser (Chrome/Edge/Firefox) que impede sites de pré-selecionar pastas do sistema operacional. Isso não é um bug do app — é um limite da Web Platform.
 
 
+ATUALIZAÇÃO MFC v66
+[x] Index: observação (l.quoteObs) movida pro card "Aprovado", desgrudada do bloco morto condicionado a l.quote (que o gestor nunca preenche).
+[x] CACHE_NAME atualizado: mfc-tecnico-v66
+[x] Service-worker atualizado para mfc-tecnico-v66.
+
 ATUALIZAÇÃO MFC v65
 [x] Gestor: botões renomeados — "Remover visita/relatório" e "Mover cliente para a lixeira", com quebra de linha (.btn-wrap) pra não estourar o layout.
 [x] CACHE_NAME atualizado: mfc-tecnico-v65

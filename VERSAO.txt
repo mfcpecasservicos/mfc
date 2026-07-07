@@ -1,3 +1,10 @@
+MFC v66
+
+Última alteração
+
+Index: observação do orçamento/status (mesmo campo do gestor) agora aparece dentro do card "🟠 Aprovado". Antes ela ficava presa num bloco condicionado a um campo (l.quote) que o gestor nunca preenche — ou seja, nunca aparecia de verdade.
+Cache atualizado para mfc-tecnico-v66.
+
 MFC v65
 
 Última alteração
