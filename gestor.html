@@ -952,33 +952,40 @@ window.showDoneTab=cid=>{
 };
 
 function renderTrash(){
+  autoMergeTrashDuplicates();
   const q=(document.getElementById('trash-search-input')?.value||'').toLowerCase().trim();
   const qd=normPhone(q);
   let deleted=all.filter(c=>c.deleted);
   if(q)deleted=deleted.filter(c=>(c.name||'').toLowerCase().includes(q)||(qd&&normPhone(c.phone).includes(qd))||(c.address||'').toLowerCase().includes(q));
   const el=document.getElementById('trash-list');
   if(!deleted.length){el.innerHTML=`<div class="empty">${q?'Nada encontrado.':'Lixeira vazia.'}</div>`;return}
-  const groups={};
-  deleted.forEach(c=>{const k=normPhone(c.phone)||c.id;(groups[k]=groups[k]||[]).push(c)});
-  el.innerHTML=Object.values(groups).map(grp=>{
-    const c=grp[0];
-    const dupBtn=grp.length>1?`<button class="btn btn-outline-blue btn-sm" onclick="mergeTrashDuplicates('${normPhone(c.phone)}')">🔗 Unificar ${grp.length} duplicados</button>`:'';
-    return `<div class="trash-item"><span>${c.name||'—'} — ${c.phone||''}${grp.length>1?` <span style="color:var(--red)">(${grp.length}x duplicado)</span>`:''}</span>${dupBtn}<button class="btn btn-outline-blue btn-sm" onclick="pickClient('${c.id}')">➕ Nova visita</button><button class="btn btn-muted btn-sm" onclick="restoreClient('${c.id}')">♻️ Restaurar</button><button class="btn btn-red btn-sm" onclick="hardDelete('${c.id}')">Excluir permanentemente</button></div>`;
-  }).join('');
+  el.innerHTML=deleted.map(c=>`<div class="trash-item"><span>${c.name||'—'} — ${c.phone||''}</span><button class="btn btn-outline-blue btn-sm" onclick="pickClient('${c.id}')">➕ Nova visita</button><button class="btn btn-muted btn-sm" onclick="restoreClient('${c.id}')">♻️ Restaurar</button><button class="btn btn-red btn-sm" onclick="hardDelete('${c.id}')">Excluir permanentemente</button></div>`).join('');
 }
 
-window.mergeTrashDuplicates=async(phone)=>{
+let _mergeLock=new Set();
+async function autoMergeTrashDuplicates(){
+  const deleted=all.filter(c=>c.deleted);
+  const groups={};
+  deleted.forEach(c=>{const k=normPhone(c.phone);if(!k)return;(groups[k]=groups[k]||[]).push(c)});
+  for(const [phone,grp] of Object.entries(groups)){
+    if(grp.length<2||_mergeLock.has(phone))continue;
+    _mergeLock.add(phone);
+    await mergeTrashDuplicates(phone).catch(err=>console.error('merge falhou',err));
+    _mergeLock.delete(phone);
+  }
+}
+
+async function mergeTrashDuplicates(phone){
   const dupes=all.filter(c=>c.deleted&&normPhone(c.phone)===phone).sort((a,b)=>new Date(a.createdAt||0)-new Date(b.createdAt||0));
   if(dupes.length<2)return;
-  if(!confirm(`Unificar ${dupes.length} clientes duplicados em um só, juntando todos os relatórios? Os registros extras serão excluídos permanentemente.`))return;
   const primary=dupes[0];
   const mergedLayers=dupes.flatMap(d=>getLayers(d));
   const pick=field=>dupes.map(d=>d[field]).find(v=>v)||'';
   const merged={name:pick('name'),phone:pick('phone'),address:pick('address'),ref:pick('ref'),equip:pick('equip'),email:pick('email'),city:pick('city'),cidade:pick('cidade'),number:pick('number'),neighborhood:pick('neighborhood'),bairro:pick('bairro'),gestorObs:pick('gestorObs'),layers:mergedLayers,deleted:true,deletedAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
   await updateDoc(doc(db,'clients',primary.id),merged);
   for(const d of dupes.slice(1))await deleteDoc(doc(db,'clients',d.id));
-  toast('🔗 Duplicados unificados');
-};
+  toast('🔗 Duplicados unificados automaticamente');
+}
 
 window.saveLayerDatetime=async(id,li,brVal)=>{const iso=brToIso(brVal);if(!iso)return;const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];layers[li]={...layers[li],datetime:iso};const first=layers.find(l=>!l.done);const upd={layers,updatedAt:new Date().toISOString()};if(li===0)upd.datetime=iso;await updateDoc(doc(db,'clients',id),upd);toast('📅 Data da visita atualizada')};
 window.removeLayer=async(id,li)=>{const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];if(layers.length<=1)return alert('Não é possível remover a única visita.');if(!confirm('Remover esta visita?'))return;layers.splice(li,1);const first=layers.find(l=>!l.done);await updateDoc(doc(db,'clients',id),{layers,status:first?first.status:'done'});toast('🗑 Visita removida')};

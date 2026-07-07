@@ -1,3 +1,10 @@
+MFC v68
+
+Última alteração
+
+Gestor: unificação de duplicados na Lixeira deixou de ser botão manual — agora roda sozinha toda vez que a Lixeira atualiza (snapshot do Firestore). Detecta telefone repetido, junta os relatórios e apaga o(s) clone(s) sem perguntar nada.
+Cache atualizado para mfc-tecnico-v68.
+
 MFC v67
 
 Última alteração
