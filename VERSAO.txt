@@ -1,3 +1,13 @@
+MFC v69
+
+Última alteração
+
+BUGFIX (meu, v68): campo de busca da Lixeira chamava "renderTrash()" via atributo inline, mas a função vive dentro de um <script type="module"> — invisível pro escopo global do HTML, gerava "ReferenceError: renderTrash is not defined". Corrigido expondo window.renderTrash.
+
+BUGFIX (pré-existente, não era meu): a real causa de "não consigo colocar imagem do orçamento". Em readLayerForm, quando a visita ainda não tinha "avaliação técnica" enviada, o código gravava techReport:undefined explicitamente no objeto da layer — e o Firestore rejeita qualquer campo com valor undefined, travando o updateDoc (erro "Unsupported field value: undefined"). Agora o campo só é incluído quando realmente existe.
+
+Cache atualizado para mfc-tecnico-v69.
+
 MFC v68
 
 Última alteração

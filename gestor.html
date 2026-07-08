@@ -499,7 +499,9 @@ function readLayerForm(id,li,base={}){
   const galpao=getChk('ly-service-workshop',base.serviceInWorkshop||base.approval?.serviceInWorkshop||false);
   const paid=getChk('ly-paid',base.approval?.paid||false);const owes=getChk('ly-owes',base.approval?.owes||false);
   const techReport=base.techReport?{...base.techReport,needsPickup:galpao?false:!!base.techReport.needsPickup}:base.techReport;
-  return {...base,status:st,datetime:visitDatetime,quote:base.quote||'',quoteObs:getVal('ly-obs',base.quoteObs||''),techReport,needsPickup:galpao?false:!!base.needsPickup,approval:{...(base.approval||{}),payment:pay,value:val,serviceDate:svc,paymentDate,entryApproval:ent,entryValue,entryPayment,balancePayment,pagamentos,serviceInWorkshop:galpao,paid,owes},serviceInWorkshop:galpao,entryApproval:ent};
+  const out={...base,status:st,datetime:visitDatetime,quote:base.quote||'',quoteObs:getVal('ly-obs',base.quoteObs||''),needsPickup:galpao?false:!!base.needsPickup,approval:{...(base.approval||{}),payment:pay,value:val,serviceDate:svc,paymentDate,entryApproval:ent,entryValue,entryPayment,balancePayment,pagamentos,serviceInWorkshop:galpao,paid,owes},serviceInWorkshop:galpao,entryApproval:ent};
+  if(techReport!==undefined)out.techReport=techReport;
+  return out;
 }
 
 /* ===== CONSTANTS ===== */
@@ -961,6 +963,7 @@ function renderTrash(){
   if(!deleted.length){el.innerHTML=`<div class="empty">${q?'Nada encontrado.':'Lixeira vazia.'}</div>`;return}
   el.innerHTML=deleted.map(c=>`<div class="trash-item"><span>${c.name||'—'} — ${c.phone||''}</span><button class="btn btn-outline-blue btn-sm" onclick="pickClient('${c.id}')">➕ Nova visita</button><button class="btn btn-muted btn-sm" onclick="restoreClient('${c.id}')">♻️ Restaurar</button><button class="btn btn-red btn-sm" onclick="hardDelete('${c.id}')">Excluir permanentemente</button></div>`).join('');
 }
+window.renderTrash=renderTrash;
 
 let _mergeLock=new Set();
 async function autoMergeTrashDuplicates(){
