@@ -1,3 +1,10 @@
+MFC v70
+
+Última alteração
+
+Index: quando o gestor preenche "Observações", o bloco vira um alerta vermelho de verdade (borda, fundo escuro-vermelho, ⚠️ no título) — não passa mais despercebido pelo técnico. Sem observação, continua discreto/cinza como antes.
+Cache atualizado para mfc-tecnico-v70.
+
 MFC v69
 
 Última alteração
