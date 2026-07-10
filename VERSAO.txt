@@ -1,3 +1,24 @@
+MFC v76
+
+Última alteração
+
+Varredura completa de emojis -> ícones Font Awesome (flat) em gestor.html e index.html. Trocado tudo que é decoração de UI (botões, títulos, chips, badges) por <i class="fa-solid/fa-regular ..."> equivalente.
+
+LIMITAÇÃO REAL, sem jeito de contornar: emoji dentro de alert(), confirm() e toast() continua emoji — essas caixas mostram texto puro, não renderizam HTML, então uma tag <i> apareceria escrita na tela em vez de virar ícone. Mesma coisa pra <option> de <select> (não aceita HTML dentro, nem em navegador nenhum). Isso é limitação do HTML/JS em si, não do código.
+
+BUGFIX crítico da própria varredura: os identificadores de "Tipo de Serviço" (🔧 Corretiva, 🧽 Preventiva, 🧰 Instalação, 📋 Laudo) e "Forma de pagamento" (💵 Espécie, ⚡ Pix, 💳 Débito, 💳 Crédito Nx) são valores de DADO salvos no Firestore e comparados por igualdade entre gestor e index — não são só decoração. A primeira passada da varredura ia convertê-los pra ícone também, o que quebraria a comparação com registros antigos e a sincronia entre os dois arquivos. Foram revertidos de propósito e continuam em emoji, igual sempre foram.
+
+OFFLINE: pasta fontawesome/ (css/all.min.css + webfonts/*.woff2) incluída no pacote pela primeira vez — o service-worker já esperava esse caminho desde sempre (cache mfc-tecnico-v75 já listava ele no APP_SHELL) mas a pasta nunca tinha sido enviada de verdade. Sem ela, os ícones não carregam offline (e alguns nem online, se o navegador bloquear CDN externo).
+
+Cache atualizado para mfc-tecnico-v76.
+
+MFC v75
+
+Última alteração
+
+Gestor: margem adicionada nos switches "Data a definir" (Nova Visita e Editar) e "Precisa retirar o equipamento" (Editar Relatório do Técnico) — não ficam mais colados na moldura/textarea de cima nem no botão Salvar de baixo.
+Cache atualizado para mfc-tecnico-v75.
+
 MFC v74
 
 Última alteração

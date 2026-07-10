@@ -310,12 +310,12 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
   <aside class="sidebar">
     <div class="side-brand"><img src="mfc-logo.png" alt="MFC" onerror="this.style.display='none'"><h2>Painel de gestão</h2></div>
     <nav class="side-nav">
-      <button class="nav-item active" id="nav-main" onclick="switchView('main');goHome()">📋 <span>Menu principal</span></button>
-      <button class="nav-item" id="nav-fin" onclick="switchView('fin')">💰 <span>Financeiro</span></button>
-      <button class="nav-item" id="nav-leads" onclick="switchView('leads')">📥 <span>Novos Cadastros</span><span class="nbadge" id="leads-count" style="display:none">0</span></button>
-      <button class="nav-item nav-trash" id="nav-trash" onclick="switchView('trash')">🗑️ <span>Lixeira</span></button>
+      <button class="nav-item active" id="nav-main" onclick="switchView('main');goHome()"><i class="fa-solid fa-clipboard"></i> <span>Menu principal</span></button>
+      <button class="nav-item" id="nav-fin" onclick="switchView('fin')"><i class="fa-solid fa-sack-dollar"></i> <span>Financeiro</span></button>
+      <button class="nav-item" id="nav-leads" onclick="switchView('leads')"><i class="fa-solid fa-inbox"></i> <span>Novos Cadastros</span><span class="nbadge" id="leads-count" style="display:none">0</span></button>
+      <button class="nav-item nav-trash" id="nav-trash" onclick="switchView('trash')"><i class="fa-solid fa-trash-can"></i> <span>Lixeira</span></button>
     </nav>
-    <span id="conn">🔴 Conectando...</span>
+    <span id="conn"><i class="fa-solid fa-circle" style="color:#ef4444"></i> Conectando...</span>
   </aside>
 
   <!-- ===== LIST COLUMN ===== -->
@@ -333,14 +333,14 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
     <div id="view-fin" style="display:none"></div>
 
     <div id="view-leads" style="display:none">
-      <div class="detail-head"><h1>📥 Novos Cadastros</h1><button class="btn btn-outline-blue btn-sm" onclick="generateCadastroLink()">🔗 Gerar link de cadastro</button></div>
+      <div class="detail-head"><h1><i class="fa-solid fa-inbox"></i> Novos Cadastros</h1><button class="btn btn-outline-blue btn-sm" onclick="generateCadastroLink()"><i class="fa-solid fa-link"></i> Gerar link de cadastro</button></div>
       <div id="leads-list"><div class="empty">⏳ Carregando...</div></div>
     </div>
 
     <div id="view-trash" style="display:none">
-      <div class="detail-head"><h1>🗑️ Lixeira</h1></div>
+      <div class="detail-head"><h1><i class="fa-solid fa-trash-can"></i> Lixeira</h1></div>
       <p style="color:var(--muted);font-size:.85rem;margin-bottom:12px">Itens são excluídos permanentemente após 90 dias.</p>
-      <div class="home-search" style="margin-bottom:14px"><span class="si">🔍</span><input id="trash-search-input" placeholder="Buscar na lixeira..." oninput="renderTrash()" autocomplete="off"></div>
+      <div class="home-search" style="margin-bottom:14px"><span class="si"><i class="fa-solid fa-magnifying-glass"></i></span><input id="trash-search-input" placeholder="Buscar na lixeira..." oninput="renderTrash()" autocomplete="off"></div>
       <div id="trash-list"><div class="empty">Lixeira vazia.</div></div>
     </div>
   </section>
@@ -349,16 +349,16 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 <!-- ===== MODAL NOVA VISITA ===== -->
 <div class="mbg" id="newvisit-modal">
   <div class="modal">
-    <h3>➕ Nova visita</h3>
+    <h3><i class="fa-solid fa-plus"></i> Nova visita</h3>
     <div class="fgrid">
       <div><span class="fl">Nome</span><input class="fi" id="inp-name" placeholder="Nome completo"></div>
       <div><span class="fl">Telefone</span><input class="fi" id="inp-phone" placeholder="(71) 9 0000-0000" oninput="phoneMask(this)"></div>
       <div><span class="fl">Ponto de referência</span><input class="fi" id="inp-ref" placeholder="Referência"></div>
       <div><span class="fl">Equipamento</span><input class="fi" id="inp-equip" placeholder="Ex: Geladeira Brastemp"></div>
       <div style="grid-column:1/-1"><span class="fl">Endereço</span><input class="fi" id="inp-address" placeholder="Rua, número, bairro"></div>
-      <div><span class="fl">📅 Data e Hora (dd/mm/aaaa hh:mm)</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="inp-datetime" placeholder="dd/mm/aaaa hh:mm" oninput="dtMask(this)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px" onclick="openPicker('pk-inp-datetime')">📅</button><input type="datetime-local" id="pk-inp-datetime" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'inp-datetime',false)"></div><input type="checkbox" id="inp-tbd" style="display:none"><button type="button" class="tg-btn tg-galpao" style="width:100%;height:40px;margin-top:8px;font-size:.82rem" onclick="toggleTBDSwitch('inp-tbd','inp-datetime',this)">📅<span style="flex:1;text-align:left">Data a definir</span><span class="switch"></span></button></div>
+      <div><span class="fl"><i class="fa-solid fa-calendar-days"></i> Data e Hora (dd/mm/aaaa hh:mm)</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="inp-datetime" placeholder="dd/mm/aaaa hh:mm" oninput="dtMask(this)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px" onclick="openPicker('pk-inp-datetime')"><i class="fa-solid fa-calendar-days"></i></button><input type="datetime-local" id="pk-inp-datetime" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'inp-datetime',false)"></div><input type="checkbox" id="inp-tbd" style="display:none"><button type="button" class="tg-btn tg-galpao" style="width:100%;height:40px;margin:8px 0 4px;font-size:.82rem" onclick="toggleTBDSwitch('inp-tbd','inp-datetime',this)"><i class="fa-solid fa-calendar-days"></i><span style="flex:1;text-align:left">Data a definir</span><span class="switch"></span></button></div>
       <div><span class="fl">Status inicial</span><select class="fi" id="inp-status"><option value="waiting">🕐 Aguardando visita</option><option value="workshop_pending">🏭 Aguardando Avaliação</option><option value="evaluated">✅ Avaliação concluída</option><option value="quoted">💰 Aguardando aprovação</option><option value="approved">🟠 Aprovado</option><option value="ready_delivery">📦 Pronto para entrega</option><option value="service_finished">✅ Serviço finalizado</option><option value="absent">🚫 Cliente ausente</option></select></div>
-      <div style="grid-column:1/-1"><input type="checkbox" id="inp-workshop" style="display:none"><button type="button" class="tg-btn tg-galpao" onclick="toggleChk('inp-workshop',this)" style="width:100%">🏭<span style="flex:1;text-align:left">Equipamento trazido à loja</span><span class="switch"></span></button></div>
+      <div style="grid-column:1/-1"><input type="checkbox" id="inp-workshop" style="display:none"><button type="button" class="tg-btn tg-galpao" onclick="toggleChk('inp-workshop',this)" style="width:100%"><i class="fa-solid fa-industry"></i><span style="flex:1;text-align:left">Equipamento trazido à loja</span><span class="switch"></span></button></div>
       <div style="grid-column:1/-1"><span class="fl">Observações</span><textarea class="fi" id="inp-notes" placeholder="Observações adicionais"></textarea></div>
     </div>
     <div class="mact">
@@ -372,22 +372,22 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 <!-- ===== MODAL VISITA EMPRESA ===== -->
 <div class="mbg" id="company-modal">
   <div class="modal">
-    <h3>🏢 Visita de empresa</h3>
+    <h3><i class="fa-solid fa-building"></i> Visita de empresa</h3>
     <div class="fgrid">
       <div><span class="fl">Nome da empresa</span><input class="fi" id="emp-name" placeholder="Empresa"></div>
       <div><span class="fl">Telefone</span><input class="fi" id="emp-phone" oninput="phoneMask(this)"></div>
       <div><span class="fl">E-mail</span><input class="fi" id="emp-email" placeholder="email@empresa.com"></div>
-      <div><span class="fl">Horário (dd/mm/aaaa hh:mm)</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="emp-datetime" placeholder="dd/mm/aaaa hh:mm" oninput="dtMask(this)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px" onclick="openPicker('pk-emp-datetime')">📅</button><input type="datetime-local" id="pk-emp-datetime" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'emp-datetime',false)"></div></div>
+      <div><span class="fl">Horário (dd/mm/aaaa hh:mm)</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="emp-datetime" placeholder="dd/mm/aaaa hh:mm" oninput="dtMask(this)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px" onclick="openPicker('pk-emp-datetime')"><i class="fa-solid fa-calendar-days"></i></button><input type="datetime-local" id="pk-emp-datetime" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'emp-datetime',false)"></div></div>
     </div>
     <div><span class="fl">Observação</span><textarea class="fi" id="emp-notes" placeholder="Observação rápida"></textarea></div>
-    <div class="mact"><button class="btn btn-muted" onclick="closeCompany()">Cancelar</button><button class="btn btn-cyan" onclick="addCompanyVisit().then(()=>closeCompany())">⚡ Enviar visita empresa</button></div>
+    <div class="mact"><button class="btn btn-muted" onclick="closeCompany()">Cancelar</button><button class="btn btn-cyan" onclick="addCompanyVisit().then(()=>closeCompany())"><i class="fa-solid fa-bolt"></i> Enviar visita empresa</button></div>
   </div>
 </div>
 
 <!-- ===== MODAL ADICIONAR CONTA (FINANCEIRO) ===== -->
 <div class="mbg" id="addres-modal">
   <div class="modal" style="max-width:440px">
-    <h3>➕ Adicionar conta</h3>
+    <h3><i class="fa-solid fa-plus"></i> Adicionar conta</h3>
     <div><span class="fl">Tipo</span><select class="fi" id="ar-tipo"><option value="coelba">⚡ Coelba</option><option value="embasa">💧 Embasa</option></select></div>
     <div><span class="fl">Endereço</span><input class="fi" id="ar-end" placeholder="Rua, número"></div>
     <div><span class="fl">Código do cliente</span><input class="fi" id="ar-cod" placeholder="Código"></div>
@@ -400,7 +400,7 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 <!-- ===== MODAL APELIDO ===== -->
 <div class="mbg" id="apelido-modal">
   <div class="modal" style="max-width:380px">
-    <h3>✏️ Apelido da conta</h3>
+    <h3><i class="fa-solid fa-pen"></i> Apelido da conta</h3>
     <div><span class="fl">Apelido</span><input class="fi" id="ap-input" placeholder='Ex: Casa da mãe, Loja, Galpão'></div>
     <div class="mact"><button class="btn btn-muted" onclick="closeApelido()">Cancelar</button><button class="btn btn-green" onclick="saveApelido()">Salvar</button></div>
   </div>
@@ -409,7 +409,7 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 <!-- ===== MODAL EDIT ===== -->
 <div class="mbg" id="edit-modal">
   <div class="modal">
-    <h3 id="e-modal-title">✏️ Editar cliente</h3>
+    <h3 id="e-modal-title"><i class="fa-solid fa-pen"></i> Editar cliente</h3>
     <div class="fgrid">
       <div><span class="fl">Nome</span><input class="fi" id="e-name"></div>
       <div><span class="fl">Telefone</span><input class="fi" id="e-phone" oninput="phoneMask(this)"></div>
@@ -417,7 +417,7 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
       <div class="ec-client-only" style="grid-column:1/-1"><span class="fl">Endereço</span><input class="fi" id="e-address"></div>
       <div class="ec-client-only"><span class="fl">Ponto de referência</span><input class="fi" id="e-ref"></div>
       <div class="ec-client-only"><span class="fl">Equipamento</span><input class="fi" id="e-equip"></div>
-      <div><span class="fl">📅 Data e Hora (dd/mm/aaaa hh:mm)</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="e-datetime" placeholder="dd/mm/aaaa hh:mm" oninput="dtMask(this)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px" onclick="openPicker('pk-e-datetime')">📅</button><input type="datetime-local" id="pk-e-datetime" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'e-datetime',false)"></div><input type="checkbox" id="e-tbd" style="display:none"><button type="button" class="tg-btn tg-galpao" style="width:100%;height:40px;margin-top:8px;font-size:.82rem" onclick="toggleTBDSwitch('e-tbd','e-datetime',this)">📅<span style="flex:1;text-align:left">Data a definir</span><span class="switch"></span></button></div>
+      <div><span class="fl"><i class="fa-solid fa-calendar-days"></i> Data e Hora (dd/mm/aaaa hh:mm)</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="e-datetime" placeholder="dd/mm/aaaa hh:mm" oninput="dtMask(this)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px" onclick="openPicker('pk-e-datetime')"><i class="fa-solid fa-calendar-days"></i></button><input type="datetime-local" id="pk-e-datetime" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'e-datetime',false)"></div><input type="checkbox" id="e-tbd" style="display:none"><button type="button" class="tg-btn tg-galpao" style="width:100%;height:40px;margin:8px 0 4px;font-size:.82rem" onclick="toggleTBDSwitch('e-tbd','e-datetime',this)"><i class="fa-solid fa-calendar-days"></i><span style="flex:1;text-align:left">Data a definir</span><span class="switch"></span></button></div>
     </div>
     <div><span class="fl" id="e-notes-label">Descrição do problema</span><textarea class="fi" id="e-notes" placeholder="O que o cliente relatou"></textarea></div>
     <div class="mact"><button class="btn btn-muted" onclick="closeEdit()">Cancelar</button><button class="btn btn-green" onclick="saveEdit()">Salvar</button></div>
@@ -425,7 +425,7 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 </div>
 
 <!-- ===== MODAL EDITAR RELATÓRIO ===== -->
-<div id="etr-modal"><div class="etr-box"><h3>✏️ Editar Relatório do Técnico</h3><div><span class="fl">Modelo exato</span><input class="fi" id="etr-model" placeholder="Ex: Brastemp BMS45"></div><div><span class="fl">Tipo de serviço</span><div id="etr-types"></div></div><div><span class="fl">Relatório</span><textarea class="fi" id="etr-report" style="min-height:80px"></textarea></div><button type="button" class="tg-btn tg-galpao" id="etr-pickup" style="width:100%" onclick="this.classList.toggle('active')">🛻<span style="flex:1;text-align:left">Precisa retirar o equipamento</span><span class="switch"></span></button><div class="acts"><button class="btn btn-green btn-sm" onclick="saveEtrModal()">💾 Salvar</button><button class="btn btn-muted btn-sm" onclick="closeEtrModal()">Cancelar</button></div></div></div>
+<div id="etr-modal"><div class="etr-box"><h3><i class="fa-solid fa-pen"></i> Editar Relatório do Técnico</h3><div><span class="fl">Modelo exato</span><input class="fi" id="etr-model" placeholder="Ex: Brastemp BMS45"></div><div><span class="fl">Tipo de serviço</span><div id="etr-types"></div></div><div><span class="fl">Relatório</span><textarea class="fi" id="etr-report" style="min-height:80px"></textarea></div><button type="button" class="tg-btn tg-galpao" id="etr-pickup" style="width:100%;margin:6px 0" onclick="this.classList.toggle('active')"><i class="fa-solid fa-truck-pickup"></i><span style="flex:1;text-align:left">Precisa retirar o equipamento</span><span class="switch"></span></button><div class="acts"><button class="btn btn-green btn-sm" onclick="saveEtrModal()"><i class="fa-solid fa-floppy-disk"></i> Salvar</button><button class="btn btn-muted btn-sm" onclick="closeEtrModal()">Cancelar</button></div></div></div>
 
 <div id="toast"></div>
 
@@ -515,7 +515,7 @@ function inferServiceType(text){const t=String(text||'');if(t.includes('Preventi
 function stripServiceTypeFromReport(text){return String(text||'').replace(/(?:^|\s*[|,-]\s*)[🔧🧽]?\s*(Corretiva|Preventiva)\s*(?:\|\s*)?/gi,'').replace(/^\s*[|,-]\s*/,'').trim()}
 function reportServiceType(r){const raw=r?.serviceType||inferServiceType(r?.problem||'');return raw||'—'}
 function reportTextOnly(r){return stripServiceTypeFromReport(r?.problem||'')||'—'}
-const ICON={waiting:'🕐',workshop_pending:'🏭',evaluated:'✅',quoted:'💰',approved:'🟠',ready_delivery:'📦',service_finished:'✅',absent:'🚫',done:'✔'};
+const ICON={waiting:'<i class="fa-regular fa-clock"></i>',workshop_pending:'<i class="fa-solid fa-industry"></i>',evaluated:'<i class="fa-solid fa-check"></i>',quoted:'<i class="fa-solid fa-sack-dollar"></i>',approved:'<i class="fa-solid fa-circle" style="color:#f97316"></i>',ready_delivery:'<i class="fa-solid fa-box"></i>',service_finished:'<i class="fa-solid fa-check"></i>',absent:'<i class="fa-solid fa-ban"></i>',done:'<i class="fa-solid fa-check"></i>'};
 const dotCls={waiting:'dw',workshop_pending:'dws',evaluated:'de',quoted:'dq',approved:'da',ready_delivery:'drd',service_finished:'dsf',absent:'dab',done:'dd'};
 const badgeCls={waiting:'sw',workshop_pending:'sws',evaluated:'se',quoted:'sq',approved:'sa',ready_delivery:'srd',service_finished:'ssf',absent:'sab',done:'sd'};
 function normPhone(v){let n=String(v||'').replace(/\D/g,'');if(n.length===8)n='71'+n;if(n.length===9)n='71'+n;if(n.startsWith('55')&&n.length>11)n=n.slice(2);return n;}
@@ -547,20 +547,20 @@ function appointmentSortValue(c){
 }
 function fullAddress(c){return [c.address,c.number,c.neighborhood||c.bairro].filter(Boolean).join(', ')||c.address||''}
 function infoCard(icon,color,label,value,extra='',cls=''){return value?`<div class="iblk ${cls}"><div class="ib-head"><div class="ib-ic" style="background:${color}22;color:${color}"><i class="fa-solid ${icon}"></i></div><label>${label}</label></div><p>${value}</p>${extra}</div>`:''}
-function clientInfoBlocks(c){const isCompany=!!(c.companyMode||c.type==='company');const addr=fullAddress(c);const routeAddress=String(c.address||'').trim();const blocks=[infoCard('fa-user','#3B82F6','Nome completo',c.name||'—'),infoCard('fa-phone','#22C55E','Número de contato',c.phone||''),infoCard('fa-envelope','#8B5CF6','E-mail',c.email||'')];if(isCompany){blocks.push(infoCard('fa-calendar','#22C55E','Data da visita',c.datetime===TBD?TBD:fdt(c.datetime)))}else{blocks.push(infoCard('fa-city','#38bdf8',"Dias D'Ávila?",c.city||c.cidade||''));blocks.push(infoCard('fa-location-dot','#F59E0B','Endereço',addr,routeAddress?`<a class="maps-btn" href="${maps(routeAddress)}" target="_blank"><i class="fa-solid fa-location-dot"></i> Ver no Maps</a>`:''));blocks.push(infoCard('fa-hashtag','#94A3B8','Número da residência',c.number||''));blocks.push(infoCard('fa-house','#94A3B8','Bairro',c.neighborhood||c.bairro||''));blocks.push(infoCard('fa-crosshairs','#F59E0B','Ponto de referência',c.ref||''));blocks.push(infoCard('fa-cube','#3B82F6','Equipamento',c.equip||''));blocks.push(infoCard('fa-triangle-exclamation','#EF4444','Descrição do problema',c.problem||c.notes||'','','iblk-problem'))}return `<div class="igrid">${blocks.join('')}<div class="iblk obs-card"><div class="ib-head"><div class="ib-ic" style="background:#F59E0B22;color:#F59E0B"><i class="fa-solid fa-note-sticky"></i></div><label>Observações</label></div><textarea class="fi obs-textarea" placeholder="Escreva aqui — salva sozinho ao sair do campo" onblur="saveGestorObs('${c.id}',this.value)">${c.gestorObs||''}</textarea><span class="obs-saved" id="obs-saved-${c.id}">Salvo ✓</span></div></div>`}
-function setConn(t){document.getElementById('conn').textContent=t}
+function clientInfoBlocks(c){const isCompany=!!(c.companyMode||c.type==='company');const addr=fullAddress(c);const routeAddress=String(c.address||'').trim();const blocks=[infoCard('fa-user','#3B82F6','Nome completo',c.name||'—'),infoCard('fa-phone','#22C55E','Número de contato',c.phone||''),infoCard('fa-envelope','#8B5CF6','E-mail',c.email||'')];if(isCompany){blocks.push(infoCard('fa-calendar','#22C55E','Data da visita',c.datetime===TBD?TBD:fdt(c.datetime)))}else{blocks.push(infoCard('fa-city','#38bdf8',"Dias D'Ávila?",c.city||c.cidade||''));blocks.push(infoCard('fa-location-dot','#F59E0B','Endereço',addr,routeAddress?`<a class="maps-btn" href="${maps(routeAddress)}" target="_blank"><i class="fa-solid fa-location-dot"></i> Ver no Maps</a>`:''));blocks.push(infoCard('fa-hashtag','#94A3B8','Número da residência',c.number||''));blocks.push(infoCard('fa-house','#94A3B8','Bairro',c.neighborhood||c.bairro||''));blocks.push(infoCard('fa-crosshairs','#F59E0B','Ponto de referência',c.ref||''));blocks.push(infoCard('fa-cube','#3B82F6','Equipamento',c.equip||''));blocks.push(infoCard('fa-triangle-exclamation','#EF4444','Descrição do problema',c.problem||c.notes||'','','iblk-problem'))}return `<div class="igrid">${blocks.join('')}<div class="iblk obs-card"><div class="ib-head"><div class="ib-ic" style="background:#F59E0B22;color:#F59E0B"><i class="fa-solid fa-note-sticky"></i></div><label>Observações</label></div><textarea class="fi obs-textarea" placeholder="Escreva aqui — salva sozinho ao sair do campo" onblur="saveGestorObs('${c.id}',this.value)">${c.gestorObs||''}</textarea><span class="obs-saved" id="obs-saved-${c.id}">Salvo <i class="fa-solid fa-check"></i></span></div></div>`}
+function setConn(t){document.getElementById('conn').innerHTML=t}
 function cleanupOld(){if(cleanupDone)return;cleanupDone=true;const now=Date.now();const DAY=86400000;all.forEach(async c=>{if(c.deleted){const delAge=c.deletedAt?now-new Date(c.deletedAt).getTime():0;if(delAge>90*DAY)await deleteDoc(doc(db,'clients',c.id));return}const layers=getLayers(c);const allDone=layers.length&&layers.every(l=>l.done);if(allDone||getStatus(c)==='done'){const doneDates=layers.map(l=>l.concludedAt).filter(Boolean).map(d=>new Date(d).getTime());const ref=c.completedAt?new Date(c.completedAt).getTime():(doneDates.length?Math.max(...doneDates):0);if(ref&&now-ref>120*DAY)await updateDoc(doc(db,'clients',c.id),{deleted:true,deletedAt:new Date().toISOString()});}})}
 
 /* ===== SNAPSHOTS ===== */
-onSnapshot(query(col,orderBy('createdAt','desc')),snap=>{all=snap.docs.map(d=>({id:d.id,...d.data()}));setConn('🟢 Conectado');cleanupOld();render();renderTrash();renderLeads();},err=>{console.error(err);setConn('🔴 Erro')});
+onSnapshot(query(col,orderBy('createdAt','desc')),snap=>{all=snap.docs.map(d=>({id:d.id,...d.data()}));setConn('<i class="fa-solid fa-circle" style="color:#22c55e"></i> Conectado');cleanupOld();render();renderTrash();renderLeads();},err=>{console.error(err);setConn('<i class="fa-solid fa-circle" style="color:#ef4444"></i> Erro')});
 onSnapshot(query(leadsCol,orderBy('createdAt','desc')),snap=>{leads=snap.docs.map(d=>({id:d.id,...d.data()}));const b=document.getElementById('leads-count');b.textContent=leads.length;b.style.display=leads.length?'inline':'none';renderLeads();});
 
 /* ===== FINANCEIRO ===== */
 const finRef=doc(db,'config','financeiro');
 const RES=[
-  {key:'embasa',nome:'Embasa',icon:'💧',end:'Boa Esperança, 1364',cod:'073469912',doc:'814.064.605-91'},
-  {key:'coelba1',nome:'Coelba',icon:'⚡',end:'Belo Horizonte, 105',cod:'230958084',doc:'40.628.562/0001-07'},
-  {key:'coelba2',nome:'Coelba',icon:'⚡',end:'Almirante Tamandaré, 80',cod:'34519307',doc:'385.599.865-53'}
+  {key:'embasa',nome:'Embasa',icon:'<i class="fa-solid fa-droplet"></i>',end:'Boa Esperança, 1364',cod:'073469912',doc:'814.064.605-91'},
+  {key:'coelba1',nome:'Coelba',icon:'<i class="fa-solid fa-bolt"></i>',end:'Belo Horizonte, 105',cod:'230958084',doc:'40.628.562/0001-07'},
+  {key:'coelba2',nome:'Coelba',icon:'<i class="fa-solid fa-bolt"></i>',end:'Almirante Tamandaré, 80',cod:'34519307',doc:'385.599.865-53'}
 ];
 onSnapshot(finRef,snap=>{finData=snap.exists()?snap.data():{};if(view==='fin')renderFin();});
 function todayIso(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
@@ -568,7 +568,7 @@ function getContas(key){return (finData[key]?.contas||[]).slice()}
 function isOverdue(conta){return conta.venc&&conta.venc<todayIso()}
 function overdueSum(key){return getContas(key).filter(isOverdue).reduce((s,c)=>s+moneyNum(c.valor),0)}
 function totalSum(key){return getContas(key).reduce((s,c)=>s+moneyNum(c.valor),0)}
-function getAllRes(){const custom=(finData.customResidencias||[]).map(r=>({key:r.key,nome:r.tipo==='embasa'?'Embasa':'Coelba',icon:r.tipo==='embasa'?'💧':'⚡',end:r.end||'',cod:r.cod||'',doc:r.doc||'',custom:true}));return [...RES,...custom]}
+function getAllRes(){const custom=(finData.customResidencias||[]).map(r=>({key:r.key,nome:r.tipo==='embasa'?'Embasa':'Coelba',icon:r.tipo==='embasa'?'<i class="fa-solid fa-droplet"></i>':'<i class="fa-solid fa-bolt"></i>',end:r.end||'',cod:r.cod||'',doc:r.doc||'',custom:true}));return [...RES,...custom]}
 function getApelido(key){const cr=(finData.customResidencias||[]).find(r=>r.key===key);if(cr)return cr.apelido||'';return (finData.apelidos||{})[key]||''}
 function waLink(nome){return nome==='Embasa'?'http://wa.me/7197170999?text=Ol%C3%A1':'https://wa.me/7133706350?text=Ol%C3%A1'}
 const WA_SVG='<svg viewBox="0 0 24 24" width="15" height="15" fill="#25D366"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.4 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.4-.7-2.9-1.1-4.7-4-4.9-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5s.8 1.9.8 2c.1.1.1.3 0 .5l-.4.6c-.1.2-.3.3-.1.6.2.3.8 1.3 1.8 2.1 1.2 1.1 2.2 1.4 2.5 1.5.3.1.5.1.7-.1l.9-1c.2-.3.4-.2.7-.1l2 .9c.3.1.5.2.5.3.1.1.1.7-.1 1.4Z"/></svg>';
@@ -627,20 +627,20 @@ function renderFin(){
     const nAtras=getContas(r.key).filter(isOverdue).length;
     const ap=getApelido(r.key);
     return `<div class="rescard ${selectedFin===r.key?'selected':''}" onclick="selectFin('${r.key}')">
-      <h4>${r.icon} ${r.nome}${ap?` <span style="font-weight:700;color:var(--muted)">(${ap})</span>`:''}<span style="margin-left:auto;display:inline-flex;gap:6px;align-items:center"><button class="copy-btn" title="Apelido" onclick="event.stopPropagation();editApelido('${r.key}')">✏️</button><a class="wa-btn" title="WhatsApp ${r.nome}" href="${waLink(r.nome)}" target="_blank" onclick="event.stopPropagation()">${WA_SVG}</a></span></h4>
-      <div class="res-end">📍 ${r.end}</div>
-      <div class="res-row"><span>Código do cliente</span><b>${r.cod} <button class="copy-btn" onclick="event.stopPropagation();copyTxt('${r.cod}')">📋</button></b></div>
-      <div class="res-row"><span>CPF/CNPJ</span><b>${r.doc} <button class="copy-btn" onclick="event.stopPropagation();copyTxt('${r.doc}')">📋</button></b></div>
-      ${sum>0?`<div class="overdue-badge">⚠️ ${nAtras} atrasada${nAtras>1?'s':''} — ${fmtMoney(sum)}</div>`:''}
-      ${r.custom?`<button class="copy-btn" style="margin-top:8px;color:#fca5a5" onclick="event.stopPropagation();removeRes('${r.key}')">🗑 Remover conta</button>`:''}
+      <h4>${r.icon} ${r.nome}${ap?` <span style="font-weight:700;color:var(--muted)">(${ap})</span>`:''}<span style="margin-left:auto;display:inline-flex;gap:6px;align-items:center"><button class="copy-btn" title="Apelido" onclick="event.stopPropagation();editApelido('${r.key}')"><i class="fa-solid fa-pen"></i></button><a class="wa-btn" title="WhatsApp ${r.nome}" href="${waLink(r.nome)}" target="_blank" onclick="event.stopPropagation()">${WA_SVG}</a></span></h4>
+      <div class="res-end"><i class="fa-solid fa-location-dot"></i> ${r.end}</div>
+      <div class="res-row"><span>Código do cliente</span><b>${r.cod} <button class="copy-btn" onclick="event.stopPropagation();copyTxt('${r.cod}')"><i class="fa-solid fa-clipboard"></i></button></b></div>
+      <div class="res-row"><span>CPF/CNPJ</span><b>${r.doc} <button class="copy-btn" onclick="event.stopPropagation();copyTxt('${r.doc}')"><i class="fa-solid fa-clipboard"></i></button></b></div>
+      ${sum>0?`<div class="overdue-badge"><i class="fa-solid fa-triangle-exclamation"></i> ${nAtras} atrasada${nAtras>1?'s':''} — ${fmtMoney(sum)}</div>`:''}
+      ${r.custom?`<button class="copy-btn" style="margin-top:8px;color:#fca5a5" onclick="event.stopPropagation();removeRes('${r.key}')"><i class="fa-solid fa-trash-can"></i> Remover conta</button>`:''}
     </div>`;
   }).join('')+`
-    <button class="btn btn-outline-blue" style="width:100%;height:46px" onclick="openAddRes()">➕ Adicionar conta</button>`;
-  document.getElementById('pagination').innerHTML=`<div class="fin-total"><span>💰 Total de todas as contas</span><b>${fmtMoney(grandTotal)}</b></div>`;
+    <button class="btn btn-outline-blue" style="width:100%;height:46px" onclick="openAddRes()"><i class="fa-solid fa-plus"></i> Adicionar conta</button>`;
+  document.getElementById('pagination').innerHTML=`<div class="fin-total"><span><i class="fa-solid fa-sack-dollar"></i> Total de todas as contas</span><b>${fmtMoney(grandTotal)}</b></div>`;
   // detail
   const wrap=document.getElementById('view-fin');
   const r=ALLRES.find(x=>x.key===selectedFin);
-  if(!r){wrap.innerHTML='<div class="detail-head"><h1>💰 Financeiro</h1></div><div class="empty" style="padding-top:80px">👈 Selecione uma residência na lista para ver as contas.</div>';return}
+  if(!r){wrap.innerHTML='<div class="detail-head"><h1><i class="fa-solid fa-sack-dollar"></i> Financeiro</h1></div><div class="empty" style="padding-top:80px"><i class="fa-solid fa-hand-point-left"></i> Selecione uma residência na lista para ver as contas.</div>';return}
   const contas=getContas(r.key).sort((a,b)=>{
     const ao=isOverdue(a)?0:1,bo=isOverdue(b)?0:1;
     if(ao!==bo)return ao-bo;
@@ -648,24 +648,24 @@ function renderFin(){
   });
   const sum=overdueSum(r.key);
   wrap.innerHTML=`
-    <div class="detail-head"><h1>${r.icon} ${r.nome}${getApelido(r.key)?` (${getApelido(r.key)})`:''} — ${r.end}</h1>${sum>0?`<span class="overdue-badge" style="margin:0">⚠️ Total atrasado: ${fmtMoney(sum)}</span>`:''}</div>
+    <div class="detail-head"><h1>${r.icon} ${r.nome}${getApelido(r.key)?` (${getApelido(r.key)})`:''} — ${r.end}</h1>${sum>0?`<span class="overdue-badge" style="margin:0"><i class="fa-solid fa-triangle-exclamation"></i> Total atrasado: ${fmtMoney(sum)}</span>`:''}</div>
     <div class="contas-list">
       ${contas.length?contas.map(c=>`
         <div class="conta-item ${isOverdue(c)?'atrasada':''}">
           <div class="cv">${fmtMoney(moneyNum(c.valor))}</div>
           <div class="cvenc"><span>Vencimento</span>${isoDateToBr(c.venc)}${isOverdue(c)?'<span class="atras-flag">ATRASADA</span>':''}</div>
-          <div class="cpix"><span>PIX</span>${c.pix?`${c.pix} <button class="copy-btn" onclick="copyTxt('${String(c.pix).replace(/'/g,'')}')">📋</button>`:'—'}</div>
-          <button class="btn btn-green btn-sm" onclick="payConta('${r.key}','${c.id}')">✅ Pago</button>
-        </div>`).join(''):'<div class="empty">Nenhuma conta pendente. 🎉</div>'}
+          <div class="cpix"><span>PIX</span>${c.pix?`${c.pix} <button class="copy-btn" onclick="copyTxt('${String(c.pix).replace(/'/g,'')}')"><i class="fa-solid fa-clipboard"></i></button>`:'—'}</div>
+          <button class="btn btn-green btn-sm" onclick="payConta('${r.key}','${c.id}')"><i class="fa-solid fa-check"></i> Pago</button>
+        </div>`).join(''):'<div class="empty">Nenhuma conta pendente. <i class="fa-solid fa-champagne-glasses"></i></div>'}
     </div>
     <div class="add-conta">
-      <span class="fl" style="margin-bottom:10px">➕ Adicionar conta</span>
+      <span class="fl" style="margin-bottom:10px"><i class="fa-solid fa-plus"></i> Adicionar conta</span>
       <div class="fgrid3">
         <div><span class="fl">Valor</span><input class="fi" id="nc-valor" placeholder="R$ 0,00"></div>
         <div><span class="fl">Vencimento</span><input class="fi" id="nc-venc" placeholder="dd/mm/aaaa" oninput="dMask(this)"></div>
         <div><span class="fl">PIX de pagamento</span><input class="fi" id="nc-pix" placeholder="Chave / código PIX"></div>
       </div>
-      <button class="btn btn-blue" onclick="addConta('${r.key}')">➕ Adicionar</button>
+      <button class="btn btn-blue" onclick="addConta('${r.key}')"><i class="fa-solid fa-plus"></i> Adicionar</button>
     </div>`;
 }
 
@@ -692,7 +692,7 @@ window.openNewVisit=()=>document.getElementById('newvisit-modal').classList.add(
 window.closeNewVisit=()=>document.getElementById('newvisit-modal').classList.remove('open');
 window.openCompany=()=>document.getElementById('company-modal').classList.add('open');
 window.closeCompany=()=>document.getElementById('company-modal').classList.remove('open');
-window.homeSearch=val=>{const box=document.getElementById('home-results');if(!box)return;if(!val||val.length<2){box.classList.remove('open');return}const q=val.toLowerCase(),qd=normPhone(val);const results=all.filter(c=>(c.name||'').toLowerCase().includes(q)||(qd&&normPhone(c.phone).includes(qd))||(c.address||'').toLowerCase().includes(q)).slice(0,12);if(!results.length){box.classList.remove('open');return}box.classList.add('open');box.innerHTML=results.map(c=>`<div class="csr-item ${c.deleted?'deleted':''}"><div style="flex:1;min-width:0"><strong>${c.name||'—'}${c.deleted?' <span style="color:var(--red)">(Lixeira)</span>':''}</strong><span>${c.phone||''} ${c.address?'· '+c.address:''}</span></div><div style="display:flex;gap:6px;flex-shrink:0"><button type="button" class="btn btn-outline-blue btn-sm" onclick="event.stopPropagation();pickClient('${c.id}')">➕ Nova visita</button>${c.deleted?`<button type="button" class="btn btn-muted btn-sm" onclick="event.stopPropagation();restoreClient('${c.id}');document.getElementById('home-results').classList.remove('open');document.getElementById('home-search-input').value=''">♻️ Restaurar</button>`:''}</div></div>`).join('')};
+window.homeSearch=val=>{const box=document.getElementById('home-results');if(!box)return;if(!val||val.length<2){box.classList.remove('open');return}const q=val.toLowerCase(),qd=normPhone(val);const results=all.filter(c=>(c.name||'').toLowerCase().includes(q)||(qd&&normPhone(c.phone).includes(qd))||(c.address||'').toLowerCase().includes(q)).slice(0,12);if(!results.length){box.classList.remove('open');return}box.classList.add('open');box.innerHTML=results.map(c=>`<div class="csr-item ${c.deleted?'deleted':''}"><div style="flex:1;min-width:0"><strong>${c.name||'—'}${c.deleted?' <span style="color:var(--red)">(Lixeira)</span>':''}</strong><span>${c.phone||''} ${c.address?'· '+c.address:''}</span></div><div style="display:flex;gap:6px;flex-shrink:0"><button type="button" class="btn btn-outline-blue btn-sm" onclick="event.stopPropagation();pickClient('${c.id}')"><i class="fa-solid fa-plus"></i> Nova visita</button>${c.deleted?`<button type="button" class="btn btn-muted btn-sm" onclick="event.stopPropagation();restoreClient('${c.id}');document.getElementById('home-results').classList.remove('open');document.getElementById('home-search-input').value=''"><i class="fa-solid fa-recycle"></i> Restaurar</button>`:''}</div></div>`).join('')};
 window.toggleTBD=(inputId,chkEl)=>{const inp=document.getElementById(inputId);if(!inp)return;if(chkEl.checked){inp.dataset.prev=inp.value;inp.value='';inp.placeholder='A definir';inp.disabled=true}else{inp.disabled=false;inp.placeholder='dd/mm/aaaa hh:mm';inp.value=inp.dataset.prev||''}};
 window.toggleTBDSwitch=(chkId,inputId,btn)=>{const chk=document.getElementById(chkId);chk.checked=!chk.checked;btn.classList.toggle('active',chk.checked);toggleTBD(inputId,chk)};
 window.syncTBDBtn=chkId=>{const chk=document.getElementById(chkId);if(!chk)return;chk.nextElementSibling?.classList.toggle('active',chk.checked)};
@@ -705,7 +705,7 @@ window.addClient=async()=>{const name=document.getElementById('inp-name').value.
 window.clearForm=()=>{['inp-name','inp-phone','inp-address','inp-ref','inp-datetime','inp-equip','inp-notes'].forEach(i=>document.getElementById(i).value='');const tbd=document.getElementById('inp-tbd');if(tbd){tbd.checked=false;document.getElementById('inp-datetime').disabled=false;document.getElementById('inp-datetime').placeholder='dd/mm/aaaa hh:mm';syncTBDBtn('inp-tbd')}};
 window.addCompanyVisit=async()=>{const name=document.getElementById('emp-name').value.trim(),phone=document.getElementById('emp-phone').value.trim(),email=document.getElementById('emp-email').value.trim(),datetime=brToIso(document.getElementById('emp-datetime').value),notes=document.getElementById('emp-notes').value.trim();if(!name||!datetime)return alert('Informe nome da empresa e horário (dd/mm/aaaa hh:mm).');await addDoc(col,{type:'company',companyMode:true,name,phone,phoneNorm:normPhone(phone),email,address:'',ref:'',equip:'',notes,datetime,status:'approved',layers:[{status:'approved',quote:'',quoteObs:notes,approval:{serviceDate:datetime,serviceInWorkshop:false},done:false,createdAt:new Date().toISOString(),companyMode:true}],deleted:false,createdAt:new Date().toISOString()});['emp-name','emp-phone','emp-email','emp-datetime','emp-notes'].forEach(i=>document.getElementById(i).value='');toast('🏢 Visita empresa enviada')};
 window.generateCadastroLink=async()=>{const token=Math.random().toString(36).slice(2,8).toUpperCase()+Date.now().toString(36).slice(-4).toUpperCase();const now=Date.now();await setDoc(doc(db,'cadastroTokens',token),{token,createdAt:new Date(now).toISOString(),createdAtMs:now,expiresAt:new Date(now+6*60*60*1000).toISOString(),expiresAtMs:now+6*60*60*1000,used:false});const link=`https://mfcpecasservicos.github.io/mfc/cadastro.html?token=${token}`;const msg=`Para prosseguirmos com o agendamento, preencha o formulário abaixo: ${link}`;try{await navigator.clipboard.writeText(msg);toast('🔗 Link copiado')}catch{prompt('Copie o link:',msg);toast('🔗 Link gerado')}};
-window.openEdit=id=>{const c=all.find(x=>x.id===id);if(!c)return;editId=id;const isCompany=!!(c.companyMode||c.type==='company');['name','phone','address','ref','equip','notes'].forEach(f=>document.getElementById('e-'+f).value=c[f]||'');document.getElementById('e-email').value=c.email||'';const dtInp=document.getElementById('e-datetime');const tbdChk=document.getElementById('e-tbd');if(c.datetime===TBD){tbdChk.checked=true;toggleTBD('e-datetime',tbdChk)}else{tbdChk.checked=false;dtInp.disabled=false;dtInp.placeholder='dd/mm/aaaa hh:mm';dtInp.value=isoToBr(c.datetime||'')}syncTBDBtn('e-tbd');document.querySelectorAll('.ec-client-only').forEach(el=>el.style.display=isCompany?'none':'');document.getElementById('e-modal-title').textContent=isCompany?'🏢 Editar empresa':'✏️ Editar cliente';document.getElementById('e-notes-label').textContent=isCompany?'Observações (formalizar orçamento)':'Descrição do problema';document.getElementById('edit-modal').dataset.company=isCompany?'1':'';document.getElementById('edit-modal').classList.add('open')};
+window.openEdit=id=>{const c=all.find(x=>x.id===id);if(!c)return;editId=id;const isCompany=!!(c.companyMode||c.type==='company');['name','phone','address','ref','equip','notes'].forEach(f=>document.getElementById('e-'+f).value=c[f]||'');document.getElementById('e-email').value=c.email||'';const dtInp=document.getElementById('e-datetime');const tbdChk=document.getElementById('e-tbd');if(c.datetime===TBD){tbdChk.checked=true;toggleTBD('e-datetime',tbdChk)}else{tbdChk.checked=false;dtInp.disabled=false;dtInp.placeholder='dd/mm/aaaa hh:mm';dtInp.value=isoToBr(c.datetime||'')}syncTBDBtn('e-tbd');document.querySelectorAll('.ec-client-only').forEach(el=>el.style.display=isCompany?'none':'');document.getElementById('e-modal-title').innerHTML=isCompany?'<i class="fa-solid fa-building"></i> Editar empresa':'<i class="fa-solid fa-pen"></i> Editar cliente';document.getElementById('e-notes-label').textContent=isCompany?'Observações (formalizar orçamento)':'Descrição do problema';document.getElementById('edit-modal').dataset.company=isCompany?'1':'';document.getElementById('edit-modal').classList.add('open')};
 window.closeEdit=()=>{editId=null;document.getElementById('edit-modal').classList.remove('open')};
 window.saveGestorObs=async(id,val)=>{await updateDoc(doc(db,'clients',id),{gestorObs:val.trim()});const badge=document.getElementById('obs-saved-'+id);if(badge){badge.classList.add('show');setTimeout(()=>badge.classList.remove('show'),1800)}};
 window.saveEdit=async()=>{if(!editId)return;const isCompany=document.getElementById('edit-modal').dataset.company==='1';const phone=document.getElementById('e-phone').value.trim();const tbdChecked=document.getElementById('e-tbd').checked;const datetime=tbdChecked?TBD:(brToIso(document.getElementById('e-datetime').value)||all.find(x=>x.id===editId)?.datetime||'');const payload={name:document.getElementById('e-name').value.trim(),phone,phoneNorm:normPhone(phone),email:document.getElementById('e-email').value.trim(),datetime,notes:document.getElementById('e-notes').value.trim()};if(!isCompany){payload.address=document.getElementById('e-address').value.trim();payload.ref=document.getElementById('e-ref').value.trim();payload.equip=document.getElementById('e-equip').value.trim()}await updateDoc(doc(db,'clients',editId),payload);closeEdit();toast('✅ Atualizado')};
@@ -722,7 +722,7 @@ window.restoreClient=async id=>{await updateDoc(doc(db,'clients',id),{deleted:fa
 window.hardDelete=async id=>{if(!confirm('Tem certeza que deseja excluir permanentemente? Essa ação não pode ser desfeita.'))return;await deleteDoc(doc(db,'clients',id));toast('🗑 Excluído')};
 window.approveLead=async id=>{const lead=leads.find(x=>x.id===id);if(!lead)return;const dtBr=document.getElementById('lead-dt-'+id)?.value||'';const dt=brToIso(dtBr);const status='waiting';const data={name:lead.name||'',phone:lead.phone||'',address:[lead.address,lead.number,lead.neighborhood||lead.bairro].filter(Boolean).join(', '),ref:lead.ref||'',equip:lead.equip||'',notes:lead.problem||'',datetime:dt,fromLead:true};await createOrAppendClient(data,status);await deleteDoc(doc(db,'leads',id))};
 window.deleteLead=async id=>{if(!confirm('Remover cadastro?'))return;await deleteDoc(doc(db,'leads',id));toast('🗑 Removido')};
-function renderLeads(){const el=document.getElementById('leads-list');if(!el)return;if(!leads.length){el.innerHTML='<div class="empty">📋 Nenhum cadastro novo.</div>';return}el.innerHTML=leads.map(l=>{return`<div class="lead-card"><h4>👤 ${l.name||'—'} </h4><div class="lead-info"><div><span>Telefone</span><strong>${l.phone||'—'}</strong></div><div><span>Endereço</span><strong>${[l.address,l.number,l.neighborhood||l.bairro].filter(Boolean).join(', ')||'—'}</strong></div><div><span>Equipamento</span><strong>${l.equip||'—'}</strong></div><div><span>Problema</span><strong>${l.problem||'—'}</strong></div></div><div class="acts"><div style="display:flex;gap:6px;position:relative;max-width:230px"><input class="fi" id="lead-dt-${l.id}" placeholder="dd/mm/aaaa hh:mm" oninput="dtMask(this)"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px" onclick="openPicker('pk-lead-${l.id}')">📅</button><input type="datetime-local" id="pk-lead-${l.id}" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'lead-dt-${l.id}',false)"></div><button class="btn btn-green btn-sm" onclick="approveLead('${l.id}')">Enviar para Técnico</button><button class="btn btn-muted btn-sm" onclick="deleteLead('${l.id}')">Remover</button></div></div>`}).join('')};
+function renderLeads(){const el=document.getElementById('leads-list');if(!el)return;if(!leads.length){el.innerHTML='<div class="empty"><i class="fa-solid fa-clipboard"></i> Nenhum cadastro novo.</div>';return}el.innerHTML=leads.map(l=>{return`<div class="lead-card"><h4><i class="fa-solid fa-user"></i> ${l.name||'—'} </h4><div class="lead-info"><div><span>Telefone</span><strong>${l.phone||'—'}</strong></div><div><span>Endereço</span><strong>${[l.address,l.number,l.neighborhood||l.bairro].filter(Boolean).join(', ')||'—'}</strong></div><div><span>Equipamento</span><strong>${l.equip||'—'}</strong></div><div><span>Problema</span><strong>${l.problem||'—'}</strong></div></div><div class="acts"><div style="display:flex;gap:6px;position:relative;max-width:230px"><input class="fi" id="lead-dt-${l.id}" placeholder="dd/mm/aaaa hh:mm" oninput="dtMask(this)"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px" onclick="openPicker('pk-lead-${l.id}')"><i class="fa-solid fa-calendar-days"></i></button><input type="datetime-local" id="pk-lead-${l.id}" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'lead-dt-${l.id}',false)"></div><button class="btn btn-green btn-sm" onclick="approveLead('${l.id}')">Enviar para Técnico</button><button class="btn btn-muted btn-sm" onclick="deleteLead('${l.id}')">Remover</button></div></div>`}).join('')};
 window.showVTab=(cid,li)=>{document.querySelectorAll(`[data-vt="${cid}"]`).forEach(t=>t.classList.remove('active'));document.querySelectorAll(`[data-vp="${cid}"]`).forEach(p=>p.classList.remove('active'));document.getElementById(`vt-${cid}-${li}`)?.classList.add('active');document.getElementById(`vp-${cid}-${li}`)?.classList.add('active');const c2=all.find(x=>x.id===cid);if(c2){const l2=getLayers(c2)[li];const hb=document.getElementById('head-badge-'+cid);if(hb&&l2){hb.className='sbadge '+(badgeCls[l2.status]||'sw');hb.textContent=lbl(l2.status||'waiting')}}};
 window.toggleAcc=(h,b)=>{document.getElementById(h)?.classList.toggle('open');document.getElementById(b)?.classList.toggle('open')};
 window.toggleChk=(chkId,btn)=>{const el=document.getElementById(chkId);if(!el)return;el.checked=!el.checked;btn.classList.toggle('active',el.checked)};
@@ -757,7 +757,7 @@ const PAG_OPTS=['','💵 Espécie','⚡ Pix','💳 Débito',...Array.from({lengt
 function pagsOf(l){const a=l?.approval;if(Array.isArray(a?.pagamentos)&&a.pagamentos.length)return a.pagamentos;if(moneyNum(a?.entryValue)>0||a?.payment)return [{forma:a?.payment||'',valor:a?.entryValue||'',data:a?.serviceDate||''}];return []}
 
 /* ===== FILTER MENU ===== */
-const FILTERS=[['all','📋 Todos (ativos)'],['waiting','🕐 Aguardando visita'],['workshop_pending','🏭 Aguardando Avaliação'],['evaluated','✅ Avaliação concluída'],['quoted','💰 Aguardando aprovação'],['approved','🟠 Aprovado'],['ready_delivery','📦 Pronto para entrega'],['service_finished','✅ Serviço finalizado'],['absent','🚫 Cliente ausente'],['done','✔ Concluídos']];
+const FILTERS=[['all','<i class="fa-solid fa-clipboard"></i> Todos (ativos)'],['waiting','<i class="fa-regular fa-clock"></i> Aguardando visita'],['workshop_pending','<i class="fa-solid fa-industry"></i> Aguardando Avaliação'],['evaluated','<i class="fa-solid fa-check"></i> Avaliação concluída'],['quoted','<i class="fa-solid fa-sack-dollar"></i> Aguardando aprovação'],['approved','<i class="fa-solid fa-circle" style="color:#f97316"></i> Aprovado'],['ready_delivery','<i class="fa-solid fa-box"></i> Pronto para entrega'],['service_finished','<i class="fa-solid fa-check"></i> Serviço finalizado'],['absent','<i class="fa-solid fa-ban"></i> Cliente ausente'],['done','<i class="fa-solid fa-check"></i> Concluídos']];
 window.setFilter=f=>{filter=f;page=1;document.getElementById('filter-menu')?.classList.remove('open');render()};
 
 /* ===== TIMELINE ===== */
@@ -789,7 +789,7 @@ function render(){
   const totalPages=Math.max(1,Math.ceil(clients.length/PAGE_SIZE));
   if(page>totalPages)page=totalPages;
   const pageClients=clients.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
-  if(!clients.length){list.innerHTML='<div class="empty">📋 Nenhum cliente.</div>';document.getElementById('pagination').innerHTML='';renderDetail();return}
+  if(!clients.length){list.innerHTML='<div class="empty"><i class="fa-solid fa-clipboard"></i> Nenhum cliente.</div>';document.getElementById('pagination').innerHTML='';renderDetail();return}
   const STATUS_COLOR={waiting:'oklch(0.72 0.17 285)',workshop_pending:'oklch(0.70 0.14 220)',evaluated:'oklch(0.75 0.18 155)',quoted:'oklch(0.80 0.16 75)',approved:'oklch(0.75 0.18 45)',ready_delivery:'oklch(0.70 0.14 220)',service_finished:'oklch(0.75 0.18 155)',absent:'oklch(0.65 0.12 300)',done:'oklch(0.75 0.18 155)'};
   function gDayKey(d){const t=new Date(d||'');if(!Number.isFinite(t.getTime()))return 'SEM DATA';const wd=t.toLocaleDateString('pt-BR',{weekday:'long'}).toUpperCase();return `${wd}, ${t.toLocaleDateString('pt-BR')}`}
   function gHourOf(d){const t=new Date(d||'');if(!Number.isFinite(t.getTime()))return '';return t.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}
@@ -800,11 +800,11 @@ function render(){
     if(dk!==lastDay){listHtml+=`<div class="day-head"><span>${dk}</span></div>`;lastDay=dk}
     const hh=gHourOf(mainDate(c));
     const chips=[];
-    if(c.datetime===TBD||indLayers(c).some(l=>l.datetime===TBD))chips.push({t:'Data a definir',h:'<span class="chip chip-time">🗓️ Data a definir</span>'});
+    if(c.datetime===TBD||indLayers(c).some(l=>l.datetime===TBD))chips.push({t:'Data a definir',h:'<span class="chip chip-time"><i class="fa-solid fa-calendar-days"></i> Data a definir</span>'});
     if(needsPickup(c))chips.push({t:'Retirar equipamento',h:'<span class="indicator ind-flag"><i class="fa-solid fa-flag"></i> Retirar equipamento</span>'});
-    if(hasLaudo(c))chips.push({t:'Laudo',h:'<span class="indicator ind-laudo">📋 Laudo</span>'});
-    if(hasServiceInWorkshop(c))chips.push({t:'Equipamento no galpão',h:'<span class="indicator">🏭 Equipamento no galpão</span>'});
-    if(hasPaidService(c))chips.push({t:'Serviço pago',h:'<span class="indicator">💳 Serviço pago</span>'});
+    if(hasLaudo(c))chips.push({t:'Laudo',h:'<span class="indicator ind-laudo"><i class="fa-solid fa-clipboard"></i> Laudo</span>'});
+    if(hasServiceInWorkshop(c))chips.push({t:'Equipamento no galpão',h:'<span class="indicator"><i class="fa-solid fa-industry"></i> Equipamento no galpão</span>'});
+    if(hasPaidService(c))chips.push({t:'Serviço pago',h:'<span class="indicator"><i class="fa-solid fa-credit-card"></i> Serviço pago</span>'});
     if(hasOwesService(c))chips.push({t:'Falta pagar',h:'<span class="chip chip-owe"><i class="fa-solid fa-circle-exclamation"></i> Falta pagar</span>'});
     if(c.companyMode||c.type==='company'){const pinL=getLayers(c).find(l=>!l.done&&l.pinned)||getLayers(c).find(l=>!l.done);const pd=pinL?.approval?.paymentDate;if(pd)chips.push({t:'Pagamento: '+isoDateToBr(pd),h:'<span class="chip chip-pay"><i class="fa-solid fa-dollar-sign"></i> Pagamento: '+isoDateToBr(pd)+'</span>'});}
     chips.sort((a,b)=>a.t.length-b.t.length);
@@ -839,13 +839,13 @@ function homeHtml(){
   return `<div class="home-wrap">
     <div class="home-logo"><img src="mfc-logo.png" alt="MFC" onerror="this.style.display='none'"></div>
     <div class="home-btns">
-      <button class="btn btn-outline-blue" onclick="generateCadastroLink()">🔗 Gerar link de cadastro</button>
+      <button class="btn btn-outline-blue" onclick="generateCadastroLink()"><i class="fa-solid fa-link"></i> Gerar link de cadastro</button>
       <button class="btn btn-green" onclick="openNewVisit()">＋ Nova visita</button>
-      <button class="btn btn-cyan" onclick="openCompany()">🏢 Visita de empresa</button>
+      <button class="btn btn-cyan" onclick="openCompany()"><i class="fa-solid fa-building"></i> Visita de empresa</button>
     </div>
     <div class="home-search-row">
-      <div class="home-search"><span class="si">🔍</span><input id="home-search-input" placeholder="Buscar clientes existentes..." oninput="homeSearch(this.value)" autocomplete="off"><div class="home-results" id="home-results"></div></div>
-      <div class="filter-wrap"><button class="filter-btn" onclick="document.getElementById('filter-menu').classList.toggle('open')">🔽 Filtro</button><div class="filter-menu" id="filter-menu">${FILTERS.map(([f,l])=>`<button class="${filter===f?'active':''}" onclick="setFilter('${f}')">${l}</button>`).join('')}</div></div>
+      <div class="home-search"><span class="si"><i class="fa-solid fa-magnifying-glass"></i></span><input id="home-search-input" placeholder="Buscar clientes existentes..." oninput="homeSearch(this.value)" autocomplete="off"><div class="home-results" id="home-results"></div></div>
+      <div class="filter-wrap"><button class="filter-btn" onclick="document.getElementById('filter-menu').classList.toggle('open')"><i class="fa-solid fa-chevron-down"></i> Filtro</button><div class="filter-menu" id="filter-menu">${FILTERS.map(([f,l])=>`<button class="${filter===f?'active':''}" onclick="setFilter('${f}')">${l}</button>`).join('')}</div></div>
     </div>
   </div>`;
 }
@@ -863,7 +863,7 @@ function renderDetail(){
   const headL=defaultIdx>=0?layers[defaultIdx]:null;
   const status=headL?headL.status||'waiting':'done';
   let n=0;
-  const tabs=layers.map((l,i)=>l.done?'':`<button id="vt-${c.id}-${i}" data-vt="${c.id}" class="vtab ${i===defaultIdx?'active':''} ${{waiting:'vtw',workshop_pending:'vtws',evaluated:'vte',quoted:'vtq',approved:'vta',ready_delivery:'vtrd',service_finished:'vte',absent:'vtab2',done:'vtd'}[l.status]||'vtw'}" onclick="showVTab('${c.id}',${i})">Relatório ${++n}${l.pinned?' 📌':''}</button>`).join('');
+  const tabs=layers.map((l,i)=>l.done?'':`<button id="vt-${c.id}-${i}" data-vt="${c.id}" class="vtab ${i===defaultIdx?'active':''} ${{waiting:'vtw',workshop_pending:'vtws',evaluated:'vte',quoted:'vtq',approved:'vta',ready_delivery:'vtrd',service_finished:'vte',absent:'vtab2',done:'vtd'}[l.status]||'vtw'}" onclick="showVTab('${c.id}',${i})">Relatório ${++n}${l.pinned?' <i class="fa-solid fa-thumbtack"></i>':''}</button>`).join('');
   const doneTab=done.length?`<button class="vtab vtd" data-vt="${c.id}" onclick="showDoneTab('${c.id}')">Concluídos (${done.length})</button>`:'';
   const panels=layers.map((l,i)=>{
     if(l.done)return'';
@@ -876,28 +876,28 @@ function renderDetail(){
     const pct=total>0?Math.min(100,Math.round(entrada/total*100)):0;
     const restante=Math.max(0,total-entrada);
     return `<div id="vp-${c.id}-${i}" data-vp="${c.id}" class="vpanel ${first?'active':''}">
-      <div style="display:flex;justify-content:flex-end;margin-bottom:2px"><button type="button" class="btn btn-sm ${l.pinned?'btn-cyan':'btn-muted'}" onclick="togglePin('${c.id}',${i})">${l.pinned?'📌 Visita fixada':'📌 Fixar visita'}</button></div>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:2px"><button type="button" class="btn btn-sm ${l.pinned?'btn-cyan':'btn-muted'}" onclick="togglePin('${c.id}',${i})">${l.pinned?'<i class="fa-solid fa-thumbtack"></i> Visita fixada':'<i class="fa-solid fa-thumbtack"></i> Fixar visita'}</button></div>
       ${timelineHtml(l)}
       <div class="dcards">
-                <div class="dcard"><h3><span class="ic">💰</span>Pagamento ${total>0?`<span class="pct-badge">${pct}% pago</span>`:''}</h3><div class="pay-bar"><div style="width:${pct}%"></div></div><div class="pay-grid"><div><div class="pg-lbl">Pago</div><div class="pg-val" style="color:var(--gold)">${fmtMoney(entrada)}</div></div><div><div class="pg-lbl">Restante</div><div class="pg-val" style="color:#fca5a5">${fmtMoney(restante)}</div></div><div><div class="pg-lbl">Total</div><div class="pg-val">${fmtMoney(total)}</div></div></div></div>
-        <div class="dcard"><h3><span class="ic">📅</span>Datas importantes</h3><div class="date-blk"><div class="di">📆</div><div><div class="dd-l">Data da visita</div><div class="dd-v">${fd(l.datetime||c.datetime)}</div>${(l.datetime||c.datetime)===TBD?'':`<div class="dd-t">🕐 ${ft(l.datetime||c.datetime)||'—'}</div>`}</div></div><div class="date-blk"><div class="di">🛠️</div><div><div class="dd-l">Data do serviço</div><div class="dd-v">${fd(l.approval?.serviceDate)}</div><div class="dd-t">🕐 ${ft(l.approval?.serviceDate)||'—'}</div></div></div></div>
+                <div class="dcard"><h3><span class="ic"><i class="fa-solid fa-sack-dollar"></i></span>Pagamento ${total>0?`<span class="pct-badge">${pct}% pago</span>`:''}</h3><div class="pay-bar"><div style="width:${pct}%"></div></div><div class="pay-grid"><div><div class="pg-lbl">Pago</div><div class="pg-val" style="color:var(--gold)">${fmtMoney(entrada)}</div></div><div><div class="pg-lbl">Restante</div><div class="pg-val" style="color:#fca5a5">${fmtMoney(restante)}</div></div><div><div class="pg-lbl">Total</div><div class="pg-val">${fmtMoney(total)}</div></div></div></div>
+        <div class="dcard"><h3><span class="ic"><i class="fa-solid fa-calendar-days"></i></span>Datas importantes</h3><div class="date-blk"><div class="di"><i class="fa-solid fa-calendar"></i></div><div><div class="dd-l">Data da visita</div><div class="dd-v">${fd(l.datetime||c.datetime)}</div>${(l.datetime||c.datetime)===TBD?'':`<div class="dd-t"><i class="fa-regular fa-clock"></i> ${ft(l.datetime||c.datetime)||'—'}</div>`}</div></div><div class="date-blk"><div class="di"><i class="fa-solid fa-screwdriver-wrench"></i></div><div><div class="dd-l">Data do serviço</div><div class="dd-v">${fd(l.approval?.serviceDate)}</div><div class="dd-t"><i class="fa-regular fa-clock"></i> ${ft(l.approval?.serviceDate)||'—'}</div></div></div></div>
       </div>
-      ${l.techReport?`<div class="acc"><div class="acc-hdr" id="th${c.id}${i}" onclick="toggleAcc('th${c.id}${i}','tb${c.id}${i}')"><span class="ic">🔧</span>Relatório do Técnico<span class="acc-arr">▼</span></div><div class="acc-body" id="tb${c.id}${i}"><p><b>Equipamento:</b> ${l.techReport.model||'—'}</p><p><b>Tipo de Serviço:</b> ${reportServiceType(l.techReport)}</p><p><b>Relatório:</b> ${reportTextOnly(l.techReport)}</p>${l.techReport.needsPickup&&!layerServiceInWorkshop(l)?'<p class="indicator">🏭 Retirar equipamento</p>':''}${(l.techReport.serviceType||'').includes('Laudo')?'<p class="indicator ind-laudo">📋 Laudo</p>':''}<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">${photos.map(p=>`<img src="${p}" onclick="openLb('${p}')" style="width:70px;height:70px;object-fit:cover;border-radius:8px;cursor:pointer">`).join('')}</div><div class="acts" style="margin-top:10px"><button class="btn btn-muted btn-sm" onclick="editTechReport('${c.id}',${i})">✏️ Editar relatório</button><button class="btn btn-red btn-sm" onclick="deleteTechReport('${c.id}',${i})">🗑 Excluir relatório</button></div></div></div>`:''}
+      ${l.techReport?`<div class="acc"><div class="acc-hdr" id="th${c.id}${i}" onclick="toggleAcc('th${c.id}${i}','tb${c.id}${i}')"><span class="ic"><i class="fa-solid fa-wrench"></i></span>Relatório do Técnico<span class="acc-arr">▼</span></div><div class="acc-body" id="tb${c.id}${i}"><p><b>Equipamento:</b> ${l.techReport.model||'—'}</p><p><b>Tipo de Serviço:</b> ${reportServiceType(l.techReport)}</p><p><b>Relatório:</b> ${reportTextOnly(l.techReport)}</p>${l.techReport.needsPickup&&!layerServiceInWorkshop(l)?'<p class="indicator"><i class="fa-solid fa-industry"></i> Retirar equipamento</p>':''}${(l.techReport.serviceType||'').includes('Laudo')?'<p class="indicator ind-laudo"><i class="fa-solid fa-clipboard"></i> Laudo</p>':''}<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">${photos.map(p=>`<img src="${p}" onclick="openLb('${p}')" style="width:70px;height:70px;object-fit:cover;border-radius:8px;cursor:pointer">`).join('')}</div><div class="acts" style="margin-top:10px"><button class="btn btn-muted btn-sm" onclick="editTechReport('${c.id}',${i})"><i class="fa-solid fa-pen"></i> Editar relatório</button><button class="btn btn-red btn-sm" onclick="deleteTechReport('${c.id}',${i})"><i class="fa-solid fa-trash-can"></i> Excluir relatório</button></div></div></div>`:''}
       <div class="acc"><div class="acc-hdr open" id="qh${c.id}${i}" onclick="toggleAcc('qh${c.id}${i}','qb${c.id}${i}')"><span class="ic"><i class="fa-solid fa-coins"></i></span>Orçamento e Status<span class="acc-arr">▼</span></div><div class="acc-body open" id="qb${c.id}${i}">
         <div style="margin-bottom:12px"><span class="fl">Status desta visita</span><select class="fi" id="ly-st-${c.id}-${i}">${statusOpts(l.status)}</select></div>
         <input type="checkbox" id="ly-service-workshop-${c.id}-${i}" ${l.serviceInWorkshop||l.approval?.serviceInWorkshop?'checked':''} style="display:none">
         <input type="checkbox" id="ly-paid-${c.id}-${i}" ${l.approval?.paid?'checked':''} style="display:none">
         <input type="checkbox" id="ly-owes-${c.id}-${i}" ${l.approval?.owes?'checked':''} style="display:none">
         <div class="toggle3">
-          <button type="button" class="tg-btn tg-galpao ${l.serviceInWorkshop||l.approval?.serviceInWorkshop?'active':''}" data-chk="ly-service-workshop-${c.id}-${i}" onclick="toggleChk('ly-service-workshop-${c.id}-${i}',this)">🏭 Equipamento no galpão</button>
-          <button type="button" class="tg-btn tg-paid ${l.approval?.paid?'active':''}" data-chk="ly-paid-${c.id}-${i}" onclick="toggleChk('ly-paid-${c.id}-${i}',this)">💳 Serviço já foi pago</button>
-          <button type="button" class="tg-btn tg-owes ${l.approval?.owes?'active':''}" data-chk="ly-owes-${c.id}-${i}" onclick="toggleChk('ly-owes-${c.id}-${i}',this)">🔴 Falta pagar</button>
+          <button type="button" class="tg-btn tg-galpao ${l.serviceInWorkshop||l.approval?.serviceInWorkshop?'active':''}" data-chk="ly-service-workshop-${c.id}-${i}" onclick="toggleChk('ly-service-workshop-${c.id}-${i}',this)"><i class="fa-solid fa-industry"></i> Equipamento no galpão</button>
+          <button type="button" class="tg-btn tg-paid ${l.approval?.paid?'active':''}" data-chk="ly-paid-${c.id}-${i}" onclick="toggleChk('ly-paid-${c.id}-${i}',this)"><i class="fa-solid fa-credit-card"></i> Serviço já foi pago</button>
+          <button type="button" class="tg-btn tg-owes ${l.approval?.owes?'active':''}" data-chk="ly-owes-${c.id}-${i}" onclick="toggleChk('ly-owes-${c.id}-${i}',this)"><i class="fa-solid fa-circle" style="color:#ef4444"></i> Falta pagar</button>
         </div>
         <div class="os-grid">
           <div class="os-left">
             <div class="fgrid" style="margin-bottom:12px">
-              <div><span class="fl">Data e hora do serviço</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="ly-svc-${c.id}-${i}" placeholder="dd/mm/aaaa hh:mm" value="${isoToBr(l.approval?.serviceDate||'')}" oninput="dtMask(this)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px;height:44px" onclick="openPicker('pk-svc-${c.id}-${i}')">📅</button><input type="datetime-local" id="pk-svc-${c.id}-${i}" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'ly-svc-${c.id}-${i}',false)"></div></div>
-              <div><span class="fl">Data de pagamento</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="ly-paydate-${c.id}-${i}" placeholder="dd/mm/aaaa" value="${isoDateToBr(l.approval?.paymentDate||'')}" oninput="dMask(this)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px;height:44px" onclick="openPicker('pk-pd-${c.id}-${i}')">📅</button><input type="date" id="pk-pd-${c.id}-${i}" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickDateToText(this,'ly-paydate-${c.id}-${i}')"></div></div>
+              <div><span class="fl">Data e hora do serviço</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="ly-svc-${c.id}-${i}" placeholder="dd/mm/aaaa hh:mm" value="${isoToBr(l.approval?.serviceDate||'')}" oninput="dtMask(this)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px;height:44px" onclick="openPicker('pk-svc-${c.id}-${i}')"><i class="fa-solid fa-calendar-days"></i></button><input type="datetime-local" id="pk-svc-${c.id}-${i}" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'ly-svc-${c.id}-${i}',false)"></div></div>
+              <div><span class="fl">Data de pagamento</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="ly-paydate-${c.id}-${i}" placeholder="dd/mm/aaaa" value="${isoDateToBr(l.approval?.paymentDate||'')}" oninput="dMask(this)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px;height:44px" onclick="openPicker('pk-pd-${c.id}-${i}')"><i class="fa-solid fa-calendar-days"></i></button><input type="date" id="pk-pd-${c.id}-${i}" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickDateToText(this,'ly-paydate-${c.id}-${i}')"></div></div>
             </div>
             <div style="margin-bottom:12px"><span class="fl">Valor do orçamento</span><input class="fi" id="ly-val-${c.id}-${i}" placeholder="R$ 0,00" value="${l.approval?.value||''}" oninput="recalcPag('${c.id}',${i})"></div>
             <div class="fgrid" style="margin-bottom:12px">
@@ -919,10 +919,10 @@ function renderDetail(){
         </div>
       </div></div>
       <div class="bottom-acts">
-        <button class="btn btn-green" onclick="saveLayer('${c.id}',${i})">💾 Salvar</button>
-        <button class="btn btn-outline-blue" onclick="concludeLayer('${c.id}',${i})">✅ Serviço finalizado</button>
-        <button class="btn btn-muted btn-wrap" onclick="removeLayer('${c.id}',${i})">➖ Remover visita/relatório</button>
-        <button class="btn btn-outline-red btn-wrap" onclick="softDelete('${c.id}')">🗑 Mover cliente para a lixeira</button>
+        <button class="btn btn-green" onclick="saveLayer('${c.id}',${i})"><i class="fa-solid fa-floppy-disk"></i> Salvar</button>
+        <button class="btn btn-outline-blue" onclick="concludeLayer('${c.id}',${i})"><i class="fa-solid fa-check"></i> Serviço finalizado</button>
+        <button class="btn btn-muted btn-wrap" onclick="removeLayer('${c.id}',${i})"><i class="fa-solid fa-minus"></i> Remover visita/relatório</button>
+        <button class="btn btn-outline-red btn-wrap" onclick="softDelete('${c.id}')"><i class="fa-solid fa-trash-can"></i> Mover cliente para a lixeira</button>
       </div>
     </div>`;
   }).join('');
@@ -957,7 +957,7 @@ window.showDoneTab=cid=>{
   panel.innerHTML=doneLayers.length?doneLayers.map((l,idx)=>{
     const photos=l.techReport?.photos||[];
     const bimg=l.budgetImage?.data||'';
-    return `<div class="acc"><div class="acc-hdr open"><span class="ic">✅</span>Concluído ${idx+1}<span class="acc-arr">▼</span></div><div class="acc-body open"><p><b>Equipamento:</b> ${l.techReport?.model||'—'}</p><p><b>Tipo de Serviço:</b> ${reportServiceType(l.techReport)}</p><p><b>Relatório:</b> ${reportTextOnly(l.techReport)}</p>${l.concludedAt?`<p><b>Concluído em:</b> ${fdt(l.concludedAt)}</p>`:''}${photos.length?`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">${photos.map(p=>`<img src="${p}" onclick="openLb('${p}')" style="width:70px;height:70px;object-fit:cover;border-radius:8px;cursor:pointer">`).join('')}</div>`:''}${bimg?`<div class="doc-box" style="margin-top:8px"><span class="fl">Imagem do orçamento / print</span><img class="budget-preview" src="${bimg}" onclick="openLb('${bimg}')"></div>`:''}</div></div>`;
+    return `<div class="acc"><div class="acc-hdr open"><span class="ic"><i class="fa-solid fa-check"></i></span>Concluído ${idx+1}<span class="acc-arr">▼</span></div><div class="acc-body open"><p><b>Equipamento:</b> ${l.techReport?.model||'—'}</p><p><b>Tipo de Serviço:</b> ${reportServiceType(l.techReport)}</p><p><b>Relatório:</b> ${reportTextOnly(l.techReport)}</p>${l.concludedAt?`<p><b>Concluído em:</b> ${fdt(l.concludedAt)}</p>`:''}${photos.length?`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">${photos.map(p=>`<img src="${p}" onclick="openLb('${p}')" style="width:70px;height:70px;object-fit:cover;border-radius:8px;cursor:pointer">`).join('')}</div>`:''}${bimg?`<div class="doc-box" style="margin-top:8px"><span class="fl">Imagem do orçamento / print</span><img class="budget-preview" src="${bimg}" onclick="openLb('${bimg}')"></div>`:''}</div></div>`;
   }).join(''):'<div class="empty">Nenhuma visita concluída.</div>';
   panel.classList.add('active');
 };
@@ -970,7 +970,7 @@ function renderTrash(){
   if(q)deleted=deleted.filter(c=>(c.name||'').toLowerCase().includes(q)||(qd&&normPhone(c.phone).includes(qd))||(c.address||'').toLowerCase().includes(q));
   const el=document.getElementById('trash-list');
   if(!deleted.length){el.innerHTML=`<div class="empty">${q?'Nada encontrado.':'Lixeira vazia.'}</div>`;return}
-  el.innerHTML=deleted.map(c=>`<div class="trash-item"><span>${c.name||'—'} — ${c.phone||''}</span><button class="btn btn-outline-blue btn-sm" onclick="pickClient('${c.id}')">➕ Nova visita</button><button class="btn btn-muted btn-sm" onclick="restoreClient('${c.id}')">♻️ Restaurar</button><button class="btn btn-red btn-sm" onclick="hardDelete('${c.id}')">Excluir permanentemente</button></div>`).join('');
+  el.innerHTML=deleted.map(c=>`<div class="trash-item"><span>${c.name||'—'} — ${c.phone||''}</span><button class="btn btn-outline-blue btn-sm" onclick="pickClient('${c.id}')"><i class="fa-solid fa-plus"></i> Nova visita</button><button class="btn btn-muted btn-sm" onclick="restoreClient('${c.id}')"><i class="fa-solid fa-recycle"></i> Restaurar</button><button class="btn btn-red btn-sm" onclick="hardDelete('${c.id}')">Excluir permanentemente</button></div>`).join('');
 }
 window.renderTrash=renderTrash;
 
