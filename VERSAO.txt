@@ -1,3 +1,13 @@
+MFC v73
+
+Última alteração
+
+Gestor: campo E-mail no modal Editar agora ocupa a linha inteira, igual Endereço.
+Gestor: "Data a definir" virou switch de verdade (mesmo padrão visual do "Equipamento no galpão"), tanto em Nova Visita quanto em Editar — não é mais checkbox pelado.
+Gestor: "Precisa retirar o equipamento" no modal Editar Relatório do Técnico também ganhou o visual de switch.
+Gestor: quando a data está "A definir", o card do cliente na listagem mostra um chip "🗓️ Data a definir" — não fica mais escondido só no grupo "SEM DATA". O bloco "Datas importantes" também para de mostrar "🕐 —" vazio quando a data é indefinida.
+Cache atualizado para mfc-tecnico-v73.
+
 MFC v72
 
 Última alteração
