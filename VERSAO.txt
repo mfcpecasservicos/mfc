@@ -1,3 +1,10 @@
+MFC v72
+
+Última alteração
+
+Gestor: card "Detalhes da visita" — caixa "Número de contato" agora só aparece se tiver telefone preenchido, igual o E-mail já fazia. Antes mostrava "—" vazio à toa. A caixa de e-mail já existia desde a v71, só não aparecia em registros antigos porque não tinham e-mail salvo (edita e preenche que ela aparece).
+Cache atualizado para mfc-tecnico-v72.
+
 MFC v71
 
 Última alteração
