@@ -1,3 +1,11 @@
+MFC v78
+
+Última alteração
+
+Gestor: campo "Telefone 2 (opcional)" no modal Editar — o bloco "Número de contato" no card de detalhes mostra os dois números juntos quando o segundo estiver preenchido.
+Index: os dois números aparecem no bloco "Contato", cada um com seus próprios botões de WhatsApp e Ligar (não é um botão genérico pra ambos — cada telefone tem o par completo).
+Cache atualizado para mfc-tecnico-v78.
+
 MFC v77
 
 Última alteração

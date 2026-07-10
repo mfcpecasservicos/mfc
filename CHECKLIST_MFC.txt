@@ -187,6 +187,12 @@ NOTA TÉCNICA — Upload de imagens (item 3 solicitado):
 Não é possível forçar um diretório padrão no seletor de arquivos do navegador via código. Essa é uma restrição de segurança do browser (Chrome/Edge/Firefox) que impede sites de pré-selecionar pastas do sistema operacional. Isso não é um bug do app — é um limite da Web Platform.
 
 
+ATUALIZAÇÃO MFC v78
+[x] Gestor: campo phone2 (Telefone 2) no modal Editar, exibido junto no bloco "Número de contato".
+[x] Index: contactBlock() renderiza WhatsApp+Ligar pra cada telefone presente (phone e phone2), independentes.
+[x] CACHE_NAME atualizado: mfc-tecnico-v78
+[x] Service-worker atualizado para mfc-tecnico-v78.
+
 ATUALIZAÇÃO MFC v77
 [x] Gestor: .tg-btn ganhou padding:0 14px — corrige ícone/switch colado na borda em todos os toggles desse estilo (retirar equipamento, data a definir, equipamento no galpão).
 [x] CACHE_NAME atualizado: mfc-tecnico-v77
