@@ -1,3 +1,15 @@
+MFC v71
+
+Última alteração
+
+Gestor: checkbox "Data a definir" na aba Nova Visita e no modal Editar — quando marcado, desativa o campo de data e grava "A definir" em vez de forçar uma data. Aparece assim em qualquer lugar que mostra a data (não tenta mais parsear como data de verdade).
+
+Gestor: modal de edição agora detecta visita de empresa e vira "🏢 Editar empresa" — some Endereço/Ponto de referência/Equipamento/Descrição do problema, sobra Nome, Telefone, E-mail, Data e um campo de observação já renomeado pra "Observações (formalizar orçamento)". Card "Detalhes da visita" (read-only) segue a mesma lógica.
+
+BUGFIX: criar "Visita de empresa" gravava literalmente o texto "Visita empresa" dentro do campo Equipamento — não fazia sentido nenhum e foi removido. O modal de criar visita de empresa agora tem Telefone e E-mail de verdade (antes nem existiam).
+
+Cache atualizado para mfc-tecnico-v71.
+
 MFC v70
 
 Última alteração
