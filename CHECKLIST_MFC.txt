@@ -187,6 +187,13 @@ NOTA TÉCNICA — Upload de imagens (item 3 solicitado):
 Não é possível forçar um diretório padrão no seletor de arquivos do navegador via código. Essa é uma restrição de segurança do browser (Chrome/Edge/Firefox) que impede sites de pré-selecionar pastas do sistema operacional. Isso não é um bug do app — é um limite da Web Platform.
 
 
+ATUALIZAÇÃO MFC v79
+[x] Gestor + Index: chip "Equipamento na loja" (c.workshopDropoff) distinto do chip "Equipamento no galpão" (serviceInWorkshop).
+[x] Gestor: campo phone2Name (Nome do dono do telefone 2) no modal Editar.
+[x] Gestor + Index: phone2Name exibido junto do telefone 2.
+[x] CACHE_NAME atualizado: mfc-tecnico-v79
+[x] Service-worker atualizado para mfc-tecnico-v79.
+
 ATUALIZAÇÃO MFC v78
 [x] Gestor: campo phone2 (Telefone 2) no modal Editar, exibido junto no bloco "Número de contato".
 [x] Index: contactBlock() renderiza WhatsApp+Ligar pra cada telefone presente (phone e phone2), independentes.

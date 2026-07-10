@@ -1,3 +1,12 @@
+MFC v79
+
+Última alteração
+
+Gestor + Index: chip "Equipamento na loja" no card do cliente quando o toggle "Equipamento trazido à loja" (na criação) está marcado — distinto do chip "Equipamento no galpão" (que é do fluxo de aprovação/serviço em andamento).
+Gestor: campo "Nome do dono do telefone 2" ao lado do Telefone 2, no modal Editar.
+Gestor + Index: o nome do dono aparece junto do telefone 2 nos blocos de contato.
+Cache atualizado para mfc-tecnico-v79.
+
 MFC v78
 
 Última alteração
