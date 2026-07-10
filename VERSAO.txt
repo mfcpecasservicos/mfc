@@ -1,3 +1,12 @@
+MFC v80
+
+Última alteração
+
+Gestor: ao aprovar um "Novo Cadastro" (cadastro.html → lead), o sistema agora confere se já existe um cliente na Lixeira com o MESMO Nome completo + telefone. Se existir, restaura o registro antigo e adiciona a nova visita nele (todo o histórico volta junto) em vez de criar um cadastro duplicado do zero — evita esquecer que o cliente já fez serviço antes.
+Aviso visual: o card do "Novo Cadastro" mostra um alerta vermelho ANTES de você clicar em "Enviar para Técnico" quando detecta esse match, avisando o que vai acontecer.
+Esse comportamento é específico do fluxo de cadastro (lead). A busca manual (barra de pesquisa → Nova visita) continua criando registro em branco de propósito — são fluxos diferentes com necessidades diferentes.
+Cache atualizado para mfc-tecnico-v80.
+
 MFC v79
 
 Última alteração
