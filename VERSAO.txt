@@ -1,3 +1,11 @@
+MFC v81
+
+Última alteração
+
+Gestor: a mesma checagem de "já existe na lixeira" (Nome + Telefone) agora roda em tempo real também na aba "Nova Visita" — enquanto você digita nome/telefone, se bater com alguém na lixeira, aparece o aviso vermelho na hora, antes de salvar. E ao salvar de verdade, restaura o histórico + adiciona a visita nova (mesmo comportamento do fluxo de cadastro/lead), em vez de criar duplicata.
+Gestor + Index: "Equipamento na loja" some quando "Equipamento no galpão" está ativo — os dois chips não fazem sentido juntos, galpão manda mais (é o estado mais avançado do processo).
+Cache atualizado para mfc-tecnico-v81.
+
 MFC v80
 
 Última alteração
