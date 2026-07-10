@@ -1,3 +1,10 @@
+MFC v77
+
+Última alteração
+
+Gestor: padding lateral (14px) adicionado na classe .tg-btn — ícone e switch dos toggles ("Precisa retirar o equipamento" e "Data a definir", tanto em Editar Relatório quanto Editar Cliente) não encostam mais na borda. Era falta de padding na classe base, agora corrigido pra todos os botões desse estilo de uma vez.
+Cache atualizado para mfc-tecnico-v77.
+
 MFC v76
 
 Última alteração
