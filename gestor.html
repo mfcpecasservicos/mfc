@@ -61,11 +61,11 @@ button{font-family:inherit}
 .vcard{box-shadow:0 0 24px -10px color-mix(in oklch,var(--sc) 60%,transparent),inset 0 0 0 1px color-mix(in oklch,var(--sc) 18%,transparent)}
 .vcard:hover{transform:translateY(-2px);border-color:color-mix(in oklch,var(--sc) 45%,var(--border));box-shadow:0 0 28px -8px color-mix(in oklch,var(--sc) 75%,transparent),0 18px 36px -20px oklch(0 0 0 / .6)}
 .vcard.selected{box-shadow:inset 0 0 0 1.5px var(--sc),0 0 32px -6px var(--sc)}
-.vcard .vc-top{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px}
-.vcard .vc-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;background:var(--sc);box-shadow:0 0 14px 2px color-mix(in oklch,var(--sc) 80%,transparent)}
+.vcard .vc-top{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px}
+.vc-info{min-width:0}.vc-type-row{display:flex;align-items:center;gap:7px;margin-bottom:3px}.vc-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;background:var(--sc);box-shadow:0 0 14px 2px color-mix(in oklch,var(--sc) 80%,transparent)}.vc-type{font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
 .vcard .vc-name{font-weight:600;font-size:.94rem;min-width:0;line-height:1.35;word-break:break-word}
-.vc-status-row{display:flex;justify-content:flex-start}
-.vc-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.vc-status-row{display:flex;justify-content:flex-start;margin-top:8px}
+.vc-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
 .day-head{display:flex;align-items:center;gap:10px;font-size:.62rem;font-weight:800;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;margin:14px 0 4px}
 .day-head::after{content:'';flex:1;height:1px;background:color-mix(in oklch,var(--border) 60%,transparent)}
 .ind-flag{background:transparent !important;color:#34d399 !important;border:1px solid #10B981 !important}
@@ -540,6 +540,7 @@ function mainDate(c){
 }
 function sortDateValue(v){const t=new Date(v||'').getTime();return Number.isFinite(t)?t:null;}
 function appointmentSortValue(c){
+  if(c.datetime===TBD||indLayers(c).some(l=>l.datetime===TBD))return Number.MAX_SAFE_INTEGER;
   const dates=getLayers(c).filter(l=>!l.done).map(l=>sortDateValue(layerMainDate(c,l))).filter(t=>t!==null);
   if(dates.length)return Math.min(...dates);
   return sortDateValue(c.createdAt)||Number.MAX_SAFE_INTEGER;
@@ -810,7 +811,7 @@ function render(){
     if(hh)chips.unshift({t:hh,h:`<span class="chip chip-time"><i class="fa-regular fa-clock"></i> ${hh}</span>`});
     const sc=STATUS_COLOR[status]||STATUS_COLOR.waiting;
     listHtml+=`<div class="vcard ${selectedId===c.id?'selected':''}" style="--sc:${sc}" onclick="selectClient('${c.id}')">
-      <div class="vc-top"><div class="vc-dot"></div><div class="vc-name">${c.name||'—'}</div><span class="vc-chevron">›</span></div>
+      <div class="vc-top"><div class="vc-info"><div class="vc-type-row"><span class="vc-dot"></span><span class="vc-type">${c.companyMode||c.type==='company'?'Empresa':'Cliente'}</span></div><div class="vc-name">${c.name||'—'}</div></div><span class="vc-chevron">›</span></div>
       <div class="vc-status-row"><span class="sbadge">${lbl(status)}</span></div>
       ${chips.length?`<div class="vc-chips">${chips.map(x=>x.h).join('')}</div>`:''}
     </div>`;

@@ -1,3 +1,12 @@
+MFC v74
+
+Última alteração
+
+Gestor + Index: quem tiver "Data a definir" agora sobe pro topo da lista automaticamente (prioridade máxima na ordenação), e ganhou um chip "🗓️ Data a definir" visível direto no card.
+Gestor + Index: espaçamento dos cards ajustado — status e chips não ficam mais colados/apertados um no outro.
+Gestor + Index: card do cliente agora mostra "CLIENTE" ou "EMPRESA" (com a bolinha de status ao lado) no topo, e o nome logo abaixo — antes só tinha o nome, sem distinguir tipo.
+Cache atualizado para mfc-tecnico-v74.
+
 MFC v73
 
 Última alteração

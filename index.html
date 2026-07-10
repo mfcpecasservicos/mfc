@@ -29,12 +29,14 @@ header h1{font-size:1rem;font-weight:800;flex:1}.reload-btn,.install-btn{backgro
 .card-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0;background:var(--sc);box-shadow:0 0 14px 2px color-mix(in oklch,var(--sc) 80%,transparent)}
 .card-chev{color:var(--muted);font-size:.85rem;position:absolute;top:16px;right:16px;transition:transform .15s}
 .card:hover .card-chev{transform:translateX(3px);color:var(--text)}
-.card-inner{position:relative;padding:16px 34px 8px 16px;display:flex;align-items:center;gap:12px}
+.card-inner{position:relative;padding:16px 34px 10px 16px;display:flex;align-items:center;gap:12px}
 .card-info{flex:1;min-width:0}
+.card-type-row{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.card-type{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
 .card-name{font-weight:600;font-size:.94rem;line-height:1.35;word-break:break-word}
-.card-sub{font-size:.76rem;color:var(--muted);margin-top:2px}
-.card-status-row{padding:0 16px 4px 16px}
-.card-foot{padding:0 16px 16px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.card-sub{font-size:.76rem;color:var(--muted);margin-top:3px}
+.card-status-row{padding:6px 16px 6px 16px}
+.card-foot{padding:2px 16px 16px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .chip{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:700;height:24px;padding:0 10px;border-radius:8px;white-space:nowrap;flex-shrink:0}
 .chip-time{font-family:'JetBrains Mono',monospace;color:var(--muted);background:var(--surface2);box-shadow:inset 0 0 0 1px var(--border)}
 .chip-pay{color:oklch(0.6 0.14 180);background:oklch(0.6 0.14 180 / .15);box-shadow:inset 0 0 0 1px oklch(0.6 0.14 180 / .35)}
@@ -127,7 +129,8 @@ function currentServiceType(l){return l?.techReport?.serviceType||l?.serviceType
 function currentReportText(l){return stripServiceTypeFromReport(l?.techReport?.problem||'');}
 function hasSubmittedReport(l){const r=l?.techReport;return !!(r&&(String(r.serviceType||'').trim()||String(r.problem||'').trim()||Array.isArray(r.photos)&&r.photos.length||r.needsPickup));}
 const st=s=>String(s||'waiting').toLowerCase().trim();const lbl=s=>STATUS[st(s)]||STATUS.waiting;const icon=s=>ICON[st(s)]||'📋';
-const fdt=dt=>{if(!dt)return'—';try{return new Date(dt).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}catch{return dt}};
+const TBD='A definir';
+const fdt=dt=>{if(!dt)return'—';if(dt===TBD)return TBD;try{return new Date(dt).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}catch{return dt}};
 const maps=a=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a||'');
 function phoneDigits(v){let d=String(v||'').replace(/\D/g,'');if(d.length===8)d='71'+d;if(d.length===10||d.length===11)d='55'+d;return d}
 function moneyNum(v){return parseFloat(String(v||'').replace(/[R$\s.]/g,'').replace(',','.'))||0}
@@ -151,6 +154,7 @@ function sortDateValue(v){
   return Number.isFinite(t)?t:null;
 }
 function appointmentSortValue(c){
+  if(c.datetime===TBD||getLayers(c).filter(l=>!l.done).some(l=>l.datetime===TBD))return Number.MAX_SAFE_INTEGER;
   const dates=getLayers(c).filter(l=>!l.done).map(l=>sortDateValue(layerDate(c,l))).filter(t=>t!==null);
   if(dates.length)return Math.min(...dates);
   return sortDateValue(c.createdAt)||Number.MAX_SAFE_INTEGER;
@@ -172,9 +176,9 @@ clients.forEach(c=>{
   const dk=dayKey(cardDate(c));
   if(dk!==lastDay){html+=`<div class="day-head">${dk}</div>`;lastDay=dk}
   const hh=hourOf(cardDate(c));
-  const tags=`${hh?`<span class="chip chip-time"><i class="fa-regular fa-clock"></i> ${hh}</span>`:''}${l?.techReport?.needsPickup&&!serviceInWorkshop(l)?'<span class="indicator ind-flag"><i class="fa-solid fa-flag"></i> Retirar equipamento</span>':''}${(currentServiceType(l)||'').includes('Laudo')?'<span class="indicator ind-laudo"><i class="fa-solid fa-clipboard"></i> Laudo</span>':''}${serviceInWorkshop(l)?'<span class="indicator"><i class="fa-solid fa-industry"></i> Equipamento no galpão</span>':''}${(l?.approval?.paid||l?.paid)?'<span class="chip chip-pay"><i class="fa-solid fa-dollar-sign"></i> Serviço pago</span>':''}${(l?.approval?.owes)?'<span class="chip chip-owe"><i class="fa-solid fa-circle-exclamation"></i> Falta pagar</span>':''}`;
+  const tags=`${(c.datetime===TBD||l?.datetime===TBD)?'<span class="chip chip-time">🗓️ Data a definir</span>':(hh?`<span class="chip chip-time"><i class="fa-regular fa-clock"></i> ${hh}</span>`:'')}${l?.techReport?.needsPickup&&!serviceInWorkshop(l)?'<span class="indicator ind-flag"><i class="fa-solid fa-flag"></i> Retirar equipamento</span>':''}${(currentServiceType(l)||'').includes('Laudo')?'<span class="indicator ind-laudo"><i class="fa-solid fa-clipboard"></i> Laudo</span>':''}${serviceInWorkshop(l)?'<span class="indicator"><i class="fa-solid fa-industry"></i> Equipamento no galpão</span>':''}${(l?.approval?.paid||l?.paid)?'<span class="chip chip-pay"><i class="fa-solid fa-dollar-sign"></i> Serviço pago</span>':''}${(l?.approval?.owes)?'<span class="chip chip-owe"><i class="fa-solid fa-circle-exclamation"></i> Falta pagar</span>':''}`;
   const sc=STATUS_COLOR[s]||STATUS_COLOR.waiting;
-  html+=`<div class="card" style="--sc:${sc}" onclick="openDetail('${c.id}')"><div class="card-inner"><div class="card-dot"></div><div class="card-info"><div class="card-name">${c.name||'—'}</div><div class="card-sub"><i class="fa-regular fa-file-lines"></i> ${rc} relatório${rc===1?'':'s'}</div></div><i class="fa-solid fa-chevron-right card-chev"></i></div><div class="card-status-row"><span class="badge">${lbl(s)}</span></div>${tags?`<div class="card-foot">${tags}</div>`:''}</div>`;
+  html+=`<div class="card" style="--sc:${sc}" onclick="openDetail('${c.id}')"><div class="card-inner"><div class="card-info"><div class="card-type-row"><span class="card-dot"></span><span class="card-type">${c.companyMode||c.type==='company'?'Empresa':'Cliente'}</span></div><div class="card-name">${c.name||'—'}</div><div class="card-sub"><i class="fa-regular fa-file-lines"></i> ${rc} relatório${rc===1?'':'s'}</div></div><i class="fa-solid fa-chevron-right card-chev"></i></div><div class="card-status-row"><span class="badge">${lbl(s)}</span></div>${tags?`<div class="card-foot">${tags}</div>`:''}</div>`;
 });
 wrap.innerHTML=html};
 let detailHistory=false;
