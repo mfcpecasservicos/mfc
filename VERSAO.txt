@@ -1,3 +1,13 @@
+MFC v86
+
+Última alteração
+
+BUGFIX (achado ao revisar a v85, mas é falha antiga): a data mostrada no card (cabeçalho do dia + hora do chip) e o status mostrado no badge podiam vir de RELATÓRIOS DIFERENTES quando o cliente tinha mais de uma visita ativa — porque o badge respeita fixação/prioridade (`displayStatus`), mas a data pegava o mínimo entre TODOS os relatórios, sem ligar pra qual é o "principal". Com o quotedAt isso ficava mais visível (podia mostrar "agora mesmo" com o badge de outro relatório completamente diferente).
+
+Corrigido: criei `primaryLayer(c)` — o mesmo relatório que decide o badge (fixado > prioridade) agora decide a data também, nos dois arquivos (gestor e index). Badge e data sempre vêm do mesmo relatório a partir de agora.
+
+Cache atualizado para mfc-tecnico-v86.
+
 MFC v85
 
 Última alteração

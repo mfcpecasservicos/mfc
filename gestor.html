@@ -546,17 +546,17 @@ function layerMainDate(c,l){
   if(l?.status==='ready_delivery')return l.readyDeliveryAt||l.deliveryDate||l.approval?.serviceDate||c.datetime||l.createdAt||c.createdAt||'';
   return l?.approval?.serviceDate||l?.deliveryDate||l?.readyDeliveryAt||c.datetime||l?.createdAt||c.createdAt||'';
 }
+function primaryLayer(c){const act=getLayers(c).filter(l=>!l.done);if(!act.length)return null;const pin=act.find(l=>l.pinned);if(pin)return pin;const PRIO=['waiting','workshop_pending','quoted','evaluated','approved','ready_delivery','service_finished','absent'];for(const s of PRIO){const found=act.find(l=>(l.status||'waiting')===s);if(found)return found}return act[0]}
 function mainDate(c){
-  const dates=getLayers(c).filter(l=>!l.done).map(l=>sortDateValue(layerMainDate(c,l))).filter(t=>t!==null);
-  if(!dates.length)return c.datetime||c.createdAt||'';
-  dates.sort((a,b)=>a-b);
-  return new Date(dates[0]).toISOString();
+  const pl=primaryLayer(c);
+  return (pl?layerMainDate(c,pl):'')||c.datetime||c.createdAt||'';
 }
 function sortDateValue(v){const t=new Date(v||'').getTime();return Number.isFinite(t)?t:null;}
 function appointmentSortValue(c){
   if(c.datetime===TBD||indLayers(c).some(l=>l.datetime===TBD))return Number.MAX_SAFE_INTEGER;
-  const dates=getLayers(c).filter(l=>!l.done).map(l=>sortDateValue(layerMainDate(c,l))).filter(t=>t!==null);
-  if(dates.length)return Math.min(...dates);
+  const pl=primaryLayer(c);
+  const d=pl?sortDateValue(layerMainDate(c,pl)):null;
+  if(d!==null)return d;
   return sortDateValue(c.createdAt)||Number.MAX_SAFE_INTEGER;
 }
 function fullAddress(c){return [c.address,c.number,c.neighborhood||c.bairro].filter(Boolean).join(', ')||c.address||''}

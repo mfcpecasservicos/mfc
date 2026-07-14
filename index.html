@@ -145,10 +145,8 @@ function layerDate(c,l){
   return l?.readyDeliveryAt||l?.deliveryDate||l?.readyAt||l?.approval?.serviceDate||c.datetime||l?.createdAt||c.createdAt||'';
 }
 function cardDate(c){
-  const dates=getLayers(c).filter(l=>!l.done).map(l=>sortDateValue(layerDate(c,l))).filter(t=>t!==null);
-  if(!dates.length)return c.datetime||c.createdAt||'';
-  dates.sort((a,b)=>a-b);
-  return new Date(dates[0]).toISOString();
+  const l=activeLayer(c);
+  return (l?layerDate(c,l):'')||c.datetime||c.createdAt||'';
 }
 function sortDateValue(v){
   const t=new Date(v||'').getTime();
@@ -156,8 +154,9 @@ function sortDateValue(v){
 }
 function appointmentSortValue(c){
   if(c.datetime===TBD||getLayers(c).filter(l=>!l.done).some(l=>l.datetime===TBD))return Number.MAX_SAFE_INTEGER;
-  const dates=getLayers(c).filter(l=>!l.done).map(l=>sortDateValue(layerDate(c,l))).filter(t=>t!==null);
-  if(dates.length)return Math.min(...dates);
+  const l=activeLayer(c);
+  const d=l?sortDateValue(layerDate(c,l)):null;
+  if(d!==null)return d;
   return sortDateValue(c.createdAt)||Number.MAX_SAFE_INTEGER;
 }
 function updOnline(){document.getElementById('offline-banner').style.display=navigator.onLine?'none':'block'}window.addEventListener('online',updOnline);window.addEventListener('offline',updOnline);updOnline();
