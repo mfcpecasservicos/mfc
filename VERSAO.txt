@@ -1,3 +1,10 @@
+MFC v84
+
+Última alteração
+
+BUGFIX (layout): você tava certo — não era pra ter aquele buraco entre o card e a paginação. Causa: `.clist` tinha `flex:1` sozinho, então esticava pra ocupar a tela inteira mesmo com 1 card só, e a paginação (que ficava do lado de fora, irmã dela) sobrava lá embaixo, longe de tudo. Agrupei os dois num wrapper (`.list-scroll`) que agora rola junto — a paginação cola logo depois do último card, e o espaço vazio (se sobrar) fica DEPOIS da paginação, não entre ela e os cards.
+Cache atualizado para mfc-tecnico-v84.
+
 MFC v83
 
 Última alteração
