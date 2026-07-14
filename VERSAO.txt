@@ -1,3 +1,10 @@
+MFC v83
+
+Última alteração
+
+Gestor: o nome do dono do telefone 2 (ex: "Tatiane") também virou clicável pra copiar, igual o número já era.
+Cache atualizado para mfc-tecnico-v83.
+
 MFC v82
 
 Última alteração
