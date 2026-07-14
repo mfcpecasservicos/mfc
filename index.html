@@ -141,7 +141,11 @@ function activeLayer(c){return getLayers(c).find(l=>!l.done)||getLayers(c)[0]}
 function getStatus(c){return c.status||activeLayer(c)?.status||'waiting'}
 function serviceInWorkshop(l){return !!(l?.serviceInWorkshop||l?.approval?.serviceInWorkshop)}
 function layerDate(c,l){
-  if(l?.status==='quoted'&&l.quotedAt)return l.quotedAt;
+  const s=l?.status;
+  if(s==='service_finished')return l.serviceFinishedAt||l.approval?.serviceDate||c.datetime||l.createdAt||c.createdAt||'';
+  if(s==='ready_delivery')return l.readyDeliveryAt||l.deliveryDate||l.readyAt||l.approval?.serviceDate||c.datetime||l.createdAt||c.createdAt||'';
+  if((s==='quoted'||s==='approved'||s==='absent')&&l.statusAt)return l.statusAt;
+  if(s==='evaluated'&&l.updatedAt)return l.updatedAt;
   return l?.readyDeliveryAt||l?.deliveryDate||l?.readyAt||l?.approval?.serviceDate||c.datetime||l?.createdAt||c.createdAt||'';
 }
 function cardDate(c){

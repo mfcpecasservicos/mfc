@@ -1,3 +1,18 @@
+MFC v87
+
+Última alteração
+
+Generalizei o que fiz na v85/v86: agora TODO status de "Avaliação concluída" em diante usa o timestamp de quando entrou nesse status, não mais a data da visita original. Antes só "Aguardando aprovação" (quoted) tinha isso.
+
+- Avaliação concluída: usa o momento do envio do relatório pelo técnico (já existia, reaproveitado).
+- Aguardando aprovação / Aprovado / Cliente ausente: `statusAt`, gravado toda vez que o status muda de verdade (não fica travado, atualiza a cada transição real — se vai de "quoted" pra "approved", o card passa a mostrar desde quando foi aprovado, não mais desde quando foi cotado).
+- Pronto para entrega / Serviço finalizado: já tinham timestamp próprio (readyDeliveryAt/serviceFinishedAt), só passaram a ser usados aqui também.
+- Aguardando visita / Aguardando Avaliação: continuam usando a data da visita normalmente (antes do status mudar, é isso que importa).
+
+Badge e data continuam vindo sempre do mesmo relatório (fix da v86), agora com o timestamp certo pra cada fase.
+
+Cache atualizado para mfc-tecnico-v87.
+
 MFC v86
 
 Última alteração
