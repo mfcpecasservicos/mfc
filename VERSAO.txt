@@ -1,3 +1,10 @@
+MFC v82
+
+Última alteração
+
+Gestor: clicar no nome do cliente ou no(s) número(s) de telefone no card "Detalhes da visita" agora copia o texto pra área de transferência (com aviso "copiado"). Sublinhado tracejado indica que é clicável. Funciona pros dois telefones quando tem o segundo cadastrado.
+Cache atualizado para mfc-tecnico-v82.
+
 MFC v81
 
 Última alteração
