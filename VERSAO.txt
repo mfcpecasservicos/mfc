@@ -1,3 +1,14 @@
+MFC v85
+
+Última alteração
+
+Gestor: agora grava `quotedAt` — a hora exata em que o status vira "Aguardando aprovação" pela primeira vez (fica congelado depois, não muda em salvamentos seguintes enquanto o status continuar quoted).
+Gestor + Index: card do cliente usa essa data como a PRINCIPAL (cabeçalho do dia + hora no chip) quando o status atual é "Aguardando aprovação" — antes usava a data da visita original, agora usa desde quando tá esperando aprovação.
+
+LIMITAÇÃO: isso só vale a partir de agora. Cliente que JÁ está em "Aguardando aprovação" de antes dessa atualização não tem esse timestamp gravado ainda — vai continuar mostrando a data da visita até você abrir aquela visita e salvar de novo (ex: mexer em qualquer campo do orçamento e clicar Salvar) — aí o sistema grava o quotedAt na hora, com timestamp de "agora" (não retroage pro momento real que virou quoted no passado, porque essa informação não existia).
+
+Cache atualizado para mfc-tecnico-v85.
+
 MFC v84
 
 Última alteração

@@ -141,6 +141,7 @@ function activeLayer(c){return getLayers(c).find(l=>!l.done)||getLayers(c)[0]}
 function getStatus(c){return c.status||activeLayer(c)?.status||'waiting'}
 function serviceInWorkshop(l){return !!(l?.serviceInWorkshop||l?.approval?.serviceInWorkshop)}
 function layerDate(c,l){
+  if(l?.status==='quoted'&&l.quotedAt)return l.quotedAt;
   return l?.readyDeliveryAt||l?.deliveryDate||l?.readyAt||l?.approval?.serviceDate||c.datetime||l?.createdAt||c.createdAt||'';
 }
 function cardDate(c){
