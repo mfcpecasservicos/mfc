@@ -236,11 +236,12 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 .conta-item{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .conta-item.atrasada{border-color:#7f1d1d;background:#1c0f13}
 .conta-item .cv{font-size:1.1rem;font-weight:900;color:var(--gold);min-width:110px}
-.conta-item .cvenc{font-size:.82rem}
-.conta-item .cvenc span{color:var(--muted);font-size:.66rem;font-weight:700;text-transform:uppercase;display:block}
+.conta-item .cvenc{font-size:.82rem;min-width:150px;display:flex;flex-direction:column;gap:3px}
+.conta-item .cvenc span{color:var(--muted);font-size:.66rem;font-weight:700;text-transform:uppercase}
+.conta-item .cvenc .cvenc-date{font-size:1.1rem;font-weight:900;color:#67e8f9}
 .conta-item .cpix{flex:1;min-width:160px;font-size:.8rem;word-break:break-all}
 .conta-item .cpix span{color:var(--muted);font-size:.66rem;font-weight:700;text-transform:uppercase;display:block}
-.atras-flag{background:#7f1d1d;color:#fecaca;border-radius:8px;height:26px;padding:0 10px;font-size:.66rem;font-weight:900;display:inline-flex;align-items:center;margin-left:6px}
+.atras-flag{background:#7f1d1d;color:#fecaca;border-radius:8px;padding:2px 9px;font-size:.62rem;font-weight:900;display:inline-flex;align-items:center;width:fit-content}
 .add-conta{background:var(--surface);border:1px dashed var(--border);border-radius:14px;padding:16px}
 .add-conta .fgrid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
 
@@ -631,7 +632,7 @@ window.removeRes=async key=>{
   if(selectedFin===key)selectedFin=null;
   toast('🗑 Conta removida');
 };
-window.copyTxt=async(txt)=>{try{await navigator.clipboard.writeText(String(txt).replace(/[^\d]/g,'')||txt);toast('📋 Copiado')}catch{prompt('Copie:',txt)}};
+window.copyTxt=async(txt)=>{try{await navigator.clipboard.writeText(String(txt));toast('📋 Copiado')}catch{prompt('Copie:',txt)}};
 window.selectFin=key=>{selectedFin=selectedFin===key?null:key;renderFin()};
 window.addConta=async key=>{
   const valor=document.getElementById('nc-valor').value.trim();
@@ -666,7 +667,7 @@ window.printFinanceiro=()=>{
 };
 function renderFin(){
   // list column: residências
-  document.getElementById('list-title').textContent='Financeiro';
+  document.querySelector('.list-head').innerHTML=`<h1 id="list-title">Financeiro</h1><button class="btn btn-outline-blue btn-sm" onclick="printFinanceiro()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button>`;
   const list=document.getElementById('clist');
   const ALLRES=getAllRes();
   const grandTotal=ALLRES.reduce((s,r)=>s+totalSum(r.key),0);
@@ -677,14 +678,14 @@ function renderFin(){
     return `<div class="rescard ${selectedFin===r.key?'selected':''}" onclick="selectFin('${r.key}')">
       <h4>${r.icon} ${r.nome}${ap?` <span style="font-weight:700;color:var(--muted)">(${ap})</span>`:''}<span style="margin-left:auto;display:inline-flex;gap:6px;align-items:center"><button class="copy-btn" title="Apelido" onclick="event.stopPropagation();editApelido('${r.key}')"><i class="fa-solid fa-pen"></i></button><a class="wa-btn" title="WhatsApp ${r.nome}" href="${waLink(r.nome)}" target="_blank" onclick="event.stopPropagation()">${WA_SVG}</a></span></h4>
       <div class="res-end"><i class="fa-solid fa-location-dot"></i> ${r.end}</div>
-      <div class="res-row"><span>Código do cliente</span><b>${r.cod} <button class="copy-btn" onclick="event.stopPropagation();copyTxt('${r.cod}')"><i class="fa-solid fa-clipboard"></i></button></b></div>
-      <div class="res-row"><span>CPF/CNPJ</span><b>${r.doc} <button class="copy-btn" onclick="event.stopPropagation();copyTxt('${r.doc}')"><i class="fa-solid fa-clipboard"></i></button></b></div>
+      <div class="res-row"><span>Código do cliente</span><b><span class="copyable" onclick="event.stopPropagation();copyTxt('${r.cod}')">${r.cod}</span></b></div>
+      <div class="res-row"><span>CPF/CNPJ</span><b><span class="copyable" onclick="event.stopPropagation();copyTxt('${r.doc}')">${r.doc}</span></b></div>
       ${sum>0?`<div class="overdue-badge"><i class="fa-solid fa-triangle-exclamation"></i> ${nAtras} atrasada${nAtras>1?'s':''} — ${fmtMoney(sum)}</div>`:''}
       ${r.custom?`<button class="copy-btn" style="margin-top:8px;color:#fca5a5" onclick="event.stopPropagation();removeRes('${r.key}')"><i class="fa-solid fa-trash-can"></i> Remover conta</button>`:''}
     </div>`;
   }).join('')+`
     <button class="btn btn-outline-blue" style="width:100%;height:46px" onclick="openAddRes()"><i class="fa-solid fa-plus"></i> Adicionar conta</button>`;
-  document.getElementById('pagination').innerHTML=`<div class="fin-total"><span><i class="fa-solid fa-sack-dollar"></i> Total de todas as contas</span><b>${fmtMoney(grandTotal)}</b></div><button class="btn btn-outline-blue" style="width:100%;margin-top:8px" onclick="printFinanceiro()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF do financeiro</button>`;
+  document.getElementById('pagination').innerHTML=`<div class="fin-total"><span><i class="fa-solid fa-sack-dollar"></i> Total de todas as contas</span><b>${fmtMoney(grandTotal)}</b></div>`;
   // detail
   const wrap=document.getElementById('view-fin');
   const r=ALLRES.find(x=>x.key===selectedFin);
@@ -696,13 +697,13 @@ function renderFin(){
   });
   const sum=overdueSum(r.key);
   wrap.innerHTML=`
-    <div class="detail-head"><h1>${r.icon} ${r.nome}${getApelido(r.key)?` (${getApelido(r.key)})`:''} — ${r.end}</h1>${sum>0?`<span class="overdue-badge" style="margin:0"><i class="fa-solid fa-triangle-exclamation"></i> Total atrasado: ${fmtMoney(sum)}</span>`:''}</div>
+    <div class="detail-head"><h1>${r.icon} ${r.nome}${getApelido(r.key)?` (${getApelido(r.key)})`:''} — ${r.end}</h1></div>
     <div class="contas-list">
       ${contas.length?contas.map(c=>`
         <div class="conta-item ${isOverdue(c)?'atrasada':''}">
           <div class="cv">${fmtMoney(moneyNum(c.valor))}</div>
-          <div class="cvenc"><span>Vencimento</span>${isoDateToBr(c.venc)}${isOverdue(c)?'<span class="atras-flag">ATRASADA</span>':''}</div>
-          <div class="cpix"><span>PIX</span>${c.pix?`${c.pix} <button class="copy-btn" onclick="copyTxt('${String(c.pix).replace(/'/g,'')}')"><i class="fa-solid fa-clipboard"></i></button>`:'—'}</div>
+          <div class="cvenc"><span>Vencimento</span><span class="cvenc-date">${isoDateToBr(c.venc)}</span>${isOverdue(c)?'<span class="atras-flag"><i class="fa-solid fa-triangle-exclamation"></i> ATRASADA</span>':''}</div>
+          <div class="cpix"><span>PIX</span>${c.pix?`<span class="copyable" onclick="copyTxt('${String(c.pix).replace(/'/g,'')}')">${c.pix}</span>`:'—'}</div>
           <button class="btn btn-green btn-sm" onclick="payConta('${r.key}','${c.id}')"><i class="fa-solid fa-check"></i> Pago</button>
         </div>`).join(''):'<div class="empty">Nenhuma conta pendente. <i class="fa-solid fa-champagne-glasses"></i></div>'}
     </div>

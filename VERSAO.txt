@@ -1,3 +1,18 @@
+MFC v91
+
+Última alteração
+
+Financeiro — ajustes visuais:
+- Botão "Gerar PDF" foi pro topo, ao lado do título "Financeiro" (não fica mais lá embaixo).
+- "Total atrasado" duplicado sumiu da página de detalhe — já mostra isso no card, não precisa repetir.
+- Badge "ATRASADA" não clipa mais na data — cada um numa linha própria dentro do bloco de vencimento.
+- Data do vencimento ganhou destaque (grande, negrito, cor própria), igual o valor já tinha.
+- Código do cliente, CPF/CNPJ e PIX agora usam o mesmo esquema de "clicar pra copiar" com sublinhado tracejado que o nome/telefone do cliente já tinha — sem botão de ícone do lado.
+
+BUGFIX encontrado de refresco: a função de copiar (copyTxt) tirava TODAS as letras de qualquer texto antes de copiar — pra código/CPF não fazia diferença (só números mesmo), mas pra PIX (que tem letras no meio do código) isso corrompia a cópia inteira. Corrigido: agora copia o texto exatamente como está.
+
+Cache atualizado para mfc-tecnico-v91.
+
 MFC v90
 
 Última alteração

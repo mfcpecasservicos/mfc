@@ -187,6 +187,16 @@ NOTA TÉCNICA — Upload de imagens (item 3 solicitado):
 Não é possível forçar um diretório padrão no seletor de arquivos do navegador via código. Essa é uma restrição de segurança do browser (Chrome/Edge/Firefox) que impede sites de pré-selecionar pastas do sistema operacional. Isso não é um bug do app — é um limite da Web Platform.
 
 
+ATUALIZAÇÃO MFC v91
+[x] Financeiro: botão Gerar PDF movido pro .list-head, ao lado do título.
+[x] Financeiro: overdue-badge duplicado removido do detail-head (fica só no rescard).
+[x] Financeiro: .cvenc virou flex-column, atras-flag em linha própria (sem clipar), data com destaque (.cvenc-date).
+[x] Financeiro: código do cliente/CPF-CNPJ/PIX usam .copyable em vez de copy-btn com ícone.
+[x] BUGFIX: copyTxt não tira mais letras do texto (quebrava cópia de PIX).
+[x] CACHE_NAME atualizado: mfc-tecnico-v91
+[x] Service-worker atualizado para mfc-tecnico-v91.
+[x] Validado com acorn (parser real), não só node --check.
+
 ATUALIZAÇÃO MFC v90
 [x] BUGFIX (meu, da v89): <div id="fin-print-area"> estava dentro de <script>, quebrando o parse inteiro do JS. Movida pra fora, entre </script> e </body>.
 [x] Validado com acorn (parser JS real) em gestor.html E index.html — não confiar só em node --check daqui pra frente pra esse tipo de erro (falso negativo confirmado).
