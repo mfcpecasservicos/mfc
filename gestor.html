@@ -305,6 +305,22 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 .iblk:hover,.dcard:hover,.rescard:hover,.fin-card:hover{box-shadow:0 0 30px -6px color-mix(in oklch,var(--glow) 75%,transparent) !important}
 .fi:focus{box-shadow:0 0 0 3px color-mix(in oklch,var(--glow) 30%,transparent)}
 .modal,#etr-modal .etr-box{box-shadow:0 0 34px -8px color-mix(in oklch,var(--glow) 55%,transparent)}
+#fin-print-area{display:none}
+@media print{
+  body *{visibility:hidden}
+  #fin-print-area,#fin-print-area *{visibility:visible}
+  #fin-print-area{display:block;position:absolute;top:0;left:0;width:100%;background:#fff;color:#111;padding:24px;font-family:Arial,sans-serif}
+  #fin-print-area h1{font-size:1.3rem;margin-bottom:4px}
+  #fin-print-area .fp-sub{font-size:.8rem;color:#555;margin-bottom:18px}
+  #fin-print-area .fp-res{margin-bottom:20px;page-break-inside:avoid}
+  #fin-print-area .fp-res h2{font-size:1rem;background:#eee;padding:6px 10px;border-radius:4px;margin-bottom:6px}
+  #fin-print-area table{width:100%;border-collapse:collapse;font-size:.85rem}
+  #fin-print-area th,#fin-print-area td{border:1px solid #ccc;padding:6px 8px;text-align:left}
+  #fin-print-area th{background:#f3f3f3}
+  #fin-print-area .fp-subtotal{text-align:right;font-weight:700;margin-top:4px;font-size:.85rem}
+  #fin-print-area .fp-grandtotal{margin-top:20px;padding:12px;border:2px solid #111;border-radius:6px;font-size:1.05rem;font-weight:800;text-align:right}
+  #fin-print-area .fp-empty{color:#777;font-size:.85rem;font-style:italic}
+}
 </style>
 </head>
 <body>
@@ -634,6 +650,20 @@ window.payConta=async(key,cid)=>{
   await setDoc(finRef,{[key]:{contas}},{merge:true});
   toast('✅ Conta paga e removida');
 };
+window.printFinanceiro=()=>{
+  const ALLRES=getAllRes();
+  const withContas=ALLRES.map(r=>({r,contas:getContas(r.key).sort((a,b)=>(a.venc||'9999').localeCompare(b.venc||'9999'))})).filter(x=>x.contas.length);
+  const grandTotal=ALLRES.reduce((s,r)=>s+totalSum(r.key),0);
+  const now=new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  const blocks=withContas.length?withContas.map(({r,contas})=>{
+    const ap=getApelido(r.key);
+    const rows=contas.map(c=>`<tr><td>${fmtMoney(moneyNum(c.valor))}</td><td>${isoDateToBr(c.venc)}${isOverdue(c)?' ⚠️':''}</td><td>${c.pix||'—'}</td></tr>`).join('');
+    const sub=totalSum(r.key);
+    return `<div class="fp-res"><h2>${r.nome}${ap?' — '+ap:''}</h2><table><thead><tr><th>Valor</th><th>Vencimento</th><th>PIX</th></tr></thead><tbody>${rows}</tbody></table><div class="fp-subtotal">Subtotal: ${fmtMoney(sub)}</div></div>`;
+  }).join(''):'<p class="fp-empty">Nenhuma conta pendente no momento.</p>';
+  document.getElementById('fin-print-area').innerHTML=`<h1>Relatório Financeiro — MFC</h1><p class="fp-sub">Gerado em ${now}</p>${blocks}<div class="fp-grandtotal">Total geral de todas as contas: ${fmtMoney(grandTotal)}</div>`;
+  setTimeout(()=>window.print(),50);
+};
 function renderFin(){
   // list column: residências
   document.getElementById('list-title').textContent='Financeiro';
@@ -654,7 +684,7 @@ function renderFin(){
     </div>`;
   }).join('')+`
     <button class="btn btn-outline-blue" style="width:100%;height:46px" onclick="openAddRes()"><i class="fa-solid fa-plus"></i> Adicionar conta</button>`;
-  document.getElementById('pagination').innerHTML=`<div class="fin-total"><span><i class="fa-solid fa-sack-dollar"></i> Total de todas as contas</span><b>${fmtMoney(grandTotal)}</b></div>`;
+  document.getElementById('pagination').innerHTML=`<div class="fin-total"><span><i class="fa-solid fa-sack-dollar"></i> Total de todas as contas</span><b>${fmtMoney(grandTotal)}</b></div><button class="btn btn-outline-blue" style="width:100%;margin-top:8px" onclick="printFinanceiro()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF do financeiro</button>`;
   // detail
   const wrap=document.getElementById('view-fin');
   const r=ALLRES.find(x=>x.key===selectedFin);
@@ -1039,5 +1069,6 @@ window.removeLayer=async(id,li)=>{const c=all.find(x=>x.id===id);const layers=[.
 function resizeImageFile(file,maxW=1400,quality=.78){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>{const sc=Math.min(1,maxW/img.width);const c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);c.getContext('2d').drawImage(img,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',quality))};img.onerror=rej;img.src=r.result};r.onerror=rej;r.readAsDataURL(file)})}
 window.uploadBudgetImage=async(id,li,input)=>{const file=input.files?.[0];if(!file)return;if(!file.type.startsWith('image/'))return alert('Envie apenas imagem.');const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];const data=await resizeImageFile(file);layers[li]={...readLayerForm(id,li,layers[li]),budgetImage:{data,name:file.name,type:'image/jpeg',uploadedAt:new Date().toISOString()}};const first=layers.find(l=>!l.done);await updateDoc(doc(db,'clients',id),{layers,status:first?first.status:'done',updatedAt:new Date().toISOString()});input.value='';toast('🖼️ Imagem anexada')};
 window.removeBudgetImage=async(id,li)=>{const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];layers[li].budgetImage=null;await updateDoc(doc(db,'clients',id),{layers})};
+<div id="fin-print-area"></div>
 </script>
 </body></html>

@@ -1,3 +1,17 @@
+MFC v89
+
+Última alteração
+
+Gestor: botão "Gerar PDF do financeiro" na tela Financeiro (embaixo do total geral). Monta um relatório de impressão (Ctrl+P → Salvar como PDF) com:
+- Cada residência (Coelba/Embasa + apelido, sem código de cliente nem CPF/CNPJ, como pedido)
+- Todas as contas disponíveis daquela residência: valor, vencimento (marca ⚠️ se atrasada) e PIX
+- Subtotal por residência
+- Total geral no final, somando tudo
+
+Sem biblioteca nova — usa a função de impressão do próprio navegador, então não precisa incluir nenhuma pasta extra no ZIP. Só residências com conta pendente aparecem no relatório.
+
+Cache atualizado para mfc-tecnico-v89.
+
 MFC v88
 
 Última alteração

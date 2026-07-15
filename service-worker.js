@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mfc-tecnico-v88';
+const CACHE_NAME = 'mfc-tecnico-v89';
 const APP_SHELL = [
   './',
   './index.html',
