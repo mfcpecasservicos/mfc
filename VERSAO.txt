@@ -1,3 +1,11 @@
+MFC v92
+
+Última alteração
+
+BUGFIX: o botão "Gerar PDF" ficava grudado no cabeçalho mesmo depois de sair da tela Financeiro — troquei o título de "Visitas" mas nunca removia o botão que veio junto. Corrigido: ao trocar de aba, o cabeçalho volta a ser só o título, sem o botão. Agora "Gerar PDF" só aparece mesmo dentro do Financeiro.
+
+Cache atualizado para mfc-tecnico-v92.
+
 MFC v91
 
 Última alteração

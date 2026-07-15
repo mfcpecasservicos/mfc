@@ -726,7 +726,7 @@ window.switchView=v=>{
   document.getElementById('view-fin').style.display=v==='fin'?'block':'none';
   document.getElementById('view-leads').style.display=v==='leads'?'block':'none';
   document.getElementById('view-trash').style.display=v==='trash'?'block':'none';
-  if(v==='fin')renderFin();else{document.getElementById('list-title').textContent='Visitas';render()}
+  if(v==='fin')renderFin();else{document.querySelector('.list-head').innerHTML='<h1 id="list-title">Visitas</h1>';render()}
 };
 window.goHome=()=>{selectedId=null;render()};
 window.toggleListCol=()=>{
