@@ -1,3 +1,11 @@
+MFC v90
+
+Última alteração
+
+BUGFIX URGENTE (era meu, na v89): deixei uma `<div id="fin-print-area">` dentro da tag `<script>` por engano, quebrando o parse do JavaScript inteiro — travava o app inteiro (tela branca/sem função nenhuma). Corrigido: a div voltou pro lugar certo, fora do script. Validei dessa vez com um parser JS de verdade (acorn), não só o `node --check` que não pegou o erro da primeira vez.
+
+Cache atualizado para mfc-tecnico-v90.
+
 MFC v89
 
 Última alteração

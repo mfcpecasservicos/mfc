@@ -1069,6 +1069,6 @@ window.removeLayer=async(id,li)=>{const c=all.find(x=>x.id===id);const layers=[.
 function resizeImageFile(file,maxW=1400,quality=.78){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>{const sc=Math.min(1,maxW/img.width);const c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);c.getContext('2d').drawImage(img,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',quality))};img.onerror=rej;img.src=r.result};r.onerror=rej;r.readAsDataURL(file)})}
 window.uploadBudgetImage=async(id,li,input)=>{const file=input.files?.[0];if(!file)return;if(!file.type.startsWith('image/'))return alert('Envie apenas imagem.');const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];const data=await resizeImageFile(file);layers[li]={...readLayerForm(id,li,layers[li]),budgetImage:{data,name:file.name,type:'image/jpeg',uploadedAt:new Date().toISOString()}};const first=layers.find(l=>!l.done);await updateDoc(doc(db,'clients',id),{layers,status:first?first.status:'done',updatedAt:new Date().toISOString()});input.value='';toast('🖼️ Imagem anexada')};
 window.removeBudgetImage=async(id,li)=>{const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];layers[li].budgetImage=null;await updateDoc(doc(db,'clients',id),{layers})};
-<div id="fin-print-area"></div>
 </script>
+<div id="fin-print-area"></div>
 </body></html>
