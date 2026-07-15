@@ -79,7 +79,7 @@ button{font-family:inherit}
 .indicator{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:700;height:24px;padding:0 10px;border-radius:8px;border:1px solid #0e749055;background:#083344;color:#67e8f9;white-space:nowrap;flex-shrink:0}
 .ind-laudo{background:#2d1f00 !important;color:#fbbf24 !important;border-color:#92400e !important}
 .sbadge{font-size:.62rem;font-weight:800;padding:5px 11px;border-radius:999px;display:inline-flex;align-items:center;gap:5px;text-transform:uppercase;letter-spacing:.09em;white-space:normal;line-height:1.2;background:color-mix(in oklch,var(--sc) 15%,transparent);color:var(--sc);box-shadow:inset 0 0 0 1px color-mix(in oklch,var(--sc) 35%,transparent),0 0 14px -4px color-mix(in oklch,var(--sc) 60%,transparent)}
-.sw{background:#1e3a5f33;color:#60a5fa;border:1px solid #1e3a5f}.sws{background:#08334455;color:#67e8f9;border:1px solid #0e7490}.se{background:#14532d33;color:#86efac;border:1px solid #14532d}.sq{background:#451a0333;color:#fbbf24;border:1px solid #451a03}.sa{background:#1c191733;color:#fb923c;border:1px solid #f9731655}.srd{background:#0c4a6e33;color:#7dd3fc;border:1px solid #0c4a6e}.ssf{background:#052e16;color:#86efac;border:1px solid #166534}.sd{background:#0d1f0d33;color:#4ade80;border:1px solid #0d1f0d}.sab{background:#3b076433;color:#d8b4fe;border:1px solid #3b0764}
+.sw{background:#1e3a5f33;color:#60a5fa;border:1px solid #1e3a5f}.sws{background:#08334455;color:#67e8f9;border:1px solid #0e7490}.se{background:#14532d33;color:#86efac;border:1px solid #14532d}.sq{background:#451a0333;color:#fbbf24;border:1px solid #451a03}.sa{background:#1c191733;color:#fb923c;border:1px solid #f9731655}.srd{background:#0c4a6e33;color:#7dd3fc;border:1px solid #0c4a6e}.ssf{background:#052e16;color:#86efac;border:1px solid #166534}.sd{background:#0d1f0d33;color:#4ade80;border:1px solid #0d1f0d}.sab{background:#3b076433;color:#d8b4fe;border:1px solid #3b0764}.sdisc{background:#3b0d0d;color:#fca5a5;border:1px solid #ef4444}
 .dw{background:#3b82f6}.dws{background:#38bdf8}.de{background:#22c55e}.dq{background:#f59e0b}.da{background:#f97316}.drd{background:#38bdf8}.dsf{background:#22c55e}.dd{background:#22c55e}.dab{background:#a855f7}
 .pagination{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px}.fin-total{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:14px;padding:13px 16px;position:sticky;bottom:0}.fin-total span{font-size:.7rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.05em;line-height:1;display:flex;align-items:center;gap:6px}.fin-total b{color:var(--gold);font-size:1.05rem;font-weight:900;white-space:nowrap;line-height:1;display:flex;align-items:center}.fin-total span{white-space:nowrap}
 .pg-btn{min-width:34px;height:34px;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-weight:800;cursor:pointer;font-size:.8rem}
@@ -520,7 +520,7 @@ function readLayerForm(id,li,base={}){
 }
 
 /* ===== CONSTANTS ===== */
-const STATUS={waiting:'Aguardando visita',workshop_pending:'Aguardando Avaliação',evaluated:'Avaliação concluída',quoted:'Aguardando aprovação',approved:'Aprovado',ready_delivery:'Equipamento pronto para entrega',service_finished:'Serviço finalizado',absent:'Cliente ausente',done:'Serviço Concluído'};
+const STATUS={waiting:'Aguardando visita',workshop_pending:'Aguardando Avaliação',evaluated:'Avaliação concluída',quoted:'Aguardando aprovação',approved:'Aprovado',ready_delivery:'Equipamento pronto para entrega',service_finished:'Serviço finalizado',absent:'Cliente ausente',discarded:'Serviço descartado',done:'Serviço Concluído'};
 function serviceTypeLabel(value){const v=String(value||'').trim();if(!v)return '';if(v.includes('Preventiva'))return '🧽 Preventiva';if(v.includes('Corretiva'))return '🔧 Corretiva';return v}
 function inferServiceType(text){const t=String(text||'');if(t.includes('Preventiva'))return '🧽 Preventiva';if(t.includes('Corretiva'))return '🔧 Corretiva';return ''}
 function stripServiceTypeFromReport(text){return String(text||'').replace(/(?:^|\s*[|,-]\s*)[🔧🧽]?\s*(Corretiva|Preventiva)\s*(?:\|\s*)?/gi,'').replace(/^\s*[|,-]\s*/,'').trim()}
@@ -528,7 +528,7 @@ function reportServiceType(r){const raw=r?.serviceType||inferServiceType(r?.prob
 function reportTextOnly(r){return stripServiceTypeFromReport(r?.problem||'')||'—'}
 const ICON={waiting:'<i class="fa-regular fa-clock"></i>',workshop_pending:'<i class="fa-solid fa-industry"></i>',evaluated:'<i class="fa-solid fa-check"></i>',quoted:'<i class="fa-solid fa-sack-dollar"></i>',approved:'<i class="fa-solid fa-circle" style="color:#f97316"></i>',ready_delivery:'<i class="fa-solid fa-box"></i>',service_finished:'<i class="fa-solid fa-check"></i>',absent:'<i class="fa-solid fa-ban"></i>',done:'<i class="fa-solid fa-check"></i>'};
 const dotCls={waiting:'dw',workshop_pending:'dws',evaluated:'de',quoted:'dq',approved:'da',ready_delivery:'drd',service_finished:'dsf',absent:'dab',done:'dd'};
-const badgeCls={waiting:'sw',workshop_pending:'sws',evaluated:'se',quoted:'sq',approved:'sa',ready_delivery:'srd',service_finished:'ssf',absent:'sab',done:'sd'};
+const badgeCls={waiting:'sw',workshop_pending:'sws',evaluated:'se',quoted:'sq',approved:'sa',ready_delivery:'srd',service_finished:'ssf',absent:'sab',discarded:'sdisc',done:'sd'};
 function normPhone(v){let n=String(v||'').replace(/\D/g,'');if(n.length===8)n='71'+n;if(n.length===9)n='71'+n;if(n.startsWith('55')&&n.length>11)n=n.slice(2);return n;}
 function toast(m,c='var(--green)'){const t=document.getElementById('toast');t.textContent=m;t.style.background=c;t.style.display='block';setTimeout(()=>t.style.display='none',3000)}
 function escJs(s){return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}
@@ -539,7 +539,7 @@ const ft=dt=>{if(!dt||dt===TBD)return'';try{return new Date(dt).toLocaleTimeStri
 const maps=a=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a||'');
 function getLayers(c){return c.layers&&c.layers.length?c.layers:[{status:c.status||'waiting',quote:c.quote||'',quoteObs:c.quoteObs||'',techReport:c.techReport||null,approval:c.approval||null,done:c.status==='done',createdAt:c.createdAt||new Date().toISOString()}]}
 function activeLayer(c){return getLayers(c).find(l=>!l.done)||getLayers(c)[0]||{status:c.status||'waiting'}}function getStatus(c){return c.status||activeLayer(c).status||'waiting'}
-function displayStatus(c){const act=getLayers(c).filter(l=>!l.done);if(!act.length)return 'done';const pin=act.find(l=>l.pinned);if(pin)return pin.status||'waiting';const PRIO=['waiting','workshop_pending','quoted','evaluated','approved','ready_delivery','service_finished','absent'];for(const s of PRIO){if(act.some(l=>(l.status||'waiting')===s))return s}return act[0].status||'waiting'}
+function displayStatus(c){if(c.status==='discarded')return 'discarded';const act=getLayers(c).filter(l=>!l.done);if(!act.length)return 'done';const pin=act.find(l=>l.pinned);if(pin)return pin.status||'waiting';const PRIO=['waiting','workshop_pending','quoted','evaluated','approved','ready_delivery','service_finished','absent'];for(const s of PRIO){if(act.some(l=>(l.status||'waiting')===s))return s}return act[0].status||'waiting'}
 function layerServiceInWorkshop(l){return !!(l?.serviceInWorkshop||l?.approval?.serviceInWorkshop)}function indLayers(c){const act=getLayers(c).filter(l=>!l.done);const pin=act.find(l=>l.pinned);return pin?[pin]:act}function hasServiceInWorkshop(c){return indLayers(c).some(l=>layerServiceInWorkshop(l))}function needsPickup(c){return indLayers(c).some(l=>!layerServiceInWorkshop(l)&&(l.needsPickup||l.techReport?.needsPickup))}function hasPaidService(c){return indLayers(c).some(l=>l.approval?.paid)}function hasLaudo(c){return indLayers(c).some(l=>(l.techReport?.serviceType||'').includes('Laudo'))}function hasOwesService(c){return indLayers(c).some(l=>l.approval?.owes)}
 function layerMainDate(c,l){
   const s=l?.status;
@@ -551,6 +551,7 @@ function layerMainDate(c,l){
 }
 function primaryLayer(c){const act=getLayers(c).filter(l=>!l.done);if(!act.length)return null;const pin=act.find(l=>l.pinned);if(pin)return pin;const PRIO=['waiting','workshop_pending','quoted','evaluated','approved','ready_delivery','service_finished','absent'];for(const s of PRIO){const found=act.find(l=>(l.status||'waiting')===s);if(found)return found}return act[0]}
 function mainDate(c){
+  if(c.status==='discarded'&&c.discardedAt)return c.discardedAt;
   const pl=primaryLayer(c);
   return (pl?layerMainDate(c,pl):'')||c.datetime||c.createdAt||'';
 }
@@ -776,7 +777,7 @@ const PAG_OPTS=['','💵 Espécie','⚡ Pix','💳 Débito',...Array.from({lengt
 function pagsOf(l){const a=l?.approval;if(Array.isArray(a?.pagamentos)&&a.pagamentos.length)return a.pagamentos;if(moneyNum(a?.entryValue)>0||a?.payment)return [{forma:a?.payment||'',valor:a?.entryValue||'',data:a?.serviceDate||''}];return []}
 
 /* ===== FILTER MENU ===== */
-const FILTERS=[['all','<i class="fa-solid fa-clipboard"></i> Todos (ativos)'],['waiting','<i class="fa-regular fa-clock"></i> Aguardando visita'],['workshop_pending','<i class="fa-solid fa-industry"></i> Aguardando Avaliação'],['evaluated','<i class="fa-solid fa-check"></i> Avaliação concluída'],['quoted','<i class="fa-solid fa-sack-dollar"></i> Aguardando aprovação'],['approved','<i class="fa-solid fa-circle" style="color:#f97316"></i> Aprovado'],['ready_delivery','<i class="fa-solid fa-box"></i> Pronto para entrega'],['service_finished','<i class="fa-solid fa-check"></i> Serviço finalizado'],['absent','<i class="fa-solid fa-ban"></i> Cliente ausente'],['done','<i class="fa-solid fa-check"></i> Concluídos']];
+const FILTERS=[['all','<i class="fa-solid fa-clipboard"></i> Todos (ativos)'],['waiting','<i class="fa-regular fa-clock"></i> Aguardando visita'],['workshop_pending','<i class="fa-solid fa-industry"></i> Aguardando Avaliação'],['evaluated','<i class="fa-solid fa-check"></i> Avaliação concluída'],['quoted','<i class="fa-solid fa-sack-dollar"></i> Aguardando aprovação'],['approved','<i class="fa-solid fa-circle" style="color:#f97316"></i> Aprovado'],['ready_delivery','<i class="fa-solid fa-box"></i> Pronto para entrega'],['service_finished','<i class="fa-solid fa-check"></i> Serviço finalizado'],['absent','<i class="fa-solid fa-ban"></i> Cliente ausente'],['discarded','<i class="fa-solid fa-trash-can"></i> Serviço descartado'],['done','<i class="fa-solid fa-check"></i> Concluídos']];
 window.setFilter=f=>{filter=f;page=1;document.getElementById('filter-menu')?.classList.remove('open');render()};
 
 /* ===== TIMELINE ===== */
@@ -875,6 +876,20 @@ function renderDetail(){
   const wrap=document.getElementById('view-detail');
   const c=all.find(x=>x.id===selectedId&&!x.deleted);
   if(!c){wrap.innerHTML=homeHtml();return}
+  if(c.status==='discarded'){
+    wrap.innerHTML=`
+    <div class="detail-head"><div class="dh-left"><div class="dh-ic">${(c.name||'?').trim().charAt(0).toUpperCase()}</div><div><h1>Detalhes da visita</h1><p class="dh-sub">Informações completas da visita registrada</p></div></div><div class="detail-actions"><span class="sbadge sdisc">Serviço descartado</span><button class="btn btn-muted btn-sm" onclick="openEdit('${c.id}')"><i class="fa-solid fa-pen"></i> Editar</button></div></div>
+    ${clientInfoBlocks(c)}
+    <div class="box" style="background:#3b0d0d;border:1px solid #ef4444;border-radius:var(--radius);padding:16px">
+      <h3 style="color:#fecaca"><i class="fa-solid fa-ban"></i> Serviço descartado pelo técnico</h3>
+      <p style="margin-top:10px"><b>Motivo:</b> ${c.discardReason||'— (nenhum motivo informado)'}</p>
+      <p style="color:var(--muted);margin-top:8px"><i class="fa-regular fa-clock"></i> ${fdt(c.discardedAt)}</p>
+    </div>
+    <div class="bottom-acts" style="margin-top:16px">
+      <button class="btn btn-outline-red btn-wrap" onclick="softDelete('${c.id}')"><i class="fa-solid fa-trash-can"></i> Mover cliente para a lixeira</button>
+    </div>`;
+    return;
+  }
   const layers=getLayers(c);
   const done=layers.filter(l=>l.done);
   const pinIdx=layers.findIndex(l=>!l.done&&l.pinned);

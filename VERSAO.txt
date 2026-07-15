@@ -1,3 +1,15 @@
+MFC v88
+
+Última alteração
+
+Index: descartar visita mudou de figura. Antes ia direto pra lixeira sem chance de voltar atrás. Agora clicar no ícone de lixeira abre um popup pedindo justificativa (obrigatória) — ao confirmar, o cliente vira status "Serviço descartado" (não é deletado). Some da lista principal do técnico (nada mais pra fazer ali).
+
+Gestor: cliente com "Serviço descartado" mostra badge próprio (vermelho) e, ao abrir os detalhes, TODA a parte de relatório/orçamento/aprovação some — fica só o motivo do descarte e a hora, com um botão "Mover cliente para a lixeira" pra você decidir se apaga de vez ou não. Só quando você exclui manualmente é que o cliente some de verdade da página principal.
+
+Novo filtro "Serviço descartado" na lista do gestor pra achar esses casos rapidinho.
+
+Cache atualizado para mfc-tecnico-v88.
+
 MFC v87
 
 Última alteração
