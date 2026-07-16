@@ -1,3 +1,13 @@
+MFC v95
+
+Última alteração
+
+Gestor: aviso vermelho de "já existe na lixeira" na Nova Visita não aparece mais quando você abre pelo próprio "+ Nova visita" da página Lixeira — você já sabe, não precisa avisar de novo. Continua aparecendo normal quando você digita manualmente um nome/telefone que bate com alguém na lixeira (esse é o cenário que interessa avisar).
+
+functions/index.js: blindagem contra notificação duplicada. Cloud Functions de 2ª geração entrega "pelo menos uma vez" — o mesmo evento pode chegar repetido raramente (é característica da infraestrutura do Google, não bug do código). Agora guarda o ID de cada evento processado e ignora se já foi tratado, então nunca manda a mesma notificação duas vezes. PRECISA FAZER DEPLOY DE NOVO (firebase deploy --only functions) pra essa correção valer — o ZIP sozinho não sobe isso.
+
+Cache atualizado para mfc-tecnico-v95.
+
 MFC v94
 
 Última alteração
