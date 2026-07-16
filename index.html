@@ -72,7 +72,7 @@ header h1{font-size:1rem;font-weight:800;flex:1}.reload-btn,.install-btn{backgro
 </head>
 <body>
 <div id="offline-banner"><i class="fa-solid fa-wifi" style="opacity:.5"></i> Sem conexão — modo offline.</div>
-<header><img src="mfc-logo.png" alt="" style="width:30px;height:30px;border-radius:8px;object-fit:contain" onerror="this.style.display='none'"><h1>Roteiro</h1><span id="conn"></span><button class="install-btn" id="install-btn"><i class="fa-solid fa-arrow-down"></i></button><button class="reload-btn" onclick="location.reload()"><i class="fa-solid fa-rotate"></i></button></header>
+<header><img src="mfc-logo.png" alt="" style="width:30px;height:30px;border-radius:8px;object-fit:contain" onerror="this.style.display='none'"><h1>Roteiro</h1><span id="conn"></span><button class="install-btn" id="notif-btn" style="display:inline-flex" onclick="ativarNotificacoes()" title="Ativar notificações"><i class="fa-solid fa-bell"></i></button><button class="install-btn" id="install-btn"><i class="fa-solid fa-arrow-down"></i></button><button class="reload-btn" onclick="location.reload()"><i class="fa-solid fa-rotate"></i></button></header>
 
 <div class="list-wrap" id="list-wrap"><div class="empty">⏳ Carregando...</div></div>
 <div id="detail"><div class="detail-header"><button class="back-btn" onclick="closeDetail()"><i class="fa-solid fa-arrow-left"></i></button><div style="flex:1;min-width:0"><h2 id="d-name"></h2><span class="badge" id="d-badge"></span></div><div class="d-avatar" id="d-avatar"></div></div><div class="detail-body" id="d-body"></div><div class="mbg" id="edit-report-modal"><div class="modal"><button type="button" class="modal-close" onclick="closeEditReportModal()"><i class="fa-solid fa-xmark"></i></button><div id="edit-report-modal-body"></div></div></div><div class="mbg" id="discard-modal"><div class="modal"><button type="button" class="modal-close" onclick="closeDiscardModal()"><i class="fa-solid fa-xmark"></i></button><h3><i class="fa-solid fa-trash-can"></i> Descartar visita</h3><p style="color:var(--muted);font-size:.85rem;margin:6px 0 12px">Explique o motivo do descarte. O gestor vai ver essa justificativa e decidir se remove o cliente de vez.</p><div class="fg"><textarea id="discard-reason" placeholder="Ex: cliente desistiu, endereço errado, não atendeu..." style="min-height:110px"></textarea></div><div class="actions-primary" style="margin-top:14px"><button class="submit-btn" style="background:#ef4444" onclick="confirmDiscard()"><i class="fa-solid fa-trash-can"></i> Confirmar descarte</button></div></div></div></div>
@@ -81,9 +81,26 @@ header h1{font-size:1rem;font-weight:800;flex:1}.reload-btn,.install-btn{backgro
 <input type="file" id="input-camera" accept="image/*" capture="environment" style="display:none" onchange="handleFiles(this)">
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getFirestore, collection, onSnapshot, updateDoc, doc, query, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { getFirestore, collection, onSnapshot, updateDoc, doc, query, orderBy, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-messaging.js";
 const app=initializeApp({apiKey:"AIzaSyAUUid850sbmBAVS9JzeZ94SbC-qzkk0B8",authDomain:"roteiro-mfc-d3053.firebaseapp.com",projectId:"roteiro-mfc-d3053",storageBucket:"roteiro-mfc-d3053.firebasestorage.app",messagingSenderId:"1030114859934",appId:"1:1030114859934:web:ad353eafb55205d6b4148f"});
 const db=getFirestore(app);const col=collection(db,'clients');let allClients=[],currentId=null,currentLayerIdx=0,localPhotos={},knownIds=null,currentDetailClient=null;
+const VAPID_KEY='BOtInjFKOxsWL18q-TNq_UzylDPQxnCtSMzTRM2LZedNxMfPvAErWMERdmAnSKHGnswe6PxIFacPvEYXwnKFU8Q';
+window.ativarNotificacoes=async()=>{
+  try{
+    if(!('Notification'in window))return alert('Esse navegador não suporta notificações.');
+    if(VAPID_KEY==='COLE_AQUI_SUA_VAPID_KEY')return alert('Notificações ainda não configuradas pelo gestor. Avise ele.');
+    const perm=await Notification.requestPermission();
+    if(perm!=='granted')return alert('Permissão de notificação negada. Pra ativar depois, precisa liberar nas configurações do navegador.');
+    const reg=await navigator.serviceWorker.ready;
+    const messaging=getMessaging(app);
+    const token=await getToken(messaging,{vapidKey:VAPID_KEY,serviceWorkerRegistration:reg});
+    if(!token)return alert('Não foi possível gerar o identificador de notificação. Tenta de novo.');
+    await setDoc(doc(db,'settings','tecnico'),{fcmToken:token,updatedAt:new Date().toISOString()},{merge:true});
+    const btn=document.getElementById('notif-btn');if(btn){btn.innerHTML='<i class="fa-solid fa-bell"></i>';btn.style.background='#22C55E';btn.title='Notificações ativadas'}
+    alert('🔔 Notificações ativadas! Você vai receber aviso de nova visita e aprovação mesmo com o app fechado.');
+  }catch(e){console.error(e);alert('Erro ao ativar notificações: '+e.message)}
+};
 function captureDetailDraft(){
   const state={forms:{}};
   if(!document.getElementById('detail')?.classList.contains('open'))return state;

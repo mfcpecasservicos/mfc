@@ -187,6 +187,24 @@ NOTA TÉCNICA — Upload de imagens (item 3 solicitado):
 Não é possível forçar um diretório padrão no seletor de arquivos do navegador via código. Essa é uma restrição de segurança do browser (Chrome/Edge/Firefox) que impede sites de pré-selecionar pastas do sistema operacional. Isso não é um bug do app — é um limite da Web Platform.
 
 
+ATUALIZAÇÃO MFC v94
+[x] VAPID_KEY real colada no index.html (linha 88), substituindo o placeholder.
+[x] Guard de "não configurado" (linha 92) agora é código morto inofensivo — nunca mais dispara.
+[x] Validado com acorn.
+[x] CACHE_NAME atualizado: mfc-tecnico-v94
+[x] Service-worker atualizado para mfc-tecnico-v94.
+[x] PENDENTE: deploy da Cloud Function (functions/) via Cloud Shell — único passo que falta pra notificação funcionar de ponta a ponta.
+
+ATUALIZAÇÃO MFC v93
+[x] functions/index.js: onDocumentWritten('clients/{id}') detecta nova visita (layer novo com status waiting/workshop_pending) e aprovação (layer virou 'approved'), manda push via admin.messaging().send() usando token salvo em settings/tecnico.
+[x] firebase.json + .firebaserc: config mínima pra `firebase deploy --only functions`.
+[x] Index: import getMessaging/getToken + setDoc; botão #notif-btn → ativarNotificacoes() pede permissão, gera token, salva em settings/tecnico.
+[x] service-worker.js: importScripts firebase-app-compat + firebase-messaging-compat, onBackgroundMessage mostra notificação com app fechado.
+[x] PENDENTE (não depende de mim): VAPID_KEY precisa ser colada manualmente no index.html (placeholder 'COLE_AQUI_SUA_VAPID_KEY'), e a function precisa ser deployada via `firebase deploy --only functions` (Cloud Shell ou terminal local).
+[x] CACHE_NAME atualizado: mfc-tecnico-v93
+[x] Service-worker atualizado para mfc-tecnico-v93.
+[x] Validado com acorn (index.html e service-worker.js).
+
 ATUALIZAÇÃO MFC v92
 [x] BUGFIX: switchView reconstrói .list-head só com o <h1> ao sair do Financeiro, removendo o botão Gerar PDF que ficava grudado. render() já delegava certo pra renderFin() quando view==='fin', não precisou mexer lá.
 [x] CACHE_NAME atualizado: mfc-tecnico-v92

@@ -1,3 +1,32 @@
+MFC v94
+
+Última alteração
+
+VAPID key configurada de verdade no index.html (era o único pedaço manual que faltava do seu lado). Agora só falta o deploy da Cloud Function (functions/) pra notificação funcionar de ponta a ponta — isso continua precisando rodar fora do navegador (Cloud Shell ou terminal), conforme expliquei na v93.
+
+Cache atualizado para mfc-tecnico-v94.
+
+MFC v93
+
+Última alteração
+
+NOVO: notificação push de verdade pro técnico (nova visita + orçamento aprovado), via Firebase Cloud Messaging — oficial, gratuito, funciona mesmo com o app fechado.
+
+O que entrou:
+- functions/index.js + functions/package.json: Cloud Function que detecta nova visita e aprovação no Firestore e dispara a notificação.
+- firebase.json + .firebaserc: configuração pra rodar o deploy da function.
+- Index: botão de sino no cabeçalho ("Ativar notificações") — técnico clica uma vez, autoriza, e o token fica salvo em settings/tecnico.
+- service-worker.js: escuta notificação em segundo plano (Firebase Messaging), mostra mesmo com o app fechado.
+
+FALTA UMA COISA MINHA PARTE SUA: preciso da VAPID key (Firebase Console → Configurações do projeto → Cloud Messaging → Certificados push da Web → Gerar par de chaves). Cole essa chave no lugar de "COLE_AQUI_SUA_VAPID_KEY" dentro do index.html (é a única edição manual necessária, deixei bem marcado).
+
+FALTA FAZER O DEPLOY DA FUNCTION: isso eu não faço sozinho (preciso rodar um comando fora do navegador). Passo a passo simples via Google Cloud Shell (sem instalar nada no seu PC): abra console.cloud.google.com, clique no ícone de terminal (Cloud Shell) no topo, suba a pasta functions/ + firebase.json + .firebaserc (pode arrastar os arquivos pro Cloud Shell), rode:
+  npm install -g firebase-tools
+  cd (pasta que você subiu)
+  firebase deploy --only functions
+
+Cache atualizado para mfc-tecnico-v93.
+
 MFC v92
 
 Última alteração

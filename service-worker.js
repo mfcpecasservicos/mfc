@@ -1,4 +1,14 @@
-const CACHE_NAME = 'mfc-tecnico-v92';
+importScripts('https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.13.2/firebase-messaging-compat.js');
+firebase.initializeApp({apiKey:"AIzaSyAUUid850sbmBAVS9JzeZ94SbC-qzkk0B8",authDomain:"roteiro-mfc-d3053.firebaseapp.com",projectId:"roteiro-mfc-d3053",storageBucket:"roteiro-mfc-d3053.firebasestorage.app",messagingSenderId:"1030114859934",appId:"1:1030114859934:web:ad353eafb55205d6b4148f"});
+const messaging=firebase.messaging();
+messaging.onBackgroundMessage(payload=>{
+  const title=payload.notification?.title||'MFC';
+  const body=payload.notification?.body||'';
+  self.registration.showNotification(title,{body,icon:'./icon-192.png',badge:'./icon-192.png'});
+});
+
+const CACHE_NAME = 'mfc-tecnico-v94';
 const APP_SHELL = [
   './',
   './index.html',
