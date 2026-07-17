@@ -101,6 +101,18 @@ window.ativarNotificacoes=async()=>{
     alert('🔔 Notificações ativadas! Você vai receber aviso de nova visita e aprovação mesmo com o app fechado.');
   }catch(e){console.error(e);alert('Erro ao ativar notificações: '+e.message)}
 };
+window.addEventListener('DOMContentLoaded',()=>{
+  const btn=document.getElementById('notif-btn');
+  if(btn&&('Notification'in window)&&Notification.permission==='granted'){
+    btn.innerHTML='<i class="fa-solid fa-bell"></i>';btn.style.background='#22C55E';btn.title='Notificações ativadas';
+  }
+});
+if(document.readyState!=='loading'){
+  const btn0=document.getElementById('notif-btn');
+  if(btn0&&('Notification'in window)&&Notification.permission==='granted'){
+    btn0.innerHTML='<i class="fa-solid fa-bell"></i>';btn0.style.background='#22C55E';btn0.title='Notificações ativadas';
+  }
+}
 function captureDetailDraft(){
   const state={forms:{}};
   if(!document.getElementById('detail')?.classList.contains('open'))return state;
