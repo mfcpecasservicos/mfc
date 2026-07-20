@@ -187,6 +187,30 @@ NOTA TÉCNICA — Upload de imagens (item 3 solicitado):
 Não é possível forçar um diretório padrão no seletor de arquivos do navegador via código. Essa é uma restrição de segurança do browser (Chrome/Edge/Firefox) que impede sites de pré-selecionar pastas do sistema operacional. Isso não é um bug do app — é um limite da Web Platform.
 
 
+ATUALIZAÇÃO MFC v98
+[x] Cadastro.html: popup Cliente/Empresa com slide-down, dois formulários completos, switch na cidade, máscara de CNPJ, aviso de taxa (cliente) e isenção (empresa). Token/anti-dup/WhatsApp preservados.
+[x] Gestor: renderLeads e approveLead reconhecem lead.type==='company', constroem client data com companyMode/cnpj/requester.
+[x] Gestor: modal Editar empresa com CNPJ, Solicitante e bloco de Acesso do técnico (tecAcessoNome/tecAcessoDoc/tecAcessoPlaca).
+[x] Gestor: clientInfoBlocks mostra endereço/equipamento pra ambos os tipos agora (antes só cliente); empresa ganha solicitante/CNPJ/acesso do técnico.
+[x] Index: client-grid isCompany com os mesmos campos + bloco de acesso do técnico, espelhando o gestor.
+[x] Validado com acorn nos três arquivos (cadastro/gestor/index) + checagem de balanço de divs.
+[x] CACHE_NAME atualizado: mfc-tecnico-v98
+[x] Service-worker atualizado para mfc-tecnico-v98.
+
+ATUALIZAÇÃO MFC v97
+[x] Index: checagem de Notification.permission==='granted' no carregamento (DOMContentLoaded + fallback readyState pra módulos que carregam depois do evento), sino fica verde se já ativado antes.
+[x] Notificação em si nunca dependeu da cor do botão — funcionalidade intacta o tempo todo, só o visual que enganava.
+[x] Validado com acorn.
+[x] CACHE_NAME atualizado: mfc-tecnico-v97
+[x] Service-worker atualizado para mfc-tecnico-v97 (só pra bump de cache, sem mudança funcional nele).
+
+ATUALIZAÇÃO MFC v96
+[x] functions/index.js: dedup trocado de event.id pra claim() atômico via collection _notified/{clientId}_{tipo}_{index}, usando .create() (falha se já existir = já foi notificado).
+[x] Cobre nova visita (_newvisit_) e aprovação (_approved_) separadamente, por índice de relatório.
+[x] PENDENTE: novo deploy (`firebase deploy --only functions`) — gestor.html/index.html não mudaram nessa versão, só a function.
+[x] CACHE_NAME atualizado: mfc-tecnico-v96
+[x] Validado com acorn.
+
 ATUALIZAÇÃO MFC v95
 [x] Gestor: checkTrashMatch(suppress) — pickClient chama com true, esconde o aviso sem checar; oninput continua chamando sem args, checagem normal.
 [x] functions/index.js: dedup via collection _processedEvents/{event.id}, evita notificação repetida por entrega duplicada do Eventarc (2ª geração).

@@ -1,3 +1,45 @@
+MFC v98
+
+Última alteração — GRANDE: diferencial Cliente x Empresa no cadastro público
+
+Cadastro.html (primeira vez que mexo nele, recebido do usuário):
+- Popup cobrindo a tela ao abrir o link, com dois cartões (👥 Cliente / 🏢 Empresa, ícone flat da mesma pasta fontawesome). Ao clicar, o popup desliza pra baixo e some, revelando o formulário certo com animação.
+- Formulário Cliente: continua igual, com um aviso novo e bem visível — "A partir de hoje, visitas têm uma taxa de R$ 10,00".
+- Formulário Empresa (novo): Nome da empresa, Nome do solicitante, Número de contato, CNPJ (com máscara automática), E-mail para envio do orçamento, Endereço da empresa, Equipamento, Descrição do problema. Aviso de "visita sem cobrança para empresas".
+- Pergunta "Dias D'Ávila?" virou switch (interpretação minha do pedido "botões de switch" — se não era isso, me corrige).
+- Token de validade, anti-duplicação por telefone, redirecionamento pro WhatsApp e toda a padronização de texto automática (maiúsculas, títulos, etc.) foram mantidos intactos para os dois formulários, como já existia.
+
+Gestor:
+- "Novos Cadastros" (leads) mostra os campos certos conforme o tipo (empresa mostra Solicitante/CNPJ/E-mail em vez dos campos residenciais).
+- Ao aprovar um lead de empresa, cria o cliente já no formato certo (companyMode, CNPJ, solicitante, e-mail).
+- Modal "Editar empresa" ganhou: Nome do solicitante, CNPJ, e um bloco novo "Acesso do técnico (portaria da empresa)" — Nome completo, CPF/RG, Placa do veículo (preenchido pelo GESTOR, é o que fica registrado na portaria da empresa pro técnico entrar).
+- Card de detalhes da empresa no gestor agora mostra: solicitante, CNPJ, endereço, equipamento, descrição do problema e o bloco de acesso do técnico — antes esses detalhes ficavam escondidos (fazia sentido quando empresa era só um registro rápido; agora que tem formulário completo, faz sentido mostrar tudo).
+
+Index (técnico):
+- Card de detalhes da empresa mostra os mesmos campos (empresa, solicitante, contato, CNPJ, e-mail, endereço, equipamento, descrição) e o bloco "Acesso do técnico (portaria)" — pra ele conferir o que foi registrado antes de chegar lá.
+
+Cache atualizado para mfc-tecnico-v98.
+
+MFC v97
+
+Última alteração
+
+Index: correção visual — o sino de notificação agora verifica, ao abrir o app, se a permissão já foi concedida antes, e mantém a cor verde nesse caso. Antes ele só ficava verde no instante do clique e voltava pro azul padrão ao reabrir o app, mesmo com tudo funcionando por baixo dos panos (isso nunca desativou a notificação, era só falta de checagem visual).
+
+Cache atualizado para mfc-tecnico-v97.
+
+MFC v96
+
+Última alteração
+
+functions/index.js: reescrevi a blindagem contra notificação duplicada. A tentativa da v95 (guardar o ID do evento) só evitava o Google reentregar o MESMO evento — não pegava o caso de duas gravações diferentes no Firestore gerarem o mesmo aviso (ex: duplo clique no Salvar, ou reordenação rara de eventos do Firestore em gravações muito próximas).
+
+Agora a trava é por RESULTADO, não por evento: cada notificação tenta "reservar" uma chave única (ex: "cliente X + relatório 2 + aprovado") direto no banco, de forma atômica — só quem ganha a corrida manda a notificação de verdade. Não importa quantas gravações aconteçam, só sai um aviso por transição real.
+
+PRECISA FAZER DEPLOY DE NOVO (mesma pasta functions/, mesmo comando de sempre).
+
+Cache atualizado para mfc-tecnico-v96.
+
 MFC v95
 
 Última alteração

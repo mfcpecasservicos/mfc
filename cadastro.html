@@ -19,6 +19,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Cadastro - MFC Peças e Serviços</title>
+<link rel="stylesheet" href="fontawesome/css/all.min.css">
 <style>
   :root{
     --bg:#eef4fb;--surface:#ffffff;--primary:#06437a;--primary2:#0b63b6;--yellow:#ffd51f;
@@ -58,19 +59,66 @@
   .btn-submit{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;border:none;border-radius:20px;padding:18px 28px;font-size:1.04rem;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:.2s;width:100%;margin-top:4px;min-height:62px;box-shadow:0 14px 30px rgba(6,67,122,.28)}
   .btn-submit:active{transform:scale(.985)}.btn-submit:disabled{background:#94a3b8;cursor:not-allowed;box-shadow:none}
   .loader{width:21px;height:21px;border:3px solid rgba(255,255,255,.35);border-radius:50%;border-top-color:#fff;animation:spin 1s linear infinite;display:none}@keyframes spin{to{transform:rotate(360deg)}}
-  #success-msg{display:none;text-align:center;color:#166534;font-weight:800;font-size:1.02rem;padding:18px;background:#f0fdf4;border-radius:20px;border:1px solid #bbf7d0;line-height:1.45}
+  .success-msg-el{display:none;text-align:center;color:#166534;font-weight:800;font-size:1.02rem;padding:18px;background:#f0fdf4;border-radius:20px;border:1px solid #bbf7d0;line-height:1.45}
   .footer-brand{text-align:center;padding:20px 0 6px;color:#64748b;font-size:.84rem}.footer-brand img{width:88px;margin-bottom:8px;opacity:.95}
   .privacy{font-size:.76rem;color:#64748b;text-align:center;line-height:1.4;padding:0 10px 4px}
   @media(max-width:600px){body{padding:12px 10px 22px}.hero{border-radius:24px}.hero-cover{height:185px}.hero-content{padding:0 18px 20px}.hero-logo{width:106px;margin-top:-48px;border-radius:22px}.hero-title{font-size:1.65rem}.hero-subtitle{font-size:.94rem}.benefits{grid-template-columns:1fr}.card{padding:19px;border-radius:18px}input[type="text"],input[type="tel"],input[type="email"],textarea{font-size:16px}.btn-submit{border-radius:18px}}
+
+  /* ===== Popup de seleção Cliente/Empresa ===== */
+  #type-overlay{position:fixed;inset:0;z-index:9999;background:linear-gradient(160deg,#06437a,#0b1f36);display:flex;align-items:center;justify-content:center;padding:20px;transition:transform .5s cubic-bezier(.6,-0.1,.3,1.2),opacity .4s ease}
+  #type-overlay.closing{transform:translateY(100%);opacity:0;pointer-events:none}
+  .type-box{max-width:520px;width:100%;text-align:center;color:#fff}
+  .type-box h2{font-size:1.5rem;font-weight:900;margin-bottom:6px}
+  .type-box p{color:#cfe3f7;font-size:.92rem;margin-bottom:26px;line-height:1.45}
+  .type-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .type-card{background:#fff;border-radius:22px;padding:26px 14px;cursor:pointer;border:3px solid transparent;transition:.15s;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .type-card:active{transform:scale(.96)}
+  .type-card:hover{border-color:var(--yellow)}
+  .type-card i{font-size:2.4rem;color:var(--primary2)}
+  .type-card span{font-weight:900;color:var(--text);font-size:1.05rem}
+  .type-card small{color:var(--muted);font-size:.76rem;font-weight:600}
+  #form-container{display:none}
+  #form-container.reveal{display:flex;animation:slideUp .5s cubic-bezier(.2,.9,.3,1.1)}
+  @keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+  /* ===== Switch (mesmo estilo do painel do gestor) ===== */
+  .switch-row{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#f8fafc;border:1px solid var(--border);border-radius:16px;padding:14px 16px;cursor:pointer}
+  .switch-row .sw-label{font-weight:700;color:#203044;font-size:.96rem}
+  .sw-track{width:50px;height:28px;border-radius:16px;background:#cbd5e1;position:relative;transition:.2s;flex-shrink:0}
+  .sw-track::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 2px 4px rgba(0,0,0,.2)}
+  .switch-row.on .sw-track{background:var(--success)}
+  .switch-row.on .sw-track::after{left:25px}
+
+  /* ===== Aviso de cobrança (cliente) ===== */
+  .fee-notice{background:#fff8cc;border:1px solid #fde047;border-radius:18px;padding:15px 16px;display:flex;gap:12px;align-items:flex-start}
+  .fee-notice i{color:#a16207;font-size:1.3rem;margin-top:2px}
+  .fee-notice strong{display:block;color:#7c5a00;font-size:.96rem;margin-bottom:3px}
+  .fee-notice span{color:#8a6a1a;font-size:.84rem;line-height:1.4}
+
+  /* ===== Aviso de isenção (empresa) ===== */
+  .free-notice{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:18px;padding:15px 16px;display:flex;gap:12px;align-items:flex-start}
+  .free-notice i{color:#166534;font-size:1.3rem;margin-top:2px}
+  .free-notice strong{display:block;color:#14532d;font-size:.96rem;margin-bottom:3px}
+  .free-notice span{color:#166534;font-size:.84rem;line-height:1.4}
 </style>
 </head>
 <body>
+<div id="type-overlay">
+  <div class="type-box">
+    <h2>Como podemos te ajudar?</h2>
+    <p>Escolha uma opção pra continuarmos com o cadastro certo pra você.</p>
+    <div class="type-cards">
+      <div class="type-card" onclick="selectType('cliente')"><i class="fa-solid fa-user"></i><span>Cliente</span><small>Residência</small></div>
+      <div class="type-card" onclick="selectType('empresa')"><i class="fa-solid fa-building"></i><span>Empresa</span><small>Pessoa jurídica</small></div>
+    </div>
+  </div>
+</div>
 <div class="container" id="form-container">
   <div class="hero">
     <div class="hero-cover-wrap"><img src="mfc-capa.png" class="hero-cover" alt="MFC Peças e Serviços"></div>
     <div class="hero-content">
       <img src="mfc-logo.png" class="hero-logo" alt="Logo MFC Peças e Serviços">
-      <h1 class="hero-title">Cadastro</h1>
+      <h1 class="hero-title" id="hero-title">Cadastro</h1>
       <p class="hero-subtitle">Preencha essas informações para darmos continuidade no agendamento da sua visita técnica.</p>
       <div class="brand-pill">❄️ MFC Peças e Serviços</div>
       <div class="benefits">
@@ -86,11 +134,15 @@
     <p class="hint" style="font-size:.95rem;color:#7f1d1d;margin:6px 0 0">Este link de cadastro expirou. Solicite um novo atendimento.</p>
   </div>
 
-  <form id="lead-form">
+  <form id="lead-form-cliente" style="display:none">
+    <div class="fee-notice"><i class="fa-solid fa-circle-info"></i><div><strong>A partir de hoje, visitas têm uma taxa de R$ 10,00</strong><span>Esse valor é referente à visita técnica e é cobrado independente da execução do serviço.</span></div></div>
     <div class="card"><label>👤 Nome completo <span class="req">*</span></label><input type="text" id="f-nome" required placeholder="Seu nome completo"></div>
     <div class="card"><label>📞 Número de contato <span class="req">*</span></label><input type="tel" id="f-telefone" required placeholder="71 9 0000-0000" maxlength="15" inputmode="tel"></div>
     <div class="card"><label>✉️ E-mail</label><input type="email" id="f-email" placeholder="seu@email.com (opcional)"></div>
-    <div class="card"><label>📍 Dias D'ávila? <span class="req">*</span></label><p class="hint">Fora de Dias D'ávila haverá cobrança na visita.</p><div class="radio-group"><label class="radio-lbl"><input type="radio" name="cidade" value="Dias D'ávila" required onchange="toggleOutro()"> Sim, resido em Dias D'ávila</label><label class="radio-lbl"><input type="radio" name="cidade" value="Outro" required onchange="toggleOutro()"> Outro:</label><input type="text" id="f-cidade-outro" placeholder="Qual cidade?"></div></div>
+    <div class="card"><label>📍 Dias D'ávila? <span class="req">*</span></label><p class="hint">Fora de Dias D'ávila haverá cobrança na visita.</p>
+      <div class="switch-row" id="sw-cidade" onclick="toggleCidadeSwitch()"><span class="sw-label" id="sw-cidade-label">Sim, resido em Dias D'Ávila</span><div class="sw-track"></div></div>
+      <input type="text" id="f-cidade-outro" placeholder="Qual cidade?">
+    </div>
     <div class="card"><label>🏠 Endereço <span class="req">*</span></label><input type="text" id="f-endereco" required placeholder="Rua, avenida, travessa..."></div>
     <div class="card"><label>🔢 Número da residência <span class="req">*</span></label><input type="text" id="f-numero" required placeholder="Ex: 123, S/N"></div>
     <div class="card"><label>🏘️ Bairro <span class="req">*</span></label><input type="text" id="f-bairro" required placeholder="Seu bairro"></div>
@@ -98,8 +150,24 @@
     <div class="card"><label>🧊 Equipamento <span class="req">*</span></label><p class="hint">Apenas o equipamento, marca, BTUs e KG, caso tenha.</p><input type="text" id="f-equip" required placeholder="Ex: Ar condicionado LG 12000 BTUs"></div>
     <div class="card"><label>📝 Descrição do problema <span class="req">*</span></label><textarea id="f-problema" required placeholder="Descreva o que está acontecendo..."></textarea></div>
 
-    <button type="submit" class="btn-submit" id="btn-submit"><span id="btn-text">Finalizar Cadastro</span><div class="loader" id="btn-loader"></div></button>
-    <div id="success-msg">✅ Cadastro finalizado com sucesso!</div>
+    <button type="submit" class="btn-submit" id="btn-submit-cliente"><span class="btn-text-lbl">Finalizar Cadastro</span><div class="loader"></div></button>
+    <div class="success-msg-el" id="success-msg-cliente">✅ Cadastro finalizado com sucesso!</div>
+    <p class="privacy">Seus dados serão usados apenas para contato e organização da visita técnica.</p>
+  </form>
+
+  <form id="lead-form-empresa" style="display:none">
+    <div class="free-notice"><i class="fa-solid fa-circle-check"></i><div><strong>Visita sem cobrança para empresas</strong><span>Não cobramos a visita técnica para atendimento empresarial.</span></div></div>
+    <div class="card"><label>🏢 Nome da empresa <span class="req">*</span></label><input type="text" id="e-empresa" required placeholder="Razão social ou nome fantasia"></div>
+    <div class="card"><label>👤 Nome do solicitante <span class="req">*</span></label><input type="text" id="e-solicitante" required placeholder="Quem está solicitando a visita"></div>
+    <div class="card"><label>📞 Número de contato <span class="req">*</span></label><input type="tel" id="e-telefone" required placeholder="71 9 0000-0000" maxlength="15" inputmode="tel"></div>
+    <div class="card"><label>🧾 CNPJ <span class="req">*</span></label><input type="text" id="e-cnpj" required placeholder="00.000.000/0000-00" maxlength="18" inputmode="numeric"></div>
+    <div class="card"><label>✉️ E-mail para envio do orçamento <span class="req">*</span></label><input type="email" id="e-email" required placeholder="financeiro@empresa.com"></div>
+    <div class="card"><label>🏠 Endereço da empresa <span class="req">*</span></label><input type="text" id="e-endereco" required placeholder="Rua, número, bairro, cidade"></div>
+    <div class="card"><label>🧊 Equipamento <span class="req">*</span></label><p class="hint">Apenas o equipamento, marca, BTUs e KG, caso tenha.</p><input type="text" id="e-equip" required placeholder="Ex: Ar condicionado LG 12000 BTUs"></div>
+    <div class="card"><label>📝 Descrição do problema <span class="req">*</span></label><textarea id="e-problema" required placeholder="Descreva o que está acontecendo..."></textarea></div>
+
+    <button type="submit" class="btn-submit" id="btn-submit-empresa"><span class="btn-text-lbl">Finalizar Cadastro</span><div class="loader"></div></button>
+    <div class="success-msg-el" id="success-msg-empresa">✅ Cadastro finalizado com sucesso!</div>
     <p class="privacy">Seus dados serão usados apenas para contato e organização da visita técnica.</p>
   </form>
 
@@ -172,8 +240,28 @@
     return (now - createdTime) <= 6 * 60 * 60 * 1000;
   };
 
+  let tipoCadastro = null;
+  let cidadeSwitchOn = true; // true = "Sim, resido em Dias D'Ávila"
+
+  window.selectType = (tipo) => {
+    tipoCadastro = tipo;
+    const overlay = document.getElementById('type-overlay');
+    overlay.classList.add('closing');
+    setTimeout(() => { overlay.style.display = 'none'; }, 480);
+    const container = document.getElementById('form-container');
+    container.classList.add('reveal');
+    document.getElementById('hero-title').textContent = tipo === 'empresa' ? 'Cadastro de Empresa' : 'Cadastro';
+    document.getElementById('lead-form-cliente').style.display = tipo === 'cliente' ? 'flex' : 'none';
+    document.getElementById('lead-form-empresa').style.display = tipo === 'empresa' ? 'flex' : 'none';
+  };
+
   const blockForm = () => {
-    document.getElementById('lead-form').style.display = 'none';
+    const overlay = document.getElementById('type-overlay');
+    if (overlay) overlay.style.display = 'none';
+    const container = document.getElementById('form-container');
+    if (container) container.classList.add('reveal');
+    document.getElementById('lead-form-cliente').style.display = 'none';
+    document.getElementById('lead-form-empresa').style.display = 'none';
     const blocked = document.getElementById('blocked-box');
     if (blocked) blocked.style.display = 'flex';
   };
@@ -199,6 +287,16 @@
     if (d.length <= 7) return `${d.slice(0,2)} ${d.slice(2,3)} ${d.slice(3)}`;
     if (d.length <= 11) return `${d.slice(0,2)} ${d.slice(2,3)} ${d.slice(3,7)}-${d.slice(7)}`;
     return d;
+  };
+
+  const maskCNPJ = (v) => {
+    const d = (v || '').replace(/\D/g, '').slice(0, 14);
+    if (!d) return '';
+    if (d.length <= 2) return d;
+    if (d.length <= 5) return `${d.slice(0,2)}.${d.slice(2)}`;
+    if (d.length <= 8) return `${d.slice(0,2)}.${d.slice(2,5)}.${d.slice(5)}`;
+    if (d.length <= 12) return `${d.slice(0,2)}.${d.slice(2,5)}.${d.slice(5,8)}/${d.slice(8)}`;
+    return `${d.slice(0,2)}.${d.slice(2,5)}.${d.slice(5,8)}/${d.slice(8,12)}-${d.slice(12)}`;
   };
 
   const smallWords = new Set(['de','da','do','das','dos','e','em','no','na','nos','nas','a','o','as','os']);
@@ -236,7 +334,7 @@
     return text ? text.charAt(0).toUpperCase() + text.slice(1) : '';
   };
 
-  const applyTextStandards = () => {
+  const applyTextStandardsCliente = () => {
     const byId = id => document.getElementById(id);
     byId('f-nome').value = titleCase(byId('f-nome').value);
     byId('f-endereco').value = titleCase(byId('f-endereco').value);
@@ -251,19 +349,45 @@
     if (outro.value) outro.value = titleCase(outro.value);
   };
 
+  const applyTextStandardsEmpresa = () => {
+    const byId = id => document.getElementById(id);
+    byId('e-empresa').value = titleCase(byId('e-empresa').value);
+    byId('e-solicitante').value = titleCase(byId('e-solicitante').value);
+    byId('e-endereco').value = titleCase(byId('e-endereco').value);
+    byId('e-equip').value = normalizeEquipment(byId('e-equip').value);
+    byId('e-problema').value = sentenceCase(byId('e-problema').value);
+    byId('e-email').value = (byId('e-email').value || '').trim().toLowerCase();
+    byId('e-telefone').value = maskPhone(byId('e-telefone').value);
+    byId('e-cnpj').value = maskCNPJ(byId('e-cnpj').value);
+  };
+
   document.getElementById('f-telefone').addEventListener('input', (e) => { e.target.value = maskPhone(e.target.value); });
+  document.getElementById('e-telefone').addEventListener('input', (e) => { e.target.value = maskPhone(e.target.value); });
+  document.getElementById('e-cnpj').addEventListener('input', (e) => { e.target.value = maskCNPJ(e.target.value); });
   ['f-nome','f-endereco','f-numero','f-bairro','f-ref','f-equip','f-problema','f-email','f-cidade-outro'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.addEventListener('blur', applyTextStandards);
+    if (el) el.addEventListener('blur', applyTextStandardsCliente);
+  });
+  ['e-empresa','e-solicitante','e-endereco','e-equip','e-problema','e-email'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('blur', applyTextStandardsEmpresa);
   });
 
-  window.toggleOutro = () => {
-    const checked = document.querySelector('input[name="cidade"]:checked');
+  window.toggleCidadeSwitch = () => {
+    cidadeSwitchOn = !cidadeSwitchOn;
+    const row = document.getElementById('sw-cidade');
+    const label = document.getElementById('sw-cidade-label');
     const inputOutro = document.getElementById('f-cidade-outro');
-    const isOutro = checked && checked.value === "Outro";
-    inputOutro.style.display = isOutro ? 'block' : 'none';
-    if(isOutro){ inputOutro.setAttribute('required','true'); setTimeout(()=>inputOutro.focus(),80); }
-    else{ inputOutro.removeAttribute('required'); inputOutro.value=''; }
+    row.classList.toggle('on', !cidadeSwitchOn);
+    if (cidadeSwitchOn) {
+      label.textContent = "Sim, resido em Dias D'Ávila";
+      inputOutro.style.display = 'none';
+      inputOutro.value = '';
+    } else {
+      label.textContent = 'Outro município — qual?';
+      inputOutro.style.display = 'block';
+      setTimeout(() => inputOutro.focus(), 80);
+    }
   };
 
 
@@ -278,23 +402,27 @@
     }
   })();
 
-  document.getElementById('lead-form').addEventListener('submit', async (e) => {
+  document.getElementById('lead-form-cliente').addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!tokenValid) { blockForm(); return; }
-    const btn = document.getElementById('btn-submit');
-    const text = document.getElementById('btn-text');
-    const loader = document.getElementById('btn-loader');
-    const successMsg = document.getElementById('success-msg');
+    if (!cidadeSwitchOn && !document.getElementById('f-cidade-outro').value.trim()) {
+      alert('Informe qual cidade você mora.');
+      return;
+    }
+    const btn = document.getElementById('btn-submit-cliente');
+    const text = btn.querySelector('.btn-text-lbl');
+    const loader = btn.querySelector('.loader');
+    const successMsg = document.getElementById('success-msg-cliente');
     btn.disabled = true; text.style.display = 'none'; loader.style.display = 'block';
 
-    applyTextStandards();
+    applyTextStandardsCliente();
 
-    const rawCity = document.querySelector('input[name="cidade"]:checked').value;
-    const finalCity = rawCity === 'Outro' ? document.getElementById('f-cidade-outro').value.trim() : rawCity;
+    const finalCity = cidadeSwitchOn ? "Dias D'Ávila" : document.getElementById('f-cidade-outro').value.trim();
     const neighborhood = document.getElementById('f-bairro').value.trim();
     const phoneDigits = phoneDigitsOnly(document.getElementById('f-telefone').value);
 
     const leadData = {
+      type: 'cliente',
       name: document.getElementById('f-nome').value.trim(),
       phone: document.getElementById('f-telefone').value.trim(),
       phoneDigits,
@@ -327,6 +455,86 @@
           phone: leadData.phone,
           address: [leadData.address, leadData.number, leadData.neighborhood].filter(Boolean).join(', '),
           ref: leadData.ref,
+          equip: leadData.equip,
+          notes: leadData.problem,
+          layers,
+          status: 'waiting',
+          updatedAt: new Date().toISOString()
+        });
+      } else {
+        const finalLeadData = {
+          ...leadData,
+          existingClientId: '',
+          recurrent: false,
+          updatedAt: new Date().toISOString()
+        };
+        if (existingLead?.id) {
+          await updateDoc(doc(db, 'leads', existingLead.id), finalLeadData);
+        } else {
+          await addDoc(collection(db, 'leads'), finalLeadData);
+        }
+      }
+
+      if (tokenRef) {
+        await updateDoc(tokenRef, { used: true, usedAt: new Date().toISOString(), phoneDigits });
+      }
+
+      btn.style.display = 'none'; successMsg.style.display = 'block';
+      setTimeout(() => {
+        window.location.href = 'https://wa.me/5571981122167?text=Cadastro%20finalizado!%20Em%20breve%20entraremos%20em%20contato.';
+      }, 1200);
+    } catch (err) {
+      console.error(err); alert("Erro ao enviar cadastro. Tente novamente.");
+      btn.disabled = false; text.style.display = 'block'; loader.style.display = 'none';
+    }
+  });
+
+  document.getElementById('lead-form-empresa').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!tokenValid) { blockForm(); return; }
+    const btn = document.getElementById('btn-submit-empresa');
+    const text = btn.querySelector('.btn-text-lbl');
+    const loader = btn.querySelector('.loader');
+    const successMsg = document.getElementById('success-msg-empresa');
+    btn.disabled = true; text.style.display = 'none'; loader.style.display = 'block';
+
+    applyTextStandardsEmpresa();
+
+    const phoneDigits = phoneDigitsOnly(document.getElementById('e-telefone').value);
+
+    const leadData = {
+      type: 'company',
+      companyName: document.getElementById('e-empresa').value.trim(),
+      name: document.getElementById('e-empresa').value.trim(),
+      requester: document.getElementById('e-solicitante').value.trim(),
+      phone: document.getElementById('e-telefone').value.trim(),
+      phoneDigits,
+      cnpj: document.getElementById('e-cnpj').value.trim(),
+      email: document.getElementById('e-email').value.trim(),
+      address: document.getElementById('e-endereco').value.trim(),
+      equip: document.getElementById('e-equip').value.trim(),
+      problem: document.getElementById('e-problema').value.trim(),
+      createdAt: new Date().toISOString()
+    };
+
+    try {
+      const existingLead = await findFirstByPhone('leads', phoneDigits);
+      const existingClient = await findFirstByPhone('clients', phoneDigits);
+
+      if (existingClient?.id) {
+        const layers = Array.isArray(existingClient.layers) ? [...existingClient.layers] : [];
+        layers.push(makeVisitLayer(leadData.problem));
+        await updateDoc(doc(db, 'clients', existingClient.id), {
+          deleted: false,
+          recurrent: true,
+          phoneDigits,
+          phoneNorm: phoneDigits,
+          name: existingClient.name || leadData.name,
+          requester: leadData.requester,
+          phone: leadData.phone,
+          cnpj: leadData.cnpj,
+          email: leadData.email,
+          address: leadData.address,
           equip: leadData.equip,
           notes: leadData.problem,
           layers,
