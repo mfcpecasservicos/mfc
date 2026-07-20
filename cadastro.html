@@ -68,6 +68,8 @@
   #type-overlay{position:fixed;inset:0;z-index:9999;background:linear-gradient(160deg,#06437a,#0b1f36);display:flex;align-items:center;justify-content:center;padding:20px;transition:transform .5s cubic-bezier(.6,-0.1,.3,1.2),opacity .4s ease}
   #type-overlay.closing{transform:translateY(100%);opacity:0;pointer-events:none}
   .type-box{max-width:520px;width:100%;text-align:center;color:#fff}
+  .type-logo{width:88px;margin:0 auto 14px;display:block;background:#fff;border-radius:20px;padding:8px;box-shadow:0 10px 26px rgba(0,0,0,.25)}
+  .type-greeting{color:var(--yellow);font-weight:800;font-size:1rem;margin-bottom:4px}
   .type-box h2{font-size:1.5rem;font-weight:900;margin-bottom:6px}
   .type-box p{color:#cfe3f7;font-size:.92rem;margin-bottom:26px;line-height:1.45}
   .type-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -105,6 +107,8 @@
 <body>
 <div id="type-overlay">
   <div class="type-box">
+    <img src="mfc-logo.png" class="type-logo" alt="MFC Peças e Serviços">
+    <p class="type-greeting" id="type-greeting">Olá!</p>
     <h2>Como podemos te ajudar?</h2>
     <p>Escolha uma opção pra continuarmos com o cadastro certo pra você.</p>
     <div class="type-cards">
@@ -135,11 +139,11 @@
   </div>
 
   <form id="lead-form-cliente" style="display:none">
-    <div class="fee-notice"><i class="fa-solid fa-circle-info"></i><div><strong>A partir de hoje, visitas têm uma taxa de R$ 10,00</strong><span>Esse valor é referente à visita técnica e é cobrado independente da execução do serviço.</span></div></div>
+    <div class="fee-notice"><i class="fa-solid fa-circle-info"></i><div><strong>Visita em Dias D'Ávila são R$ 10,00</strong><span>Outras regiões, por favor consultar no WhatsApp.</span></div></div>
     <div class="card"><label>👤 Nome completo <span class="req">*</span></label><input type="text" id="f-nome" required placeholder="Seu nome completo"></div>
     <div class="card"><label>📞 Número de contato <span class="req">*</span></label><input type="tel" id="f-telefone" required placeholder="71 9 0000-0000" maxlength="15" inputmode="tel"></div>
     <div class="card"><label>✉️ E-mail</label><input type="email" id="f-email" placeholder="seu@email.com (opcional)"></div>
-    <div class="card"><label>📍 Dias D'ávila? <span class="req">*</span></label><p class="hint">Fora de Dias D'ávila haverá cobrança na visita.</p>
+    <div class="card"><label>📍 Dias D'ávila? <span class="req">*</span></label><p class="hint">Visita em Dias D'Ávila R$ 10,00.</p>
       <div class="switch-row" id="sw-cidade" onclick="toggleCidadeSwitch()"><span class="sw-label" id="sw-cidade-label">Sim, resido em Dias D'Ávila</span><div class="sw-track"></div></div>
       <input type="text" id="f-cidade-outro" placeholder="Qual cidade?">
     </div>
@@ -156,13 +160,15 @@
   </form>
 
   <form id="lead-form-empresa" style="display:none">
-    <div class="free-notice"><i class="fa-solid fa-circle-check"></i><div><strong>Visita sem cobrança para empresas</strong><span>Não cobramos a visita técnica para atendimento empresarial.</span></div></div>
     <div class="card"><label>🏢 Nome da empresa <span class="req">*</span></label><input type="text" id="e-empresa" required placeholder="Razão social ou nome fantasia"></div>
     <div class="card"><label>👤 Nome do solicitante <span class="req">*</span></label><input type="text" id="e-solicitante" required placeholder="Quem está solicitando a visita"></div>
     <div class="card"><label>📞 Número de contato <span class="req">*</span></label><input type="tel" id="e-telefone" required placeholder="71 9 0000-0000" maxlength="15" inputmode="tel"></div>
     <div class="card"><label>🧾 CNPJ <span class="req">*</span></label><input type="text" id="e-cnpj" required placeholder="00.000.000/0000-00" maxlength="18" inputmode="numeric"></div>
-    <div class="card"><label>✉️ E-mail para envio do orçamento <span class="req">*</span></label><input type="email" id="e-email" required placeholder="financeiro@empresa.com"></div>
+    <div class="card"><label>✉️ E-mail para envio do orçamento</label><input type="email" id="e-email" placeholder="financeiro@empresa.com (opcional)"></div>
     <div class="card"><label>🏠 Endereço da empresa <span class="req">*</span></label><input type="text" id="e-endereco" required placeholder="Rua, número, bairro, cidade"></div>
+    <div class="card"><label><i class="fa-solid fa-id-badge"></i> A portaria exige registro de acesso do técnico?</label><p class="hint">Nome, CPF/RG e placa do veículo — se sua empresa exige esse controle, avisamos o técnico antes da visita.</p>
+      <div class="switch-row" id="sw-acesso" onclick="toggleAcessoSwitch()"><span class="sw-label" id="sw-acesso-label">Não é necessário</span><div class="sw-track"></div></div>
+    </div>
     <div class="card"><label>🧊 Equipamento <span class="req">*</span></label><p class="hint">Apenas o equipamento, marca, BTUs e KG, caso tenha.</p><input type="text" id="e-equip" required placeholder="Ex: Ar condicionado LG 12000 BTUs"></div>
     <div class="card"><label>📝 Descrição do problema <span class="req">*</span></label><textarea id="e-problema" required placeholder="Descreva o que está acontecendo..."></textarea></div>
 
@@ -241,6 +247,11 @@
   };
 
   let tipoCadastro = null;
+  (() => {
+    const h = new Date().getHours();
+    const greetEl = document.getElementById('type-greeting');
+    if (greetEl) greetEl.textContent = h < 12 ? 'Bom dia!' : h < 18 ? 'Boa tarde!' : 'Boa noite!';
+  })();
   let cidadeSwitchOn = true; // true = "Sim, resido em Dias D'Ávila"
 
   window.selectType = (tipo) => {
@@ -390,6 +401,15 @@
     }
   };
 
+  let acessoSwitchOn = false; // true = portaria exige registro de acesso do técnico
+  window.toggleAcessoSwitch = () => {
+    acessoSwitchOn = !acessoSwitchOn;
+    const row = document.getElementById('sw-acesso');
+    const label = document.getElementById('sw-acesso-label');
+    row.classList.toggle('on', acessoSwitchOn);
+    label.textContent = acessoSwitchOn ? 'Sim, é necessário' : 'Não é necessário';
+  };
+
 
 
   (async () => {
@@ -514,6 +534,7 @@
       address: document.getElementById('e-endereco').value.trim(),
       equip: document.getElementById('e-equip').value.trim(),
       problem: document.getElementById('e-problema').value.trim(),
+      accessRequired: acessoSwitchOn,
       createdAt: new Date().toISOString()
     };
 
@@ -537,6 +558,7 @@
           address: leadData.address,
           equip: leadData.equip,
           notes: leadData.problem,
+          accessRequired: leadData.accessRequired,
           layers,
           status: 'waiting',
           updatedAt: new Date().toISOString()

@@ -1,3 +1,24 @@
+MFC v99
+
+Última alteração
+
+Cadastro.html:
+- Logo da loja (mfc-logo) e saudação "Bom dia/Boa tarde/Boa noite" (por horário) no popup de seleção Cliente/Empresa.
+- Aviso de cobrança reescrito sem data que expira: "Visita em Dias D'Ávila são R$ 10,00, outras regiões por favor consultar no WhatsApp" — nunca mais fica desatualizado.
+- Legenda do switch de cidade trocada pra "Visita em Dias D'Ávila R$ 10,00" (era o aviso antigo de cobrança fora da cidade).
+- Empresa: removido o aviso "visita sem cobrança" (empresa não precisa saber disso). E-mail pro orçamento virou opcional.
+- Empresa: novo switch "A portaria exige registro de acesso do técnico?" — é a EMPRESA avisando que precisa disso, não o preenchimento do nome/CPF/placa (isso o gestor ainda preenche depois, quando já souber quem vai atender).
+
+Gestor:
+- Lead de empresa carrega esse aviso (accessRequired) até o cliente aprovado.
+- "Novos Cadastros" mostra "⚠️ Exige registro de acesso do técnico" na prévia do lead de empresa, se marcado.
+- Card de detalhes do cliente mostra um aviso vermelho destacado no topo: "Portaria exige registro de acesso do técnico" — lembrete pra você passar as informações pro solicitante, com atalho pro "Editar empresa".
+
+Index:
+- Mesmo aviso aparece pro técnico, com um toque prático: "Leve documento (CPF/RG) e confira a placa do veículo antes de ir."
+
+Cache atualizado para mfc-tecnico-v99.
+
 MFC v98
 
 Última alteração — GRANDE: diferencial Cliente x Empresa no cadastro público
