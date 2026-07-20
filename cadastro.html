@@ -102,6 +102,15 @@
   .free-notice i{color:#166534;font-size:1.3rem;margin-top:2px}
   .free-notice strong{display:block;color:#14532d;font-size:.96rem;margin-bottom:3px}
   .free-notice span{color:#166534;font-size:.84rem;line-height:1.4}
+
+  .acesso-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .acesso-btn{height:52px;border-radius:14px;border:2px solid var(--border);background:#f8fafc;color:#203044;font-weight:800;font-size:1rem;cursor:pointer;transition:.15s}
+  .acesso-btn:active{transform:scale(.97)}
+  .acesso-btn.sel-yes{background:var(--success);border-color:var(--success);color:#fff}
+  .acesso-btn.sel-no{background:#dc2626;border-color:#dc2626;color:#fff}
+  .acesso-desc{margin-top:10px;font-size:.86rem;font-weight:700;min-height:1.2em}
+  .acesso-desc.is-yes{color:#166534}
+  .acesso-desc.is-no{color:#b91c1c}
 </style>
 </head>
 <body>
@@ -167,7 +176,11 @@
     <div class="card"><label>✉️ E-mail para envio do orçamento</label><input type="email" id="e-email" placeholder="financeiro@empresa.com (opcional)"></div>
     <div class="card"><label>🏠 Endereço da empresa <span class="req">*</span></label><input type="text" id="e-endereco" required placeholder="Rua, número, bairro, cidade"></div>
     <div class="card"><label><i class="fa-solid fa-id-badge"></i> A portaria exige registro de acesso do técnico?</label><p class="hint">Nome, CPF/RG e placa do veículo — se sua empresa exige esse controle, avisamos o técnico antes da visita.</p>
-      <div class="switch-row" id="sw-acesso" onclick="toggleAcessoSwitch()"><span class="sw-label" id="sw-acesso-label">Não é necessário</span><div class="sw-track"></div></div>
+      <div class="acesso-btns">
+        <button type="button" class="acesso-btn" id="acesso-btn-sim" onclick="setAcesso(true)">Sim</button>
+        <button type="button" class="acesso-btn" id="acesso-btn-nao" onclick="setAcesso(false)">Não</button>
+      </div>
+      <p class="acesso-desc" id="acesso-desc"></p>
     </div>
     <div class="card"><label>🧊 Equipamento <span class="req">*</span></label><p class="hint">Apenas o equipamento, marca, BTUs e KG, caso tenha.</p><input type="text" id="e-equip" required placeholder="Ex: Ar condicionado LG 12000 BTUs"></div>
     <div class="card"><label>📝 Descrição do problema <span class="req">*</span></label><textarea id="e-problema" required placeholder="Descreva o que está acontecendo..."></textarea></div>
@@ -402,12 +415,18 @@
   };
 
   let acessoSwitchOn = false; // true = portaria exige registro de acesso do técnico
-  window.toggleAcessoSwitch = () => {
-    acessoSwitchOn = !acessoSwitchOn;
-    const row = document.getElementById('sw-acesso');
-    const label = document.getElementById('sw-acesso-label');
-    row.classList.toggle('on', acessoSwitchOn);
-    label.textContent = acessoSwitchOn ? 'Sim, é necessário' : 'Não é necessário';
+  window.setAcesso = (val) => {
+    acessoSwitchOn = val;
+    const btnSim = document.getElementById('acesso-btn-sim');
+    const btnNao = document.getElementById('acesso-btn-nao');
+    const desc = document.getElementById('acesso-desc');
+    btnSim.classList.toggle('sel-yes', val === true);
+    btnNao.classList.toggle('sel-no', val === false);
+    desc.classList.toggle('is-yes', val === true);
+    desc.classList.toggle('is-no', val === false);
+    desc.textContent = val
+      ? 'Sim, vai ser necessário registro de acesso do técnico.'
+      : 'Não, não será necessário registro de acesso do técnico.';
   };
 
 

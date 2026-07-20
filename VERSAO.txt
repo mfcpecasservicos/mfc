@@ -1,3 +1,11 @@
+MFC v101
+
+Última alteração
+
+Cadastro.html: o switch confuso da pergunta "A portaria exige registro de acesso do técnico?" virou dois botões simples — "Sim" (verde ao clicar) e "Não" (vermelho ao clicar), com a frase certa aparecendo embaixo ("Sim, vai ser necessário registro de acesso do técnico." / "Não, não será necessário registro de acesso do técnico."). Mais claro pro cliente da empresa entender de primeira.
+
+Cache atualizado para mfc-tecnico-v101.
+
 MFC v100
 
 Última alteração
