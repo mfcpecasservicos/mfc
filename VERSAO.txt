@@ -1,3 +1,13 @@
+MFC v100
+
+Última alteração
+
+BUGFIX: ícone duplicado no header do card de "Novos Cadastros" (tinha o ícone Font Awesome de prédio E o emoji 🏢 juntos). Tirado o emoji, só o ícone flat fica.
+
+Simplifiquei bastante o "Acesso do técnico": era um bloco de 3 campos (Nome completo/CPF-RG/Placa) no editar empresa — virou um switch único "Portaria exige documentação do técnico?" (sim/não). O card do cliente (lista, gestor E índex) mostra um ícone pequeno de carteirinha — vermelho se precisa, verde se não precisa — sem inundar a tela de informação. A caixa grande de aviso que ficava no detalhe também saiu; o ícone no card já avisa sozinho.
+
+Cache atualizado para mfc-tecnico-v100.
+
 MFC v99
 
 Última alteração
