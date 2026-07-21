@@ -1,3 +1,25 @@
+MFC v103
+
+Última alteração
+
+BUGFIX: o badge por extenso "Documentação necessária/não necessária" tava aparecendo no CARD da lista também (gestor e index) — devia ficar só dentro do detalhe da empresa. Removido dos dois cards; agora o card mostra só o ícone (que já tinha), o texto por extenso continua exclusivamente na tela de detalhes.
+
+Cache atualizado para mfc-tecnico-v103.
+
+MFC v102
+
+Última alteração
+
+Gestor + Index: card do cliente (lista) agora mostra "Nome da empresa (Nome do solicitante)" quando é empresa — antes só mostrava o nome da empresa.
+
+Gestor: detalhe já tinha blocos separados pra "Nome do solicitante" e o nome da empresa (só corrigi o rótulo do primeiro, que dizia "Nome completo" mesmo sendo empresa — agora diz "Nome da empresa"). Index já mostrava os dois blocos separados desde a v98.
+
+Cores da documentação do técnico INVERTIDAS conforme pedido: precisa de documentação = verde, não precisa = vermelho (antes tava ao contrário). Vale pro ícone do card e pro badge por extenso.
+
+Adicionei o badge por extenso "Documentação necessária"/"Documentação não necessária" ao lado do status, em três lugares: linha de status do card na lista (gestor), cabeçalho da tela de detalhes (gestor) e cabeçalho da tela de detalhes (index).
+
+Cache atualizado para mfc-tecnico-v102.
+
 MFC v101
 
 Última alteração

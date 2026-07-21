@@ -187,6 +187,23 @@ NOTA TÉCNICA — Upload de imagens (item 3 solicitado):
 Não é possível forçar um diretório padrão no seletor de arquivos do navegador via código. Essa é uma restrição de segurança do browser (Chrome/Edge/Firefox) que impede sites de pré-selecionar pastas do sistema operacional. Isso não é um bug do app — é um limite da Web Platform.
 
 
+ATUALIZAÇÃO MFC v103
+[x] BUGFIX: badge por extenso removido do vc-status-row (gestor) e card-status-row (index) — card só mostra o ícone chip agora.
+[x] Badge por extenso continua só no detail-head (gestor) e d-access-badge (index).
+[x] Validado com acorn.
+[x] CACHE_NAME atualizado: mfc-tecnico-v103
+[x] Service-worker atualizado para mfc-tecnico-v103.
+
+ATUALIZAÇÃO MFC v102
+[x] Gestor+Index: vc-name/card-name mostram "Empresa (Solicitante)" quando aplicável.
+[x] Gestor: rótulo do primeiro infoCard vira "Nome da empresa" quando isCompany (antes sempre "Nome completo").
+[x] Cores accessRequired invertidas: true=verde, false=vermelho (ícone do card + badge por extenso).
+[x] Badge por extenso "Documentação necessária/não necessária" ao lado do status: vc-status-row (gestor lista), detail-head (gestor detalhe), d-access-badge novo (index detalhe).
+[x] Removida duplicação de vc-status-row que ficou depois do primeiro replace.
+[x] Validado com acorn + balanço de divs nos dois arquivos.
+[x] CACHE_NAME atualizado: mfc-tecnico-v102
+[x] Service-worker atualizado para mfc-tecnico-v102.
+
 ATUALIZAÇÃO MFC v101
 [x] Cadastro.html: switch-row de acesso do técnico trocado por dois botões (Sim/Não) + descrição dinâmica embaixo, mais claro pro cliente empresa.
 [x] setAcesso(val) substitui toggleAcessoSwitch(); acessoSwitchOn continua alimentando o leadData igual antes.
