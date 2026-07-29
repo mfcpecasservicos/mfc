@@ -290,18 +290,6 @@
     if (blocked) blocked.style.display = 'flex';
   };
 
-  const makeVisitLayer = (problem='') => ({
-    status: 'waiting',
-    quote: '',
-    quoteObs: '',
-    techReport: null,
-    absentAt: null,
-    approval: null,
-    done: false,
-    createdAt: new Date().toISOString(),
-    notes: problem || ''
-  });
-
   // Padronização automática de texto e telefone
   const maskPhone = (v) => {
     const d = (v || '').replace(/\D/g, '').slice(0, 11);
@@ -482,36 +470,16 @@
       const existingLead = await findFirstByPhone('leads', phoneDigits);
       const existingClient = await findFirstByPhone('clients', phoneDigits);
 
-      if (existingClient?.id) {
-        const layers = Array.isArray(existingClient.layers) ? [...existingClient.layers] : [];
-        layers.push(makeVisitLayer(leadData.problem));
-        await updateDoc(doc(db, 'clients', existingClient.id), {
-          deleted: false,
-          recurrent: true,
-          phoneDigits,
-          phoneNorm: phoneDigits,
-          name: existingClient.name || leadData.name,
-          phone: leadData.phone,
-          address: [leadData.address, leadData.number, leadData.neighborhood].filter(Boolean).join(', '),
-          ref: leadData.ref,
-          equip: leadData.equip,
-          notes: leadData.problem,
-          layers,
-          status: 'waiting',
-          updatedAt: new Date().toISOString()
-        });
+      const finalLeadData = {
+        ...leadData,
+        existingClientId: existingClient?.id || '',
+        recurrent: !!existingClient?.id,
+        updatedAt: new Date().toISOString()
+      };
+      if (existingLead?.id) {
+        await updateDoc(doc(db, 'leads', existingLead.id), finalLeadData);
       } else {
-        const finalLeadData = {
-          ...leadData,
-          existingClientId: '',
-          recurrent: false,
-          updatedAt: new Date().toISOString()
-        };
-        if (existingLead?.id) {
-          await updateDoc(doc(db, 'leads', existingLead.id), finalLeadData);
-        } else {
-          await addDoc(collection(db, 'leads'), finalLeadData);
-        }
+        await addDoc(collection(db, 'leads'), finalLeadData);
       }
 
       if (tokenRef) {
@@ -561,39 +529,16 @@
       const existingLead = await findFirstByPhone('leads', phoneDigits);
       const existingClient = await findFirstByPhone('clients', phoneDigits);
 
-      if (existingClient?.id) {
-        const layers = Array.isArray(existingClient.layers) ? [...existingClient.layers] : [];
-        layers.push(makeVisitLayer(leadData.problem));
-        await updateDoc(doc(db, 'clients', existingClient.id), {
-          deleted: false,
-          recurrent: true,
-          phoneDigits,
-          phoneNorm: phoneDigits,
-          name: existingClient.name || leadData.name,
-          requester: leadData.requester,
-          phone: leadData.phone,
-          cnpj: leadData.cnpj,
-          email: leadData.email,
-          address: leadData.address,
-          equip: leadData.equip,
-          notes: leadData.problem,
-          accessRequired: leadData.accessRequired,
-          layers,
-          status: 'waiting',
-          updatedAt: new Date().toISOString()
-        });
+      const finalLeadData = {
+        ...leadData,
+        existingClientId: existingClient?.id || '',
+        recurrent: !!existingClient?.id,
+        updatedAt: new Date().toISOString()
+      };
+      if (existingLead?.id) {
+        await updateDoc(doc(db, 'leads', existingLead.id), finalLeadData);
       } else {
-        const finalLeadData = {
-          ...leadData,
-          existingClientId: '',
-          recurrent: false,
-          updatedAt: new Date().toISOString()
-        };
-        if (existingLead?.id) {
-          await updateDoc(doc(db, 'leads', existingLead.id), finalLeadData);
-        } else {
-          await addDoc(collection(db, 'leads'), finalLeadData);
-        }
+        await addDoc(collection(db, 'leads'), finalLeadData);
       }
 
       if (tokenRef) {

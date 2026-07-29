@@ -1,3 +1,15 @@
+MFC v104
+
+Última alteração — BUGFIX (meu, achado por você)
+
+Cadastro.html: quando o telefone digitado já batia com um cliente ATIVO existente, o sistema pulava a fila de "Novos Cadastros" e gravava a visita nova DIRETO no cliente, sem sua revisão. Além disso, essa visita nova nunca ganhava uma data própria — então o sistema usava, por fallback, a data do PRIMEIRO cadastro daquele cliente (antiga), fazendo a visita nova aparecer com data errada (foi o "14/07 15:30" que você viu).
+
+Correção: removido esse atalho de mesclagem automática. Agora TODA submissão do cadastro.html (cliente ou empresa) vai sempre pra "Novos Cadastros", sem exceção — é você quem decide, na tela de aprovação, se é um cliente recorrente e qual a data/hora certa da visita. A detecção de telefone repetido continua existindo (fica marcada no lead como "recurrent"), só que agora é informativa, não automática.
+
+ATENÇÃO: se esse bug já aconteceu antes dessa correção, o cliente que sofreu o merge automático pode estar com uma visita "fantasma" datada errado dentro do histórico dele. Vale conferir manualmente o card daquele cliente específico e corrigir a data/remover a visita extra se for o caso — essa correção não desfaz o que já foi gravado, só impede que aconteça de novo.
+
+Cache atualizado para mfc-tecnico-v104.
+
 MFC v103
 
 Última alteração
