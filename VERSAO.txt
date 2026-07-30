@@ -1,3 +1,9 @@
+MFC v105
+
+Última alteração
+
+Cadastro.html: nova observação no formulário Cliente, logo abaixo do aviso de cobrança — "Reembolso em caso de serviço descartado: se o técnico descartar o serviço no momento da visita, o valor da visita é reembolsado, caso o cliente já tenha pago adiantado."
+
 MFC v104
 
 Última alteração — BUGFIX (meu, achado por você)
