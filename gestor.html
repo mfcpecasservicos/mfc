@@ -565,7 +565,8 @@ function layerMainDate(c,l){
   const s=l?.status;
   if(s==='service_finished')return l.serviceFinishedAt||l.approval?.serviceDate||c.datetime||l.createdAt||c.createdAt||'';
   if(s==='ready_delivery')return l.readyDeliveryAt||l.deliveryDate||l.approval?.serviceDate||c.datetime||l.createdAt||c.createdAt||'';
-  if((s==='quoted'||s==='approved'||s==='absent')&&l.statusAt)return l.statusAt;
+  if(s==='approved')return l.approval?.serviceDate||l.statusAt||l.createdAt||c.createdAt||'';
+  if((s==='quoted'||s==='absent')&&l.statusAt)return l.statusAt;
   if(s==='evaluated'&&l.updatedAt)return l.updatedAt;
   return l?.approval?.serviceDate||l?.deliveryDate||l?.readyDeliveryAt||c.datetime||l?.createdAt||c.createdAt||'';
 }

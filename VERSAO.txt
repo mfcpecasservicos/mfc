@@ -1,3 +1,9 @@
+MFC v106
+
+Última alteração — BUGFIX
+
+Gestor + Index: card do cliente com status "Aprovado" mostrava a hora que VOCÊ aprovou, ignorando a "Data e hora do serviço" quando ela já tinha sido definida. Corrigido: agora, se a Data do serviço foi preenchida, ela manda no card. Só volta a usar a hora da aprovação se a data do serviço ainda não foi definida. Mesma regra nos dois arquivos.
+
 MFC v105
 
 Última alteração
