@@ -489,7 +489,7 @@
 
       btn.style.display = 'none'; successMsg.style.display = 'block';
       setTimeout(() => {
-        window.location.href = 'https://wa.me/5571981122167?text=Cadastro%20finalizado!%20Em%20breve%20entraremos%20em%20contato.';
+        window.location.href = 'https://wa.me/5571981122167?text=' + encodeURIComponent('Eu, ' + (leadData.name || '') + ' finalizei o cadastro');
       }, 1200);
     } catch (err) {
       console.error(err); alert("Erro ao enviar cadastro. Tente novamente.");
@@ -548,7 +548,7 @@
 
       btn.style.display = 'none'; successMsg.style.display = 'block';
       setTimeout(() => {
-        window.location.href = 'https://wa.me/5571981122167?text=Cadastro%20finalizado!%20Em%20breve%20entraremos%20em%20contato.';
+        window.location.href = 'https://wa.me/5571981122167?text=' + encodeURIComponent('Eu, ' + (leadData.name || '') + ' finalizei o cadastro');
       }, 1200);
     } catch (err) {
       console.error(err); alert("Erro ao enviar cadastro. Tente novamente.");
