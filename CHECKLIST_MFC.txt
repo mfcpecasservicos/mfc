@@ -189,9 +189,11 @@ Não é possível forçar um diretório padrão no seletor de arquivos do navega
 
 ATUALIZAÇÃO MFC v107
 
-[x] Index: badge de status "Orçamento enviado" (aguardando aprovação), dentro da tela de detalhe da visita, agora é clicável — ao tocar, copia mensagem pronta de acompanhamento com saudação (Bom dia/Boa tarde conforme horário) e nome do cliente.
+[x] CORREÇÃO: a função de copiar mensagem de acompanhamento (clique no badge "Aguardando aprovação") foi implementada por engano no index.html (técnico) na primeira tentativa. Corrigido: a função está agora no gestor.html, badge do cabeçalho do detalhe da visita (head-badge), que é onde o status "Aguardando aprovação" realmente aparece. index.html voltou ao estado original do v106.
 
-[x] Cadastro: mensagem automática de redirecionamento para WhatsApp após finalizar cadastro (cliente e empresa) agora é dinâmica — "Eu, {Nome completo do cliente ou da empresa} finalizei o cadastro" — no lugar do texto fixo anterior.
+[x] Gestor: badge "Aguardando aprovação" no cabeçalho do detalhe da visita agora é clicável — ao tocar, copia mensagem pronta de acompanhamento com saudação (Bom dia/Boa tarde conforme horário) e nome do cliente. Funciona no carregamento inicial do detalhe, ao trocar de aba entre relatórios, e é desativado automaticamente na aba Concluídos.
+
+[x] Cadastro: mensagem automática enviada ao WhatsApp ao finalizar o cadastro (formulário Cliente e formulário Empresa) trocada de texto fixo para dinâmica — "Eu, {Nome completo do cliente ou da empresa} finalizei o cadastro".
 
 [x] Service-worker atualizado para mfc-tecnico-v107.
 
