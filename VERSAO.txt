@@ -1,3 +1,21 @@
+MFC v109
+
+Última alteração — AJUSTES DE COBRANÇA E LAYOUT
+
+Cadastro.html: removido o aviso amarelo "Visita em Dias D'Ávila são R$ 10,00" — não fazia mais sentido, visitas em Dias D'Ávila passaram a ser gratuitas. O aviso de reembolso por serviço descartado foi mantido.
+
+Cadastro.html: legenda abaixo do switch "Dias D'ávila?" atualizada para "Visita em Dias D'Ávila é gratuita. Outras cidades ou municípios, consulte o valor pelo WhatsApp." (era o texto antigo de R$ 10,00).
+
+Cadastro.html: lógica do switch "Dias D'ávila?" invertida — antes o padrão (sem tocar) já vinha marcado como "Sim, resido em Dias D'Ávila", e só ao acionar o switch é que aparecia "Outro município — qual?". Agora é o contrário: o padrão (sem tocar, switch desligado/cinza) é "Não resido em Dias D'Ávila", com o campo "Qual cidade?" já visível; ao acionar o switch (ligado/verde) é que vira "Sim, resido em Dias D'Ávila". Validação do formulário e gravação da cidade final (finalCity) não precisaram mudar — continuam corretas com a nova lógica.
+
+Gestor: removidos os painéis "Pagamento" (Pago/Restante/Total com barra de progresso) e "Datas importantes" (Data da visita/Data do serviço) do card de detalhe da visita — pedido do usuário.
+
+Cache atualizado para mfc-tecnico-v109.
+
+Regra
+
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
 MFC v108
 
 Última alteração — CORREÇÃO + FUNÇÕES NOVAS

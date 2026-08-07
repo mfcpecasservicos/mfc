@@ -148,14 +148,13 @@
   </div>
 
   <form id="lead-form-cliente" style="display:none">
-    <div class="fee-notice"><i class="fa-solid fa-circle-info"></i><div><strong>Visita em Dias D'Ávila são R$ 10,00</strong><span>Outras regiões, por favor consultar no WhatsApp.</span></div></div>
     <div class="fee-notice"><i class="fa-solid fa-circle-info"></i><div><strong>Reembolso em caso de serviço descartado</strong><span>Se o técnico descartar o serviço no momento da visita, o valor da visita é reembolsado, caso o cliente já tenha pago adiantado.</span></div></div>
     <div class="card"><label>👤 Nome completo <span class="req">*</span></label><input type="text" id="f-nome" required placeholder="Seu nome completo"></div>
     <div class="card"><label>📞 Número de contato <span class="req">*</span></label><input type="tel" id="f-telefone" required placeholder="71 9 0000-0000" maxlength="15" inputmode="tel"></div>
     <div class="card"><label>✉️ E-mail</label><input type="email" id="f-email" placeholder="seu@email.com (opcional)"></div>
-    <div class="card"><label>📍 Dias D'ávila? <span class="req">*</span></label><p class="hint">Visita em Dias D'Ávila R$ 10,00.</p>
-      <div class="switch-row" id="sw-cidade" onclick="toggleCidadeSwitch()"><span class="sw-label" id="sw-cidade-label">Sim, resido em Dias D'Ávila</span><div class="sw-track"></div></div>
-      <input type="text" id="f-cidade-outro" placeholder="Qual cidade?">
+    <div class="card"><label>📍 Dias D'ávila? <span class="req">*</span></label><p class="hint">Visita em Dias D'Ávila é gratuita. Outras cidades ou municípios, consulte o valor pelo WhatsApp.</p>
+      <div class="switch-row" id="sw-cidade" onclick="toggleCidadeSwitch()"><span class="sw-label" id="sw-cidade-label">Não resido em Dias D'Ávila</span><div class="sw-track"></div></div>
+      <input type="text" id="f-cidade-outro" placeholder="Qual cidade?" style="display:block">
     </div>
     <div class="card"><label>🏠 Endereço <span class="req">*</span></label><input type="text" id="f-endereco" required placeholder="Rua, avenida, travessa..."></div>
     <div class="card"><label>🔢 Número da residência <span class="req">*</span></label><input type="text" id="f-numero" required placeholder="Ex: 123, S/N"></div>
@@ -266,7 +265,7 @@
     const greetEl = document.getElementById('type-greeting');
     if (greetEl) greetEl.textContent = h < 12 ? 'Bom dia!' : h < 18 ? 'Boa tarde!' : 'Boa noite!';
   })();
-  let cidadeSwitchOn = true; // true = "Sim, resido em Dias D'Ávila"
+  let cidadeSwitchOn = false; // true = "Sim, resido em Dias D'Ávila"
 
   window.selectType = (tipo) => {
     tipoCadastro = tipo;
@@ -391,13 +390,13 @@
     const row = document.getElementById('sw-cidade');
     const label = document.getElementById('sw-cidade-label');
     const inputOutro = document.getElementById('f-cidade-outro');
-    row.classList.toggle('on', !cidadeSwitchOn);
+    row.classList.toggle('on', cidadeSwitchOn);
     if (cidadeSwitchOn) {
       label.textContent = "Sim, resido em Dias D'Ávila";
       inputOutro.style.display = 'none';
       inputOutro.value = '';
     } else {
-      label.textContent = 'Outro município — qual?';
+      label.textContent = "Não resido em Dias D'Ávila";
       inputOutro.style.display = 'block';
       setTimeout(() => inputOutro.focus(), 80);
     }
