@@ -189,6 +189,8 @@ Não é possível forçar um diretório padrão no seletor de arquivos do navega
 
 ATUALIZAÇÃO MFC v107
 
+[x] AJUSTE: ordenação da lista de visitas (index.html e gestor.html) corrigida para regra composta: dia decrescente (dia mais recente no topo, igual já era) + horário crescente dentro do mesmo dia (mais cedo no topo). "Data a definir" continua com prioridade máxima no topo.
+
 [x] CORREÇÃO: ordenação da lista de visitas (index.html e gestor.html) estava decrescente (horário mais tarde no topo). Corrigido para crescente (horário mais cedo no topo), conforme regra já documentada no checklist.
 
 [x] CORREÇÃO: a função de copiar mensagem de acompanhamento (clique no badge "Aguardando aprovação") foi implementada por engano no index.html (técnico) na primeira tentativa. Corrigido: a função está agora no gestor.html, badge do cabeçalho do detalhe da visita (head-badge), que é onde o status "Aguardando aprovação" realmente aparece. index.html voltou ao estado original do v106.
