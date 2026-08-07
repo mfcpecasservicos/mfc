@@ -187,7 +187,9 @@ NOTA TÉCNICA — Upload de imagens (item 3 solicitado):
 Não é possível forçar um diretório padrão no seletor de arquivos do navegador via código. Essa é uma restrição de segurança do browser (Chrome/Edge/Firefox) que impede sites de pré-selecionar pastas do sistema operacional. Isso não é um bug do app — é um limite da Web Platform.
 
 
-ATUALIZAÇÃO MFC v107
+ATUALIZAÇÃO MFC v108
+
+[x] REMOÇÃO: stepper visual "Aprovação → Para executar → Concluído → Pago" removido da tela de detalhe da visita no gestor.html (função timelineHtml, chamada no template, CSS .timeline/.tl-*). Puramente estético, sem uso funcional — remoção pedida pelo usuário.
 
 [x] AJUSTE: ordenação da lista de visitas (index.html e gestor.html) corrigida para regra composta: dia decrescente (dia mais recente no topo, igual já era) + horário crescente dentro do mesmo dia (mais cedo no topo). "Data a definir" continua com prioridade máxima no topo.
 
@@ -199,7 +201,7 @@ ATUALIZAÇÃO MFC v107
 
 [x] Cadastro: mensagem automática enviada ao WhatsApp ao finalizar o cadastro (formulário Cliente e formulário Empresa) trocada de texto fixo para dinâmica — "Eu, {Nome completo do cliente ou da empresa} finalizei o cadastro".
 
-[x] Service-worker atualizado para mfc-tecnico-v107.
+[x] Service-worker atualizado para mfc-tecnico-v108.
 
 ATUALIZAÇÃO MFC v106
 [x] BUGFIX: layerMainDate (gestor) e layerDate (index) — status 'approved' agora prioriza l.approval.serviceDate sobre l.statusAt. Só cai pro statusAt se a data do serviço ainda não foi definida.
