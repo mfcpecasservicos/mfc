@@ -2,6 +2,8 @@ MFC v107
 
 Última alteração — CORREÇÃO + FUNÇÕES NOVAS
 
+CORREÇÃO: ordem das visitas (index.html e gestor.html) estava mostrando os horários mais tarde no topo (decrescente). Invertido para o padrão correto: horário mais cedo no topo, mais tarde embaixo (crescente), igual descrito no checklist ("do menor para o maior").
+
 CORREÇÃO: a função de copiar mensagem de acompanhamento pedida pelo usuário tinha sido implementada por engano no index.html (tela do técnico). O status "Aguardando aprovação" mostrado pelo usuário é do gestor.html (badge do cabeçalho do detalhe da visita, tela do gestor). index.html foi revertido ao estado original do v106; a função foi refeita no gestor.html.
 
 Gestor: badge "Aguardando aprovação" no cabeçalho do detalhe da visita (id head-badge-{clientId}) agora é clicável. Ao tocar, copia para a área de transferência: saudação (Bom dia, se antes de 12h, ou Boa tarde, se depois) + Sr(a). + nome do cliente + pergunta sobre posição do orçamento. Funciona no carregamento inicial do detalhe e ao trocar entre abas de relatório (showVTab); é desativado automaticamente ao abrir a aba Concluídos.

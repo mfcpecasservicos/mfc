@@ -189,6 +189,8 @@ Não é possível forçar um diretório padrão no seletor de arquivos do navega
 
 ATUALIZAÇÃO MFC v107
 
+[x] CORREÇÃO: ordenação da lista de visitas (index.html e gestor.html) estava decrescente (horário mais tarde no topo). Corrigido para crescente (horário mais cedo no topo), conforme regra já documentada no checklist.
+
 [x] CORREÇÃO: a função de copiar mensagem de acompanhamento (clique no badge "Aguardando aprovação") foi implementada por engano no index.html (técnico) na primeira tentativa. Corrigido: a função está agora no gestor.html, badge do cabeçalho do detalhe da visita (head-badge), que é onde o status "Aguardando aprovação" realmente aparece. index.html voltou ao estado original do v106.
 
 [x] Gestor: badge "Aguardando aprovação" no cabeçalho do detalhe da visita agora é clicável — ao tocar, copia mensagem pronta de acompanhamento com saudação (Bom dia/Boa tarde conforme horário) e nome do cliente. Funciona no carregamento inicial do detalhe, ao trocar de aba entre relatórios, e é desativado automaticamente na aba Concluídos.
