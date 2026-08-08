@@ -1,3 +1,21 @@
+MFC v110
+
+Última alteração — CORREÇÃO DA V109 + AJUSTE DE LAYOUT
+
+Cadastro.html: revertida a inversão errada da v109 no switch "Dias D'ávila?". Voltou ao comportamento correto pedido pelo usuário: por padrão (sem tocar no switch), já consta "Sim, resido em Dias D'Ávila" — nenhuma ação necessária pro caso mais comum. Só ao acionar o switch é que aparece "Não, não resido em Dias D'Ávila", revelando o campo "Qual cidade?" junto com o aviso "Haverá taxa para visitas fora de Dias D'Ávila, por favor consultar no WhatsApp." (novo texto, some quando volta pro estado padrão).
+
+Cadastro.html: removido também o aviso amarelo de reembolso por serviço descartado — pedido do usuário, saiu junto com o aviso de R$10 removido na v109.
+
+Cadastro.html: hint fixo abaixo do rótulo "Dias D'ávila?" simplificado para "Visita em Dias D'Ávila é gratuita." — o aviso de taxa para outras cidades agora só aparece quando o cliente indica que não reside em Dias D'Ávila (contextual, não polui a tela pra quem já mora aqui).
+
+Gestor: botão "Fixar visita" saiu de cima do card de detalhe (linha própria) e passou para a mesma linha das abas de relatório ("Relatório 1", "+ Nova visita"), alinhado à direita. Criada função pinBtnHtml(c, li) que gera o botão pro relatório ativo; showVTab atualiza o botão ao trocar de aba; aba Concluídos esconde o botão (não faz sentido fixar um relatório já concluído).
+
+Cache atualizado para mfc-tecnico-v110.
+
+Regra
+
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
 MFC v109
 
 Última alteração — AJUSTES DE COBRANÇA E LAYOUT

@@ -187,6 +187,16 @@ NOTA TÉCNICA — Upload de imagens (item 3 solicitado):
 Não é possível forçar um diretório padrão no seletor de arquivos do navegador via código. Essa é uma restrição de segurança do browser (Chrome/Edge/Firefox) que impede sites de pré-selecionar pastas do sistema operacional. Isso não é um bug do app — é um limite da Web Platform.
 
 
+ATUALIZAÇÃO MFC v110
+
+[x] Cadastro: switch "Dias D'ávila?" corrigido — padrão (sem tocar) volta a ser "Sim, resido em Dias D'Ávila" (reverte inversão errada da v109); ao acionar, mostra "Não, não resido em Dias D'Ávila" + campo "Qual cidade?" + aviso de taxa contextual.
+[x] Cadastro: aviso de reembolso por serviço descartado removido (junto com o de R$10 já removido na v109).
+[x] Cadastro: hint fixo do card "Dias D'ávila?" simplificado; aviso de taxa para outras cidades vira contextual, some/aparece com o switch.
+[x] Gestor: botão "Fixar visita" movido para a mesma linha das abas de relatório (vtabs-row), alinhado à direita via justify-content:space-between; pinBtnHtml(c,li) gera o botão do relatório ativo, showVTab atualiza ao trocar de aba, showDoneTab esconde o botão na aba Concluídos.
+[x] Validado com acorn (gestor.html, cadastro.html, index.html) + balanço de divs.
+[x] CACHE_NAME atualizado: mfc-tecnico-v110
+[x] Service-worker atualizado para mfc-tecnico-v110.
+
 ATUALIZAÇÃO MFC v109
 
 [x] Cadastro: removido o fee-notice "Visita em Dias D'Ávila são R$ 10,00" (visitas em Dias D'Ávila agora são gratuitas); aviso de reembolso por serviço descartado mantido.
