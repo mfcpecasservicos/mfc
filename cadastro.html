@@ -83,14 +83,6 @@
   #form-container.reveal{display:flex;animation:slideUp .5s cubic-bezier(.2,.9,.3,1.1)}
   @keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
 
-  /* ===== Switch (mesmo estilo do painel do gestor) ===== */
-  .switch-row{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#f8fafc;border:1px solid var(--border);border-radius:16px;padding:14px 16px;cursor:pointer}
-  .switch-row .sw-label{font-weight:700;color:#203044;font-size:.96rem}
-  .sw-track{width:50px;height:28px;border-radius:16px;background:#cbd5e1;position:relative;transition:.2s;flex-shrink:0}
-  .sw-track::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 2px 4px rgba(0,0,0,.2)}
-  .switch-row.on .sw-track{background:var(--success)}
-  .switch-row.on .sw-track::after{left:25px}
-
   /* ===== Aviso de cobrança (cliente) ===== */
   .fee-notice{background:#fff8cc;border:1px solid #fde047;border-radius:18px;padding:15px 16px;display:flex;gap:12px;align-items:flex-start}
   .fee-notice i{color:#a16207;font-size:1.3rem;margin-top:2px}
@@ -151,8 +143,11 @@
     <div class="card"><label>👤 Nome completo <span class="req">*</span></label><input type="text" id="f-nome" required placeholder="Seu nome completo"></div>
     <div class="card"><label>📞 Número de contato <span class="req">*</span></label><input type="tel" id="f-telefone" required placeholder="71 9 0000-0000" maxlength="15" inputmode="tel"></div>
     <div class="card"><label>✉️ E-mail</label><input type="email" id="f-email" placeholder="seu@email.com (opcional)"></div>
-    <div class="card"><label>📍 Dias D'ávila? <span class="req">*</span></label><p class="hint">Visita em Dias D'Ávila é gratuita.</p>
-      <div class="switch-row" id="sw-cidade" onclick="toggleCidadeSwitch()"><span class="sw-label" id="sw-cidade-label">Sim, resido em Dias D'Ávila</span><div class="sw-track"></div></div>
+    <div class="card"><label>📍 Reside em Dias D'Ávila? <span class="req">*</span></label><p class="hint">Visita em Dias D'Ávila é gratuita.</p>
+      <div class="radio-group" id="rg-cidade">
+        <label class="radio-lbl"><input type="radio" name="reside-dv" id="rd-cidade-sim" value="sim" checked> Sim, resido em Dias D'Ávila</label>
+        <label class="radio-lbl"><input type="radio" name="reside-dv" id="rd-cidade-nao" value="nao"> Não, não resido em Dias D'Ávila</label>
+      </div>
       <p class="hint" id="sw-cidade-taxa-hint" style="display:none">Haverá taxa para visitas fora de Dias D'Ávila, por favor consultar no WhatsApp.</p>
       <input type="text" id="f-cidade-outro" placeholder="Qual cidade?">
     </div>
@@ -385,25 +380,22 @@
     if (el) el.addEventListener('blur', applyTextStandardsEmpresa);
   });
 
-  window.toggleCidadeSwitch = () => {
-    cidadeSwitchOn = !cidadeSwitchOn;
-    const row = document.getElementById('sw-cidade');
-    const label = document.getElementById('sw-cidade-label');
+  window.updateCidadeChoice = () => {
+    cidadeSwitchOn = document.getElementById('rd-cidade-sim').checked;
     const inputOutro = document.getElementById('f-cidade-outro');
     const taxaHint = document.getElementById('sw-cidade-taxa-hint');
-    row.classList.toggle('on', !cidadeSwitchOn);
     if (cidadeSwitchOn) {
-      label.textContent = "Sim, resido em Dias D'Ávila";
       inputOutro.style.display = 'none';
       inputOutro.value = '';
       taxaHint.style.display = 'none';
     } else {
-      label.textContent = "Não, não resido em Dias D'Ávila";
       inputOutro.style.display = 'block';
       taxaHint.style.display = 'block';
       setTimeout(() => inputOutro.focus(), 80);
     }
   };
+  document.getElementById('rd-cidade-sim').addEventListener('change', updateCidadeChoice);
+  document.getElementById('rd-cidade-nao').addEventListener('change', updateCidadeChoice);
 
   let acessoSwitchOn = false; // true = portaria exige registro de acesso do técnico
   window.setAcesso = (val) => {

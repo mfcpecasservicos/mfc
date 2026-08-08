@@ -1,3 +1,26 @@
+MFC v111
+
+Última alteração — REFATORAÇÃO DO CAMPO "DIAS D'ÁVILA?"
+
+Cadastro.html: campo "Dias D'ávila?" deixou de ser switch com texto dinâmico e virou radio buttons simples (Sim/Não), estrutura pedida pelo usuário por ser mais clara que o switch (que gerava confusão de lógica invertida mesmo depois de corrigido).
+
+- Rótulo: "Reside em Dias D'Ávila?"
+- Texto fixo de apoio: "Visita em Dias D'Ávila é gratuita."
+- "Sim" (padrão, já marcado): oculta aviso de taxa e campo de cidade.
+- "Não": exibe o aviso "Haverá taxa para visitas fora de Dias D'Ávila, por favor consultar no WhatsApp." e o campo "Qual cidade?" (obrigatório nesse caso).
+
+Função toggleCidadeSwitch() removida, substituída por updateCidadeChoice() ligada ao evento change dos dois radios. Variável cidadeSwitchOn mantida (para não quebrar validação do submit e cálculo de finalCity), só passou a ser atualizada a partir do estado do radio "Sim" em vez do clique no switch.
+
+CSS morto do switch antigo (.switch-row, .sw-track, .sw-label) removido — usava o mesmo estilo de .radio-group/.radio-lbl que já existia no arquivo (usado por outras telas), então zero CSS novo precisou ser criado.
+
+Visual geral do formulário preservado — radio buttons usam o mesmo componente visual (.radio-group/.radio-lbl) já padrão no restante do cadastro.
+
+Cache atualizado para mfc-tecnico-v111.
+
+Regra
+
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
 MFC v110
 
 Última alteração — CORREÇÃO DA V109 + AJUSTE DE LAYOUT

@@ -187,6 +187,16 @@ NOTA TÉCNICA — Upload de imagens (item 3 solicitado):
 Não é possível forçar um diretório padrão no seletor de arquivos do navegador via código. Essa é uma restrição de segurança do browser (Chrome/Edge/Firefox) que impede sites de pré-selecionar pastas do sistema operacional. Isso não é um bug do app — é um limite da Web Platform.
 
 
+ATUALIZAÇÃO MFC v111
+
+[x] Cadastro: campo "Dias D'ávila?" trocado de switch (toggleCidadeSwitch) para radio buttons (rd-cidade-sim/rd-cidade-nao), rótulo "Reside em Dias D'Ávila?".
+[x] Cadastro: "Sim" (padrão marcado) esconde aviso de taxa + campo cidade; "Não" mostra ambos. Lógica em updateCidadeChoice(), ligada via addEventListener('change') nos dois radios.
+[x] Cadastro: cidadeSwitchOn preservada como variável de estado (compatibilidade com validação do submit e cálculo de finalCity) — passou a refletir o estado do radio "Sim".
+[x] Cadastro: CSS morto do switch antigo (.switch-row/.sw-track/.sw-label) removido; radios reutilizam .radio-group/.radio-lbl já existentes no arquivo, sem CSS novo.
+[x] Validado com acorn + balanço de divs.
+[x] CACHE_NAME atualizado: mfc-tecnico-v111
+[x] Service-worker atualizado para mfc-tecnico-v111.
+
 ATUALIZAÇÃO MFC v110
 
 [x] Cadastro: switch "Dias D'ávila?" corrigido — padrão (sem tocar) volta a ser "Sim, resido em Dias D'Ávila" (reverte inversão errada da v109); ao acionar, mostra "Não, não resido em Dias D'Ávila" + campo "Qual cidade?" + aviso de taxa contextual.
