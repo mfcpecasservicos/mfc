@@ -1,3 +1,21 @@
+MFC v112
+
+Última alteração — REPOSICIONAMENTO DO FILTRO
+
+Gestor: botão "Filtro" (dropdown com status: Todos, Aguardando visita, Aprovado, etc.) saiu da barra de busca ("Buscar clientes existentes...") e virou um ícone compacto ao lado do título "Visitas", no list-head, mesma posição indicada na captura de tela do usuário.
+
+- Removido o filter-wrap antigo de dentro de home-search-row (homeHtml()) — a barra de busca agora ocupa a linha sozinha.
+- Criada função filterIconHtml() que gera o botão-ícone (só o ícone de filtro, sem texto "Filtro" nem seta) + o menu dropdown, reaproveitando o mesmo array FILTERS e função setFilter() já existentes — nenhuma lógica de filtro foi duplicada ou reescrita.
+- render() agora injeta filterIconHtml() dentro de #list-filter-wrap sempre que a lista de Visitas é (re)desenhada, inclusive ao trocar de Financeiro para Visitas.
+- Nova classe CSS .filter-btn-icon (botão circular 34x34, ícone centralizado) sem alterar o .filter-btn original (ainda usado por outras telas, se houver).
+- View "Financeiro" não ganhou o ícone de filtro (ela nunca teve esse filtro de status, segue só com o botão "Gerar PDF").
+
+Cache atualizado para mfc-tecnico-v112.
+
+Regra
+
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
 MFC v111
 
 Última alteração — REFATORAÇÃO DO CAMPO "DIAS D'ÁVILA?"

@@ -123,6 +123,7 @@ button{font-family:inherit}
 .filter-wrap{position:relative}
 .filter-btn{height:50px;padding:0 20px;border-radius:26px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-weight:800;font-size:.9rem;cursor:pointer;display:flex;align-items:center;gap:8px}
 .filter-btn:hover{color:var(--text);background:var(--surface2)}
+.filter-btn-icon{height:34px;width:34px;padding:0;border-radius:50%;justify-content:center;font-size:.95rem}
 .filter-menu{position:absolute;right:0;top:calc(100% + 6px);background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:8px;display:none;flex-direction:column;gap:4px;z-index:90;min-width:240px;box-shadow:var(--shadow)}
 .filter-menu.open{display:flex}
 .filter-menu button{background:transparent;border:none;color:var(--muted);text-align:left;padding:9px 11px;border-radius:8px;font-size:.83rem;font-weight:700;cursor:pointer}
@@ -331,7 +332,7 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 
   <!-- ===== LIST COLUMN ===== -->
   <section class="list-col" id="list-col">
-    <div class="list-head"><h1 id="list-title">Visitas</h1></div>
+    <div class="list-head"><h1 id="list-title">Visitas</h1><div class="filter-wrap" id="list-filter-wrap"></div></div>
     <div class="list-scroll">
       <div class="clist" id="clist"></div>
       <div class="pagination" id="pagination"></div>
@@ -726,7 +727,7 @@ window.switchView=v=>{
   document.getElementById('view-fin').style.display=v==='fin'?'block':'none';
   document.getElementById('view-leads').style.display=v==='leads'?'block':'none';
   document.getElementById('view-trash').style.display=v==='trash'?'block':'none';
-  if(v==='fin')renderFin();else{document.querySelector('.list-head').innerHTML='<h1 id="list-title">Visitas</h1>';render()}
+  if(v==='fin')renderFin();else{document.querySelector('.list-head').innerHTML='<h1 id="list-title">Visitas</h1><div class="filter-wrap" id="list-filter-wrap"></div>';render()}
 };
 window.goHome=()=>{selectedId=null;render()};
 window.toggleListCol=()=>{
@@ -811,11 +812,13 @@ function pagsOf(l){const a=l?.approval;if(Array.isArray(a?.pagamentos)&&a.pagame
 /* ===== FILTER MENU ===== */
 const FILTERS=[['all','<i class="fa-solid fa-clipboard"></i> Todos (ativos)'],['waiting','<i class="fa-regular fa-clock"></i> Aguardando visita'],['workshop_pending','<i class="fa-solid fa-industry"></i> Aguardando Avaliação'],['evaluated','<i class="fa-solid fa-check"></i> Avaliação concluída'],['quoted','<i class="fa-solid fa-sack-dollar"></i> Aguardando aprovação'],['approved','<i class="fa-solid fa-circle" style="color:#f97316"></i> Aprovado'],['ready_delivery','<i class="fa-solid fa-box"></i> Pronto para entrega'],['service_finished','<i class="fa-solid fa-check"></i> Serviço finalizado'],['absent','<i class="fa-solid fa-ban"></i> Cliente ausente'],['discarded','<i class="fa-solid fa-trash-can"></i> Serviço descartado'],['done','<i class="fa-solid fa-check"></i> Concluídos']];
 window.setFilter=f=>{filter=f;page=1;document.getElementById('filter-menu')?.classList.remove('open');render()};
+function filterIconHtml(){return `<button class="filter-btn filter-btn-icon" title="Filtro" onclick="document.getElementById('filter-menu').classList.toggle('open')"><i class="fa-solid fa-filter"></i></button><div class="filter-menu" id="filter-menu">${FILTERS.map(([f,l])=>`<button class="${filter===f?'active':''}" onclick="setFilter('${f}')">${l}</button>`).join('')}</div>`}
 
 /* ===== LIST RENDER ===== */
 function render(){
   if(view==='fin'){renderFin();return}
   document.getElementById('list-title').textContent='Visitas';
+  const lfw=document.getElementById('list-filter-wrap');if(lfw)lfw.innerHTML=filterIconHtml();
   const uiState=captureGestorUiState();
   const list=document.getElementById('clist');
   let clients=all.filter(c=>!c.deleted);
@@ -883,7 +886,6 @@ function homeHtml(){
     </div>
     <div class="home-search-row">
       <div class="home-search"><span class="si"><i class="fa-solid fa-magnifying-glass"></i></span><input id="home-search-input" placeholder="Buscar clientes existentes..." oninput="homeSearch(this.value)" autocomplete="off"><div class="home-results" id="home-results"></div></div>
-      <div class="filter-wrap"><button class="filter-btn" onclick="document.getElementById('filter-menu').classList.toggle('open')"><i class="fa-solid fa-chevron-down"></i> Filtro</button><div class="filter-menu" id="filter-menu">${FILTERS.map(([f,l])=>`<button class="${filter===f?'active':''}" onclick="setFilter('${f}')">${l}</button>`).join('')}</div></div>
     </div>
   </div>`;
 }
