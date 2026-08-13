@@ -8,7 +8,7 @@ messaging.onBackgroundMessage(payload=>{
   self.registration.showNotification(title,{body,icon:'./icon-192.png',badge:'./icon-192.png'});
 });
 
-const CACHE_NAME = 'mfc-tecnico-v112';
+const CACHE_NAME = 'mfc-tecnico-v115';
 const APP_SHELL = [
   './',
   './index.html',

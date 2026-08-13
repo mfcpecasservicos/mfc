@@ -65,7 +65,9 @@ button{font-family:inherit}
 .vcard .vc-top{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px}
 .vc-info{min-width:0}.vc-type-row{display:flex;align-items:center;gap:7px;margin-bottom:3px}.vc-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;background:var(--sc);box-shadow:0 0 14px 2px color-mix(in oklch,var(--sc) 80%,transparent)}.vc-type{font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
 .vcard .vc-name{font-weight:600;font-size:.94rem;min-width:0;line-height:1.35;word-break:break-word}
-.vc-status-row{display:flex;justify-content:flex-start;margin-top:8px}
+.vc-status-row{display:flex;justify-content:flex-start;flex-wrap:wrap;gap:6px;margin-top:8px}
+.rep-chip{display:inline-flex;align-items:center;gap:4px}
+.rep-num{font-size:.62rem;font-weight:800;padding:3px 6px;border-radius:999px;background:var(--surface2);color:var(--muted);letter-spacing:.03em;flex-shrink:0}
 .vc-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
 .day-head{display:flex;align-items:center;gap:10px;font-size:.62rem;font-weight:800;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;margin:14px 0 4px}
 .day-head::after{content:'';flex:1;height:1px;background:color-mix(in oklch,var(--border) 60%,transparent)}
@@ -835,6 +837,11 @@ function render(){
   let listHtml='',lastDay=null;
   pageClients.forEach(c=>{
     const status=displayStatus(c);
+    const statusBadges=c.status==='discarded'
+      ? `<span class="sbadge ${badgeCls.discarded}">${lbl('discarded')}</span>`
+      : (()=>{const act=getLayers(c).filter(l=>!l.done);return act.length
+          ? act.map((l,idx)=>{const s=l.status||'waiting';const num=act.length>1?`<span class="rep-num">R${idx+1}</span>`:'';return `<span class="rep-chip">${num}<span class="sbadge ${badgeCls[s]||'sw'}">${lbl(s)}</span></span>`}).join('')
+          : `<span class="sbadge ${badgeCls.done}">${lbl('done')}</span>`})();
     const dk=gDayKey(mainDate(c));
     if(dk!==lastDay){listHtml+=`<div class="day-head"><span>${dk}</span></div>`;lastDay=dk}
     const hh=gHourOf(mainDate(c));
@@ -853,7 +860,7 @@ function render(){
     const sc=STATUS_COLOR[status]||STATUS_COLOR.waiting;
     listHtml+=`<div class="vcard ${selectedId===c.id?'selected':''}" style="--sc:${sc}" onclick="selectClient('${c.id}')">
       <div class="vc-top"><div class="vc-info"><div class="vc-type-row"><span class="vc-dot"></span><span class="vc-type">${c.companyMode||c.type==='company'?'Empresa':'Cliente'}</span></div><div class="vc-name">${c.name||'—'}${(c.companyMode||c.type==='company')&&c.requester?` (${c.requester})`:''}</div></div><span class="vc-chevron">›</span></div>
-      <div class="vc-status-row"><span class="sbadge ${badgeCls[status]||'sw'}">${lbl(status)}</span></div>
+      <div class="vc-status-row">${statusBadges}</div>
       ${chips.length?`<div class="vc-chips">${chips.map(x=>x.h).join('')}</div>`:''}
     </div>`;
   });

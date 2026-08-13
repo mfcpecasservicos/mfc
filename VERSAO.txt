@@ -1,3 +1,55 @@
+MFC v115
+
+Última alteração — IDENTIFICAÇÃO DO RELATÓRIO NOS BADGES DE STATUS
+
+Gestor e Index: cada badge de status nos cards agora vem acompanhado de um selo curto "R1", "R2" etc. indicando a qual relatório aquele status pertence — só aparece quando o cliente tem mais de 1 relatório ativo (com 1 relatório só, sem selo, pra não poluir à toa). Numeração segue a mesma ordem usada nas abas "Relatório 1/2/3" do detalhe do gestor (só conta relatórios ativos, ignora os concluídos).
+
+Gestor: badges continuam lado a lado (wrap), agora cada um dentro de um .rep-chip com o selo .rep-num na frente.
+
+Index: pedido do usuário pra ficar mais fácil de identificar — .card-status-row virou coluna (um status embaixo do outro) em vez de lado a lado, cada linha com seu .rep-num + badge colorido.
+
+Ideia que considerei e descartei: tooltip ao passar o mouse mostrando o número do relatório — funciona mal em touchscreen (celular não tem hover), por isso optei pelo selo sempre visível.
+
+Cache atualizado para mfc-tecnico-v115.
+
+Regra
+
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
+MFC v114
+
+Última alteração — MÚLTIPLOS STATUS NO CARD (INDEX/TÉCNICO)
+
+Index.html: mesma mudança da v113 (gestor), agora aplicada no app do técnico. Card do cliente na lista principal mostra um badge de status para cada relatório ativo, não só o status representativo único.
+
+- STATUS_COLOR (já existente no arquivo) usado para colorir cada badge individualmente via style="--sc:..." inline — como a var --sc normalmente é herdada do card inteiro (cor única), cada badge agora recebe sua própria cor sobrescrevendo a herança, sem precisar mexer no CSS de cores.
+- Lista já filtra clientes com status "discarded" e clientes sem nenhuma camada ativa antes de chegar no card, então não foi necessário replicar esse tratamento aqui (diferente do gestor, que lista tudo).
+- .card-status-row virou flex-wrap com gap pra comportar múltiplos badges.
+- Cor da borda lateral do card (--sc no nível do card) segue vindo do status representativo (s=st(getStatus(c))), inalterado.
+
+Cache atualizado para mfc-tecnico-v114.
+
+Regra
+
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
+MFC v113
+
+Última alteração — MÚLTIPLOS STATUS NO CARD DO CLIENTE
+
+Gestor: card do cliente na lista de Visitas agora mostra um badge de status para CADA relatório/visita ativo (não concluído), em vez de mostrar só um status representativo. Se o cliente tem 2 relatórios em andamento com status diferentes (ex: "Aguardando avaliação" e "Aprovado"), os dois badges aparecem lado a lado no card.
+
+- Cliente com "Serviço descartado" continua mostrando só o badge de descartado (não muda).
+- Cliente sem nenhum relatório ativo (todos concluídos) mostra o badge "Concluído".
+- vc-status-row virou flex-wrap com gap, pra comportar vários badges sem quebrar o layout do card.
+- A cor da borda lateral do card (--sc) continua vindo de displayStatus(c) (prioridade/pin), não mudou — só os badges de texto que agora refletem todos os relatórios ativos.
+
+Cache atualizado para mfc-tecnico-v113.
+
+Regra
+
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
 MFC v112
 
 Última alteração — REPOSICIONAMENTO DO FILTRO
