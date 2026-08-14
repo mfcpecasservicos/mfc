@@ -1,3 +1,15 @@
+MFC v117
+
+Última alteração — CAMPO DE RELATÓRIO MAIOR (INDEX)
+
+Index (técnico): min-height do .report-textarea aumentado de 140px para 260px — campo nasce bem maior desde o início, antes mesmo de digitar. Auto-crescimento (autoGrowTA) continua funcionando normalmente por cima disso, aumentando ainda mais se o texto passar do tamanho inicial.
+
+Cache atualizado para mfc-tecnico-v117.
+
+Regra
+
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
 MFC v116
 
 Última alteração — 3 CORREÇÕES: LIXEIRA, CAMPO DE RELATÓRIO E FORMATAÇÃO
