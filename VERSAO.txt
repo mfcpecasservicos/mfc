@@ -1,3 +1,15 @@
+MFC v119
+
+Última alteração — CORREÇÃO REAL DO TAMANHO DO CAMPO RELATÓRIO
+
+Index (técnico): corrigido o bug de especificidade CSS que estava impedindo o aumento do campo Relatório funcionar nas versões v117/v118. A textarea fica dentro de uma <div class="fg">, e a regra genérica ".fg textarea{min-height:72px}" (2 seletores = mais específica) sempre vencia ".report-textarea{min-height:420px}" (1 seletor), não importa o valor que eu colocasse ali — por isso parecia que nada mudava. Seletor corrigido para ".fg textarea.report-textarea{min-height:420px;resize:none;overflow:hidden}", que agora é mais específico que a regra genérica e realmente prevalece.
+
+Cache atualizado para mfc-tecnico-v119.
+
+Regra
+
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
 MFC v118
 
 Última alteração — RELATÓRIO GIGANTE + AUTO-UPDATE DO APP
