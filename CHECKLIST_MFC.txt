@@ -187,6 +187,13 @@ NOTA TÉCNICA — Upload de imagens (item 3 solicitado):
 Não é possível forçar um diretório padrão no seletor de arquivos do navegador via código. Essa é uma restrição de segurança do browser (Chrome/Edge/Firefox) que impede sites de pré-selecionar pastas do sistema operacional. Isso não é um bug do app — é um limite da Web Platform.
 
 
+ATUALIZAÇÃO MFC v120
+
+[x] Index: .fg textarea.report-textarea min-height 420px → 210px (usuário confirmou que 420 ficou grande demais).
+[x] Validado com acorn + balanço de divs.
+[x] CACHE_NAME atualizado: mfc-tecnico-v120
+[x] Service-worker atualizado para mfc-tecnico-v120.
+
 ATUALIZAÇÃO MFC v119
 
 [x] Index: bug de especificidade CSS corrigido — ".fg textarea{min-height:72px}" (specificity 0,1,1) vencia ".report-textarea{min-height:420px}" (specificity 0,1,0) independente do valor setado nas v117/v118, por isso o campo nunca mudava de tamanho de fato.

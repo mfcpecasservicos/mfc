@@ -1,3 +1,15 @@
+MFC v120
+
+Última alteração — AJUSTE FINO DO TAMANHO DO RELATÓRIO
+
+Index (técnico): 420px estava grande demais (usuário confirmou por print). Reduzido pela metade: min-height 420px → 210px. Continua bem maior que o original (72px) e continua crescendo sozinho (autoGrowTA) se o texto passar disso.
+
+Cache atualizado para mfc-tecnico-v120.
+
+Regra
+
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
 MFC v119
 
 Última alteração — CORREÇÃO REAL DO TAMANHO DO CAMPO RELATÓRIO
