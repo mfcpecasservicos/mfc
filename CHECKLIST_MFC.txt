@@ -187,6 +187,15 @@ NOTA TÉCNICA — Upload de imagens (item 3 solicitado):
 Não é possível forçar um diretório padrão no seletor de arquivos do navegador via código. Essa é uma restrição de segurança do browser (Chrome/Edge/Firefox) que impede sites de pré-selecionar pastas do sistema operacional. Isso não é um bug do app — é um limite da Web Platform.
 
 
+ATUALIZAÇÃO MFC v118
+
+[x] Index: .report-textarea min-height 260px → 420px.
+[x] Index: listener 'controllerchange' no navigator.serviceWorker adicionado — quando um SW novo assume controle (skipWaiting+claim já existentes no service-worker.js), a página recarrega automaticamente uma vez (guard swRefreshing evita loop).
+[x] Index: reg.update() no registro do SW mantido (chamado a cada load), garantindo checagem de versão nova toda vez que o app abre.
+[x] Validado com acorn + balanço de divs.
+[x] CACHE_NAME atualizado: mfc-tecnico-v118
+[x] Service-worker atualizado para mfc-tecnico-v118.
+
 ATUALIZAÇÃO MFC v117
 
 [x] Index: .report-textarea min-height 140px → 260px, campo nasce maior; autoGrowTA continua funcionando por cima.

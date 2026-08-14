@@ -1,3 +1,17 @@
+MFC v118
+
+Última alteração — RELATÓRIO GIGANTE + AUTO-UPDATE DO APP
+
+Index (técnico): .report-textarea min-height 260px → 420px. Agora é bem grande já de cara, sem precisar digitar nada pra perceber espaço de sobra.
+
+Index (técnico): app agora se auto-atualiza ao abrir. Antes o service-worker.js já tinha skipWaiting()+clients.claim() na instalação/ativação (ou seja, a nova versão assumia o controle sozinha), mas a aba que já estava aberta continuava rodando o HTML/JS antigo até um F5 manual. Agora, ao detectar que um novo service worker assumiu o controle (evento controllerchange), a página recarrega sozinha uma única vez — assim, toda vez que o técnico abre o app, se tiver versão nova publicada no GitHub, ele já pega a atualizada sem precisar limpar cache ou reinstalar nada.
+
+Cache atualizado para mfc-tecnico-v118.
+
+Regra
+
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
 MFC v117
 
 Última alteração — CAMPO DE RELATÓRIO MAIOR (INDEX)
