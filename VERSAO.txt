@@ -1,3 +1,30 @@
+MFC v121
+
+Última alteração — NOVA FUNÇÃO: SERVIÇO DE GARANTIA
+
+Gestor — nova função "🛡️ Serviço de garantia", com verificação automática de prazo:
+- Regra de prazo: Corretiva e Instalação = 90 dias. Preventiva = 15 dias. Laudo não tem garantia (é só avaliação).
+- Cálculo sempre a partir do último relatório CONCLUÍDO do cliente (concludedAt) — pega o serviço concluído mais recente, soma os dias de garantia do tipo dele, e compara com a data de hoje.
+- Ao clicar no botão de garantia (em qualquer um dos 2 lugares abaixo) e ativá-lo, aparece um popup automático:
+  • Se não houver serviço concluído anterior: avisa que não há nada pra verificar.
+  • Se o último concluído foi um Laudo: avisa que Laudo não tem garantia.
+  • Se dentro do prazo: "✅ Dentro da garantia" com data de conclusão e validade.
+  • Se vencida: "⚠️ GARANTIA VENCIDA" com a data de conclusão e a data em que a garantia expirou.
+
+Onde a função aparece:
+1. Painel "Orçamento e Status" de cada relatório/visita (junto com Equipamento no galpão / Serviço já foi pago / Falta pagar — grid virou 2x2 pra caber os 4 botões).
+2. Caixa "+ Nova Visita" (topo, criação de cliente novo) — inclusive quando o nome+telefone bate com um cliente da lixeira ("restaurar da conclusão"): a checagem busca por nome+telefone em TODOS os clientes (ativos e lixeira), não só na lixeira, pra cobrir o caso mais comum de cliente ainda ativo com serviço concluído recente.
+
+Card do cliente: chip "🛡️ Garantia" aparece quando alguma visita ativa do cliente está marcada como serviço de garantia (mesmo padrão visual dos outros indicadores, cor âmbar pra não confundir com os outros).
+
+Dado técnico: warranty é salvo dentro de layer.approval.warranty (true/false), tanto em relatórios existentes (readLayerForm) quanto em relatórios novos criados via Nova Visita (makeLayer aceita parâmetro warranty).
+
+Cache atualizado para mfc-tecnico-v121.
+
+Regra
+
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
 MFC v120
 
 Última alteração — AJUSTE FINO DO TAMANHO DO RELATÓRIO
