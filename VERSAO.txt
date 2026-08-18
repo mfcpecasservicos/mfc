@@ -1,3 +1,15 @@
+MFC v122
+
+Última alteração — CHIP DE GARANTIA NO INDEX (TÉCNICO)
+
+Index (técnico): card do cliente na lista principal agora também mostra o chip "🛡️ Garantia" (mesma cor âmbar do gestor) quando a visita ativa está marcada como serviço de garantia (l.approval.warranty). Antes só aparecia no gestor.
+
+Cache atualizado para mfc-tecnico-v122.
+
+Regra
+
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
 MFC v121
 
 Última alteração — NOVA FUNÇÃO: SERVIÇO DE GARANTIA
