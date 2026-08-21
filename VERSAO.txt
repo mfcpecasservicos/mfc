@@ -1,3 +1,27 @@
+MFC v123
+
+Última alteração — BOTÃO GARANTIA NA BUSCA DE CLIENTES
+
+Gestor: ao buscar um cliente (busca do topo, "Buscar clientes existentes...") que tenha pelo menos um serviço concluído, aparece um botão "🛡️ Garantia" ao lado de "+ Nova visita" no resultado.
+
+Ao clicar em "Garantia", abre um modal (MODAL GARANTIA / PREVIEW) trazendo tudo do último serviço concluído desse cliente:
+- Telefone, endereço, equipamento
+- Tipo de serviço (Corretiva/Preventiva/Instalação/Laudo)
+- Selo de status: dentro da garantia (verde) / vencida (vermelho) / Laudo sem garantia (neutro) — mesmo cálculo de dias já usado em outros lugares (90 corretiva/instalação, 15 preventiva)
+- Data de conclusão
+- Avaliação do técnico (relatório completo, com formatação preservada)
+- Forma de pagamento usada
+- Fotos anexadas ao relatório (se houver)
+- Imagem do orçamento/print (se houver)
+
+Botão "Iniciar nova visita (garantia)" dentro do modal: fecha o preview, chama o mesmo fluxo de pickClient (preenche o formulário de Nova Visita com os dados do cliente) e já deixa o toggle "Serviço de garantia" ativado — sem alerta duplicado, já que o técnico acabou de ver todas as informações no preview.
+
+Cache atualizado para mfc-tecnico-v123.
+
+Regra
+
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
 MFC v122
 
 Última alteração — CHIP DE GARANTIA NO INDEX (TÉCNICO)
