@@ -50,7 +50,7 @@ Funcionalidades ativas:
 
 
 [x] Botão Ligar sem +55 no link tel:
-[x] Botão Maps usa apenas o endereço do cliente
+[x] Botão Maps usa endereço, número, bairro e cidade do cliente
 [x] Tipo de serviço inclui Corretiva, Preventiva e Instalação
 [x] Ao abrir outro cliente, os campos de avaliação não herdam dados do cliente anterior
 [x] Novo relatório copia o modelo exato do Relatório 1 e permanece editável
@@ -135,8 +135,8 @@ ATUALIZAÇÃO MFC v20
 [x] Service-worker atualizado para mfc-tecnico-v23.
 
 ATUALIZAÇÃO MFC v21
-[x] Gestor: botão Maps usa exclusivamente a caixa de endereço do cliente, ignorando ponto de referência para não atrapalhar a rota.
-[x] Index: botão Maps usa exclusivamente a caixa de endereço do cliente, ignorando ponto de referência para não atrapalhar a rota.
+[x] Gestor: botão Maps usa endereço, número, bairro e cidade do cliente, ignorando apenas o ponto de referência para não atrapalhar a rota.
+[x] Index: botão Maps usa endereço, número, bairro e cidade do cliente, ignorando apenas o ponto de referência para não atrapalhar a rota.
 [x] Service-worker atualizado para mfc-tecnico-v24.
 
 ATUALIZAÇÃO MFC v22
@@ -191,6 +191,7 @@ ATUALIZAÇÃO MFC v124
 
 [x] Gestor: cidade escolhida no cadastro público é preservada ao aprovar o novo cadastro e exibida sempre no bloco "Cidade" dos detalhes do cliente; cadastros antigos sem cidade mostram "Não informada" e podem ser corrigidos em Editar cliente.
 [x] Index: cidade do cliente exibida sempre no bloco "Cidade" dos detalhes para o técnico; cadastros antigos sem cidade mostram "Não informada".
+[x] Gestor/Index: botão Maps inclui a cidade informada pelo cliente junto do endereço, número e bairro na busca da rota.
 [x] Gestor: aprovação do cadastro preserva também e-mail, endereço, número, bairro e descrição em campos separados, conforme o checklist obrigatório.
 [x] Validado com acorn + balanço de divs.
 [x] CACHE_NAME atualizado: mfc-tecnico-v124

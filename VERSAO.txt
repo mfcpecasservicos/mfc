@@ -6,6 +6,8 @@ Gestor: a cidade informada no cadastro público — inclusive "Dias D'Ávila" qu
 
 Index (técnico): o mesmo bloco "Cidade" aparece sempre nos detalhes do cliente, usando os campos city/cidade para manter compatibilidade; cadastros antigos sem a informação mostram "Não informada".
 
+Gestor e Index: o botão Maps agora envia endereço, número, bairro e cidade juntos para a busca da rota. O ponto de referência continua fora da pesquisa para não confundir o mapa.
+
 Checklist obrigatório: a aprovação do novo cadastro também passa a preservar e-mail, endereço, número, bairro e descrição do problema em campos separados, evitando que essas informações sejam perdidas ou agrupadas indevidamente.
 
 Cache atualizado para mfc-tecnico-v124.
