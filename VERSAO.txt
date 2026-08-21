@@ -1,3 +1,46 @@
+MFC v126
+
+Última alteração — ORGANIZAÇÃO DOS RELATÓRIOS DE GARANTIA NO INDEX
+
+Index (técnico): os botões "Ajuste simples" e "Novo relatório / orçamento" foram alinhados horizontalmente com ícones da fonte Font Awesome já incluída no projeto, eliminando a quebra que deixava texto e símbolo tortos.
+
+Organização visual: o bloco "Como será atendida a garantia?" agora aparece antes do bloco "Histórico da garantia", deixando a escolha do técnico no início do fluxo.
+
+O atendimento de garantia agora começa sem a aba "Relatório 1" e sem lixeira. Essa aba só é criada visualmente quando o técnico escolhe "Novo relatório / orçamento"; nesse momento, ela passa a ser o Relatório 1 do atendimento atual.
+
+O histórico anterior fica separado em "Concluídos":
+- ao abrir um novo relatório de garantia, os serviços anteriores podem ser consultados na aba Concluídos;
+- quando existirem dois ou mais relatórios concluídos, a aba Concluídos permanece disponível mesmo antes da escolha da modalidade;
+- cada concluído preserva equipamento, tipo, data, relatório, fotos e orçamento.
+
+A lixeira ao lado do novo Relatório 1 cancela somente a criação do relatório atual e retorna à escolha da modalidade, sem apagar o histórico concluído. O botão genérico de adicionar relatório foi ocultado durante o fluxo de garantia para evitar caminhos duplicados e confusão.
+
+Cache atualizado para mfc-tecnico-v126.
+
+Regra
+
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
+MFC v125
+
+Última alteração — FLUXO COMPLETO DE GARANTIA NO INDEX
+
+Index (técnico): visitas marcadas como garantia agora exibem o histórico completo do último serviço concluído, no mesmo espírito da prévia do gestor: equipamento, tipo do serviço anterior, status e validade da garantia, data de conclusão, avaliação anterior, forma de pagamento, fotos e imagem do orçamento.
+
+O atendimento de garantia ganhou duas modalidades em botões:
+- Ajuste simples: mostra apenas um campo amplo para explicar o ajuste realizado. Ao salvar, registra a modalidade e envia a visita como avaliação concluída para o gestor.
+- Novo relatório / orçamento: abre o formulário técnico completo, com modelo, tipos de serviço, retirada, relatório e fotos, seguindo depois o fluxo normal de orçamento.
+
+Gestor: a modalidade escolhida aparece identificada no relatório ativo e também nos concluídos. Ajustes simples usam o título "Ajuste realizado" e continuam editáveis sem perder a identificação de garantia.
+
+Compatibilidade: quando um cliente da lixeira inicia uma garantia, os serviços concluídos com data de conclusão são preservados para que o histórico apareça no index. Uma visita comum de cliente restaurado continua nascendo limpa, mantendo a regra anterior.
+
+Cache atualizado para mfc-tecnico-v125.
+
+Regra
+
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
 MFC v124
 
 Última alteração — CIDADE NOS DETALHES DO CLIENTE

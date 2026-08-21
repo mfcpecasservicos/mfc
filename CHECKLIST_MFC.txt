@@ -80,7 +80,7 @@ Itens removidos:
 [x] AUSENTE: balão/mensagem de WhatsApp automática após cadastro
 
 SERVICE WORKER (service-worker.js)
-[x] CACHE_NAME atualizado: mfc-tecnico-v124
+[x] CACHE_NAME atualizado: mfc-tecnico-v126
 [x] APP_SHELL inclui index.html, gestor.html, cadastro.html, manifest.webmanifest, icon-192.png, icon-512.png, mfc-logo.png, mfc-capa.png
 [x] Cache antigo deletado no activate
 [x] Páginas HTML: rede primeiro, cache fallback
@@ -186,6 +186,31 @@ ATUALIZAÇÃO MFC v30
 NOTA TÉCNICA — Upload de imagens (item 3 solicitado):
 Não é possível forçar um diretório padrão no seletor de arquivos do navegador via código. Essa é uma restrição de segurança do browser (Chrome/Edge/Firefox) que impede sites de pré-selecionar pastas do sistema operacional. Isso não é um bug do app — é um limite da Web Platform.
 
+
+ATUALIZAÇÃO MFC v126
+
+[x] Index: botões de modalidade da garantia alinhados com ícones da fonte local do projeto.
+[x] Index: bloco "Como será atendida a garantia?" exibido acima do bloco "Histórico da garantia".
+[x] Index: garantia inicia sem "Relatório 1" e sem lixeira; a aba nasce somente ao escolher "Novo relatório / orçamento".
+[x] Index: lixeira do novo Relatório 1 cancela apenas o relatório atual e preserva o histórico do cliente.
+[x] Index: relatórios anteriores são agrupados em "Concluídos" ao criar um novo relatório; com dois ou mais concluídos, a aba permanece visível desde o início.
+[x] Index: aba Concluídos mostra equipamento, tipo, data, relatório, fotos e orçamento de cada atendimento finalizado.
+[x] Index: botão genérico de adicionar relatório fica oculto no fluxo de garantia para não duplicar a ação de novo relatório.
+[x] Validado com verificação de sintaxe JavaScript, balanço estrutural de HTML e conferência das regras do checklist.
+[x] CACHE_NAME atualizado: mfc-tecnico-v126
+[x] Service-worker atualizado para mfc-tecnico-v126.
+
+ATUALIZAÇÃO MFC v125
+
+[x] Index: atendimento em garantia mostra ao técnico o histórico completo do último serviço concluído — equipamento, tipo, prazo/status da garantia, conclusão, relatório, pagamento, fotos e orçamento.
+[x] Index: garantia oferece os botões "Ajuste simples" e "Novo relatório / orçamento".
+[x] Index: "Ajuste simples" abre somente um campo amplo para o técnico explicar o ajuste realizado e salva o atendimento como avaliação concluída.
+[x] Index: "Novo relatório / orçamento" abre o formulário técnico completo e segue o fluxo normal de orçamento.
+[x] Gestor: modalidade escolhida e texto do ajuste ficam identificados no relatório ativo e nos concluídos.
+[x] Gestor: ao restaurar cliente da lixeira para uma garantia, preserva os serviços concluídos necessários para o técnico consultar o histórico; visita comum continua iniciando limpa.
+[x] Validado com acorn + balanço de divs.
+[x] CACHE_NAME atualizado: mfc-tecnico-v125
+[x] Service-worker atualizado para mfc-tecnico-v125.
 
 ATUALIZAÇÃO MFC v124
 
