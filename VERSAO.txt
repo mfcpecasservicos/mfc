@@ -1,3 +1,19 @@
+MFC v124
+
+Última alteração — CIDADE NOS DETALHES DO CLIENTE
+
+Gestor: a cidade informada no cadastro público — inclusive "Dias D'Ávila" quando o cliente seleciona Sim — agora é preservada ao aprovar o novo cadastro e aparece sempre em um bloco próprio chamado "Cidade" nos detalhes do cliente. Cadastros antigos que perderam essa informação mostram "Não informada"; o campo Cidade foi incluído no botão Editar para permitir a correção manual desses registros.
+
+Index (técnico): o mesmo bloco "Cidade" aparece sempre nos detalhes do cliente, usando os campos city/cidade para manter compatibilidade; cadastros antigos sem a informação mostram "Não informada".
+
+Checklist obrigatório: a aprovação do novo cadastro também passa a preservar e-mail, endereço, número, bairro e descrição do problema em campos separados, evitando que essas informações sejam perdidas ou agrupadas indevidamente.
+
+Cache atualizado para mfc-tecnico-v124.
+
+Regra
+
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
 MFC v123
 
 Última alteração — BOTÃO GARANTIA NA BUSCA DE CLIENTES
