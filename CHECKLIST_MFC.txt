@@ -80,7 +80,7 @@ Itens removidos:
 [x] AUSENTE: balão/mensagem de WhatsApp automática após cadastro
 
 SERVICE WORKER (service-worker.js)
-[x] CACHE_NAME atualizado: mfc-tecnico-v126
+[x] CACHE_NAME atualizado: mfc-tecnico-v127
 [x] APP_SHELL inclui index.html, gestor.html, cadastro.html, manifest.webmanifest, icon-192.png, icon-512.png, mfc-logo.png, mfc-capa.png
 [x] Cache antigo deletado no activate
 [x] Páginas HTML: rede primeiro, cache fallback
@@ -186,6 +186,20 @@ ATUALIZAÇÃO MFC v30
 NOTA TÉCNICA — Upload de imagens (item 3 solicitado):
 Não é possível forçar um diretório padrão no seletor de arquivos do navegador via código. Essa é uma restrição de segurança do browser (Chrome/Edge/Firefox) que impede sites de pré-selecionar pastas do sistema operacional. Isso não é um bug do app — é um limite da Web Platform.
 
+
+ATUALIZAÇÃO MFC v127
+
+[x] Gestor, Index e Cadastro: modo particular "Mapa visual" identifica áreas de layout com contornos e códigos copiáveis.
+[x] Modo oculto por padrão: primeira ativação somente no navegador do responsável com ?mfc_layout=1; remoção com ?mfc_layout=0.
+[x] Atalho Ctrl+Shift+L liga/desliga o mapa no computador após a ativação inicial.
+[x] Identificação atualizada automaticamente para cartões, relatórios, blocos e modais criados dinamicamente.
+[x] Clique na etiqueta copia o código da área sem executar a ação normal do componente.
+[x] Recurso somente visual: não lê, altera ou grava dados de clientes no Firebase.
+[x] Arquivo MAPA_VISUAL_MFC.txt criado com legenda, instruções e exemplo de pedido de layout.
+[x] layout-guide.js compartilhado pelas três páginas e incluído no APP_SHELL.
+[x] Validado com verificação de sintaxe JavaScript, estrutura HTML, arquivos obrigatórios e regras do checklist.
+[x] CACHE_NAME atualizado: mfc-tecnico-v127
+[x] Service-worker atualizado para mfc-tecnico-v127.
 
 ATUALIZAÇÃO MFC v126
 

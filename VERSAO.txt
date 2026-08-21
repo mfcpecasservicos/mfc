@@ -1,3 +1,21 @@
+MFC v127
+
+Última alteração — MAPA VISUAL PARTICULAR DE LAYOUT
+
+Gestor, Index e Cadastro receberam um modo particular de identificação visual. Quando ativado no navegador do responsável, ele contorna as áreas da tela e mostra etiquetas amarelas com códigos estáveis, como GESTOR-CLIENTE-01, INDEX-GARANTIA-HISTORICO-01 e CADASTRO-CLIENTE-CAMPO-01.
+
+As etiquetas acompanham conteúdos criados dinamicamente, incluindo cartões, relatórios, blocos de cliente e modais. Ao clicar em uma etiqueta, o código é copiado para facilitar pedidos precisos de alteração de layout.
+
+Privacidade visual: o botão não aparece normalmente para clientes ou técnicos. A primeira ativação é feita no navegador particular acrescentando ?mfc_layout=1 ao endereço. Depois disso, o botão "Mapa visual" fica disponível nesse navegador. Para remover o acesso visual do aparelho, usa-se ?mfc_layout=0. No computador, Ctrl+Shift+L liga ou desliga o mapa após a ativação inicial.
+
+Foi adicionado o arquivo MAPA_VISUAL_MFC.txt com instruções, códigos e exemplos de solicitação. O modo é somente visual, usa armazenamento local do navegador e não lê, altera nem grava dados dos clientes.
+
+Cache atualizado para mfc-tecnico-v127 e layout-guide.js incluído no APP_SHELL.
+
+Regra
+
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
 MFC v126
 
 Última alteração — ORGANIZAÇÃO DOS RELATÓRIOS DE GARANTIA NO INDEX
