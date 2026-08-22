@@ -16,7 +16,7 @@ Funcionalidades ativas:
 [x] Texto copiado ao gerar link: "Para prosseguirmos com o agendamento, preencha o formulário abaixo: [link]"
 [x] Conclusão final de qualquer serviço é feita pelo gestor
 [x] Clientes ordenados pela menor data e horário ativos do atendimento, do menor para o maior
-[x] Informações do cliente organizadas separadamente: nome, telefone, e-mail, cidade, endereço, número, bairro, referência, equipamento e problema
+[x] Informações do cliente sem duplicação visual: rua, número, bairro e cidade aparecem juntos em um único bloco de endereço; ponto de referência permanece em bloco separado
 
 Itens removidos:
 [x] AUSENTE: seção "Cole as informações do cliente" / paste-card / parseAndFill / paste-area
@@ -46,7 +46,7 @@ Funcionalidades ativas:
 [x] Fotos da avaliação aparecem como prévia e abrem com zoom nativo em nova aba/visualizador do celular
 [x] Técnico consegue editar avaliação já enviada
 [x] Melhoria visual da avaliação técnica: botão principal verde em destaque, ações Cliente Ausente/Descartar visíveis com emojis, tipo de serviço por botões Corretiva/Preventiva/Instalação, relatório em texto, placeholder de modelo corrigido, câmera destacada
-[x] Informações do cliente organizadas separadamente: nome, telefone, e-mail, cidade, endereço, número, bairro, referência, equipamento e problema
+[x] Informações do cliente sem duplicação visual: rua, número, bairro e cidade aparecem juntos em um único bloco de endereço; ponto de referência permanece em bloco separado
 
 
 [x] Botão Ligar sem +55 no link tel:
@@ -80,7 +80,7 @@ Itens removidos:
 [x] AUSENTE: balão/mensagem de WhatsApp automática após cadastro
 
 SERVICE WORKER (service-worker.js)
-[x] CACHE_NAME atualizado: mfc-tecnico-v128
+[x] CACHE_NAME atualizado: mfc-tecnico-v129
 [x] APP_SHELL inclui páginas, imagens, fontes, layout-guide.js, location-view.js e os arquivos locais do Leaflet
 [x] Cache antigo deletado no activate
 [x] Páginas HTML: rede primeiro, cache fallback
@@ -186,6 +186,21 @@ ATUALIZAÇÃO MFC v30
 NOTA TÉCNICA — Upload de imagens (item 3 solicitado):
 Não é possível forçar um diretório padrão no seletor de arquivos do navegador via código. Essa é uma restrição de segurança do browser (Chrome/Edge/Firefox) que impede sites de pré-selecionar pastas do sistema operacional. Isso não é um bug do app — é um limite da Web Platform.
 
+
+ATUALIZAÇÃO MFC v129
+
+[x] Cadastro de cliente e empresa grava todo ponto de mapa válido nos formatos direto e interno, preservando compatibilidade entre cadastro, aprovação e exibição.
+[x] Gestor reconhece coordenadas válidas nos formatos latitude/longitude, lat/lng e nos objetos location, mapLocation ou geolocation.
+[x] Gestor exibe o mapa dentro da grade de blocos de detalhe quando a localização tiver sido utilizada no cadastro.
+[x] Index exibe o mapa minimizado dentro do conteúdo de detalhes da visita quando a localização tiver sido utilizada no cadastro.
+[x] Botões Maps do Gestor e Index priorizam as coordenadas do alfinete e usam o endereço completo como fallback.
+[x] Gestor e Index exibem rua, número, bairro e cidade em um único bloco de endereço, sem repetir cidade, número ou bairro em blocos separados.
+[x] Ponto de referência continua em bloco próprio no Gestor e Index.
+[x] A consolidação é apenas visual: os campos separados continuam preservados no cadastro e no Firestore.
+[x] Clientes antigos, empresas e registros sem coordenadas continuam compatíveis e sem bloco de mapa vazio.
+[x] Validado com sintaxe JavaScript, estrutura HTML, propagação das coordenadas, ausência de blocos duplicados, arquivos obrigatórios e checklist.
+[x] CACHE_NAME atualizado: mfc-tecnico-v129
+[x] Service-worker atualizado para mfc-tecnico-v129.
 
 ATUALIZAÇÃO MFC v128
 

@@ -1,3 +1,21 @@
+MFC v129
+
+Última alteração — MAPA VISÍVEL E ENDEREÇO SEM DUPLICAÇÃO
+
+Cadastro de cliente e empresa: todo ponto válido usado no mapa passa a ser gravado de forma compatível nos campos diretos e no objeto interno de localização. A confirmação continua registrada separadamente, mas um ponto válido não deixa de aparecer apenas porque o segundo botão de confirmação não foi concluído.
+
+Gestor: o mapa agora é exibido dentro da grade de blocos de detalhe sempre que o cadastro possuir coordenadas válidas. A aprovação do novo cadastro preserva coordenadas antigas ou novas, incluindo as variações latitude/longitude, lat/lng e objetos internos de localização.
+
+Index: o mapa minimizado aparece dentro do conteúdo de detalhes da visita. No Gestor e no Index, os botões Maps usam primeiro o alfinete e mantêm o endereço completo como alternativa.
+
+Endereço: rua, número, bairro e cidade são apresentados juntos em um único bloco, no formato "Rua, número, bairro, cidade". Os blocos visuais separados de cidade, número e bairro foram removidos para impedir repetição. O ponto de referência permanece em bloco próprio. Os campos originais continuam separados no cadastro e no banco, sem perda de dados.
+
+Cache atualizado para mfc-tecnico-v129.
+
+Regra
+
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
 MFC v128
 
 Última alteração — LOCALIZAÇÃO SIMPLES DA VISITA POR GPS
