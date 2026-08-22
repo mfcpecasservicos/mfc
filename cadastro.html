@@ -20,6 +20,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Cadastro - MFC Peças e Serviços</title>
 <link rel="stylesheet" href="fontawesome/css/all.min.css">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
 <style>
   :root{
     --bg:#eef4fb;--surface:#ffffff;--primary:#06437a;--primary2:#0b63b6;--yellow:#ffd51f;
@@ -103,6 +104,13 @@
   .acesso-desc{margin-top:10px;font-size:.86rem;font-weight:700;min-height:1.2em}
   .acesso-desc.is-yes{color:#166534}
   .acesso-desc.is-no{color:#b91c1c}
+  .location-card{border-color:#93c5fd;background:linear-gradient(180deg,#fff,#f0f7ff)}
+  .location-main-btn{width:100%;min-height:60px;border:0;border-radius:17px;background:linear-gradient(135deg,#075985,#0284c7);color:#fff;font-size:1rem;font-weight:900;display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;cursor:pointer;box-shadow:0 10px 24px rgba(2,132,199,.22)}
+  .location-main-btn:disabled{background:#94a3b8;box-shadow:none}.location-status{font-size:.84rem;line-height:1.4;color:#475569;min-height:20px}.location-status.ok{color:#166534;font-weight:800}.location-status.error{color:#b45309;font-weight:750}
+  .location-preview{display:none;margin-top:5px}.location-map{height:220px;border:1px solid #bfdbfe;border-radius:16px;overflow:hidden;background:#dbeafe}.location-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+  .location-action{min-height:48px;border-radius:14px;border:1px solid #bfdbfe;background:#fff;color:#075985;font-weight:900;font-size:.9rem;cursor:pointer;padding:9px}.location-action.confirm{background:#16a34a;border-color:#16a34a;color:#fff}.location-action.active{background:#fff7cc;border-color:#eab308;color:#854d0e}
+  .mfc-pin{width:38px;height:38px;border-radius:50% 50% 50% 0;background:#ef4444;color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;transform:rotate(-45deg);border:3px solid #fff;box-shadow:0 4px 12px #0007}.mfc-pin i{transform:rotate(45deg)}
+  @media(max-width:420px){.location-actions{grid-template-columns:1fr}.location-map{height:200px}}
 </style>
 </head>
 <body>
@@ -155,6 +163,7 @@
     <div class="card"><label>🔢 Número da residência <span class="req">*</span></label><input type="text" id="f-numero" required placeholder="Ex: 123, S/N"></div>
     <div class="card"><label>🏘️ Bairro <span class="req">*</span></label><input type="text" id="f-bairro" required placeholder="Seu bairro"></div>
     <div class="card"><label>🧭 Ponto de referência <span class="req">*</span></label><input type="text" id="f-ref" required placeholder="Próximo a..."></div>
+    <div class="card location-card" data-location-block="cliente"><label><i class="fa-solid fa-location-dot"></i> Localização da visita <span style="font-size:.75rem;color:var(--muted)">(opcional)</span></label><p class="hint">Faça esta etapa no endereço onde será realizado o atendimento.</p><button type="button" class="location-main-btn" id="location-btn-cliente" onclick="requestVisitLocation('cliente')"><i class="fa-solid fa-location-crosshairs"></i> Confirmar localização desta casa</button><p class="location-status" id="location-status-cliente">Se preferir, você pode continuar sem confirmar a localização.</p><div class="location-preview" id="location-preview-cliente"><div class="location-map" id="location-map-cliente"></div><div class="location-actions"><button type="button" class="location-action confirm" onclick="confirmVisitLocation('cliente')"><i class="fa-solid fa-check"></i> Está correto</button><button type="button" class="location-action" id="location-adjust-cliente" onclick="adjustVisitLocation('cliente')"><i class="fa-solid fa-pen"></i> Ajustar localização</button></div></div></div>
     <div class="card"><label>🧊 Equipamento <span class="req">*</span></label><p class="hint">Apenas o equipamento, marca, BTUs e KG, caso tenha.</p><input type="text" id="f-equip" required placeholder="Ex: Ar condicionado LG 12000 BTUs"></div>
     <div class="card"><label>📝 Descrição do problema <span class="req">*</span></label><textarea id="f-problema" required placeholder="Descreva o que está acontecendo..."></textarea></div>
 
@@ -170,6 +179,7 @@
     <div class="card"><label>🧾 CNPJ <span class="req">*</span></label><input type="text" id="e-cnpj" required placeholder="00.000.000/0000-00" maxlength="18" inputmode="numeric"></div>
     <div class="card"><label>✉️ E-mail para envio do orçamento</label><input type="email" id="e-email" placeholder="financeiro@empresa.com (opcional)"></div>
     <div class="card"><label>🏠 Endereço da empresa <span class="req">*</span></label><input type="text" id="e-endereco" required placeholder="Rua, número, bairro, cidade"></div>
+    <div class="card location-card" data-location-block="empresa"><label><i class="fa-solid fa-location-dot"></i> Localização do atendimento <span style="font-size:.75rem;color:var(--muted)">(opcional)</span></label><p class="hint">Faça esta etapa no endereço onde será realizado o atendimento.</p><button type="button" class="location-main-btn" id="location-btn-empresa" onclick="requestVisitLocation('empresa')"><i class="fa-solid fa-location-crosshairs"></i> Confirmar localização da empresa</button><p class="location-status" id="location-status-empresa">Se preferir, você pode continuar sem confirmar a localização.</p><div class="location-preview" id="location-preview-empresa"><div class="location-map" id="location-map-empresa"></div><div class="location-actions"><button type="button" class="location-action confirm" onclick="confirmVisitLocation('empresa')"><i class="fa-solid fa-check"></i> Está correto</button><button type="button" class="location-action" id="location-adjust-empresa" onclick="adjustVisitLocation('empresa')"><i class="fa-solid fa-pen"></i> Ajustar localização</button></div></div></div>
     <div class="card"><label><i class="fa-solid fa-id-badge"></i> A portaria exige registro de acesso do técnico?</label><p class="hint">Nome, CPF/RG e placa do veículo — se sua empresa exige esse controle, avisamos o técnico antes da visita.</p>
       <div class="acesso-btns">
         <button type="button" class="acesso-btn" id="acesso-btn-sim" onclick="setAcesso(true)">Sim</button>
@@ -188,6 +198,7 @@
   <div class="footer-brand"><img src="mfc-logo.png" alt="MFC"><p>30 anos atendendo em Dias D'Ávila e região</p></div>
 </div>
 
+<script src="vendor/leaflet/leaflet.js"></script>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
   import { getFirestore, collection, addDoc, getDocs, query, where, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
@@ -261,6 +272,17 @@
     if (greetEl) greetEl.textContent = h < 12 ? 'Bom dia!' : h < 18 ? 'Boa tarde!' : 'Boa noite!';
   })();
   let cidadeSwitchOn = true; // true = "Sim, resido em Dias D'Ávila"
+  const visitLocations={cliente:{lat:null,lng:null,accuracy:null,confirmed:false,source:''},empresa:{lat:null,lng:null,accuracy:null,confirmed:false,source:''}};
+  const locationMaps={};
+  const locationMarkers={};
+  const pinIcon=()=>L.divIcon({className:'',html:'<div class="mfc-pin"><i class="fa-solid fa-house"></i></div>',iconSize:[38,38],iconAnchor:[19,38]});
+  const setLocationStatus=(type,text,state='')=>{const el=document.getElementById('location-status-'+type);if(!el)return;el.textContent=text;el.className='location-status '+state};
+  const updateLocationPoint=(type,lat,lng,source)=>{const state=visitLocations[type];state.lat=Number(lat);state.lng=Number(lng);state.source=source||state.source||'gps';state.confirmed=false;const map=locationMaps[type];const marker=locationMarkers[type];if(map&&marker){marker.setLatLng([state.lat,state.lng]);map.setView([state.lat,state.lng],18)}};
+  const ensureLocationMap=(type)=>{const state=visitLocations[type];const preview=document.getElementById('location-preview-'+type);preview.style.display='block';if(!locationMaps[type]){const map=L.map('location-map-'+type,{zoomControl:true,attributionControl:true}).setView([state.lat,state.lng],18);L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);const marker=L.marker([state.lat,state.lng],{icon:pinIcon(),draggable:false,keyboard:true,title:'Local do atendimento'}).addTo(map);marker.on('dragend',()=>{const point=marker.getLatLng();updateLocationPoint(type,point.lat,point.lng,'manual');setLocationStatus(type,'Alfinete ajustado. Toque em “Está correto” para confirmar.','error')});map.on('click',event=>{if(!map._mfcAdjusting)return;updateLocationPoint(type,event.latlng.lat,event.latlng.lng,'manual');setLocationStatus(type,'Alfinete ajustado. Toque em “Está correto” para confirmar.','error')});locationMaps[type]=map;locationMarkers[type]=marker}else{updateLocationPoint(type,state.lat,state.lng,state.source)}setTimeout(()=>locationMaps[type]?.invalidateSize(),80)};
+  window.requestVisitLocation=(type)=>{const btn=document.getElementById('location-btn-'+type);if(!navigator.geolocation){setLocationStatus(type,'Este aparelho não oferece localização. O cadastro pode continuar normalmente.','error');return}btn.disabled=true;btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Localizando esta casa...';setLocationStatus(type,'Aguarde alguns segundos e mantenha a localização do celular ativada.');navigator.geolocation.getCurrentPosition(position=>{const state=visitLocations[type];state.lat=position.coords.latitude;state.lng=position.coords.longitude;state.accuracy=Math.round(position.coords.accuracy||0);state.confirmed=false;state.source='gps';ensureLocationMap(type);locationMaps[type]._mfcAdjusting=false;locationMarkers[type].dragging.disable();const adjust=document.getElementById('location-adjust-'+type);adjust.classList.remove('active');adjust.innerHTML='<i class="fa-solid fa-pen"></i> Ajustar localização';setLocationStatus(type,'Confira o alfinete abaixo. Se estiver certo, toque em “Está correto”.');btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-location-crosshairs"></i> Localizar novamente';},error=>{const messages={1:'A localização não foi autorizada. Você pode continuar o cadastro normalmente.',2:'O celular não conseguiu encontrar sua localização. Você pode continuar normalmente.',3:'A localização demorou demais. Tente novamente ou continue o cadastro.'};setLocationStatus(type,messages[error.code]||'Não foi possível localizar. O cadastro pode continuar normalmente.','error');btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-rotate-right"></i> Tentar localizar novamente';},{enableHighAccuracy:true,timeout:15000,maximumAge:60000})};
+  window.adjustVisitLocation=(type)=>{const map=locationMaps[type],marker=locationMarkers[type],btn=document.getElementById('location-adjust-'+type);if(!map||!marker)return;map._mfcAdjusting=true;marker.dragging.enable();visitLocations[type].confirmed=false;btn.classList.add('active');btn.innerHTML='<i class="fa-solid fa-hand-pointer"></i> Toque ou arraste o alfinete';setLocationStatus(type,'Toque no ponto correto do mapa ou arraste o alfinete.','error');map.invalidateSize()};
+  window.confirmVisitLocation=(type)=>{const state=visitLocations[type];if(!Number.isFinite(state.lat)||!Number.isFinite(state.lng))return;state.confirmed=true;locationMaps[type]._mfcAdjusting=false;locationMarkers[type].dragging.disable();const btn=document.getElementById('location-adjust-'+type);btn.classList.remove('active');btn.innerHTML='<i class="fa-solid fa-pen"></i> Ajustar localização';setLocationStatus(type,'Localização confirmada! Ela será enviada junto com o cadastro.','ok')};
+  const locationPayload=(type)=>{const state=visitLocations[type];return state.confirmed?{latitude:Number(state.lat.toFixed(7)),longitude:Number(state.lng.toFixed(7)),locationAccuracy:state.accuracy||null,locationConfirmed:true,locationSource:state.source||'gps',locationConfirmedAt:new Date().toISOString()}:{latitude:null,longitude:null,locationAccuracy:null,locationConfirmed:false,locationSource:'',locationConfirmedAt:null}};
 
   window.selectType = (tipo) => {
     tipoCadastro = tipo;
@@ -458,6 +480,7 @@
       ref: document.getElementById('f-ref').value.trim(),
       equip: document.getElementById('f-equip').value.trim(),
       problem: document.getElementById('f-problema').value.trim(),
+      ...locationPayload('cliente'),
       createdAt: new Date().toISOString()
     };
 
@@ -517,6 +540,7 @@
       equip: document.getElementById('e-equip').value.trim(),
       problem: document.getElementById('e-problema').value.trim(),
       accessRequired: acessoSwitchOn,
+      ...locationPayload('empresa'),
       createdAt: new Date().toISOString()
     };
 

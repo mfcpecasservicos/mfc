@@ -1,3 +1,25 @@
+MFC v128
+
+Última alteração — LOCALIZAÇÃO SIMPLES DA VISITA POR GPS
+
+Cadastro de cliente e empresa: foi incluído um bloco opcional de localização pensado para pessoas idosas ou com pouca familiaridade com tecnologia. O cliente toca em um único botão para o celular localizar automaticamente o endereço do atendimento. Em seguida, vê uma prévia pequena e escolhe apenas "Está correto" ou, se necessário, "Ajustar localização".
+
+O ajuste avançado permanece escondido até ser solicitado. Quando aberto, permite tocar no mapa ou arrastar o alfinete. Negar a permissão, estar fora do endereço ou ocorrer falha no GPS nunca bloqueia o cadastro: endereço, bairro e cidade continuam funcionando como antes.
+
+Dados: somente uma localização confirmada salva latitude, longitude, precisão aproximada, origem do ponto e data da confirmação no cadastro pendente. Ao aprovar o cadastro, o gestor preserva esses campos no cliente, tanto para pessoa física quanto para empresa. Cadastros antigos continuam compatíveis.
+
+Gestor e Index: clientes com ponto confirmado exibem um mapa compacto dentro dos detalhes e um botão "Abrir rota no Maps". Os botões Maps também priorizam as coordenadas exatas quando disponíveis; sem coordenadas, continuam usando endereço, número, bairro e cidade.
+
+Tecnologia gratuita: Leaflet 1.9.4 foi incluído localmente no repositório com sua licença BSD. O mapa usa OpenStreetMap com atribuição visível, sem geocodificação automática de endereço. A navegação abre o Google Maps por URL, sem chave de API.
+
+Mapa visual: foram adicionados códigos próprios para os novos blocos e mapas em Cadastro, Gestor e Index.
+
+Cache atualizado para mfc-tecnico-v128, incluindo Leaflet e location-view.js no APP_SHELL.
+
+Regra
+
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
 MFC v127
 
 Última alteração — MAPA VISUAL PARTICULAR DE LAYOUT

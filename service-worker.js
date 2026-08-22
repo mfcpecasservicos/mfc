@@ -8,13 +8,21 @@ messaging.onBackgroundMessage(payload=>{
   self.registration.showNotification(title,{body,icon:'./icon-192.png',badge:'./icon-192.png'});
 });
 
-const CACHE_NAME = 'mfc-tecnico-v127';
+const CACHE_NAME = 'mfc-tecnico-v128';
 const APP_SHELL = [
   './',
   './index.html',
   './gestor.html',
   './cadastro.html',
   './layout-guide.js',
+  './location-view.js',
+  './vendor/leaflet/leaflet.js',
+  './vendor/leaflet/leaflet.css',
+  './vendor/leaflet/images/marker-icon.png',
+  './vendor/leaflet/images/marker-icon-2x.png',
+  './vendor/leaflet/images/marker-shadow.png',
+  './vendor/leaflet/images/layers.png',
+  './vendor/leaflet/images/layers-2x.png',
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png',
