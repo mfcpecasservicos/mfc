@@ -1,4 +1,4 @@
-CHECKLIST ATUAL — MFC v133
+CHECKLIST ATUAL — MFC v134
 
 REGRA DE DOCUMENTAÇÃO
 [x] Este arquivo contém somente regras e funções atualmente válidas.
@@ -12,6 +12,8 @@ GESTOR — LISTA E FLUXO
 [x] Gestor-Detalhe possui altura limitada ao viewport, overflow vertical próprio e overscroll-behavior contain.
 [x] Rolar a lista não move o detalhe nem a página; rolar o detalhe não move a lista nem a página.
 [x] Em telas estreitas, lista e detalhe são empilhados dentro do mesmo viewport e mantêm scroll independente.
+[x] A lista mostra todos os atendimentos filtrados continuamente; não existe paginação nem botões de páginas.
+[x] Barras de rolagem usam trilho e polegar escuros compatíveis com o tema, sem faixa ou setas brancas chamativas.
 [x] Status workshop_pending usa o texto "Aguardando Avaliação" e identificação ciano.
 [x] Clientes com "Data a definir" aparecem primeiro.
 [x] Os demais clientes são agrupados por dia mais recente; dentro do mesmo dia, o horário mais cedo aparece primeiro.
@@ -110,7 +112,7 @@ MAPA VISUAL PARTICULAR
 [x] MAPA_VISUAL_MFC.txt contém códigos e instruções atuais.
 
 SERVICE WORKER E ARQUIVOS
-[x] CACHE_NAME atual: mfc-tecnico-v133.
+[x] CACHE_NAME atual: mfc-tecnico-v134.
 [x] APP_SHELL inclui páginas, imagens, fontes, layout-guide.js, location-view.js e Leaflet local.
 [x] Cache anterior é removido durante activate.
 [x] Páginas HTML usam rede primeiro e cache como fallback.
@@ -126,4 +128,4 @@ VALIDAÇÃO OBRIGATÓRIA
 [x] Mapa exato, mapa aproximado e edição manual validados.
 [x] Compatibilidade com clientes novos, antigos e sem endereço validada.
 [x] Arquivos obrigatórios do APP_SHELL conferidos.
-[x] Service worker atualizado para mfc-tecnico-v133.
+[x] Service worker atualizado para mfc-tecnico-v134.
