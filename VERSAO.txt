@@ -1,4 +1,4 @@
-MFC v138
+MFC v137a
 
 VERSÃO ATUAL — QUADRADOS ALINHADOS À ESQUERDA
 
@@ -92,8 +92,10 @@ A navegação continua abrindo o Google Maps por URL, sem chave de API.
 
 CACHE
 
-Cache atualizado para mfc-tecnico-v138, incluindo location-view.js, Leaflet local, fontes, páginas no APP_SHELL e módulos Firebase 11 necessários ao Index offline.
+Cache atualizado para mfc-tecnico-v137a, incluindo location-view.js, Leaflet local, fontes, páginas no APP_SHELL e módulos Firebase 11 necessários ao Index offline.
 
 REGRA
 
-Toda atualização futura deve partir da v138 ou de versão posterior aprovada. CHECKLIST_MFC.txt e VERSAO.txt devem conter somente regras atuais; uma regra substituída deve ser removida, não acumulada como se ainda estivesse ativa.
+Toda atualização futura deve partir da v137a ou de versão posterior aprovada. CHECKLIST_MFC.txt e VERSAO.txt devem conter somente regras atuais; uma regra substituída deve ser removida, não acumulada como se ainda estivesse ativa.
+
+Atualizações pequenas e localizadas usam sufixos por letra na versão atual, por exemplo v137a, v137b e v137c. O número inteiro seguinte fica reservado para mudanças maiores ou conjuntos amplos de alterações.
