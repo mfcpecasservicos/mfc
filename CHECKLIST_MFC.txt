@@ -124,9 +124,10 @@ MAPA VISUAL PARTICULAR
 [x] MAPA_VISUAL_MFC.txt contém códigos e instruções atuais.
 
 SERVICE WORKER E ARQUIVOS
-[x] CACHE_NAME atual: mfc-tecnico-v138.
+[x] CACHE_NAME atual: mfc-tecnico-v137a.
 [x] APP_SHELL inclui páginas, imagens, fontes, layout-guide.js, location-view.js e Leaflet local.
 [x] Cache anterior é removido durante activate.
+[x] Alterações pequenas usam sufixo por letra na versão atual; número inteiro novo fica reservado para mudanças maiores.
 [x] Páginas HTML usam rede primeiro e cache como fallback.
 [x] Módulos Firebase 11 do Index são armazenados pelo service worker para permitir nova abertura offline após uma primeira abertura online.
 [x] Recursos externos de mapas, geocodificação e demais domínios continuam fora do cache local; o mapa-base pode depender da disponibilidade de tiles já vistos.
