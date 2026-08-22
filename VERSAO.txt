@@ -1,6 +1,6 @@
-MFC v137
+MFC v138
 
-VERSÃO ATUAL — CAMPOS PREENCHIDOS EM QUADRADOS
+VERSÃO ATUAL — QUADRADOS ALINHADOS À ESQUERDA
 
 Esta é a única versão de referência válida. O histórico antigo foi removido porque continha regras substituídas que estavam sendo confundidas com o funcionamento atual.
 
@@ -24,7 +24,7 @@ GESTOR — INFORMAÇÕES GERAIS EM QUADRADOS
 
 O detalhe usa a mesma grade de quadrados para clientes e empresas. Somente campos preenchidos geram blocos: informações vazias não exibem quadrado nem marcador artificial.
 
-A grade comporta até quatro quadrados por linha. Quando a última linha possui menos de quatro informações, seus blocos são centralizados automaticamente, preservando a composição sem buracos desnecessários.
+A grade comporta até quatro quadrados por linha. Quando a última linha possui menos de quatro informações, seus blocos permanecem alinhados à esquerda, seguindo a ordem natural da grade.
 
 Clientes podem exibir Nome completo, Número de contato, E-mail, Endereço, Ponto de referência e Equipamento. Empresas podem exibir Nome da empresa, Número de contato, E-mail, Data da visita, Nome do solicitante, CNPJ, Endereço da empresa e Equipamento.
 
@@ -92,8 +92,8 @@ A navegação continua abrindo o Google Maps por URL, sem chave de API.
 
 CACHE
 
-Cache atualizado para mfc-tecnico-v137, incluindo location-view.js, Leaflet local, fontes, páginas no APP_SHELL e módulos Firebase 11 necessários ao Index offline.
+Cache atualizado para mfc-tecnico-v138, incluindo location-view.js, Leaflet local, fontes, páginas no APP_SHELL e módulos Firebase 11 necessários ao Index offline.
 
 REGRA
 
-Toda atualização futura deve partir da v137 ou de versão posterior aprovada. CHECKLIST_MFC.txt e VERSAO.txt devem conter somente regras atuais; uma regra substituída deve ser removida, não acumulada como se ainda estivesse ativa.
+Toda atualização futura deve partir da v138 ou de versão posterior aprovada. CHECKLIST_MFC.txt e VERSAO.txt devem conter somente regras atuais; uma regra substituída deve ser removida, não acumulada como se ainda estivesse ativa.
