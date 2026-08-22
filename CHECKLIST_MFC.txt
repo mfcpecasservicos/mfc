@@ -28,7 +28,7 @@ GESTOR — LISTA E FLUXO
 GESTOR — DETALHES DO CLIENTE
 [x] Todas as informações gerais ficam em quadrados na área esquerda; não existe seção suplementar separada.
 [x] Campo geral vazio não gera quadrado nem exibe marcador artificial.
-[x] A última linha de quadrados é centralizada automaticamente quando possui menos de quatro itens.
+[x] A última linha de quadrados permanece alinhada à esquerda quando possui menos de quatro itens.
 [x] E-mail possui sublinhado tracejado e pode ser copiado com um clique.
 [x] Clientes possuem seis quadrados: Nome, Número de contato, E-mail, Endereço, Ponto de referência e Equipamento.
 [x] Nos clientes, quatro quadrados formam a primeira linha e os dois restantes ficam centralizados na segunda.
@@ -124,7 +124,7 @@ MAPA VISUAL PARTICULAR
 [x] MAPA_VISUAL_MFC.txt contém códigos e instruções atuais.
 
 SERVICE WORKER E ARQUIVOS
-[x] CACHE_NAME atual: mfc-tecnico-v137.
+[x] CACHE_NAME atual: mfc-tecnico-v138.
 [x] APP_SHELL inclui páginas, imagens, fontes, layout-guide.js, location-view.js e Leaflet local.
 [x] Cache anterior é removido durante activate.
 [x] Páginas HTML usam rede primeiro e cache como fallback.
