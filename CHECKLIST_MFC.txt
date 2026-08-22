@@ -26,12 +26,16 @@ GESTOR — LISTA E FLUXO
 [x] Serviço descartado pelo técnico aguarda revisão do gestor antes de ir para a lixeira.
 
 GESTOR — DETALHES DO CLIENTE
-[x] A ordem principal é Nome, Número de contato, Endereço, Ponto de referência, Equipamento e Localização do atendimento.
-[x] Nome, Número de contato e Endereço formam a primeira linha; Ponto de referência e Equipamento ficam centralizados na segunda.
-[x] Os cinco blocos principais permanecem quadrados e o mapa ocupa o painel grande à direita das duas linhas.
+[x] Todas as informações gerais ficam em quadrados na área esquerda; não existe seção suplementar separada.
+[x] Clientes possuem seis quadrados: Nome, Número de contato, E-mail, Endereço, Ponto de referência e Equipamento.
+[x] Nos clientes, quatro quadrados formam a primeira linha e os dois restantes ficam centralizados na segunda.
+[x] Empresas possuem oito quadrados: Nome da empresa, Número de contato, E-mail, Data da visita, Nome do solicitante, CNPJ, Endereço da empresa e Equipamento.
+[x] Nas empresas, os oito quadrados são distribuídos em duas linhas de quatro.
+[x] Os quadrados possuem largura mínima suficiente para evitar texto excessivamente comprimido.
+[x] O mapa ocupa o painel grande à direita das duas linhas de informações gerais.
 [x] Descrição do problema e Observações ficam abaixo, lado a lado, como os únicos blocos largos.
 [x] Rua, número, bairro e cidade aparecem juntos em um único bloco de endereço.
-[x] Ponto de referência permanece em bloco separado.
+[x] Ponto de referência permanece em bloco separado no detalhe do cliente.
 [x] Campos de endereço continuam separados no Firestore para edição e compatibilidade.
 [x] Observações crescem ao digitar e também ao carregar texto já salvo.
 [x] Conteúdo excepcionalmente grande em bloco comum permanece acessível por rolagem interna.
@@ -117,7 +121,7 @@ MAPA VISUAL PARTICULAR
 [x] MAPA_VISUAL_MFC.txt contém códigos e instruções atuais.
 
 SERVICE WORKER E ARQUIVOS
-[x] CACHE_NAME atual: mfc-tecnico-v135.
+[x] CACHE_NAME atual: mfc-tecnico-v136.
 [x] APP_SHELL inclui páginas, imagens, fontes, layout-guide.js, location-view.js e Leaflet local.
 [x] Cache anterior é removido durante activate.
 [x] Páginas HTML usam rede primeiro e cache como fallback.
