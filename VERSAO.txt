@@ -1,8 +1,16 @@
-MFC v132
+MFC v133
 
-VERSÃO ATUAL — INDEX OFFLINE, BLOCOS RESPONSIVOS E MAPAS SEM DUPLICAÇÃO
+VERSÃO ATUAL — GESTOR EM TELA ÚNICA COM SCROLL INDEPENDENTE
 
 Esta é a única versão de referência válida. O histórico antigo foi removido porque continha regras substituídas que estavam sendo confundidas com o funcionamento atual.
+
+GESTOR — LISTA E DETALHE NA MESMA TELA
+
+Gestor-Lista e Gestor-Detalhe permanecem no mesmo gestor.html e são exibidos simultaneamente. O antigo controle lateral que escondia a lista foi removido, portanto selecionar um cliente apenas atualiza o painel de detalhes sem trocar de página nem ocultar a relação de atendimentos.
+
+A página principal fica travada no tamanho do viewport. Gestor-Lista e Gestor-Detalhe possuem altura própria, overflow vertical automático e overscroll-behavior contain. Assim, a rolagem feita em um painel não movimenta o outro e não escapa para o documento principal.
+
+Em telas grandes, sidebar, lista e detalhe ficam lado a lado. Em telas intermediárias, a sidebar vira uma barra horizontal e lista/detalhe continuam lado a lado. Em celulares, lista e detalhe ficam empilhados dentro do mesmo viewport, cada um preservando sua própria área rolável.
 
 GESTOR — BLOCOS DE DETALHE
 
@@ -72,8 +80,8 @@ A navegação continua abrindo o Google Maps por URL, sem chave de API.
 
 CACHE
 
-Cache atualizado para mfc-tecnico-v132, incluindo location-view.js, Leaflet local, fontes, páginas no APP_SHELL e módulos Firebase 11 necessários ao Index offline.
+Cache atualizado para mfc-tecnico-v133, incluindo location-view.js, Leaflet local, fontes, páginas no APP_SHELL e módulos Firebase 11 necessários ao Index offline.
 
 REGRA
 
-Toda atualização futura deve partir da v132 ou de versão posterior aprovada. CHECKLIST_MFC.txt e VERSAO.txt devem conter somente regras atuais; uma regra substituída deve ser removida, não acumulada como se ainda estivesse ativa.
+Toda atualização futura deve partir da v133 ou de versão posterior aprovada. CHECKLIST_MFC.txt e VERSAO.txt devem conter somente regras atuais; uma regra substituída deve ser removida, não acumulada como se ainda estivesse ativa.
