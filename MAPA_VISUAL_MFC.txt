@@ -23,7 +23,7 @@ GESTOR-VISITA-01 — Detalhes da visita selecionada
 GESTOR-CABECALHO-01 — Cabeçalho da visita
 GESTOR-CLIENTE-01 — Grade de dados do cliente
 GESTOR-BLOCO-01 — Blocos individuais dos dados do cliente
-GESTOR-LOCALIZACAO-01 — Mapa da localização confirmada
+GESTOR-LOCALIZACAO-01 — Mapa exato ou aproximado do atendimento
 GESTOR-RELATORIO-01 — Relatórios/atendimentos
 GESTOR-SECAO-01 — Seções internas do atendimento
 GESTOR-FINANCEIRO-01 — Tela Financeiro
@@ -35,6 +35,7 @@ GESTOR-MODAL-VISITA-01 — Modal Nova visita
 GESTOR-MODAL-EMPRESA-01 — Modal Visita Empresa
 GESTOR-MODAL-GARANTIA-01 — Modal Garantia
 GESTOR-MODAL-EDITAR-01 — Modal Editar cliente
+GESTOR-MODAL-EDITAR-MAPA-01 — Mapa para corrigir, arrastar ou remover o alfinete
 GESTOR-MODAL-RELATORIO-01 — Modal Editar relatório do técnico
 
 INDEX DO TÉCNICO
@@ -48,7 +49,7 @@ INDEX-DETALHE-CABECALHO-01 — Cabeçalho dos detalhes
 INDEX-DETALHE-CONTEUDO-01 — Conteúdo dos detalhes
 INDEX-CLIENTE-01 — Dados do cliente
 INDEX-CLIENTE-BLOCO-01 — Blocos individuais do cliente
-INDEX-LOCALIZACAO-01 — Mapa da localização confirmada
+INDEX-LOCALIZACAO-01 — Mapa exato ou aproximado do atendimento
 INDEX-ABAS-01 — Abas de relatórios
 INDEX-RELATORIO-01 — Relatório atualmente aberto
 INDEX-GARANTIA-ESCOLHA-01 — Escolha do atendimento da garantia

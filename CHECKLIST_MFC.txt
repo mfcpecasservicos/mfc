@@ -1,765 +1,112 @@
-CHECKLIST ATUALIZADO — MFC
-
-GESTOR (gestor.html)
-Funcionalidades ativas:
-[x] Status workshop_pending com label "Aguardando Avaliação" e cor ciano em badges, filtros e cards
-[x] Indicador "🏭 No galpão" nos cards com status workshop_pending
-[x] Checkbox "Equipamento trazido à loja" no formulário de novo cliente → status inicial workshop_pending
-[x] Checkbox "Entrada da aprovação (40%)" em Aprovação e Pagamento → calcula 40% em tempo real
-[x] Checkbox "Serviço no galpão" em Aprovação e Pagamento → exibe "🏭 Serviço no galpão" no card
-[x] Seleção de texto de nome e telefone nos cards fechados
-[x] Botão descartar para lixeira nos cards
-[x] Limpeza automática: lixeira 90 dias, concluídos 365 dias
-[x] Anti-duplicação por telefone normalizado
-[x] Badge "Cliente recorrente" quando telefone já existe
-[x] Botão "Gerar link de cadastro" com token Firebase válido por 6h
-[x] Texto copiado ao gerar link: "Para prosseguirmos com o agendamento, preencha o formulário abaixo: [link]"
-[x] Conclusão final de qualquer serviço é feita pelo gestor
-[x] Clientes ordenados pela menor data e horário ativos do atendimento, do menor para o maior
-[x] Informações do cliente sem duplicação visual: rua, número, bairro e cidade aparecem juntos em um único bloco de endereço; ponto de referência permanece em bloco separado
-[x] Blocos comuns dos detalhes usam altura padrão compacta de 100px e não são esticados pela maior informação da linha
-[x] Descrição do problema e observações crescem conforme o conteúdo, sem cortar textos grandes
-[x] Mapa do atendimento usa bloco compacto de 100px dentro da mesma grade dos demais dados
-
-Itens removidos:
-[x] AUSENTE: seção "Cole as informações do cliente" / paste-card / parseAndFill / paste-area
-[x] AUSENTE: seção "Entrada / Sinal"
-[x] AUSENTE: botão "Copiar número"
-[x] AUSENTE: status "Rejeitado"
-[x] AUSENTE: seção "Orçamento do técnico" na Visita Empresa
-
-INDEX (index.html)
-Funcionalidades ativas:
-[x] Status workshop_pending reconhecido com badge ciano e label "Aguardando Avaliação"
-[x] Formulário de avaliação disponível para workshop_pending
-[x] openLb usa window.open(src, '_blank') — sem lightbox, sem zoom manual
-[x] openLb converte fotos base64 para Blob URL para abrir no visualizador padrão do celular
-[x] Checkbox "Precisa retirar o equipamento" na avaliação
-[x] Fotos salvas em techReport.photos no Firestore ao enviar avaliação
-[x] Status approved + Serviço no galpão ativo → botão "Pronto para Entrega" → ready_delivery
-[x] Status approved sem Serviço no galpão → botão "Serviço Concluído" muda para Serviço finalizado, aguardando confirmação do gestor
-[x] Técnico pode descartar visita para lixeira pelo index
-[x] Clientes ordenados pela menor data e horário ativos do atendimento, do menor para o maior
-[x] Botões WhatsApp e Ligar próximos ao número do cliente
-[x] Botão Maps próximo ao endereço do cliente
-[x] Abas de atendimento renomeadas para "Relatório 1", "Relatório 2" etc.
-[x] Botão ➕ para adicionar outro relatório/orçamento
-[x] Botão 🗑️ para excluir relatório extra, mantendo limite mínimo de 1 relatório
-[x] Botão físico voltar do celular fecha o detalhe e retorna ao menu sem sair do app
-[x] Fotos da avaliação aparecem como prévia e abrem com zoom nativo em nova aba/visualizador do celular
-[x] Técnico consegue editar avaliação já enviada
-[x] Melhoria visual da avaliação técnica: botão principal verde em destaque, ações Cliente Ausente/Descartar visíveis com emojis, tipo de serviço por botões Corretiva/Preventiva/Instalação, relatório em texto, placeholder de modelo corrigido, câmera destacada
-[x] Informações do cliente sem duplicação visual: rua, número, bairro e cidade aparecem juntos em um único bloco de endereço; ponto de referência permanece em bloco separado
-
-
-[x] Botão Ligar sem +55 no link tel:
-[x] Botão Maps usa endereço, número, bairro e cidade do cliente
-[x] Tipo de serviço inclui Corretiva, Preventiva e Instalação
-[x] Ao abrir outro cliente, os campos de avaliação não herdam dados do cliente anterior
-[x] Novo relatório copia o modelo exato do Relatório 1 e permanece editável
-[x] Aba minimizada mostra a quantidade de relatórios
-[x] Botão 🛻 Precisa retirar o equipamento no lugar do checkbox simples
-[x] Relatórios no index com rolagem horizontal e lixeira integrada
-[x] Notificação/aviso sonoro de nova visita adicionada no index e gestor [x] Correção reforçada de relatórios no index: adicionar relatórios ilimitados busca a versão atual no Firestore, botão alternativo grande foi adicionado, e exclusão usa mínimo de 1 relatório total para não bloquear indevidamente.
-
-
-[x] Correção visual/fluxo no index: botão duplicado de adicionar relatório removido, som desativado ao adicionar relatório e envio de avaliação em branco bloqueado (modelo, tipo de serviço e relatório obrigatórios; foto opcional)
-
-Itens removidos:
-[x] AUSENTE: variável deliveryBox
-[x] AUSENTE: lightbox com zoom manual
-[x] AUSENTE: modo claro no index
-
-CADASTRO (cadastro.html)
-Funcionalidades ativas:
-[x] Visual padrão profissional restaurado
-[x] Validação de token ?token= via Firebase, validade 6h, uso único
-[x] Link expirado/inválido bloqueia o formulário
-[x] Após finalizar cadastro redireciona para WhatsApp 5571981122167
-[x] Rodapé: "30 anos atendendo em Dias D'Ávila e região"
-[x] Anti-duplicação por telefone normalizado
-
-Itens removidos:
-[x] AUSENTE: balão/mensagem de WhatsApp automática após cadastro
-
-SERVICE WORKER (service-worker.js)
-[x] CACHE_NAME atualizado: mfc-tecnico-v130
-[x] APP_SHELL inclui páginas, imagens, fontes, layout-guide.js, location-view.js e os arquivos locais do Leaflet
-[x] Cache antigo deletado no activate
-[x] Páginas HTML: rede primeiro, cache fallback
-[x] Firebase, Google APIs e CDNs externos não interceptados
-
-INDEX — Atualização MFC v6
-[x] Correção de relatórios no index: permite adicionar mais de dois relatórios e excluir relatório extra mantendo mínimo de 1 ativo
-
-ATUALIZAÇÃO MFC v10
-[x] Correção anterior de ordenação por data e hora substituída posteriormente pela regra createdAt desc.
-[x] Service-worker atualizado para mfc-tecnico-v16.
-
-[x] Atualização MFC v11: index.html e gestor.html usam query orderBy(createdAt, desc) e renderização ordenada por createdAt decrescente, mantendo clientes mais recentes no topo.
-[x] Atualização MFC v12: função sortByNearestDate removida completamente; lista principal usa somente createdAt decrescente, sem datetime/serviceDate/sortDateValue para ordenar clientes.
-
-ATUALIZAÇÃO MFC v13
-[x] Index: envio de avaliação confirma sucesso e retorna ao menu quando não houver outro relatório pendente.
-[x] Index: botão de atualização da avaliação renomeado para salvar avaliação, mantendo edição direta da avaliação já enviada.
-[x] Index/Gestor: efeitos sonoros removidos.
-[x] Index/Gestor: clientes ordenados pela menor data e horário ativos do atendimento, do menor para o maior.
-[x] Service-worker atualizado para mfc-tecnico-v16.
-ATUALIZAÇÃO MFC v14
-[x] Tipo de serviço separado do relatório técnico no index e no gestor: Corretiva/Preventiva agora fica em "Tipo de Serviço" e o relatório mantém apenas a especificação digitada pelo técnico, evitando duplicação ao editar e reenviar.
-
-ATUALIZAÇÃO MFC v15
-[x] Link de cadastro reduzido para 6 horas no gestor e no cadastro.
-[x] Gestor exibe fotos e imagens diretamente em visualizador interno, sem abrir nova guia.
-[x] Service-worker atualizado para mfc-tecnico-v18.
-ATUALIZAÇÃO MFC v16
-[x] Gestor: visualizador interno de fotos/imagens permite zoom com o scroll do mouse, sem abrir nova guia.
-[x] Service-worker atualizado para mfc-tecnico-v19.
-ATUALIZAÇÃO MFC v17
-[x] Cadastro: corrigida validação do token expirável — imports do Firestore restaurados e validação usa expiresAtMs/createdAtMs com prazo ativo de 6 horas.
-[x] Service-worker atualizado para mfc-tecnico-v20.
-
-ATUALIZAÇÃO MFC v18
-[x] Index: envio de avaliação protegido contra perda de dados — fotos são comprimidas antes de salvar, o app só limpa/retorna ao menu após confirmação do Firestore, e falhas de envio mantêm os dados na tela com aviso ao técnico.
-[x] Service-worker atualizado para mfc-tecnico-v21.
-
-ATUALIZAÇÃO MFC v19
-[x] Check-up geral: sintaxe dos scripts validada em index.html, gestor.html e cadastro.html.
-[x] Gestor: campo de busca corrigido para chamar render() sem erro de escopo do module script.
-[x] Gestor: aba Concluídos corrigida para exibir visitas concluídas, relatórios, fotos e imagem de orçamento no visualizador interno.
-[x] Checklist alinhado com a regra atual de ordenação por data/hora do atendimento.
-[x] Service-worker atualizado para mfc-tecnico-v22.
-
-ATUALIZAÇÃO MFC v20
-[x] Gestor: preserva aba do cliente aberta após salvar status, anexar/remover imagem ou receber atualização do Firestore em tempo real.
-[x] Gestor: preserva relatório selecionado, acordeões abertos e campos em edição durante nova renderização da lista.
-[x] Gestor: ao anexar imagem do orçamento, também preserva os campos já digitados da visita no mesmo salvamento, evitando perda na primeira tentativa.
-[x] Index: preserva campos digitados, tipo de serviço selecionado e fotos locais durante atualizações em tempo real enquanto o técnico edita a avaliação.
-[x] Service-worker atualizado para mfc-tecnico-v23.
-
-ATUALIZAÇÃO MFC v21
-[x] Gestor: botão Maps usa endereço, número, bairro e cidade do cliente, ignorando apenas o ponto de referência para não atrapalhar a rota.
-[x] Index: botão Maps usa endereço, número, bairro e cidade do cliente, ignorando apenas o ponto de referência para não atrapalhar a rota.
-[x] Service-worker atualizado para mfc-tecnico-v24.
-
-ATUALIZAÇÃO MFC v22
-[x] Index: corrigido vazamento de rascunho entre clientes — avaliação digitada em um cliente não aparece mais em outro cliente.
-[x] Index: envio de avaliação bloqueia chamada antiga quando o cliente aberto não corresponde ao botão acionado.
-[x] Index: tipo de serviço agora inclui Instalação.
-[x] Index: novo relatório copia automaticamente o modelo exato do Relatório 1 e mantém o campo editável.
-[x] Index/Gestor: aba minimizada mostra a quantidade de relatórios.
-[x] Index/Gestor: opção de excluir relatório disponível, mantendo mínimo de 1 relatório.
-[x] Service-worker atualizado para mfc-tecnico-v25.
-
-ATUALIZAÇÃO MFC v23
-[x] Gestor: removido o campo de texto "Orçamento" da aba "Orçamento e Status", mantendo apenas Observação e Imagem do orçamento/print.
-[x] Service-worker atualizado para mfc-tecnico-v26.
-
-ATUALIZAÇÃO MFC v24
-[x] Gestor: marcar Serviço no galpão anula Retirar equipamento no salvamento do relatório.
-[x] Gestor: opção Serviço já foi pago adicionada em Aprovação e Pagamento.
-[x] Gestor: botão Serviço finalizado move somente o relatório selecionado para Concluídos, mantendo o cliente na home se existirem outros relatórios ativos.
-[x] Index: técnico não envia mais o relatório direto para Concluídos ao clicar Serviço Concluído; o status fica como Serviço finalizado aguardando o gestor.
-[x] Service-worker atualizado para mfc-tecnico-v27.
-
-ATUALIZAÇÃO MFC v28
-[x] Index: card do cliente — data e indicadores (Retirar equipamento, Serviço no galpão, Serviço pago) na mesma linha, data à esquerda e indicadores à direita, com altura/padding idênticos para alinhamento simétrico.
-[x] Gestor: botão "Remover visita" mantido sem alteração; novo botão "🗑 Mover para lixeira" adicionado ao lado, enviando o cliente para a lixeira do gestor (mesma lógica de softDelete já usada na lixeira).
-[x] Service-worker atualizado para mfc-tecnico-v28.
-ATUALIZAÇÃO MFC v29
-[x] Gestor: bug das abas soltas corrigido — </div> extra no template techReport foi removido; acordeões agora ficam corretamente dentro do vpanel da visita correspondente.
-[x] Gestor: botão ✏️ Editar adicionado no header do card para edição completa do cadastro (nome, telefone, endereço, referência, data/hora, equipamento, observações).
-[x] Gestor: campo "Data e hora da visita" adicionado por layer (salva imediatamente ao alterar).
-[x] Gestor: checkbox "💸 Falta pagar" adicionado em Aprovação e Pagamento; indicador vermelho aparece no card quando ativo.
-[x] Service-worker atualizado para mfc-tecnico-v29.
-
-
-ATUALIZAÇÃO MFC v30
-
-[x] Gestor: bug de persistência de data/hora corrigido — readLayerForm agora captura o campo ly-datetime e inclui no objeto salvo; saveLayerDatetime também atualiza o campo datetime no nível raiz do cliente quando é a primeira visita.
-
-[x] Gestor: campo "Tipo de serviço" adicionado em Aprovação e Pagamento com opções Corretiva, Preventiva, Instalação e Laudo (multi-seleção via botões — salvo como serviceType na aprovação).
-
-[x] Gestor: seção "Entrada da aprovação (40%)" substituída por input numérico livre "Valor da entrada pago" com cálculo dinâmico exibindo "Falta a pagar" em vermelho.
-
-[x] Index: opção "📋 Laudo" adicionada aos tipos de serviço. Indicador "📋 Laudo" exibido no card quando selecionado.
-
-[x] Service-worker atualizado para mfc-tecnico-v30.
-
-NOTA TÉCNICA — Upload de imagens (item 3 solicitado):
-Não é possível forçar um diretório padrão no seletor de arquivos do navegador via código. Essa é uma restrição de segurança do browser (Chrome/Edge/Firefox) que impede sites de pré-selecionar pastas do sistema operacional. Isso não é um bug do app — é um limite da Web Platform.
-
-
-ATUALIZAÇÃO MFC v130
-
-[x] Gestor: blocos comuns dos detalhes padronizados com altura total de 100px.
-[x] Gestor: grade usa alinhamento pelo início para um conteúdo maior não esticar os demais blocos da linha.
-[x] Gestor: mapa deixou de ocupar a largura inteira e passou a usar um bloco compacto de 100px na grade.
-[x] Gestor: descrição do problema mantém altura automática e acompanha textos grandes sem rolagem interna forçada.
-[x] Gestor: observações mantêm altura automática; o campo cresce ao digitar e ao carregar texto já salvo.
-[x] Conteúdos excepcionalmente longos nos blocos comuns permanecem acessíveis por rolagem interna, sem alterar o padrão visual.
-[x] Validado com sintaxe JavaScript, estrutura HTML, regras de tamanho, mapa compacto, crescimento das exceções e checklist.
-[x] CACHE_NAME atualizado: mfc-tecnico-v130
-[x] Service-worker atualizado para mfc-tecnico-v130.
-
-ATUALIZAÇÃO MFC v129
-
-[x] Cadastro de cliente e empresa grava todo ponto de mapa válido nos formatos direto e interno, preservando compatibilidade entre cadastro, aprovação e exibição.
-[x] Gestor reconhece coordenadas válidas nos formatos latitude/longitude, lat/lng e nos objetos location, mapLocation ou geolocation.
-[x] Gestor exibe o mapa dentro da grade de blocos de detalhe quando a localização tiver sido utilizada no cadastro.
-[x] Index exibe o mapa minimizado dentro do conteúdo de detalhes da visita quando a localização tiver sido utilizada no cadastro.
-[x] Botões Maps do Gestor e Index priorizam as coordenadas do alfinete e usam o endereço completo como fallback.
-[x] Gestor e Index exibem rua, número, bairro e cidade em um único bloco de endereço, sem repetir cidade, número ou bairro em blocos separados.
-[x] Ponto de referência continua em bloco próprio no Gestor e Index.
-[x] A consolidação é apenas visual: os campos separados continuam preservados no cadastro e no Firestore.
-[x] Clientes antigos, empresas e registros sem coordenadas continuam compatíveis e sem bloco de mapa vazio.
-[x] Validado com sintaxe JavaScript, estrutura HTML, propagação das coordenadas, ausência de blocos duplicados, arquivos obrigatórios e checklist.
-[x] CACHE_NAME atualizado: mfc-tecnico-v129
-[x] Service-worker atualizado para mfc-tecnico-v129.
-
-ATUALIZAÇÃO MFC v128
-
-[x] Cadastro de cliente: botão simples e opcional confirma pelo GPS a localização da casa.
-[x] Cadastro de empresa: o mesmo fluxo confirma a localização do atendimento empresarial.
-[x] Após localizar, são exibidas somente as opções "Está correto" e "Ajustar localização".
-[x] Ajuste manual oculto por padrão; quando solicitado, permite tocar no mapa ou arrastar o alfinete.
-[x] Permissão negada, GPS indisponível ou tempo esgotado não bloqueiam o envio do cadastro.
-[x] Somente pontos confirmados salvam latitude, longitude, precisão, origem e data de confirmação.
-[x] Aprovação de novos cadastros preserva a localização confirmada em clientes e empresas.
-[x] Gestor: novos cadastros mostram um indicador quando o cliente confirmou a localização.
-[x] Gestor: mapa compacto e botão de rota aparecem nos detalhes quando houver localização confirmada.
-[x] Index: mapa minimizado e botão de rota aparecem nos detalhes para o técnico.
-[x] Botões Maps priorizam coordenadas confirmadas e mantêm endereço/número/bairro/cidade como fallback.
-[x] Cadastros antigos e clientes sem localização permanecem compatíveis e sem blocos vazios.
-[x] Leaflet 1.9.4 e licença BSD incluídos localmente; OpenStreetMap exibido com atribuição visível.
-[x] Nenhum serviço de geocodificação automática foi adicionado; o endereço residencial não é enviado ao Nominatim.
-[x] Mapa visual atualizado com códigos de localização para Cadastro, Gestor e Index.
-[x] Validado com sintaxe JavaScript, estrutura HTML, propagação dos campos, arquivos obrigatórios e checklist.
-[x] CACHE_NAME atualizado: mfc-tecnico-v128
-[x] Service-worker atualizado para mfc-tecnico-v128.
-
-ATUALIZAÇÃO MFC v127
-
-[x] Gestor, Index e Cadastro: modo particular "Mapa visual" identifica áreas de layout com contornos e códigos copiáveis.
-[x] Modo oculto por padrão: primeira ativação somente no navegador do responsável com ?mfc_layout=1; remoção com ?mfc_layout=0.
-[x] Atalho Ctrl+Shift+L liga/desliga o mapa no computador após a ativação inicial.
-[x] Identificação atualizada automaticamente para cartões, relatórios, blocos e modais criados dinamicamente.
-[x] Clique na etiqueta copia o código da área sem executar a ação normal do componente.
-[x] Recurso somente visual: não lê, altera ou grava dados de clientes no Firebase.
-[x] Arquivo MAPA_VISUAL_MFC.txt criado com legenda, instruções e exemplo de pedido de layout.
-[x] layout-guide.js compartilhado pelas três páginas e incluído no APP_SHELL.
-[x] Validado com verificação de sintaxe JavaScript, estrutura HTML, arquivos obrigatórios e regras do checklist.
-[x] CACHE_NAME atualizado: mfc-tecnico-v127
-[x] Service-worker atualizado para mfc-tecnico-v127.
-
-ATUALIZAÇÃO MFC v126
-
-[x] Index: botões de modalidade da garantia alinhados com ícones da fonte local do projeto.
-[x] Index: bloco "Como será atendida a garantia?" exibido acima do bloco "Histórico da garantia".
-[x] Index: garantia inicia sem "Relatório 1" e sem lixeira; a aba nasce somente ao escolher "Novo relatório / orçamento".
-[x] Index: lixeira do novo Relatório 1 cancela apenas o relatório atual e preserva o histórico do cliente.
-[x] Index: relatórios anteriores são agrupados em "Concluídos" ao criar um novo relatório; com dois ou mais concluídos, a aba permanece visível desde o início.
-[x] Index: aba Concluídos mostra equipamento, tipo, data, relatório, fotos e orçamento de cada atendimento finalizado.
-[x] Index: botão genérico de adicionar relatório fica oculto no fluxo de garantia para não duplicar a ação de novo relatório.
-[x] Validado com verificação de sintaxe JavaScript, balanço estrutural de HTML e conferência das regras do checklist.
-[x] CACHE_NAME atualizado: mfc-tecnico-v126
-[x] Service-worker atualizado para mfc-tecnico-v126.
-
-ATUALIZAÇÃO MFC v125
-
-[x] Index: atendimento em garantia mostra ao técnico o histórico completo do último serviço concluído — equipamento, tipo, prazo/status da garantia, conclusão, relatório, pagamento, fotos e orçamento.
-[x] Index: garantia oferece os botões "Ajuste simples" e "Novo relatório / orçamento".
-[x] Index: "Ajuste simples" abre somente um campo amplo para o técnico explicar o ajuste realizado e salva o atendimento como avaliação concluída.
-[x] Index: "Novo relatório / orçamento" abre o formulário técnico completo e segue o fluxo normal de orçamento.
-[x] Gestor: modalidade escolhida e texto do ajuste ficam identificados no relatório ativo e nos concluídos.
-[x] Gestor: ao restaurar cliente da lixeira para uma garantia, preserva os serviços concluídos necessários para o técnico consultar o histórico; visita comum continua iniciando limpa.
-[x] Validado com acorn + balanço de divs.
-[x] CACHE_NAME atualizado: mfc-tecnico-v125
-[x] Service-worker atualizado para mfc-tecnico-v125.
-
-ATUALIZAÇÃO MFC v124
-
-[x] Gestor: cidade escolhida no cadastro público é preservada ao aprovar o novo cadastro e exibida sempre no bloco "Cidade" dos detalhes do cliente; cadastros antigos sem cidade mostram "Não informada" e podem ser corrigidos em Editar cliente.
-[x] Index: cidade do cliente exibida sempre no bloco "Cidade" dos detalhes para o técnico; cadastros antigos sem cidade mostram "Não informada".
-[x] Gestor/Index: botão Maps inclui a cidade informada pelo cliente junto do endereço, número e bairro na busca da rota.
-[x] Gestor: aprovação do cadastro preserva também e-mail, endereço, número, bairro e descrição em campos separados, conforme o checklist obrigatório.
-[x] Validado com acorn + balanço de divs.
-[x] CACHE_NAME atualizado: mfc-tecnico-v124
-[x] Service-worker atualizado para mfc-tecnico-v124.
-
-ATUALIZAÇÃO MFC v123
-
-[x] Gestor: homeSearch() agora renderiza botão "🛡️ Garantia" nos resultados de busca quando findLastConcludedLayer(c,-1) encontra um relatório concluído.
-[x] Gestor: modal #warranty-modal criado (padrão .mbg/.modal já existente), função openWarrantyPreview(id) monta o conteúdo com dados do cliente + último relatório concluído (equipamento, tipo, status de garantia, data de conclusão, avaliação do técnico com white-space:pre-wrap, forma de pagamento, fotos, imagem do orçamento).
-[x] Gestor: closeWarrantyModal() e startWarrantyVisit(id) criados; startWarrantyVisit fecha o preview, reaproveita pickClient() pra preencher o form de Nova Visita, e já marca o toggle "Serviço de garantia" (sem duplicar o alerta, já que o preview mostrou tudo).
-[x] Validado com acorn + balanço de divs.
-[x] CACHE_NAME atualizado: mfc-tecnico-v123
-[x] Service-worker atualizado para mfc-tecnico-v123.
-
-ATUALIZAÇÃO MFC v122
-
-[x] Index: chip "🛡️ Garantia" adicionado em card-foot (tags), condicional a l?.approval?.warranty — mesmo estilo/cor âmbar usado no gestor v121.
-[x] Validado com acorn + balanço de divs.
-[x] CACHE_NAME atualizado: mfc-tecnico-v122
-[x] Service-worker atualizado para mfc-tecnico-v122.
-
-ATUALIZAÇÃO MFC v121
-
-[x] Gestor: função "Serviço de garantia" criada. Regra: Corretiva/Instalação = 90 dias, Preventiva = 15 dias, Laudo = sem garantia. Baseado no último relatório concluído (concludedAt) do cliente.
-[x] Gestor: helpers warrantyDaysFor(), findLastConcludedLayer(), checkWarrantyStatus(), hasWarrantyService() criados.
-[x] Gestor: botão "🛡️ Serviço de garantia" adicionado no painel Orçamento e Status (toggle3 virou grid 2x2 pra caber 4 botões); salvo em layer.approval.warranty via readLayerForm.
-[x] Gestor: botão "🛡️ Serviço de garantia" adicionado na caixa "+ Nova Visita"; ao ativar, busca cliente por nome+telefone em TODOS os registros (ativos e lixeira) via findAnyClientMatch() e roda a checagem de garantia — cobre tanto restauração da lixeira quanto cliente ativo recorrente.
-[x] Gestor: makeLayer(), addVisitToExisting(), createOrAppendClient(), addClient() atualizados para propagar o parâmetro warranty até o novo relatório criado.
-[x] Gestor: chip "🛡️ Garantia" (âmbar) adicionado ao card do cliente via hasWarrantyService(c).
-[x] Validado com acorn + balanço de divs.
-[x] CACHE_NAME atualizado: mfc-tecnico-v121
-[x] Service-worker atualizado para mfc-tecnico-v121.
-
-ATUALIZAÇÃO MFC v120
-
-[x] Index: .fg textarea.report-textarea min-height 420px → 210px (usuário confirmou que 420 ficou grande demais).
-[x] Validado com acorn + balanço de divs.
-[x] CACHE_NAME atualizado: mfc-tecnico-v120
-[x] Service-worker atualizado para mfc-tecnico-v120.
-
-ATUALIZAÇÃO MFC v119
-
-[x] Index: bug de especificidade CSS corrigido — ".fg textarea{min-height:72px}" (specificity 0,1,1) vencia ".report-textarea{min-height:420px}" (specificity 0,1,0) independente do valor setado nas v117/v118, por isso o campo nunca mudava de tamanho de fato.
-[x] Index: seletor trocado para ".fg textarea.report-textarea" (specificity 0,2,1), agora mais específico que a regra genérica — min-height:420px realmente aplicado.
-[x] Validado com acorn + balanço de divs.
-[x] CACHE_NAME atualizado: mfc-tecnico-v119
-[x] Service-worker atualizado para mfc-tecnico-v119.
-
-ATUALIZAÇÃO MFC v118
-
-[x] Index: .report-textarea min-height 260px → 420px.
-[x] Index: listener 'controllerchange' no navigator.serviceWorker adicionado — quando um SW novo assume controle (skipWaiting+claim já existentes no service-worker.js), a página recarrega automaticamente uma vez (guard swRefreshing evita loop).
-[x] Index: reg.update() no registro do SW mantido (chamado a cada load), garantindo checagem de versão nova toda vez que o app abre.
-[x] Validado com acorn + balanço de divs.
-[x] CACHE_NAME atualizado: mfc-tecnico-v118
-[x] Service-worker atualizado para mfc-tecnico-v118.
-
-ATUALIZAÇÃO MFC v117
-
-[x] Index: .report-textarea min-height 140px → 260px, campo nasce maior; autoGrowTA continua funcionando por cima.
-[x] Validado com acorn + balanço de divs.
-[x] CACHE_NAME atualizado: mfc-tecnico-v117
-[x] Service-worker atualizado para mfc-tecnico-v117.
-
-ATUALIZAÇÃO MFC v116
-
-[x] Gestor: addVisitToExisting() corrigida — cliente vindo da lixeira (c.deleted===true) começa a nova visita com 1 relatório limpo, em vez de resgatar todo o histórico antigo (inclusive concluídos). Cliente recorrente normal (não deletado) mantém o comportamento de histórico ativo, sem mudança.
-[x] Index: textarea do Relatório (id f-problem-${i}, em assessmentForm e editAssessment) ganhou classe .report-textarea (min-height 140px, resize:none, overflow:hidden) + oninput="autoGrowTA(this)".
-[x] Index: função global window.autoGrowTA(el) criada; chamada também na inicialização (renderDetailFull após montar #d-body, e openEditReportModal após montar o modal) pra ajustar altura de relatórios já preenchidos.
-[x] Gestor: exibição do relatório do técnico (aba de detalhe + card "Concluído") envolvida em <span style="white-space:pre-wrap">, preservando quebras de linha digitadas no index.
-[x] Validado com acorn (gestor.html, index.html) + balanço de divs.
-[x] CACHE_NAME atualizado: mfc-tecnico-v116
-[x] Service-worker atualizado para mfc-tecnico-v116.
-
-ATUALIZAÇÃO MFC v115
-
-[x] Gestor: cada badge de status no card ganhou selo "R{n}" (.rep-num dentro de .rep-chip) quando o cliente tem >1 relatório ativo; numeração igual à das abas do detalhe.
-[x] Index: mesma lógica de selo "R{n}"; .card-status-row virou coluna (flex-direction:column) — status um embaixo do outro, pedido explícito do usuário.
-[x] CSS .rep-chip/.rep-num adicionado em ambos os arquivos, reaproveitando var(--surface2)/var(--muted) já existentes.
-[x] Validado com acorn (gestor.html, index.html) + balanço de divs.
-[x] CACHE_NAME atualizado: mfc-tecnico-v115
-[x] Service-worker atualizado para mfc-tecnico-v115.
-
-ATUALIZAÇÃO MFC v114
-
-[x] Index (técnico): card do cliente agora renderiza um <span class="badge"> por relatório ativo (getLayers(c).filter(!done)), replicando a mudança da v113 no gestor.
-[x] Index: cada badge recebe cor própria via style="--sc:${STATUS_COLOR[status]}" inline, sobrescrevendo a herança do --sc do card.
-[x] Index: nenhum tratamento extra necessário pra "discarded"/sem camada ativa — lista já filtra esses casos antes de renderizar.
-[x] Index: .card-status-row com flex-wrap+gap.
-[x] Index: cor da borda do card inalterada (segue status representativo).
-[x] Validado com acorn + balanço de divs.
-[x] CACHE_NAME atualizado: mfc-tecnico-v114
-[x] Service-worker atualizado para mfc-tecnico-v114.
-
-ATUALIZAÇÃO MFC v113
-
-[x] Gestor: card do cliente agora renderiza um <span class="sbadge"> por relatório ativo (não concluído), não mais apenas displayStatus(c).
-[x] Gestor: caso "discarded" mantém badge único; caso sem relatórios ativos mostra badge "Concluído".
-[x] Gestor: .vc-status-row com flex-wrap+gap pra suportar múltiplos badges.
-[x] Gestor: cor da borda do card (--sc) inalterada, ainda usa displayStatus(c).
-[x] Validado com acorn + balanço de divs.
-[x] CACHE_NAME atualizado: mfc-tecnico-v113
-[x] Service-worker atualizado para mfc-tecnico-v113.
-
-ATUALIZAÇÃO MFC v112
-
-[x] Gestor: botão "Filtro" removido da barra de busca (home-search-row) e recolocado como ícone compacto (filter-btn-icon) ao lado do título "Visitas" no list-head.
-[x] Gestor: filterIconHtml() reaproveita FILTERS[] e setFilter() já existentes, sem duplicar lógica de filtragem.
-[x] Gestor: render() injeta o ícone/menu em #list-filter-wrap toda vez que a lista é redesenhada; troca de view Financeiro→Visitas também restaura o container corretamente.
-[x] Gestor: view Financeiro não recebeu o ícone (nunca teve esse filtro).
-[x] Validado com acorn + balanço de divs.
-[x] CACHE_NAME atualizado: mfc-tecnico-v112
-[x] Service-worker atualizado para mfc-tecnico-v112.
-
-ATUALIZAÇÃO MFC v111
-
-[x] Cadastro: campo "Dias D'ávila?" trocado de switch (toggleCidadeSwitch) para radio buttons (rd-cidade-sim/rd-cidade-nao), rótulo "Reside em Dias D'Ávila?".
-[x] Cadastro: "Sim" (padrão marcado) esconde aviso de taxa + campo cidade; "Não" mostra ambos. Lógica em updateCidadeChoice(), ligada via addEventListener('change') nos dois radios.
-[x] Cadastro: cidadeSwitchOn preservada como variável de estado (compatibilidade com validação do submit e cálculo de finalCity) — passou a refletir o estado do radio "Sim".
-[x] Cadastro: CSS morto do switch antigo (.switch-row/.sw-track/.sw-label) removido; radios reutilizam .radio-group/.radio-lbl já existentes no arquivo, sem CSS novo.
-[x] Validado com acorn + balanço de divs.
-[x] CACHE_NAME atualizado: mfc-tecnico-v111
-[x] Service-worker atualizado para mfc-tecnico-v111.
-
-ATUALIZAÇÃO MFC v110
-
-[x] Cadastro: switch "Dias D'ávila?" corrigido — padrão (sem tocar) volta a ser "Sim, resido em Dias D'Ávila" (reverte inversão errada da v109); ao acionar, mostra "Não, não resido em Dias D'Ávila" + campo "Qual cidade?" + aviso de taxa contextual.
-[x] Cadastro: aviso de reembolso por serviço descartado removido (junto com o de R$10 já removido na v109).
-[x] Cadastro: hint fixo do card "Dias D'ávila?" simplificado; aviso de taxa para outras cidades vira contextual, some/aparece com o switch.
-[x] Gestor: botão "Fixar visita" movido para a mesma linha das abas de relatório (vtabs-row), alinhado à direita via justify-content:space-between; pinBtnHtml(c,li) gera o botão do relatório ativo, showVTab atualiza ao trocar de aba, showDoneTab esconde o botão na aba Concluídos.
-[x] Validado com acorn (gestor.html, cadastro.html, index.html) + balanço de divs.
-[x] CACHE_NAME atualizado: mfc-tecnico-v110
-[x] Service-worker atualizado para mfc-tecnico-v110.
-
-ATUALIZAÇÃO MFC v109
-
-[x] Cadastro: removido o fee-notice "Visita em Dias D'Ávila são R$ 10,00" (visitas em Dias D'Ávila agora são gratuitas); aviso de reembolso por serviço descartado mantido.
-[x] Cadastro: hint do switch "Dias D'ávila?" atualizado para refletir cobrança gratuita local / consulta via WhatsApp para outras cidades.
-[x] Cadastro: switch "Dias D'ávila?" invertido — padrão (desligado) agora é "Não resido em Dias D'Ávila" com campo de cidade já visível; acionar o switch (ligado) declara "Sim, resido em Dias D'Ávila" e esconde o campo. cidadeSwitchOn inicia em false; classe .on do switch e rótulo trocados de acordo.
-[x] Gestor: painéis "Pagamento" (Pago/Restante/Total) e "Datas importantes" (Data da visita/Data do serviço) removidos do card de detalhe da visita.
-[x] Validado com acorn (gestor.html, cadastro.html, index.html) + balanço de divs.
-[x] CACHE_NAME atualizado: mfc-tecnico-v109
-[x] Service-worker atualizado para mfc-tecnico-v109.
-
-ATUALIZAÇÃO MFC v108
-
-[x] REMOÇÃO: stepper visual "Aprovação → Para executar → Concluído → Pago" removido da tela de detalhe da visita no gestor.html (função timelineHtml, chamada no template, CSS .timeline/.tl-*). Puramente estético, sem uso funcional — remoção pedida pelo usuário.
-
-[x] AJUSTE: ordenação da lista de visitas (index.html e gestor.html) corrigida para regra composta: dia decrescente (dia mais recente no topo, igual já era) + horário crescente dentro do mesmo dia (mais cedo no topo). "Data a definir" continua com prioridade máxima no topo.
-
-[x] CORREÇÃO: ordenação da lista de visitas (index.html e gestor.html) estava decrescente (horário mais tarde no topo). Corrigido para crescente (horário mais cedo no topo), conforme regra já documentada no checklist.
-
-[x] CORREÇÃO: a função de copiar mensagem de acompanhamento (clique no badge "Aguardando aprovação") foi implementada por engano no index.html (técnico) na primeira tentativa. Corrigido: a função está agora no gestor.html, badge do cabeçalho do detalhe da visita (head-badge), que é onde o status "Aguardando aprovação" realmente aparece. index.html voltou ao estado original do v106.
-
-[x] Gestor: badge "Aguardando aprovação" no cabeçalho do detalhe da visita agora é clicável — ao tocar, copia mensagem pronta de acompanhamento com saudação (Bom dia/Boa tarde conforme horário) e nome do cliente. Funciona no carregamento inicial do detalhe, ao trocar de aba entre relatórios, e é desativado automaticamente na aba Concluídos.
-
-[x] Cadastro: mensagem automática enviada ao WhatsApp ao finalizar o cadastro (formulário Cliente e formulário Empresa) trocada de texto fixo para dinâmica — "Eu, {Nome completo do cliente ou da empresa} finalizei o cadastro".
-
-[x] Service-worker atualizado para mfc-tecnico-v108.
-
-ATUALIZAÇÃO MFC v106
-[x] BUGFIX: layerMainDate (gestor) e layerDate (index) — status 'approved' agora prioriza l.approval.serviceDate sobre l.statusAt. Só cai pro statusAt se a data do serviço ainda não foi definida.
-[x] Validado com acorn nos dois arquivos.
-[x] CACHE_NAME atualizado: mfc-tecnico-v106
-[x] Service-worker atualizado para mfc-tecnico-v106.
-
-ATUALIZAÇÃO MFC v105
-[x] Cadastro.html: aviso de reembolso por serviço descartado adicionado no formulário Cliente (abaixo do aviso de taxa).
-
-ATUALIZAÇÃO MFC v104
-[x] BUGFIX: cadastro.html removeu o merge automático direto em clients quando telefone já existia — causava (1) bypass de "Novos Cadastros" e (2) data errada (layer nova sem datetime, caindo no fallback c.datetime = data do primeiro cadastro).
-[x] makeVisitLayer() removida (função morta, era a origem do bug).
-[x] Toda submissão (cliente/empresa) vai sempre pra leads agora; existingClientId/recurrent viram metadados informativos no lead, não ação automática.
-[x] AVISO: dados já gravados incorretamente antes dessa correção não são desfeitos automaticamente — checar manualmente clientes afetados.
-[x] Validado com acorn + balanço de divs.
-[x] CACHE_NAME atualizado: mfc-tecnico-v104
-[x] Service-worker atualizado para mfc-tecnico-v104.
-
-ATUALIZAÇÃO MFC v103
-[x] BUGFIX: badge por extenso removido do vc-status-row (gestor) e card-status-row (index) — card só mostra o ícone chip agora.
-[x] Badge por extenso continua só no detail-head (gestor) e d-access-badge (index).
-[x] Validado com acorn.
-[x] CACHE_NAME atualizado: mfc-tecnico-v103
-[x] Service-worker atualizado para mfc-tecnico-v103.
-
-ATUALIZAÇÃO MFC v102
-[x] Gestor+Index: vc-name/card-name mostram "Empresa (Solicitante)" quando aplicável.
-[x] Gestor: rótulo do primeiro infoCard vira "Nome da empresa" quando isCompany (antes sempre "Nome completo").
-[x] Cores accessRequired invertidas: true=verde, false=vermelho (ícone do card + badge por extenso).
-[x] Badge por extenso "Documentação necessária/não necessária" ao lado do status: vc-status-row (gestor lista), detail-head (gestor detalhe), d-access-badge novo (index detalhe).
-[x] Removida duplicação de vc-status-row que ficou depois do primeiro replace.
-[x] Validado com acorn + balanço de divs nos dois arquivos.
-[x] CACHE_NAME atualizado: mfc-tecnico-v102
-[x] Service-worker atualizado para mfc-tecnico-v102.
-
-ATUALIZAÇÃO MFC v101
-[x] Cadastro.html: switch-row de acesso do técnico trocado por dois botões (Sim/Não) + descrição dinâmica embaixo, mais claro pro cliente empresa.
-[x] setAcesso(val) substitui toggleAcessoSwitch(); acessoSwitchOn continua alimentando o leadData igual antes.
-[x] Validado com acorn + balanço de divs.
-[x] CACHE_NAME atualizado: mfc-tecnico-v101
-[x] Service-worker atualizado para mfc-tecnico-v101.
-
-ATUALIZAÇÃO MFC v100
-[x] BUGFIX: removido emoji 🏢 duplicado no header do lead card (só ícone FA fica).
-[x] Editar empresa: bloco de 3 campos (tecAcessoNome/Doc/Placa) virou switch único e-access-required, gravando accessRequired.
-[x] clientInfoBlocks (gestor) e client-grid (index): removida a caixa grande de aviso e o card de acesso — substituídos por chip ícone (carteirinha vermelha/verde) no card da lista.
-[x] Validado com acorn (gestor.html e index.html).
-[x] CACHE_NAME atualizado: mfc-tecnico-v100
-[x] Service-worker atualizado para mfc-tecnico-v100.
-
-ATUALIZAÇÃO MFC v99
-[x] Cadastro.html: logo+saudação por horário no popup, aviso de taxa sem data que expira, hint do switch atualizado.
-[x] Cadastro.html: empresa perde o aviso de isenção, e-mail vira opcional, ganha switch accessRequired (é a empresa avisando, não preenchendo dados do técnico).
-[x] Gestor: approveLead carrega accessRequired; renderLeads mostra aviso na prévia; clientInfoBlocks mostra banner vermelho no topo do detalhe quando accessRequired true.
-[x] Index: mesmo banner (usando client-row/obs-alert que já existem aqui) com dica prática pro técnico.
-[x] Corrigido bug próprio: um `}` perdido num str_replace no meio da edição (toggleCidadeSwitch) — pego e corrigido antes de fechar, validado com acorn depois.
-[x] Validado com acorn nos três arquivos + balanço de divs/forms.
-[x] CACHE_NAME atualizado: mfc-tecnico-v99
-[x] Service-worker atualizado para mfc-tecnico-v99.
-
-ATUALIZAÇÃO MFC v98
-[x] Cadastro.html: popup Cliente/Empresa com slide-down, dois formulários completos, switch na cidade, máscara de CNPJ, aviso de taxa (cliente) e isenção (empresa). Token/anti-dup/WhatsApp preservados.
-[x] Gestor: renderLeads e approveLead reconhecem lead.type==='company', constroem client data com companyMode/cnpj/requester.
-[x] Gestor: modal Editar empresa com CNPJ, Solicitante e bloco de Acesso do técnico (tecAcessoNome/tecAcessoDoc/tecAcessoPlaca).
-[x] Gestor: clientInfoBlocks mostra endereço/equipamento pra ambos os tipos agora (antes só cliente); empresa ganha solicitante/CNPJ/acesso do técnico.
-[x] Index: client-grid isCompany com os mesmos campos + bloco de acesso do técnico, espelhando o gestor.
-[x] Validado com acorn nos três arquivos (cadastro/gestor/index) + checagem de balanço de divs.
-[x] CACHE_NAME atualizado: mfc-tecnico-v98
-[x] Service-worker atualizado para mfc-tecnico-v98.
-
-ATUALIZAÇÃO MFC v97
-[x] Index: checagem de Notification.permission==='granted' no carregamento (DOMContentLoaded + fallback readyState pra módulos que carregam depois do evento), sino fica verde se já ativado antes.
-[x] Notificação em si nunca dependeu da cor do botão — funcionalidade intacta o tempo todo, só o visual que enganava.
-[x] Validado com acorn.
-[x] CACHE_NAME atualizado: mfc-tecnico-v97
-[x] Service-worker atualizado para mfc-tecnico-v97 (só pra bump de cache, sem mudança funcional nele).
-
-ATUALIZAÇÃO MFC v96
-[x] functions/index.js: dedup trocado de event.id pra claim() atômico via collection _notified/{clientId}_{tipo}_{index}, usando .create() (falha se já existir = já foi notificado).
-[x] Cobre nova visita (_newvisit_) e aprovação (_approved_) separadamente, por índice de relatório.
-[x] PENDENTE: novo deploy (`firebase deploy --only functions`) — gestor.html/index.html não mudaram nessa versão, só a function.
-[x] CACHE_NAME atualizado: mfc-tecnico-v96
-[x] Validado com acorn.
-
-ATUALIZAÇÃO MFC v95
-[x] Gestor: checkTrashMatch(suppress) — pickClient chama com true, esconde o aviso sem checar; oninput continua chamando sem args, checagem normal.
-[x] functions/index.js: dedup via collection _processedEvents/{event.id}, evita notificação repetida por entrega duplicada do Eventarc (2ª geração).
-[x] PENDENTE: refazer `firebase deploy --only functions` pra correção da function valer (ZIP não sobe isso sozinho).
-[x] CACHE_NAME atualizado: mfc-tecnico-v95
-[x] Service-worker atualizado para mfc-tecnico-v95.
-[x] Validado com acorn (gestor.html e functions/index.js).
-
-ATUALIZAÇÃO MFC v94
-[x] VAPID_KEY real colada no index.html (linha 88), substituindo o placeholder.
-[x] Guard de "não configurado" (linha 92) agora é código morto inofensivo — nunca mais dispara.
-[x] Validado com acorn.
-[x] CACHE_NAME atualizado: mfc-tecnico-v94
-[x] Service-worker atualizado para mfc-tecnico-v94.
-[x] PENDENTE: deploy da Cloud Function (functions/) via Cloud Shell — único passo que falta pra notificação funcionar de ponta a ponta.
-
-ATUALIZAÇÃO MFC v93
-[x] functions/index.js: onDocumentWritten('clients/{id}') detecta nova visita (layer novo com status waiting/workshop_pending) e aprovação (layer virou 'approved'), manda push via admin.messaging().send() usando token salvo em settings/tecnico.
-[x] firebase.json + .firebaserc: config mínima pra `firebase deploy --only functions`.
-[x] Index: import getMessaging/getToken + setDoc; botão #notif-btn → ativarNotificacoes() pede permissão, gera token, salva em settings/tecnico.
-[x] service-worker.js: importScripts firebase-app-compat + firebase-messaging-compat, onBackgroundMessage mostra notificação com app fechado.
-[x] PENDENTE (não depende de mim): VAPID_KEY precisa ser colada manualmente no index.html (placeholder 'COLE_AQUI_SUA_VAPID_KEY'), e a function precisa ser deployada via `firebase deploy --only functions` (Cloud Shell ou terminal local).
-[x] CACHE_NAME atualizado: mfc-tecnico-v93
-[x] Service-worker atualizado para mfc-tecnico-v93.
-[x] Validado com acorn (index.html e service-worker.js).
-
-ATUALIZAÇÃO MFC v92
-[x] BUGFIX: switchView reconstrói .list-head só com o <h1> ao sair do Financeiro, removendo o botão Gerar PDF que ficava grudado. render() já delegava certo pra renderFin() quando view==='fin', não precisou mexer lá.
-[x] CACHE_NAME atualizado: mfc-tecnico-v92
-[x] Service-worker atualizado para mfc-tecnico-v92.
-[x] Validado com acorn.
-
-ATUALIZAÇÃO MFC v91
-[x] Financeiro: botão Gerar PDF movido pro .list-head, ao lado do título.
-[x] Financeiro: overdue-badge duplicado removido do detail-head (fica só no rescard).
-[x] Financeiro: .cvenc virou flex-column, atras-flag em linha própria (sem clipar), data com destaque (.cvenc-date).
-[x] Financeiro: código do cliente/CPF-CNPJ/PIX usam .copyable em vez de copy-btn com ícone.
-[x] BUGFIX: copyTxt não tira mais letras do texto (quebrava cópia de PIX).
-[x] CACHE_NAME atualizado: mfc-tecnico-v91
-[x] Service-worker atualizado para mfc-tecnico-v91.
-[x] Validado com acorn (parser real), não só node --check.
-
-ATUALIZAÇÃO MFC v90
-[x] BUGFIX (meu, da v89): <div id="fin-print-area"> estava dentro de <script>, quebrando o parse inteiro do JS. Movida pra fora, entre </script> e </body>.
-[x] Validado com acorn (parser JS real) em gestor.html E index.html — não confiar só em node --check daqui pra frente pra esse tipo de erro (falso negativo confirmado).
-[x] CACHE_NAME atualizado: mfc-tecnico-v90
-[x] Service-worker atualizado para mfc-tecnico-v90.
-
-ATUALIZAÇÃO MFC v89
-[x] Gestor: #fin-print-area + CSS @media print (visibility-based, esconde o resto do app na hora de imprimir).
-[x] printFinanceiro() monta tabela por residência (valor/vencimento/pix) + subtotal + total geral, sem código de cliente/CPF-CNPJ.
-[x] Botão "Gerar PDF do financeiro" no rodapé da tela Financeiro, aciona window.print().
-[x] Zero biblioteca externa — sem pasta nova pra incluir no ZIP.
-[x] CACHE_NAME atualizado: mfc-tecnico-v89
-[x] Service-worker atualizado para mfc-tecnico-v89.
-
-ATUALIZAÇÃO MFC v88
-[x] Index: discardClient vira modal com textarea obrigatória (discard-reason) — status:'discarded'+discardReason+discardedAt em vez de deleted:true.
-[x] Index: renderList exclui status==='discarded'; renderDetailFull tem tela simplificada de segurança pra esse status.
-[x] Gestor: STATUS/badgeCls/FILTERS/STATUS_COLOR/ICON (index) ganharam 'discarded'. displayStatus(c) prioriza c.status==='discarded' antes da lógica de layers.
-[x] Gestor: renderDetail desvia pra tela só com motivo+data+botão "Mover para lixeira" quando c.status==='discarded', pulando toda a árvore de relatório/orçamento.
-[x] mainDate(gestor) usa discardedAt quando descartado, consistente com o padrão da v87.
-[x] CACHE_NAME atualizado: mfc-tecnico-v88
-[x] Service-worker atualizado para mfc-tecnico-v88.
-
-ATUALIZAÇÃO MFC v87
-[x] readLayerForm: quotedAt virou statusAt genérico — grava toda vez que st!==base.status (qualquer transição real de status).
-[x] layerMainDate (gestor) e layerDate (index): evaluated usa l.updatedAt, quoted/approved/absent usam l.statusAt, ready_delivery/service_finished usam seus campos já existentes (readyDeliveryAt/serviceFinishedAt). waiting/workshop_pending continuam com a data da visita.
-[x] LIMITAÇÃO igual antes: sem retroatividade — status antigo só ganha statusAt no próximo save daquela visita.
-[x] CACHE_NAME atualizado: mfc-tecnico-v87
-[x] Service-worker atualizado para mfc-tecnico-v87.
-
-ATUALIZAÇÃO MFC v86
-[x] BUGFIX: mainDate/cardDate usavam MIN entre todos os relatórios ativos, dessincronizado do badge (que respeita pin/prioridade via displayStatus/getStatus). Corrigido com primaryLayer(c) no gestor, activeLayer(c) já existente reaproveitado no index — badge e data sempre do mesmo relatório.
-[x] appointmentSortValue (ordenação da lista) também usa a mesma referência agora, consistente com o que é exibido.
-[x] CACHE_NAME atualizado: mfc-tecnico-v86
-[x] Service-worker atualizado para mfc-tecnico-v86.
-
-ATUALIZAÇÃO MFC v85
-[x] Gestor: readLayerForm grava l.quotedAt na primeira transição pra status 'quoted', preserva em saves seguintes.
-[x] Gestor: layerMainDate usa quotedAt como data principal quando l.status==='quoted'.
-[x] Index: layerDate espelha a mesma regra (quotedAt), consistência entre os dois cards.
-[x] LIMITAÇÃO: sem retroatividade — registros já quoted antes da v85 só ganham quotedAt no próximo save manual daquela visita.
-[x] CACHE_NAME atualizado: mfc-tecnico-v85
-[x] Service-worker atualizado para mfc-tecnico-v85.
-
-ATUALIZAÇÃO MFC v84
-[x] BUGFIX: .clist não tem mais flex:1 sozinho — agrupado com .pagination dentro de .list-scroll (flex:1;overflow-y:auto;min-height:0), paginação cola no fim da lista real, não no fim da viewport.
-[x] Efeito colateral positivo: .fin-total (sticky bottom) da view financeira agora gruda no fim do scroll certo também.
-[x] CACHE_NAME atualizado: mfc-tecnico-v84
-[x] Service-worker atualizado para mfc-tecnico-v84.
-
-ATUALIZAÇÃO MFC v83
-[x] Gestor: phone2Name também usa cp()/copyable, tanto na linha extra quanto quando é o número principal exibido.
-[x] CACHE_NAME atualizado: mfc-tecnico-v83
-[x] Service-worker atualizado para mfc-tecnico-v83.
-
-ATUALIZAÇÃO MFC v82
-[x] Gestor: copyToClipboard() com fallback (execCommand) pra navegadores/contextos sem Clipboard API.
-[x] Nome completo e Número(s) de contato no card de detalhes viram clicáveis (.copyable) pra copiar.
-[x] CACHE_NAME atualizado: mfc-tecnico-v82
-[x] Service-worker atualizado para mfc-tecnico-v82.
-
-ATUALIZAÇÃO MFC v81
-[x] Gestor: checkTrashMatch() em tempo real (oninput) nos campos Nome/Telefone da Nova Visita, usando findTrashedMatch já existente.
-[x] addClient agora efetivamente restaura+addVisitToExisting quando há match, cumprindo o que o aviso promete (antes só avisava no lead, aqui a ação de salvar também faz).
-[x] clearForm/pickClient resetam e re-checam o aviso corretamente.
-[x] Gestor + Index: "Equipamento na loja" oculto quando "Equipamento no galpão" ativo (não mostra os dois ao mesmo tempo).
-[x] CACHE_NAME atualizado: mfc-tecnico-v81
-[x] Service-worker atualizado para mfc-tecnico-v81.
-
-ATUALIZAÇÃO MFC v80
-[x] Gestor: findTrashedMatch(name,phone) detecta cliente na lixeira por nome+telefone.
-[x] approveLead usa addVisitToExisting quando há match na lixeira (restaura + nova visita), senão fluxo normal.
-[x] renderLeads mostra alerta vermelho no card do lead quando detecta o match, antes de aprovar.
-[x] Fluxo de busca manual (pickClient) continua intocado — só o approveLead (cadastro) tem esse comportamento.
-[x] CACHE_NAME atualizado: mfc-tecnico-v80
-[x] Service-worker atualizado para mfc-tecnico-v80.
-
-ATUALIZAÇÃO MFC v79
-[x] Gestor + Index: chip "Equipamento na loja" (c.workshopDropoff) distinto do chip "Equipamento no galpão" (serviceInWorkshop).
-[x] Gestor: campo phone2Name (Nome do dono do telefone 2) no modal Editar.
-[x] Gestor + Index: phone2Name exibido junto do telefone 2.
-[x] CACHE_NAME atualizado: mfc-tecnico-v79
-[x] Service-worker atualizado para mfc-tecnico-v79.
-
-ATUALIZAÇÃO MFC v78
-[x] Gestor: campo phone2 (Telefone 2) no modal Editar, exibido junto no bloco "Número de contato".
-[x] Index: contactBlock() renderiza WhatsApp+Ligar pra cada telefone presente (phone e phone2), independentes.
-[x] CACHE_NAME atualizado: mfc-tecnico-v78
-[x] Service-worker atualizado para mfc-tecnico-v78.
-
-ATUALIZAÇÃO MFC v77
-[x] Gestor: .tg-btn ganhou padding:0 14px — corrige ícone/switch colado na borda em todos os toggles desse estilo (retirar equipamento, data a definir, equipamento no galpão).
-[x] CACHE_NAME atualizado: mfc-tecnico-v77
-[x] Service-worker atualizado para mfc-tecnico-v77.
-
-ATUALIZAÇÃO MFC v76
-[x] Varredura emoji -> Font Awesome (flat) em gestor.html e index.html, decorativo apenas.
-[x] Preservados em emoji (limitação de HTML/JS, não dá pra evitar): alert(), confirm(), toast(), <option> de <select>.
-[x] BUGFIX da própria varredura: reverteu tipos de serviço (Corretiva/Preventiva/Instalação/Laudo) e formas de pagamento (Espécie/Pix/Débito/Crédito) pro emoji original — são valores de dado comparados/salvos no Firestore, não decoração. Convertê-los quebraria a comparação com dados antigos e a sincronia gestor↔index.
-[x] Pasta fontawesome/ (css + webfonts) incluída no ZIP pela primeira vez — necessária pro app funcionar offline, o service-worker já esperava esse caminho.
-[x] CACHE_NAME atualizado: mfc-tecnico-v76
-[x] Service-worker atualizado para mfc-tecnico-v76.
-
-ATUALIZAÇÃO MFC v75
-[x] Gestor: margem nos switches (Data a definir x2, Precisa retirar o equipamento) — sem mais colar na moldura/elementos vizinhos.
-[x] CACHE_NAME atualizado: mfc-tecnico-v75
-[x] Service-worker atualizado para mfc-tecnico-v75.
-
-ATUALIZAÇÃO MFC v74
-[x] Gestor + Index: appointmentSortValue prioriza clientes com "Data a definir" no topo da lista.
-[x] Gestor + Index: chip "🗓️ Data a definir" nos cards da listagem.
-[x] Gestor + Index: espaçamento entre status/chips no card corrigido (sem sobreposição/aperto).
-[x] Gestor + Index: card mostra "CLIENTE"/"EMPRESA" + bolinha no topo, nome abaixo.
-[x] CACHE_NAME atualizado: mfc-tecnico-v74
-[x] Service-worker atualizado para mfc-tecnico-v74.
-
-ATUALIZAÇÃO MFC v73
-[x] Gestor: E-mail ocupa linha inteira no modal Editar.
-[x] Gestor: "Data a definir" e "Precisa retirar o equipamento" (editar relatório) viraram switches visuais de verdade.
-[x] Gestor: chip "🗓️ Data a definir" no card do cliente na listagem quando aplicável; "Datas importantes" não mostra mais relógio vazio pra data indefinida.
-[x] CACHE_NAME atualizado: mfc-tecnico-v73
-[x] Service-worker atualizado para mfc-tecnico-v73.
-
-ATUALIZAÇÃO MFC v72
-[x] Gestor: "Número de contato" no card de detalhes só renderiza se preenchido (removido fallback '—'), consistente com E-mail.
-[x] CACHE_NAME atualizado: mfc-tecnico-v72
-[x] Service-worker atualizado para mfc-tecnico-v72.
-
-ATUALIZAÇÃO MFC v71
-[x] Gestor: checkbox "Data a definir" (TBD) em Nova Visita e Editar — grava "A definir", helpers de data (fdt/fd/ft/isoToBr) reconhecem o valor sem tentar parsear.
-[x] Gestor: modal Editar vira "🏢 Editar empresa" pra visitas de empresa (esconde Endereço/Referência/Equipamento/Descrição, mostra E-mail e observação renomeada).
-[x] Gestor: card "Detalhes da visita" também simplifica pra visita de empresa (mesmos campos escondidos, mostra Data da visita).
-[x] BUGFIX: addCompanyVisit não grava mais "Visita empresa" no campo Equipamento; ganhou Telefone e E-mail reais na criação.
-[x] CACHE_NAME atualizado: mfc-tecnico-v71
-[x] Service-worker atualizado para mfc-tecnico-v71.
-
-ATUALIZAÇÃO MFC v70
-[x] Index: bloco de Observações (gestorObs) vira alerta vermelho com ⚠️ quando preenchido, pra chamar atenção do técnico. Vazio continua neutro.
-[x] CACHE_NAME atualizado: mfc-tecnico-v70
-[x] Service-worker atualizado para mfc-tecnico-v70.
-
-ATUALIZAÇÃO MFC v69
-[x] BUGFIX (meu): busca da Lixeira usava renderTrash() inline num módulo — corrigido com window.renderTrash exposto.
-[x] BUGFIX (pré-existente): readLayerForm gravava techReport:undefined quando não havia avaliação técnica ainda, travando updateDoc (inclusive upload de imagem do orçamento) com "Unsupported field value: undefined". Corrigido — campo só entra no objeto se existir de verdade.
-[x] CACHE_NAME atualizado: mfc-tecnico-v69
-[x] Service-worker atualizado para mfc-tecnico-v69.
-
-ATUALIZAÇÃO MFC v68
-[x] Gestor: unificação de duplicados na Lixeira agora é automática (autoMergeTrashDuplicates), roda a cada snapshot, sem botão e sem confirmação.
-[x] CACHE_NAME atualizado: mfc-tecnico-v68
-[x] Service-worker atualizado para mfc-tecnico-v68.
-
-ATUALIZAÇÃO MFC v67
-[x] Gestor: busca dentro da Lixeira (nome/telefone/endereço).
-[x] Gestor: resultados de busca (home + lixeira) com botões "➕ Nova visita" e "♻️ Restaurar" (Restaurar só aparece se deleted).
-[x] Gestor: detecção de duplicados por telefone na Lixeira + "🔗 Unificar duplicados" (junta layers, apaga os extras, com confirmação).
-[x] CACHE_NAME atualizado: mfc-tecnico-v67
-[x] Service-worker atualizado para mfc-tecnico-v67.
-
-ATUALIZAÇÃO MFC v66
-[x] Index: observação (l.quoteObs) movida pro card "Aprovado", desgrudada do bloco morto condicionado a l.quote (que o gestor nunca preenche).
-[x] CACHE_NAME atualizado: mfc-tecnico-v66
-[x] Service-worker atualizado para mfc-tecnico-v66.
-
-ATUALIZAÇÃO MFC v65
-[x] Gestor: botões renomeados — "Remover visita/relatório" e "Mover cliente para a lixeira", com quebra de linha (.btn-wrap) pra não estourar o layout.
-[x] CACHE_NAME atualizado: mfc-tecnico-v65
-[x] Service-worker atualizado para mfc-tecnico-v65.
-
-ATUALIZAÇÃO MFC v64
-[x] BUGFIX: pickClient (busca → Nova visita) não seta mais _selectedClientId para clientes deletados — só pré-preenche os campos, não reaproveita layers/histórico antigo.
-[x] BUGFIX: createOrAppendClient ignora clientes deletados tanto no match por ID quanto no match por telefone (anti-duplicação), evitando merge indevido com registro da lixeira.
-[x] Restaurar pela página Lixeira continua trazendo tudo de volta sem alteração (comportamento correto, intocado).
-[x] CACHE_NAME atualizado: mfc-tecnico-v64
-[x] Service-worker atualizado para mfc-tecnico-v64.
-
-ATUALIZAÇÃO MFC v63
-[x] Index: formulário de edição do relatório enviado deixou de ficar fixo/inline — virou popup (modal), acionado pelo botão "Editar relatório" dentro do accordion "Avaliação enviada". Fecha sozinho ao salvar.
-[x] CACHE_NAME atualizado: mfc-tecnico-v63
-[x] Service-worker atualizado para mfc-tecnico-v63.
-
-ATUALIZAÇÃO MFC v62
-[x] Gestor: abas de visita renomeadas para "Relatório 1", "Relatório 2" etc (era "1ª Visita").
-[x] Index: pin do gestor (📌) manda no relatório que abre por padrão ao abrir o cliente; index não tem controle próprio de fixar.
-[x] Index: "Avaliação enviada" virou accordion mostrar/ocultar, igual ao "Relatório do Técnico" do gestor.
-[x] Index: caixa de editar relatório enviado renomeada ("Editar Relatório", "Tipo de serviço"), título "Relatório" com emoji removido.
-[x] Index: card "Aprovado" detalha "Valor total do orçamento" + forma de pagamento por extenso (entrada/saldo, no mesmo padrão do gestor).
-[x] Service-worker atualizado para mfc-tecnico-v62.
-
-ATUALIZAÇÃO MFC v37
-[x] Home estilo Chrome no Menu principal (link cadastro / nova visita / visita empresa + busca + filtro, tudo simétrico).
-[x] Financeiro com contas por residência: atrasadas no topo + aviso, soma de atrasadas, código/CPF/CNPJ/PIX copiáveis, botão Pago exclui a conta.
-[x] Datas digitáveis com máscara em todo o sistema.
-[x] Toggles visíveis (galpão/pago/falta pagar) e forma de pagamento em select com parcelas de crédito.
-[x] Lista recolhível (‹/›), cards sem telefone/endereço, sem stats redundantes, sem capa duplicada, sem cabeçalho repetido no detalhe.
+CHECKLIST ATUAL — MFC v131
+
+REGRA DE DOCUMENTAÇÃO
+[x] Este arquivo contém somente regras e funções atualmente válidas.
+[x] Regras substituídas e histórico de versões antigas foram removidos para evitar contradições.
+[x] Toda atualização deve preservar o que já funciona, alterar apenas o solicitado e validar este checklist.
+
+GESTOR — LISTA E FLUXO
+[x] Status workshop_pending usa o texto "Aguardando Avaliação" e identificação ciano.
+[x] Clientes com "Data a definir" aparecem primeiro.
+[x] Os demais clientes são agrupados por dia mais recente; dentro do mesmo dia, o horário mais cedo aparece primeiro.
+[x] Anti-duplicação usa telefone normalizado e identifica cliente recorrente.
+[x] Novo cadastro com nome e telefone correspondentes a cliente da lixeira restaura o cadastro e adiciona nova visita sem criar duplicata.
+[x] Duplicados da lixeira são unificados automaticamente por telefone.
+[x] Cliente concluído é enviado à lixeira após 120 dias.
+[x] Cliente na lixeira é excluído definitivamente após 90 dias.
+[x] Conclusão definitiva do serviço é feita pelo gestor.
+[x] Serviço descartado pelo técnico aguarda revisão do gestor antes de ir para a lixeira.
+
+GESTOR — DETALHES DO CLIENTE
+[x] Rua, número, bairro e cidade aparecem juntos em um único bloco de endereço.
+[x] Ponto de referência permanece em bloco separado.
+[x] Campos de endereço continuam separados no Firestore para edição e compatibilidade.
+[x] Blocos comuns usam formato quadrado Metro/Windows Phone de 190x190px no computador.
+[x] Em telas pequenas, os blocos ocupam a largura disponível e mantêm proporção quadrada quando possível.
+[x] Descrição do problema e Observações podem ocupar duas colunas e crescem conforme o texto.
+[x] Observações crescem ao digitar e também ao carregar texto já salvo.
+[x] Conteúdo excepcionalmente grande em bloco comum permanece acessível por rolagem interna.
+[x] Nome e telefones podem ser selecionados e copiados.
+[x] Botão Maps usa primeiro o alfinete; sem coordenadas, usa rua, número, bairro e cidade.
+
+LOCALIZAÇÃO E MAPAS
+[x] Cadastros novos de cliente e empresa podem enviar latitude e longitude pelo GPS ou ajuste manual.
+[x] Coordenadas válidas aparecem no Gestor e no Index mesmo quando o segundo botão de confirmação não foi concluído.
+[x] Cadastros antigos sem coordenadas tentam localizar o endereço quando os detalhes são abertos.
+[x] A busca aproximada usa Nominatim/OpenStreetMap somente sob demanda, sem varredura em massa.
+[x] Consultas são enfileiradas com intervalo mínimo de 1,1 segundo e armazenadas em cache local por 30 dias.
+[x] A busca tenta endereço completo e alternativas progressivas; caso necessário, pode mostrar bairro ou centro da cidade.
+[x] Local obtido pelo endereço é identificado em amarelo como aproximado e não confirmado.
+[x] Quando o Gestor encontra um ponto aproximado, salva as coordenadas no cliente para reutilização no Gestor e no Index.
+[x] O modal Editar cliente/empresa possui mapa próprio.
+[x] No mapa de edição, o gestor pode buscar novamente pelo endereço, tocar no mapa, arrastar ou remover o alfinete.
+[x] Ponto tocado ou arrastado pelo gestor é salvo como confirmado manualmente.
+[x] Editar cliente também permite corrigir número e bairro.
+[x] Sem coordenadas e sem endereço aproveitável, nenhum mapa vazio é exibido.
+[x] Leaflet e seus recursos estão armazenados localmente; mapas e geocodificação exibem atribuição OpenStreetMap.
+[x] Botão de rota abre o Google Maps por URL, sem chave de API.
+
+GESTOR — RELATÓRIOS, GARANTIA E PAGAMENTO
+[x] Cada cliente pode possuir múltiplos relatórios ativos e concluídos.
+[x] Uma visita fixada determina o status principal e a aba aberta por padrão.
+[x] Relatório concluído preserva modelo, serviço, texto, fotos, orçamento e data de conclusão.
+[x] Garantia usa o último serviço concluído: Corretiva e Instalação = 90 dias; Preventiva = 15 dias; Laudo não possui garantia.
+[x] Garantia oferece Ajuste simples ou Novo relatório/orçamento.
+[x] Ajuste simples mantém identificação própria e texto editável.
+[x] Pagamento atual usa valor livre de entrada, forma da entrada, saldo automático e forma do saldo.
+[x] Não existe cálculo fixo de entrada de 40%.
+[x] "Serviço já foi pago" e "Falta pagar" continuam controles separados.
+
+INDEX — TÉCNICO
+[x] Lista segue a mesma ordenação atual do Gestor: Data a definir primeiro, dia mais recente e horário crescente dentro do dia.
+[x] Técnico vê cliente, contatos, e-mail, endereço completo, referência, equipamento, problema e observação do gestor.
+[x] WhatsApp e Ligar aparecem próximos aos contatos.
+[x] Endereço aparece uma única vez; cidade, número e bairro não são repetidos em blocos separados.
+[x] Mapa aparece dentro do conteúdo do detalhe quando houver coordenadas ou endereço localizável.
+[x] Local obtido somente pelo endereço aparece como aproximado.
+[x] Avaliação exige modelo, ao menos um tipo de serviço e relatório; foto é opcional.
+[x] Fotos são comprimidas antes do salvamento e falhas não apagam o rascunho.
+[x] Técnico pode editar avaliação já enviada.
+[x] "Precisa retirar o equipamento" funciona como botão com estado visual.
+[x] Técnico pode criar relatórios adicionais e excluir extras, mantendo ao menos um relatório no fluxo comum.
+[x] No fluxo de garantia, a aba Relatório 1 só aparece após escolher Novo relatório/orçamento.
+[x] Histórico de garantia permanece separado em Concluídos conforme a quantidade e o fluxo atual.
+[x] Descartar exige justificativa, muda para "Serviço descartado" e aguarda decisão do gestor.
+[x] Não existem efeitos sonoros de nova visita.
+[x] Notificação push é independente de som e depende da configuração/deploy do Firebase Messaging.
+[x] Botão voltar físico fecha o detalhe antes de sair do aplicativo.
+[x] Index permanece sem modo claro e sem lightbox de zoom manual.
+
+CADASTRO PÚBLICO
+[x] Link exige token Firebase válido por 6 horas e de uso único.
+[x] Cliente escolhe se reside em Dias D'Ávila; "Sim" grava Dias D'Ávila e "Não" exige a cidade digitada.
+[x] Cliente informa rua, número, bairro e ponto de referência em campos separados.
+[x] Cliente e empresa podem usar GPS e ajustar o alfinete manualmente.
+[x] Negar GPS ou ocorrer falha de localização não bloqueia o cadastro.
+[x] Cadastro finalizado redireciona para o WhatsApp 5571981122167.
+[x] Anti-duplicação usa telefone normalizado.
+[x] Rodapé informa "30 anos atendendo em Dias D'Ávila e região".
+
+MAPA VISUAL PARTICULAR
+[x] Gestor, Index e Cadastro possuem modo particular de identificação de layout.
+[x] Ativação inicial usa ?mfc_layout=1; remoção usa ?mfc_layout=0.
+[x] Ctrl+Shift+L alterna o modo no computador após a ativação inicial.
+[x] O recurso é somente visual e não altera dados de clientes.
+[x] MAPA_VISUAL_MFC.txt contém códigos e instruções atuais.
+
+SERVICE WORKER E ARQUIVOS
+[x] CACHE_NAME atual: mfc-tecnico-v131.
+[x] APP_SHELL inclui páginas, imagens, fontes, layout-guide.js, location-view.js e Leaflet local.
+[x] Cache anterior é removido durante activate.
+[x] Páginas HTML usam rede primeiro e cache como fallback.
+[x] Recursos externos do Firebase, Google, OpenStreetMap e outros domínios não são interceptados pelo cache local.
+[x] CHECKLIST_MFC.txt e VERSAO.txt refletem somente o funcionamento atual.
+
+VALIDAÇÃO OBRIGATÓRIA
+[x] Sintaxe dos scripts validada.
+[x] Estrutura HTML validada.
+[x] Endereço sem duplicação validado.
+[x] Mapa exato, mapa aproximado e edição manual validados.
+[x] Compatibilidade com clientes novos, antigos e sem endereço validada.
+[x] Arquivos obrigatórios do APP_SHELL conferidos.
+[x] Service worker atualizado para mfc-tecnico-v131.
