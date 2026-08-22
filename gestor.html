@@ -211,15 +211,15 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 .bottom-acts .btn{height:46px;font-size:.85rem;display:flex;align-items:center;justify-content:center;gap:6px}
 .igrid{
   display:grid;
-  grid-template-columns:minmax(610px,1.28fr) minmax(390px,.92fr);
+  grid-template-columns:minmax(760px,1.45fr) minmax(400px,.85fr);
   align-items:stretch;
   gap:16px;
-  min-width:1016px;
+  min-width:1176px;
   margin-bottom:16px
 }
 .info-core{
   display:grid;
-  grid-template-columns:repeat(6,minmax(0,1fr));
+  grid-template-columns:repeat(4,minmax(0,1fr));
   gap:16px;
   align-content:start
 }
@@ -238,13 +238,12 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
   scrollbar-color:var(--surface3) transparent
 }
 .info-core .iblk{
-  grid-column:span 2;
   aspect-ratio:1/1;
   min-height:0;
   height:auto
 }
-.info-core .iblk:nth-child(4){grid-column:2/span 2}
-.info-core .iblk:nth-child(5){grid-column:4/span 2}
+.info-core.is-client .iblk:nth-child(5){grid-column:2}
+.info-core.is-client .iblk:nth-child(6){grid-column:3}
 .iblk:hover{background:linear-gradient(160deg,#17233A,#121B2D);transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,0,0,.35)}
 .ib-head{display:flex;align-items:center;gap:9px;margin-bottom:12px}
 .ib-ic{width:34px;height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.88rem;flex-shrink:0}
@@ -264,13 +263,6 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 .obs-textarea{min-height:92px;height:auto;margin-top:2px;overflow:hidden;resize:vertical}
 .obs-saved{display:none;font-size:.7rem;color:#34d399;font-weight:800;margin-top:6px}
 .obs-saved.show{display:inline-block}
-.info-extra{
-  grid-column:1/-1;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
-  gap:16px
-}
-.info-extra .iblk{aspect-ratio:1/1;min-height:0;height:auto}
 .igrid>.mfc-location-card{
   grid-column:2;
   grid-row:1;
@@ -303,11 +295,9 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 @media(max-width:620px) and (hover:none){
   .igrid{min-width:0;grid-template-columns:1fr;gap:12px}
   .info-core{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-  .info-core .iblk,.info-core .iblk:nth-child(4),.info-core .iblk:nth-child(5){grid-column:auto}
-  .info-core .iblk:last-child{grid-column:1/-1;width:calc(50% - 6px);justify-self:center}
+  .info-core.is-client .iblk:nth-child(5),.info-core.is-client .iblk:nth-child(6){grid-column:auto}
   .igrid>.mfc-location-card{grid-column:1;grid-row:auto;width:100%;height:auto;min-height:320px}
   .info-long{grid-template-columns:1fr;gap:12px}
-  .info-extra{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
   .igrid .mfc-location-map{height:220px;min-height:220px}
   .igrid .mfc-location-route{width:100%}
   .edit-location-map{height:240px}
@@ -711,22 +701,27 @@ function clientInfoBlocks(c){
   const cp=(txt,label)=>`<span class="copyable" onclick="copyToClipboard('${escJs(txt)}','${label}')">${txt}</span>`;
   const mainNameSuffix=(mainIsPhone2&&c.phone2Name)?` — ${cp(c.phone2Name,'Nome do contato 2')}`:'';
   const phone2ExtraLine=(c.phone&&c.phone2)?`<p style="margin-top:4px">${cp(c.phone2,'Telefone 2')}${c.phone2Name?' — '+cp(c.phone2Name,'Nome do contato 2'):''}</p>`:'';
-  const core=[
+  const shared=[
     infoCard('fa-user','#3B82F6',isCompany?'Nome da empresa':'Nome completo',c.name?cp(c.name,'Nome'):'—'),
     infoCard('fa-phone','#22C55E','Número de contato',mainPhone?cp(mainPhone,'Telefone')+mainNameSuffix:'—',phone2ExtraLine),
-    infoCard('fa-location-dot','#F59E0B',isCompany?'Endereço da empresa':'Endereço',addr||'—'),
-    infoCard('fa-crosshairs','#F59E0B','Ponto de referência',c.ref||'—'),
-    infoCard('fa-cube','#3B82F6','Equipamento',c.equip||'—')
+    infoCard('fa-envelope','#8B5CF6','E-mail',c.email||'—')
   ];
+  const general=isCompany
+    ?shared.concat([
+      infoCard('fa-calendar','#22C55E','Data da visita',c.datetime===TBD?TBD:fdt(c.datetime)),
+      infoCard('fa-user-tie','#8B5CF6','Nome do solicitante',c.requester||'—'),
+      infoCard('fa-id-card','#F59E0B','CNPJ',c.cnpj?cp(c.cnpj,'CNPJ'):'—'),
+      infoCard('fa-location-dot','#F59E0B','Endereço da empresa',addr||'—'),
+      infoCard('fa-cube','#3B82F6','Equipamento',c.equip||'—')
+    ])
+    :shared.concat([
+      infoCard('fa-location-dot','#F59E0B','Endereço',addr||'—'),
+      infoCard('fa-crosshairs','#F59E0B','Ponto de referência',c.ref||'—'),
+      infoCard('fa-cube','#3B82F6','Equipamento',c.equip||'—')
+    ]);
   const problem=infoCard('fa-triangle-exclamation','#EF4444','Descrição do problema',(isCompany?c.notes:(c.problem||c.notes))||'—','','iblk-problem');
-  const extras=[
-    c.email?infoCard('fa-envelope','#8B5CF6','E-mail',c.email):'',
-    isCompany?infoCard('fa-calendar','#22C55E','Data da visita',c.datetime===TBD?TBD:fdt(c.datetime)):'',
-    isCompany&&c.requester?infoCard('fa-user-tie','#8B5CF6','Nome do solicitante',c.requester):'',
-    isCompany&&c.cnpj?infoCard('fa-id-card','#F59E0B','CNPJ',cp(c.cnpj,'CNPJ')):''
-  ].filter(Boolean);
   const obs=`<div class="iblk obs-card"><div class="ib-head"><div class="ib-ic" style="background:#F59E0B22;color:#F59E0B"><i class="fa-solid fa-note-sticky"></i></div><label>Observações</label></div><textarea class="fi obs-textarea" id="obs-textarea-${c.id}" placeholder="Escreva aqui — salva sozinho ao sair do campo" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'" onblur="saveGestorObs('${c.id}',this.value)">${c.gestorObs||''}</textarea><span class="obs-saved" id="obs-saved-${c.id}">Salvo <i class="fa-solid fa-check"></i></span></div>`;
-  return `<div class="igrid"><div class="info-core">${core.join('')}</div>${MFCLocation.html(c,'gestor-location-'+c.id)}<div class="info-long">${problem}${obs}</div>${extras.length?`<div class="info-extra">${extras.join('')}</div>`:''}</div>`
+  return `<div class="igrid"><div class="info-core ${isCompany?'is-company':'is-client'}">${general.join('')}</div>${MFCLocation.html(c,'gestor-location-'+c.id)}<div class="info-long">${problem}${obs}</div></div>`
 }
 function locationSavePayload(point,confirmed=point.confirmed,source=point.source||'address'){const latitude=Number(point.lat),longitude=Number(point.lng),now=new Date().toISOString();return{latitude,longitude,locationAccuracy:null,locationProvided:true,locationConfirmed:!!confirmed,locationSource:source,locationConfirmedAt:confirmed?now:null,locationGeocodedAt:source==='address'?now:null,location:{latitude,longitude,accuracy:null,provided:true,confirmed:!!confirmed,source,confirmedAt:confirmed?now:null,geocodedAt:source==='address'?now:null}}}
 function initGestorLocation(c){setTimeout(async()=>{const result=await MFCLocation.init('gestor-location-'+c.id,c);if(result?.geocoded&&!MFCLocation.has(c)&&!approximateLocationSaves.has(c.id)){approximateLocationSaves.add(c.id);updateDoc(doc(db,'clients',c.id),locationSavePayload(result,false,'address')).catch(err=>{approximateLocationSaves.delete(c.id);console.error('Não foi possível salvar a localização aproximada:',err)})}const obs=document.getElementById('obs-textarea-'+c.id);if(obs){obs.style.height='auto';obs.style.height=obs.scrollHeight+'px'}},0)}
@@ -1213,5 +1208,5 @@ window.uploadBudgetImage=async(id,li,input)=>{const file=input.files?.[0];if(!fi
 window.removeBudgetImage=async(id,li)=>{const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];layers[li].budgetImage=null;await updateDoc(doc(db,'clients',id),{layers})};
 </script>
 <div id="fin-print-area"></div>
-<script src="layout-guide.js?v=135"></script>
+<script src="layout-guide.js?v=136"></script>
 </body></html>
