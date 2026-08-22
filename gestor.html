@@ -208,24 +208,29 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 .tg-warranty.active{background:#3b2a06;border-color:#f59e0b;color:#fbbf24}
 .bottom-acts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
 .bottom-acts .btn{height:46px;font-size:.85rem;display:flex;align-items:center;justify-content:center;gap:6px}
-.igrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-bottom:16px}
-.iblk{background:linear-gradient(160deg,#121B2D,#0f1728);border-radius:18px;padding:18px;border:1px solid var(--border);box-shadow:0 4px 16px rgba(0,0,0,.25);transition:all .2s ease-in-out;position:relative}
+.igrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));grid-auto-flow:row dense;align-items:start;gap:10px;margin-bottom:16px}
+.iblk{height:100px;min-height:100px;background:linear-gradient(160deg,#121B2D,#0f1728);border-radius:14px;padding:10px;border:1px solid var(--border);box-shadow:0 4px 16px rgba(0,0,0,.25);transition:all .2s ease-in-out;position:relative;overflow:auto;scrollbar-width:thin;scrollbar-color:var(--surface3) transparent}
 .iblk:hover{background:linear-gradient(160deg,#17233A,#121B2D);transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,0,0,.35)}
-.ib-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}.ib-ic{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
-.iblk label{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;font-weight:600}
-.iblk p{font-size:.95rem;font-weight:600;user-select:text;line-height:1.55}
+.ib-head{display:flex;align-items:center;gap:8px;margin-bottom:4px}.ib-ic{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.76rem;flex-shrink:0}
+.iblk label{font-size:.61rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;display:block;font-weight:700}
+.iblk p{font-size:.82rem;font-weight:600;user-select:text;line-height:1.35}
 .copyable{cursor:pointer;border-bottom:1px dashed color-mix(in oklch,var(--text) 40%,transparent);transition:color .15s}
 .copyable:hover{color:var(--accent,#22d3ee)}
 .copyable:active{opacity:.6}
-.iblk-problem p{max-height:150px;overflow-y:auto;line-height:1.7;font-weight:500;padding-right:6px;scrollbar-width:thin;scrollbar-color:var(--surface3) transparent}
+.iblk-problem,.obs-card{height:auto;min-height:100px;overflow:visible}
+.iblk-problem p{max-height:none;overflow:visible;line-height:1.55;font-weight:500;padding-right:0}
 .iblk-problem p::-webkit-scrollbar{width:5px}
 .iblk-problem p::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:4px}
 @media(min-width:760px){.iblk-problem{grid-column:span 2}}
-.maps-btn{display:inline-flex;align-items:center;gap:6px;margin-top:10px;height:34px;padding:0 14px;border-radius:12px;background:#0d2346;border:1px solid #3b82f655;color:#60a5fa;font-size:.78rem;font-weight:600;text-decoration:none;transition:all .2s ease-in-out}
+.maps-btn{display:inline-flex;align-items:center;gap:5px;margin-top:4px;height:25px;padding:0 9px;border-radius:8px;background:#0d2346;border:1px solid #3b82f655;color:#60a5fa;font-size:.65rem;font-weight:700;text-decoration:none;transition:all .2s ease-in-out}
 .maps-btn:hover{background:#12315f;transform:translateY(-2px);box-shadow:0 4px 12px rgba(59,130,246,.25)}
-.obs-textarea{min-height:80px;margin-top:2px}
+.obs-textarea{min-height:52px;height:auto;margin-top:2px;overflow:hidden;resize:vertical}
 .obs-saved{display:none;font-size:.7rem;color:#34d399;font-weight:800;margin-top:6px}
 .obs-saved.show{display:inline-block}
+.igrid .mfc-location-card{grid-column:auto;height:100px;min-height:100px;padding:7px;overflow:hidden}
+.igrid .mfc-location-head{gap:6px;margin-bottom:3px}.igrid .mfc-location-head i{font-size:.75rem}.igrid .mfc-location-head strong{font-size:.58rem}
+.igrid .mfc-location-map{height:42px;border-radius:7px}
+.igrid .mfc-location-actions{gap:5px;margin-top:3px;flex-wrap:nowrap}.igrid .mfc-location-ok{font-size:.54rem;line-height:1.05}.igrid .mfc-location-route{min-height:24px;padding:3px 6px;border-radius:7px;font-size:.57rem;line-height:1.05;white-space:nowrap}
 
 /* ====== FINANCEIRO DETAIL ====== */
 .contas-list{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
@@ -612,9 +617,9 @@ function clientInfoBlocks(c){
   const blocks=[infoCard('fa-user','#3B82F6',isCompany?'Nome da empresa':'Nome completo',c.name?cp(c.name,'Nome'):'—'),infoCard('fa-phone','#22C55E','Número de contato',mainPhone?cp(mainPhone,'Telefone')+mainNameSuffix:'',phone2ExtraLine),infoCard('fa-envelope','#8B5CF6','E-mail',c.email||'')];
   if(isCompany){blocks.push(infoCard('fa-calendar','#22C55E','Data da visita',c.datetime===TBD?TBD:fdt(c.datetime)),infoCard('fa-user-tie','#8B5CF6','Nome do solicitante',c.requester||''),infoCard('fa-id-card','#F59E0B','CNPJ',c.cnpj?cp(c.cnpj,'CNPJ'):''),infoCard('fa-location-dot','#F59E0B','Endereço da empresa',addr,routeTarget?`<a class="maps-btn" href="${maps(routeTarget)}" target="_blank"><i class="fa-solid fa-location-dot"></i> Ver no Maps</a>`:''),infoCard('fa-cube','#3B82F6','Equipamento',c.equip||''),infoCard('fa-triangle-exclamation','#EF4444','Descrição do problema',c.notes||'','','iblk-problem'))}
   else{blocks.push(infoCard('fa-location-dot','#F59E0B','Endereço',addr,routeTarget?`<a class="maps-btn" href="${maps(routeTarget)}" target="_blank"><i class="fa-solid fa-location-dot"></i> Ver no Maps</a>`:''),infoCard('fa-crosshairs','#F59E0B','Ponto de referência',c.ref||''),infoCard('fa-cube','#3B82F6','Equipamento',c.equip||''),infoCard('fa-triangle-exclamation','#EF4444','Descrição do problema',c.problem||c.notes||'','','iblk-problem'))}
-  return `<div class="igrid">${blocks.join('')}${MFCLocation.html(c,'gestor-location-'+c.id)}<div class="iblk obs-card"><div class="ib-head"><div class="ib-ic" style="background:#F59E0B22;color:#F59E0B"><i class="fa-solid fa-note-sticky"></i></div><label>Observações</label></div><textarea class="fi obs-textarea" placeholder="Escreva aqui — salva sozinho ao sair do campo" onblur="saveGestorObs('${c.id}',this.value)">${c.gestorObs||''}</textarea><span class="obs-saved" id="obs-saved-${c.id}">Salvo <i class="fa-solid fa-check"></i></span></div></div>`
+  return `<div class="igrid">${blocks.join('')}${MFCLocation.html(c,'gestor-location-'+c.id)}<div class="iblk obs-card"><div class="ib-head"><div class="ib-ic" style="background:#F59E0B22;color:#F59E0B"><i class="fa-solid fa-note-sticky"></i></div><label>Observações</label></div><textarea class="fi obs-textarea" id="obs-textarea-${c.id}" placeholder="Escreva aqui — salva sozinho ao sair do campo" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'" onblur="saveGestorObs('${c.id}',this.value)">${c.gestorObs||''}</textarea><span class="obs-saved" id="obs-saved-${c.id}">Salvo <i class="fa-solid fa-check"></i></span></div></div>`
 }
-function initGestorLocation(c){if(MFCLocation.has(c))setTimeout(()=>MFCLocation.init('gestor-location-'+c.id,c),0)}
+function initGestorLocation(c){setTimeout(()=>{if(MFCLocation.has(c))MFCLocation.init('gestor-location-'+c.id,c);const obs=document.getElementById('obs-textarea-'+c.id);if(obs){obs.style.height='auto';obs.style.height=obs.scrollHeight+'px'}},0)}
 function setConn(t){document.getElementById('conn').innerHTML=t}
 function cleanupOld(){if(cleanupDone)return;cleanupDone=true;const now=Date.now();const DAY=86400000;all.forEach(async c=>{if(c.deleted){const delAge=c.deletedAt?now-new Date(c.deletedAt).getTime():0;if(delAge>90*DAY)await deleteDoc(doc(db,'clients',c.id));return}const layers=getLayers(c);const allDone=layers.length&&layers.every(l=>l.done);if(allDone||getStatus(c)==='done'){const doneDates=layers.map(l=>l.concludedAt).filter(Boolean).map(d=>new Date(d).getTime());const ref=c.completedAt?new Date(c.completedAt).getTime():(doneDates.length?Math.max(...doneDates):0);if(ref&&now-ref>120*DAY)await updateDoc(doc(db,'clients',c.id),{deleted:true,deletedAt:new Date().toISOString()});}})}
 

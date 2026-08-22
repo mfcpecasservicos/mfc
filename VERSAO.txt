@@ -1,3 +1,19 @@
+MFC v130
+
+Última alteração — BLOCOS COMPACTOS NOS DETALHES DO GESTOR
+
+Os blocos comuns da área de detalhes do Gestor agora têm altura total padronizada em 100px e são alinhados pelo início da grade. Assim, um endereço maior ou outro conteúdo da mesma linha não estica todos os cartões.
+
+O mapa do atendimento deixou de ocupar a largura inteira e passou a seguir o mesmo formato compacto de 100px dentro da grade, mantendo a visualização do ponto e o botão de rota.
+
+Descrição do problema e Observações são as exceções: ambos mantêm altura automática para acompanhar textos grandes. O campo de observações cresce enquanto o texto é digitado e também ao carregar uma observação já salva. Se algum conteúdo incomum não couber em um bloco padrão, ele continua acessível por rolagem dentro do próprio cartão.
+
+Cache atualizado para mfc-tecnico-v130.
+
+Regra
+
+Toda atualização futura deve partir desta versão ou de uma versão posterior aprovada.
+
 MFC v129
 
 Última alteração — MAPA VISÍVEL E ENDEREÇO SEM DUPLICAÇÃO
