@@ -8,7 +8,12 @@ messaging.onBackgroundMessage(payload=>{
   self.registration.showNotification(title,{body,icon:'./icon-192.png',badge:'./icon-192.png'});
 });
 
-const CACHE_NAME = 'mfc-tecnico-v131';
+const CACHE_NAME = 'mfc-tecnico-v132';
+const FIREBASE_MODULES = [
+  'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js',
+  'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js',
+  'https://www.gstatic.com/firebasejs/11.0.0/firebase-messaging.js'
+];
 const APP_SHELL = [
   './',
   './index.html',
@@ -35,7 +40,10 @@ const APP_SHELL = [
 ];
 
 self.addEventListener('install', event => {
-  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL).catch(() => null)));
+  event.waitUntil(caches.open(CACHE_NAME).then(async cache => {
+    await cache.addAll(APP_SHELL).catch(() => null);
+    await Promise.allSettled(FIREBASE_MODULES.map(url => cache.add(url)));
+  }));
   self.skipWaiting();
 });
 
@@ -48,6 +56,15 @@ self.addEventListener('fetch', event => {
   const req = event.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
+  const isFirebaseModule = url.hostname === 'www.gstatic.com' && url.pathname.startsWith('/firebasejs/11.0.0/');
+  if (isFirebaseModule) {
+    event.respondWith(caches.match(req).then(cached => cached || fetch(req).then(res => {
+      const copy = res.clone();
+      caches.open(CACHE_NAME).then(cache => cache.put(req, copy)).catch(() => {});
+      return res;
+    })));
+    return;
+  }
   if (url.origin !== self.location.origin) return;
 
   const isHtml = req.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname === '/mfc/' || url.pathname === '/mfc';

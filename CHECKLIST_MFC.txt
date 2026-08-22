@@ -1,4 +1,4 @@
-CHECKLIST ATUAL — MFC v131
+CHECKLIST ATUAL — MFC v132
 
 REGRA DE DOCUMENTAÇÃO
 [x] Este arquivo contém somente regras e funções atualmente válidas.
@@ -21,13 +21,15 @@ GESTOR — DETALHES DO CLIENTE
 [x] Rua, número, bairro e cidade aparecem juntos em um único bloco de endereço.
 [x] Ponto de referência permanece em bloco separado.
 [x] Campos de endereço continuam separados no Firestore para edição e compatibilidade.
-[x] Blocos comuns usam formato quadrado Metro/Windows Phone de 190x190px no computador.
-[x] Em telas pequenas, os blocos ocupam a largura disponível e mantêm proporção quadrada quando possível.
-[x] Descrição do problema e Observações podem ocupar duas colunas e crescem conforme o texto.
+[x] A grade usa colunas automáticas de no mínimo 280px, espaçamento de 16px e alinhamento uniforme por linha.
+[x] Blocos comuns possuem altura mínima de 140px, largura disponível entre 280px e 320px quando a tela permitir e conteúdo legível sem cortes.
+[x] Em telas pequenas, os blocos ocupam a largura disponível sem provocar rolagem horizontal.
+[x] Descrição do problema, Observações e Mapa podem ocupar duas colunas e crescem conforme o conteúdo.
 [x] Observações crescem ao digitar e também ao carregar texto já salvo.
 [x] Conteúdo excepcionalmente grande em bloco comum permanece acessível por rolagem interna.
 [x] Nome e telefones podem ser selecionados e copiados.
-[x] Botão Maps usa primeiro o alfinete; sem coordenadas, usa rua, número, bairro e cidade.
+[x] Existe somente um botão de Maps nos detalhes: o botão de rota localizado dentro do bloco do mapa.
+[x] A rota usa primeiro o alfinete; sem coordenadas, usa rua, número, bairro e cidade.
 
 LOCALIZAÇÃO E MAPAS
 [x] Cadastros novos de cliente e empresa podem enviar latitude e longitude pelo GPS ou ajuste manual.
@@ -39,6 +41,8 @@ LOCALIZAÇÃO E MAPAS
 [x] Local obtido pelo endereço é identificado em amarelo como aproximado e não confirmado.
 [x] Quando o Gestor encontra um ponto aproximado, salva as coordenadas no cliente para reutilização no Gestor e no Index.
 [x] O modal Editar cliente/empresa possui mapa próprio.
+[x] O mapa de edição abre imediatamente centralizado na região, sem depender do término da busca de endereço.
+[x] A busca de endereço possui limite de espera de 9 segundos e, se falhar, mantém o mapa disponível para marcação manual.
 [x] No mapa de edição, o gestor pode buscar novamente pelo endereço, tocar no mapa, arrastar ou remover o alfinete.
 [x] Ponto tocado ou arrastado pelo gestor é salvo como confirmado manualmente.
 [x] Editar cliente também permite corrigir número e bairro.
@@ -64,6 +68,7 @@ INDEX — TÉCNICO
 [x] Endereço aparece uma única vez; cidade, número e bairro não são repetidos em blocos separados.
 [x] Mapa aparece dentro do conteúdo do detalhe quando houver coordenadas ou endereço localizável.
 [x] Local obtido somente pelo endereço aparece como aproximado.
+[x] Existe somente um botão de Maps nos detalhes: o botão de rota localizado dentro do bloco do mapa.
 [x] Avaliação exige modelo, ao menos um tipo de serviço e relatório; foto é opcional.
 [x] Fotos são comprimidas antes do salvamento e falhas não apagam o rascunho.
 [x] Técnico pode editar avaliação já enviada.
@@ -76,6 +81,10 @@ INDEX — TÉCNICO
 [x] Notificação push é independente de som e depende da configuração/deploy do Firebase Messaging.
 [x] Botão voltar físico fecha o detalhe antes de sair do aplicativo.
 [x] Index permanece sem modo claro e sem lightbox de zoom manual.
+[x] O Index mantém clientes em cache persistente no aparelho após pelo menos uma abertura online.
+[x] Relatórios e ajustes salvos sem internet ficam na fila local do Firestore e são enviados automaticamente quando a conexão volta.
+[x] A página não recarrega por troca de service worker; recarrega somente na transição real de offline para online, após tentar concluir os envios pendentes.
+[x] Sem dados offline preparados, o Index mostra orientação explícita em vez de loading infinito.
 
 CADASTRO PÚBLICO
 [x] Link exige token Firebase válido por 6 horas e de uso único.
@@ -95,11 +104,13 @@ MAPA VISUAL PARTICULAR
 [x] MAPA_VISUAL_MFC.txt contém códigos e instruções atuais.
 
 SERVICE WORKER E ARQUIVOS
-[x] CACHE_NAME atual: mfc-tecnico-v131.
+[x] CACHE_NAME atual: mfc-tecnico-v132.
 [x] APP_SHELL inclui páginas, imagens, fontes, layout-guide.js, location-view.js e Leaflet local.
 [x] Cache anterior é removido durante activate.
 [x] Páginas HTML usam rede primeiro e cache como fallback.
-[x] Recursos externos do Firebase, Google, OpenStreetMap e outros domínios não são interceptados pelo cache local.
+[x] Módulos Firebase 11 do Index são armazenados pelo service worker para permitir nova abertura offline após uma primeira abertura online.
+[x] Recursos externos de mapas, geocodificação e demais domínios continuam fora do cache local; o mapa-base pode depender da disponibilidade de tiles já vistos.
+[x] O primeiro uso do Index em cada aparelho deve ocorrer online para preparar arquivos e dados do modo offline.
 [x] CHECKLIST_MFC.txt e VERSAO.txt refletem somente o funcionamento atual.
 
 VALIDAÇÃO OBRIGATÓRIA
@@ -109,4 +120,4 @@ VALIDAÇÃO OBRIGATÓRIA
 [x] Mapa exato, mapa aproximado e edição manual validados.
 [x] Compatibilidade com clientes novos, antigos e sem endereço validada.
 [x] Arquivos obrigatórios do APP_SHELL conferidos.
-[x] Service worker atualizado para mfc-tecnico-v131.
+[x] Service worker atualizado para mfc-tecnico-v132.
