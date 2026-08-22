@@ -1,6 +1,6 @@
-MFC v136
+MFC v137
 
-VERSÃO ATUAL — INFORMAÇÕES GERAIS EM QUADRADOS
+VERSÃO ATUAL — CAMPOS PREENCHIDOS EM QUADRADOS
 
 Esta é a única versão de referência válida. O histórico antigo foi removido porque continha regras substituídas que estavam sendo confundidas com o funcionamento atual.
 
@@ -22,17 +22,15 @@ As barras de rolagem agora usam trilho azul-marinho, polegar azul-acinzentado e 
 
 GESTOR — INFORMAÇÕES GERAIS EM QUADRADOS
 
-O detalhe possui uma estrutura padrão para clientes e empresas. Todas as informações gerais ficam em blocos quadrados na área esquerda, sem cartões suplementares separados.
+O detalhe usa a mesma grade de quadrados para clientes e empresas. Somente campos preenchidos geram blocos: informações vazias não exibem quadrado nem marcador artificial.
 
-Clientes exibem seis quadrados: Nome completo, Número de contato, E-mail, Endereço, Ponto de referência e Equipamento. A primeira linha contém quatro blocos; os dois restantes ficam centralizados na segunda linha.
+A grade comporta até quatro quadrados por linha. Quando a última linha possui menos de quatro informações, seus blocos são centralizados automaticamente, preservando a composição sem buracos desnecessários.
 
-Empresas exibem oito quadrados: Nome da empresa, Número de contato, E-mail, Data da visita, Nome do solicitante, CNPJ, Endereço da empresa e Equipamento. São quatro blocos em cada linha.
+Clientes podem exibir Nome completo, Número de contato, E-mail, Endereço, Ponto de referência e Equipamento. Empresas podem exibir Nome da empresa, Número de contato, E-mail, Data da visita, Nome do solicitante, CNPJ, Endereço da empresa e Equipamento.
 
-Os quadrados possuem largura mínima maior para evitar texto excessivamente comprimido. O mapa ocupa o painel grande à direita das duas linhas. Descrição do problema e Observações permanecem abaixo, lado a lado, como os únicos blocos largos.
+Nome, telefones, CNPJ e E-mail possuem sublinhado tracejado e podem ser copiados com um clique. O mapa permanece no painel grande à direita. Descrição do problema só aparece quando preenchida; Observações permanece disponível para edição e ocupa toda a largura inferior quando não existe descrição.
 
-No Chrome para computador, aumentar o zoom preserva o formato e a ordem dos blocos. Quando a largura visível deixa de comportar a composição, o Gestor-Detalhe oferece rolagem horizontal temática em vez de esmagar ou remontar os quadrados. A ampliação nativa do navegador continua disponível para acessibilidade.
-
-Em aparelho estreito com tela de toque, a composição continua responsiva e se reorganiza para a largura do celular.
+Os quadrados mantêm largura mínima para evitar texto excessivamente comprimido. No zoom do Chrome para computador, a grade preserva formato e ordem e usa rolagem horizontal temática quando necessário. Em aparelho estreito de toque, a composição continua responsiva.
 
 INDEX — FUNCIONAMENTO OFFLINE
 
@@ -94,8 +92,8 @@ A navegação continua abrindo o Google Maps por URL, sem chave de API.
 
 CACHE
 
-Cache atualizado para mfc-tecnico-v136, incluindo location-view.js, Leaflet local, fontes, páginas no APP_SHELL e módulos Firebase 11 necessários ao Index offline.
+Cache atualizado para mfc-tecnico-v137, incluindo location-view.js, Leaflet local, fontes, páginas no APP_SHELL e módulos Firebase 11 necessários ao Index offline.
 
 REGRA
 
-Toda atualização futura deve partir da v136 ou de versão posterior aprovada. CHECKLIST_MFC.txt e VERSAO.txt devem conter somente regras atuais; uma regra substituída deve ser removida, não acumulada como se ainda estivesse ativa.
+Toda atualização futura deve partir da v137 ou de versão posterior aprovada. CHECKLIST_MFC.txt e VERSAO.txt devem conter somente regras atuais; uma regra substituída deve ser removida, não acumulada como se ainda estivesse ativa.
