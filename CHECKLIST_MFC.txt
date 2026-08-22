@@ -26,16 +26,19 @@ GESTOR — LISTA E FLUXO
 [x] Serviço descartado pelo técnico aguarda revisão do gestor antes de ir para a lixeira.
 
 GESTOR — DETALHES DO CLIENTE
+[x] A ordem principal é Nome, Número de contato, Endereço, Ponto de referência, Equipamento e Localização do atendimento.
+[x] Nome, Número de contato e Endereço formam a primeira linha; Ponto de referência e Equipamento ficam centralizados na segunda.
+[x] Os cinco blocos principais permanecem quadrados e o mapa ocupa o painel grande à direita das duas linhas.
+[x] Descrição do problema e Observações ficam abaixo, lado a lado, como os únicos blocos largos.
 [x] Rua, número, bairro e cidade aparecem juntos em um único bloco de endereço.
 [x] Ponto de referência permanece em bloco separado.
 [x] Campos de endereço continuam separados no Firestore para edição e compatibilidade.
-[x] A grade usa colunas automáticas de no mínimo 280px, espaçamento de 16px e alinhamento uniforme por linha.
-[x] Blocos comuns possuem altura mínima de 140px, largura disponível entre 280px e 320px quando a tela permitir e conteúdo legível sem cortes.
-[x] Em telas pequenas, os blocos ocupam a largura disponível sem provocar rolagem horizontal.
-[x] Descrição do problema, Observações e Mapa podem ocupar duas colunas e crescem conforme o conteúdo.
 [x] Observações crescem ao digitar e também ao carregar texto já salvo.
 [x] Conteúdo excepcionalmente grande em bloco comum permanece acessível por rolagem interna.
 [x] Nome e telefones podem ser selecionados e copiados.
+[x] No zoom do Chrome para computador, a grade mantém formato e ordem; quando faltar largura, o Gestor-Detalhe usa rolagem horizontal temática.
+[x] A ampliação nativa do navegador permanece habilitada para acessibilidade.
+[x] Em aparelho estreito de toque, os blocos continuam responsivos à largura do celular.
 [x] Existe somente um botão de Maps nos detalhes: o botão de rota localizado dentro do bloco do mapa.
 [x] A rota usa primeiro o alfinete; sem coordenadas, usa rua, número, bairro e cidade.
 
@@ -114,7 +117,7 @@ MAPA VISUAL PARTICULAR
 [x] MAPA_VISUAL_MFC.txt contém códigos e instruções atuais.
 
 SERVICE WORKER E ARQUIVOS
-[x] CACHE_NAME atual: mfc-tecnico-v134.
+[x] CACHE_NAME atual: mfc-tecnico-v135.
 [x] APP_SHELL inclui páginas, imagens, fontes, layout-guide.js, location-view.js e Leaflet local.
 [x] Cache anterior é removido durante activate.
 [x] Páginas HTML usam rede primeiro e cache como fallback.
