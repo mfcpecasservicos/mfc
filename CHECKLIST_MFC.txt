@@ -106,6 +106,8 @@ CADASTRO PÚBLICO
 
 MAPA VISUAL PARTICULAR
 [x] Gestor, Index e Cadastro possuem modo particular de identificação de layout.
+[x] No Gestor, o botão do mapa visual fica dentro de GESTOR-MENU-01, imediatamente acima do status de conexão.
+[x] O botão do mapa visual usa somente o ícone Font Awesome de código </>, sem texto permanente.
 [x] Ativação inicial usa ?mfc_layout=1; remoção usa ?mfc_layout=0.
 [x] Ctrl+Shift+L alterna o modo no computador após a ativação inicial.
 [x] O recurso é somente visual e não altera dados de clientes.

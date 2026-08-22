@@ -4,7 +4,7 @@ ATIVAÇÃO PARTICULAR
 
 1. Abra qualquer página acrescentando ?mfc_layout=1 ao endereço.
    Exemplo: gestor.html?mfc_layout=1
-2. O botão "Mapa visual" ficará disponível apenas nesse navegador.
+2. O botão com ícone de código </> ficará disponível apenas nesse navegador. No Gestor, ele aparece no final do menu lateral, acima de "Conectado".
 3. Ligue o botão e clique em uma etiqueta amarela para copiar seu código.
 4. Para desativar e remover o recurso desse navegador, abra qualquer página com ?mfc_layout=0.
 5. No computador, Ctrl+Shift+L também liga/desliga o mapa depois da primeira ativação.

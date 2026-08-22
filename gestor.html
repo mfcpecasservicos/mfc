@@ -1120,5 +1120,5 @@ window.uploadBudgetImage=async(id,li,input)=>{const file=input.files?.[0];if(!fi
 window.removeBudgetImage=async(id,li)=>{const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];layers[li].budgetImage=null;await updateDoc(doc(db,'clients',id),{layers})};
 </script>
 <div id="fin-print-area"></div>
-<script src="layout-guide.js"></script>
+<script src="layout-guide.js?v=134a"></script>
 </body></html>
