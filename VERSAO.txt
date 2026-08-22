@@ -1,6 +1,6 @@
-MFC v135
+MFC v136
 
-VERSÃO ATUAL — DETALHES EM TILES E ZOOM ACESSÍVEL
+VERSÃO ATUAL — INFORMAÇÕES GERAIS EM QUADRADOS
 
 Esta é a única versão de referência válida. O histórico antigo foi removido porque continha regras substituídas que estavam sendo confundidas com o funcionamento atual.
 
@@ -20,17 +20,21 @@ SCROLL NO TEMA DO GESTOR
 
 As barras de rolagem agora usam trilho azul-marinho, polegar azul-acinzentado e destaque azul ao passar o mouse. As setas e faixas brancas nativas foram ocultadas, mantendo o scroll discreto e coerente com o painel escuro.
 
-GESTOR GESTOR — BLOCOS DE DETALHE E ZOOM ACESSÍVEL
+GESTOR — INFORMAÇÕES GERAIS EM QUADRADOS
 
-Os detalhes do Gestor usam uma composição fixa: Nome, Telefone e Endereço formam a primeira linha; Ponto de referência e Equipamento ficam centralizados na segunda. Esses cinco blocos permanecem quadrados. O mapa ocupa o painel grande à direita das duas linhas.
+O detalhe possui uma estrutura padrão para clientes e empresas. Todas as informações gerais ficam em blocos quadrados na área esquerda, sem cartões suplementares separados.
 
-Descrição do problema e Observações ficam abaixo, lado a lado, como os únicos blocos largos. Observações continuam crescendo conforme o conteúdo.
+Clientes exibem seis quadrados: Nome completo, Número de contato, E-mail, Endereço, Ponto de referência e Equipamento. A primeira linha contém quatro blocos; os dois restantes ficam centralizados na segunda linha.
 
-No Chrome para computador, aumentar o zoom preserva o formato e a ordem dos blocos. Quando a largura visível deixa de comportar a composição, o Gestor-Detalhe oferece rolagem horizontal com as mesmas cores do tema em vez de esmagar ou remontar os tiles. A ampliação nativa do navegador continua disponível para acessibilidade.
+Empresas exibem oito quadrados: Nome da empresa, Número de contato, E-mail, Data da visita, Nome do solicitante, CNPJ, Endereço da empresa e Equipamento. São quatro blocos em cada linha.
 
-Em aparelho estreito com tela de toque, a composição continua responsiva e se reorganiza para a largura do celular. O endereço permanece consolidado, sem duplicação de rua, número, bairro ou cidade, e o ponto de referência continua separado.
+Os quadrados possuem largura mínima maior para evitar texto excessivamente comprimido. O mapa ocupa o painel grande à direita das duas linhas. Descrição do problema e Observações permanecem abaixo, lado a lado, como os únicos blocos largos.
 
- FUNCIONAMENTO OFFLINE
+No Chrome para computador, aumentar o zoom preserva o formato e a ordem dos blocos. Quando a largura visível deixa de comportar a composição, o Gestor-Detalhe oferece rolagem horizontal temática em vez de esmagar ou remontar os quadrados. A ampliação nativa do navegador continua disponível para acessibilidade.
+
+Em aparelho estreito com tela de toque, a composição continua responsiva e se reorganiza para a largura do celular.
+
+INDEX — FUNCIONAMENTO OFFLINE
 
 O Index agora usa o cache persistente do Firestore no aparelho. Depois de uma primeira abertura com internet, a lista de clientes fica disponível offline e alterações como relatórios e ajustes de garantia são gravadas localmente para envio automático quando a conexão voltar.
 
@@ -90,8 +94,8 @@ A navegação continua abrindo o Google Maps por URL, sem chave de API.
 
 CACHE
 
-Cache atualizado para mfc-tecnico-v135, incluindo location-view.js, Leaflet local, fontes, páginas no APP_SHELL e módulos Firebase 11 necessários ao Index offline.
+Cache atualizado para mfc-tecnico-v136, incluindo location-view.js, Leaflet local, fontes, páginas no APP_SHELL e módulos Firebase 11 necessários ao Index offline.
 
 REGRA
 
-Toda atualização futura deve partir da v135 ou de versão posterior aprovada. CHECKLIST_MFC.txt e VERSAO.txt devem conter somente regras atuais; uma regra substituída deve ser removida, não acumulada como se ainda estivesse ativa.
+Toda atualização futura deve partir da v136 ou de versão posterior aprovada. CHECKLIST_MFC.txt e VERSAO.txt devem conter somente regras atuais; uma regra substituída deve ser removida, não acumulada como se ainda estivesse ativa.
