@@ -19,10 +19,15 @@ GESTOR — LISTA E FLUXO
 [x] Os demais clientes são agrupados por dia mais recente; dentro do mesmo dia, o horário mais cedo aparece primeiro.
 [x] Anti-duplicação usa telefone normalizado e identifica cliente recorrente.
 [x] Novo cadastro com nome e telefone correspondentes a cliente da lixeira restaura o cadastro e adiciona nova visita sem criar duplicata.
-[x] O modal Nova visita possui botão + ao lado do telefone principal para revelar Nome e Telefone do contato adicional.
-[x] Contato adicional é opcional e usa os campos phone2Name e phone2 já existentes.
-[x] Ao abrir cliente existente, contato adicional salvo é carregado automaticamente.
-[x] Fechar o bloco adicional limpa seus campos e evita salvar informação invisível.
+[x] Nova visita segue a ordem visual do Editar cliente.
+[x] Nova visita inclui E-mail, Número, Bairro e Cidade.
+[x] Serviço de garantia e Equipamento trazido à loja ficam depois de Data a definir.
+[x] Nova visita e Editar cliente possuem botão + ao lado do telefone principal.
+[x] Cada formulário aceita até três contatos adicionais.
+[x] Cada contato adicional possui Nome, Telefone e botão − próprio para exclusão.
+[x] Contatos adicionais ficam alinhados como campos normais, sem caixa deslocada.
+[x] A lista usa additionalContacts e preserva phone2Name/phone2 para compatibilidade.
+[x] Ao abrir cliente existente, todos os contatos adicionais salvos são carregados automaticamente.
 [x] Duplicados da lixeira são unificados automaticamente por telefone.
 [x] Cliente concluído é enviado à lixeira após 120 dias.
 [x] Cliente na lixeira é excluído definitivamente após 90 dias.
@@ -128,7 +133,7 @@ MAPA VISUAL PARTICULAR
 [x] MAPA_VISUAL_MFC.txt contém códigos e instruções atuais.
 
 SERVICE WORKER E ARQUIVOS
-[x] CACHE_NAME atual: mfc-tecnico-v137b.
+[x] CACHE_NAME atual: mfc-tecnico-v137c.
 [x] APP_SHELL inclui páginas, imagens, fontes, layout-guide.js, location-view.js e Leaflet local.
 [x] Cache anterior é removido durante activate.
 [x] Alterações pequenas usam sufixo por letra na versão atual; número inteiro novo fica reservado para mudanças maiores.
