@@ -1,6 +1,6 @@
-MFC v137b
+MFC v137c
 
-VERSÃO ATUAL — CONTATO ADICIONAL NA NOVA VISITA
+VERSÃO ATUAL — NOVA VISITA REORGANIZADA
 
 Esta é a única versão de referência válida. O histórico antigo foi removido porque continha regras substituídas que estavam sendo confundidas com o funcionamento atual.
 
@@ -33,11 +33,17 @@ Nome, telefones, CNPJ e E-mail possuem sublinhado tracejado e podem ser copiados
 Os quadrados mantêm largura mínima para evitar texto excessivamente comprimido. No zoom do Chrome para computador, a grade preserva formato e ordem e usa rolagem horizontal temática quando necessário. Em aparelho estreito de toque, a composição continua responsiva.
 
 
-NOVA VISITA — CONTATO ADICIONAL
+NOVA VISITA E EDITAR CLIENTE — ORDEM E CONTATOS
 
-Ao lado do telefone principal existe um botão +. Ele revela os campos opcionais Nome do contato adicional e Telefone adicional, gravados respectivamente em phone2Name e phone2.
+O modal Nova visita segue a mesma ordem visual do Editar cliente: Nome e Telefone; contatos adicionais; E-mail; Endereço; Número e Bairro; Cidade e Ponto de referência; Equipamento e Data/Hora; Data a definir; Serviço de garantia; Equipamento trazido à loja; Status inicial; Observações.
 
-Quando o bloco está aberto, o botão muda para −. Fechá-lo limpa os dois campos para impedir o salvamento de dados ocultos. Ao iniciar nova visita para cliente já existente, o contato adicional salvo é carregado automaticamente. Caso nenhum contato adicional seja informado, os campos não são enviados e os dados existentes não são apagados.
+Serviço de garantia e Equipamento trazido à loja ficam depois do controle Data a definir.
+
+Nova visita e Editar cliente possuem botão + ao lado do telefone principal. Cada formulário aceita até três contatos adicionais. Cada linha adicional contém Nome do contato adicional, Telefone adicional e um botão − próprio para excluir somente aquela linha.
+
+Os contatos ficam alinhados como os demais campos, sem caixa ou balão deslocado. A lista é salva em additionalContacts. Por compatibilidade, o primeiro contato adicional também continua gravado em phone2Name e phone2.
+
+Ao iniciar nova visita para cliente existente, todos os contatos adicionais salvos são carregados automaticamente. E-mail, número, bairro e cidade também foram incluídos no formulário manual de Nova visita.
 
 INDEX — FUNCIONAMENTO OFFLINE
 
@@ -99,10 +105,10 @@ A navegação continua abrindo o Google Maps por URL, sem chave de API.
 
 CACHE
 
-Cache atualizado para mfc-tecnico-v137b, incluindo location-view.js, Leaflet local, fontes, páginas no APP_SHELL e módulos Firebase 11 necessários ao Index offline.
+Cache atualizado para mfc-tecnico-v137c, incluindo location-view.js, Leaflet local, fontes, páginas no APP_SHELL e módulos Firebase 11 necessários ao Index offline.
 
 REGRA
 
-Toda atualização futura deve partir da v137b ou de versão posterior aprovada. CHECKLIST_MFC.txt e VERSAO.txt devem conter somente regras atuais; uma regra substituída deve ser removida, não acumulada como se ainda estivesse ativa.
+Toda atualização futura deve partir da v137c ou de versão posterior aprovada. CHECKLIST_MFC.txt e VERSAO.txt devem conter somente regras atuais; uma regra substituída deve ser removida, não acumulada como se ainda estivesse ativa.
 
 Atualizações pequenas e localizadas usam sufixos por letra na versão atual, por exemplo v137a, v137b e v137c. O número inteiro seguinte fica reservado para mudanças maiores ou conjuntos amplos de alterações.
