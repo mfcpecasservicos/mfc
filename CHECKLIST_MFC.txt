@@ -19,6 +19,10 @@ GESTOR — LISTA E FLUXO
 [x] Os demais clientes são agrupados por dia mais recente; dentro do mesmo dia, o horário mais cedo aparece primeiro.
 [x] Anti-duplicação usa telefone normalizado e identifica cliente recorrente.
 [x] Novo cadastro com nome e telefone correspondentes a cliente da lixeira restaura o cadastro e adiciona nova visita sem criar duplicata.
+[x] O modal Nova visita possui botão + ao lado do telefone principal para revelar Nome e Telefone do contato adicional.
+[x] Contato adicional é opcional e usa os campos phone2Name e phone2 já existentes.
+[x] Ao abrir cliente existente, contato adicional salvo é carregado automaticamente.
+[x] Fechar o bloco adicional limpa seus campos e evita salvar informação invisível.
 [x] Duplicados da lixeira são unificados automaticamente por telefone.
 [x] Cliente concluído é enviado à lixeira após 120 dias.
 [x] Cliente na lixeira é excluído definitivamente após 90 dias.
@@ -124,7 +128,7 @@ MAPA VISUAL PARTICULAR
 [x] MAPA_VISUAL_MFC.txt contém códigos e instruções atuais.
 
 SERVICE WORKER E ARQUIVOS
-[x] CACHE_NAME atual: mfc-tecnico-v137a.
+[x] CACHE_NAME atual: mfc-tecnico-v137b.
 [x] APP_SHELL inclui páginas, imagens, fontes, layout-guide.js, location-view.js e Leaflet local.
 [x] Cache anterior é removido durante activate.
 [x] Alterações pequenas usam sufixo por letra na versão atual; número inteiro novo fica reservado para mudanças maiores.
