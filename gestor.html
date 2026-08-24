@@ -173,6 +173,9 @@ button{font-family:inherit}
 .fi::placeholder{color:#94A3B8aa}
 textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-height:1.55}
 .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.address-number-row{display:grid;grid-template-columns:minmax(0,1fr) clamp(88px,20%,118px);gap:10px;min-width:0}
+.address-number-row>div{min-width:0}
+#edit-modal[data-company="1"] .address-number-row{grid-template-columns:1fr}
 .contact-phone-wrap{display:grid;grid-template-columns:minmax(0,1fr) 46px;gap:8px}
 .contact-add-btn,.additional-contact-remove{width:46px;height:44px;padding:0;border-radius:10px;font-size:1rem}
 .additional-contacts-list{grid-column:1/-1;display:grid;gap:10px}
@@ -465,11 +468,10 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
       <div class="additional-contacts-list" id="inp-additional-contacts"></div>
       <div id="new-visit-trash-warning" style="display:none;grid-column:1/-1"></div>
       <div style="grid-column:1/-1"><span class="fl">E-mail</span><input class="fi" id="inp-email" type="email" placeholder="email@exemplo.com"></div>
-      <div style="grid-column:1/-1"><span class="fl">Endereço</span><input class="fi" id="inp-address" placeholder="Rua"></div>
-      <div><span class="fl">Número</span><input class="fi" id="inp-number" placeholder="Número"></div>
+      <div class="address-number-row" style="grid-column:1/-1"><div><span class="fl">Endereço</span><input class="fi" id="inp-address" placeholder="Rua"></div><div><span class="fl">Nº</span><input class="fi" id="inp-number" placeholder="Nº"></div></div>
       <div><span class="fl">Bairro</span><input class="fi" id="inp-neighborhood" placeholder="Bairro"></div>
       <div><span class="fl">Cidade</span><input class="fi" id="inp-city" placeholder="Ex: Dias D'Ávila"></div>
-      <div><span class="fl">Ponto de referência</span><input class="fi" id="inp-ref" placeholder="Referência"></div>
+      <div style="grid-column:1/-1"><span class="fl">Ponto de referência</span><input class="fi" id="inp-ref" placeholder="Referência"></div>
       <div style="grid-column:1/-1"><span class="fl">Equipamento</span><input class="fi" id="inp-equip" placeholder="Ex: Geladeira Brastemp"></div>
       <div><span class="fl"><i class="fa-solid fa-calendar-days"></i> Data e Hora (dd/mm/aaaa hh:mm)</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="inp-datetime" placeholder="dd/mm/aaaa hh:mm" oninput="dtMask(this)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px" onclick="openPicker('pk-inp-datetime')"><i class="fa-solid fa-calendar-days"></i></button><input type="datetime-local" id="pk-inp-datetime" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'inp-datetime',false)"></div></div>
       <div style="align-self:end"><input type="checkbox" id="inp-tbd" style="display:none"><button type="button" class="tg-btn tg-galpao" style="width:100%;height:44px;font-size:.82rem" onclick="toggleTBDSwitch('inp-tbd','inp-datetime',this)"><i class="fa-solid fa-calendar-days"></i><span style="flex:1;text-align:left">Data a definir</span><span class="switch"></span></button></div>
@@ -539,11 +541,10 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
       <div style="grid-column:1/-1"><span class="fl">E-mail</span><input class="fi" id="e-email" placeholder="email@exemplo.com"></div>
       <div class="ec-company-only" style="display:none"><span class="fl">Nome do solicitante</span><input class="fi" id="e-requester" placeholder="Quem solicitou a visita"></div>
       <div class="ec-company-only" style="display:none"><span class="fl">CNPJ</span><input class="fi" id="e-cnpj" placeholder="00.000.000/0000-00"></div>
-      <div style="grid-column:1/-1"><span class="fl">Endereço</span><input class="fi" id="e-address"></div>
-      <div class="ec-client-only"><span class="fl">Número</span><input class="fi" id="e-number"></div>
+      <div class="address-number-row" style="grid-column:1/-1"><div><span class="fl">Endereço</span><input class="fi" id="e-address"></div><div class="ec-client-only"><span class="fl">Nº</span><input class="fi" id="e-number" placeholder="Nº"></div></div>
       <div class="ec-client-only"><span class="fl">Bairro</span><input class="fi" id="e-neighborhood"></div>
       <div class="ec-client-only"><span class="fl">Cidade</span><input class="fi" id="e-city" placeholder="Ex: Dias D'Ávila"></div>
-      <div class="ec-client-only"><span class="fl">Ponto de referência</span><input class="fi" id="e-ref"></div>
+      <div class="ec-client-only" style="grid-column:1/-1"><span class="fl">Ponto de referência</span><input class="fi" id="e-ref"></div>
       <div style="grid-column:1/-1"><span class="fl">Equipamento</span><input class="fi" id="e-equip"></div>
       <div><span class="fl"><i class="fa-solid fa-calendar-days"></i> Data e Hora (dd/mm/aaaa hh:mm)</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="e-datetime" placeholder="dd/mm/aaaa hh:mm" oninput="dtMask(this)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px" onclick="openPicker('pk-e-datetime')"><i class="fa-solid fa-calendar-days"></i></button><input type="datetime-local" id="pk-e-datetime" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'e-datetime',false)"></div></div>
       <div style="align-self:end"><input type="checkbox" id="e-tbd" style="display:none"><button type="button" class="tg-btn tg-galpao" style="width:100%;height:44px;font-size:.82rem" onclick="toggleTBDSwitch('e-tbd','e-datetime',this)"><i class="fa-solid fa-calendar-days"></i><span style="flex:1;text-align:left">Data a definir</span><span class="switch"></span></button></div>
@@ -1301,5 +1302,5 @@ window.uploadBudgetImage=async(id,li,input)=>{const file=input.files?.[0];if(!fi
 window.removeBudgetImage=async(id,li)=>{const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];layers[li].budgetImage=null;await updateDoc(doc(db,'clients',id),{layers})};
 </script>
 <div id="fin-print-area"></div>
-<script src="layout-guide.js?v=137d"></script>
+<script src="layout-guide.js?v=137e"></script>
 </body></html>
