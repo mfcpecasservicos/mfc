@@ -174,11 +174,14 @@ button{font-family:inherit}
 textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-height:1.55}
 .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
 .contact-phone-wrap{display:grid;grid-template-columns:minmax(0,1fr) 46px;gap:8px}
-.contact-add-btn{width:46px;height:44px;padding:0;border-radius:10px;font-size:1rem}
-.additional-contact-row{grid-column:1/-1;display:none;grid-template-columns:1fr 1fr;gap:10px;padding:12px;background:#0f1728;border:1px solid var(--border);border-radius:12px}
-.additional-contact-row.open{display:grid}
-@media(max-width:620px){.additional-contact-row{grid-template-columns:1fr}}
-
+.contact-add-btn,.additional-contact-remove{width:46px;height:44px;padding:0;border-radius:10px;font-size:1rem}
+.additional-contacts-list{grid-column:1/-1;display:grid;gap:10px}
+.additional-contact-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 46px;gap:10px;align-items:end}
+.additional-contact-row>div{min-width:0}
+@media(max-width:620px){
+  .additional-contact-row{grid-template-columns:minmax(0,1fr) 46px}
+  .additional-contact-name{grid-column:1/-1}
+}
 .value-preview{font-size:.84rem;color:#67e8f9;background:#083344;border:1px solid #0e7490;border-radius:8px;padding:8px 10px;margin:8px 0;display:none}
 .value-preview.show{display:block}
 .os-grid{display:grid;grid-template-columns:1.18fr .82fr;gap:16px;align-items:stretch}
@@ -458,19 +461,20 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
     <h3><i class="fa-solid fa-plus"></i> Nova visita</h3>
     <div class="fgrid">
       <div><span class="fl">Nome</span><input class="fi" id="inp-name" placeholder="Nome completo" oninput="checkTrashMatch()"></div>
-      <div><span class="fl">Telefone</span><div class="contact-phone-wrap"><input class="fi" id="inp-phone" placeholder="(71) 9 0000-0000" oninput="phoneMask(this);checkTrashMatch()"><button type="button" class="btn btn-muted contact-add-btn" id="inp-add-contact-btn" onclick="toggleAdditionalContact()" title="Adicionar nome e telefone de outro contato" aria-label="Adicionar contato adicional" aria-expanded="false"><i class="fa-solid fa-plus"></i></button></div></div>
-      <div class="additional-contact-row" id="inp-additional-contact">
-        <div><span class="fl">Nome do contato adicional</span><input class="fi" id="inp-phone2Name" placeholder="Ex: esposa, filho, responsável"></div>
-        <div><span class="fl">Telefone adicional</span><input class="fi" id="inp-phone2" placeholder="(71) 9 0000-0000" oninput="phoneMask(this)"></div>
-      </div>
+      <div><span class="fl">Telefone</span><div class="contact-phone-wrap"><input class="fi" id="inp-phone" placeholder="(71) 9 0000-0000" oninput="phoneMask(this);checkTrashMatch()"><button type="button" class="btn btn-muted contact-add-btn" id="inp-add-contact-btn" onclick="addAdditionalContact('inp')" title="Adicionar contato adicional" aria-label="Adicionar contato adicional"><i class="fa-solid fa-plus"></i></button></div></div>
+      <div class="additional-contacts-list" id="inp-additional-contacts"></div>
       <div id="new-visit-trash-warning" style="display:none;grid-column:1/-1"></div>
-      <div style="grid-column:1/-1"><input type="checkbox" id="inp-warranty" style="display:none"><button type="button" class="tg-btn tg-warranty" style="width:100%" onclick="checkNewVisitWarranty('inp-warranty',this)"><i class="fa-solid fa-shield-halved"></i><span style="flex:1;text-align:left">Serviço de garantia</span><span class="switch"></span></button></div>
+      <div style="grid-column:1/-1"><span class="fl">E-mail</span><input class="fi" id="inp-email" type="email" placeholder="email@exemplo.com"></div>
+      <div style="grid-column:1/-1"><span class="fl">Endereço</span><input class="fi" id="inp-address" placeholder="Rua"></div>
+      <div><span class="fl">Número</span><input class="fi" id="inp-number" placeholder="Número"></div>
+      <div><span class="fl">Bairro</span><input class="fi" id="inp-neighborhood" placeholder="Bairro"></div>
+      <div><span class="fl">Cidade</span><input class="fi" id="inp-city" placeholder="Ex: Dias D'Ávila"></div>
       <div><span class="fl">Ponto de referência</span><input class="fi" id="inp-ref" placeholder="Referência"></div>
       <div><span class="fl">Equipamento</span><input class="fi" id="inp-equip" placeholder="Ex: Geladeira Brastemp"></div>
-      <div style="grid-column:1/-1"><span class="fl">Endereço</span><input class="fi" id="inp-address" placeholder="Rua, número, bairro"></div>
       <div><span class="fl"><i class="fa-solid fa-calendar-days"></i> Data e Hora (dd/mm/aaaa hh:mm)</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="inp-datetime" placeholder="dd/mm/aaaa hh:mm" oninput="dtMask(this)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px" onclick="openPicker('pk-inp-datetime')"><i class="fa-solid fa-calendar-days"></i></button><input type="datetime-local" id="pk-inp-datetime" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'inp-datetime',false)"></div><input type="checkbox" id="inp-tbd" style="display:none"><button type="button" class="tg-btn tg-galpao" style="width:100%;height:40px;margin:8px 0 4px;font-size:.82rem" onclick="toggleTBDSwitch('inp-tbd','inp-datetime',this)"><i class="fa-solid fa-calendar-days"></i><span style="flex:1;text-align:left">Data a definir</span><span class="switch"></span></button></div>
-      <div><span class="fl">Status inicial</span><select class="fi" id="inp-status"><option value="waiting">🕐 Aguardando visita</option><option value="workshop_pending">🏭 Aguardando Avaliação</option><option value="evaluated">✅ Avaliação concluída</option><option value="quoted">💰 Aguardando aprovação</option><option value="approved">🟠 Aprovado</option><option value="ready_delivery">📦 Pronto para entrega</option><option value="service_finished">✅ Serviço finalizado</option><option value="absent">🚫 Cliente ausente</option></select></div>
+      <div style="grid-column:1/-1"><input type="checkbox" id="inp-warranty" style="display:none"><button type="button" class="tg-btn tg-warranty" style="width:100%" onclick="checkNewVisitWarranty('inp-warranty',this)"><i class="fa-solid fa-shield-halved"></i><span style="flex:1;text-align:left">Serviço de garantia</span><span class="switch"></span></button></div>
       <div style="grid-column:1/-1"><input type="checkbox" id="inp-workshop" style="display:none"><button type="button" class="tg-btn tg-galpao" onclick="toggleChk('inp-workshop',this)" style="width:100%"><i class="fa-solid fa-industry"></i><span style="flex:1;text-align:left">Equipamento trazido à loja</span><span class="switch"></span></button></div>
+      <div style="grid-column:1/-1"><span class="fl">Status inicial</span><select class="fi" id="inp-status"><option value="waiting">🕐 Aguardando visita</option><option value="workshop_pending">🏭 Aguardando Avaliação</option><option value="evaluated">✅ Avaliação concluída</option><option value="quoted">💰 Aguardando aprovação</option><option value="approved">🟠 Aprovado</option><option value="ready_delivery">📦 Pronto para entrega</option><option value="service_finished">✅ Serviço finalizado</option><option value="absent">🚫 Cliente ausente</option></select></div>
       <div style="grid-column:1/-1"><span class="fl">Observações</span><textarea class="fi" id="inp-notes" placeholder="Observações adicionais"></textarea></div>
     </div>
     <div class="mact">
@@ -529,9 +533,8 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
     <h3 id="e-modal-title"><i class="fa-solid fa-pen"></i> Editar cliente</h3>
     <div class="fgrid">
       <div><span class="fl">Nome</span><input class="fi" id="e-name"></div>
-      <div><span class="fl">Telefone</span><input class="fi" id="e-phone" oninput="phoneMask(this)"></div>
-      <div><span class="fl">Telefone 2 (opcional)</span><input class="fi" id="e-phone2" oninput="phoneMask(this)"></div>
-      <div><span class="fl">Nome do dono do telefone 2</span><input class="fi" id="e-phone2Name" placeholder="Ex: esposa, filho..."></div>
+      <div><span class="fl">Telefone</span><div class="contact-phone-wrap"><input class="fi" id="e-phone" oninput="phoneMask(this)"><button type="button" class="btn btn-muted contact-add-btn" id="e-add-contact-btn" onclick="addAdditionalContact('e')" title="Adicionar contato adicional" aria-label="Adicionar contato adicional"><i class="fa-solid fa-plus"></i></button></div></div>
+      <div class="additional-contacts-list" id="e-additional-contacts"></div>
       <div style="grid-column:1/-1"><span class="fl">E-mail</span><input class="fi" id="e-email" placeholder="email@exemplo.com"></div>
       <div class="ec-company-only" style="display:none"><span class="fl">Nome do solicitante</span><input class="fi" id="e-requester" placeholder="Quem solicitou a visita"></div>
       <div class="ec-company-only" style="display:none"><span class="fl">CNPJ</span><input class="fi" id="e-cnpj" placeholder="00.000.000/0000-00"></div>
@@ -707,13 +710,14 @@ function fullAddress(c){return completeAddress(c)||c.address||''}
 function infoCard(icon,color,label,value,extra='',cls=''){return value?`<div class="iblk ${cls}"><div class="ib-head"><div class="ib-ic" style="background:${color}22;color:${color}"><i class="fa-solid ${icon}"></i></div><label>${label}</label></div><p>${value}</p>${extra}</div>`:''}
 function clientInfoBlocks(c){
   const isCompany=!!(c.companyMode||c.type==='company'),addr=fullAddress(c);
-  const mainPhone=c.phone||c.phone2||'',mainIsPhone2=!c.phone&&!!c.phone2;
+  const contacts=storedAdditionalContacts(c),mainPhone=c.phone||contacts[0]?.phone||'',mainContactName=!c.phone?(contacts[0]?.name||''):'';
   const cp=(txt,label)=>`<span class="copyable" onclick="copyToClipboard('${escJs(txt)}','${label}')">${txt}</span>`;
-  const mainNameSuffix=(mainIsPhone2&&c.phone2Name)?` — ${cp(c.phone2Name,'Nome do contato 2')}`:'';
-  const phone2ExtraLine=(c.phone&&c.phone2)?`<p style="margin-top:4px">${cp(c.phone2,'Telefone 2')}${c.phone2Name?' — '+cp(c.phone2Name,'Nome do contato 2'):''}</p>`:'';
+  const mainNameSuffix=mainContactName?` — ${cp(mainContactName,'Nome do contato')}`:'';
+  const extraContacts=c.phone?contacts:contacts.slice(1);
+  const extraContactLines=extraContacts.map((contact,index)=>`<p style="margin-top:4px">${contact.phone?cp(contact.phone,'Telefone adicional '+(index+1)):''}${contact.name?(contact.phone?' — ':'')+cp(contact.name,'Nome do contato adicional '+(index+1)):''}</p>`).join('');
   const shared=[
     infoCard('fa-user','#3B82F6',isCompany?'Nome da empresa':'Nome completo',c.name?cp(c.name,'Nome'):''),
-    infoCard('fa-phone','#22C55E','Número de contato',mainPhone?cp(mainPhone,'Telefone')+mainNameSuffix:'',phone2ExtraLine),
+    infoCard('fa-phone','#22C55E','Número de contato',mainPhone?cp(mainPhone,'Telefone')+mainNameSuffix:'',extraContactLines),
     infoCard('fa-envelope','#8B5CF6','E-mail',c.email?cp(c.email,'E-mail'):'')
   ];
   const general=(isCompany
@@ -884,32 +888,56 @@ window.switchView=v=>{
 window.goHome=()=>{selectedId=null;render()};
 /* ===== BASIC FNS ===== */
 window.phoneMask=el=>{let v=el.value.replace(/\D/g,'');if(v.length>11)v=v.slice(0,11);if(v.length<=2)el.value=v;else if(v.length<=7)el.value=v.slice(0,2)+' '+v.slice(2);else if(v.length<=10)el.value=v.slice(0,2)+' '+v.slice(2,6)+'-'+v.slice(6);else el.value=v.slice(0,2)+' '+v.slice(2,3)+' '+v.slice(3,7)+'-'+v.slice(7)};
+function escAttr(v){return String(v??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
+function storedAdditionalContacts(c){
+  const saved=Array.isArray(c?.additionalContacts)?c.additionalContacts:[];
+  const contacts=saved.map(x=>({name:String(x?.name||'').trim(),phone:String(x?.phone||'').trim()})).filter(x=>x.name||x.phone);
+  if(!contacts.length&&(c?.phone2||c?.phone2Name))contacts.push({name:String(c.phone2Name||'').trim(),phone:String(c.phone2||'').trim()});
+  return contacts.slice(0,3);
+}
+function readAdditionalContactInputs(prefix){
+  return Array.from(document.querySelectorAll(`[data-additional-contact="${prefix}"]`)).map(row=>({
+    name:(row.querySelector('[data-contact-name]')?.value||'').trim(),
+    phone:(row.querySelector('[data-contact-phone]')?.value||'').trim()
+  })).filter(x=>x.name||x.phone).slice(0,3);
+}
+function additionalContactRowHtml(prefix,contact,index){
+  return `<div class="additional-contact-row" data-additional-contact="${prefix}">
+    <div class="additional-contact-name"><span class="fl">Nome do contato adicional</span><input class="fi" data-contact-name value="${escAttr(contact.name)}" placeholder="Ex: esposa, filho, responsável"></div>
+    <div><span class="fl">Telefone adicional</span><input class="fi" data-contact-phone value="${escAttr(contact.phone)}" placeholder="(71) 9 0000-0000" oninput="phoneMask(this)"></div>
+    <button type="button" class="btn btn-outline-red additional-contact-remove" onclick="removeAdditionalContact('${prefix}',${index})" title="Excluir este contato" aria-label="Excluir este contato"><i class="fa-solid fa-minus"></i></button>
+  </div>`
+}
+window.renderAdditionalContacts=(prefix,contacts=[])=>{
+  const box=document.getElementById(prefix+'-additional-contacts'),btn=document.getElementById(prefix+'-add-contact-btn');
+  if(!box)return;
+  const list=contacts.slice(0,3);
+  box.innerHTML=list.map((contact,index)=>additionalContactRowHtml(prefix,contact,index)).join('');
+  if(btn){btn.disabled=list.length>=3;btn.style.opacity=list.length>=3?'.45':'1';btn.title=list.length>=3?'Limite de 3 contatos adicionais':'Adicionar contato adicional'}
+};
+window.addAdditionalContact=prefix=>{
+  const list=readAdditionalContactInputs(prefix);
+  if(list.length>=3)return toast('Limite de 3 contatos adicionais','var(--yellow)');
+  list.push({name:'',phone:''});
+  renderAdditionalContacts(prefix,list);
+  if(prefix==='inp')window._additionalContactsTouched=true;
+  setTimeout(()=>document.querySelectorAll(`[data-additional-contact="${prefix}"] [data-contact-name]`)[list.length-1]?.focus(),0)
+};
+window.removeAdditionalContact=(prefix,index)=>{
+  const list=readAdditionalContactInputs(prefix);
+  list.splice(index,1);
+  renderAdditionalContacts(prefix,list);
+  if(prefix==='inp')window._additionalContactsTouched=true;
+};
 window.openNewVisit=()=>document.getElementById('newvisit-modal').classList.add('open');
 window.closeNewVisit=()=>document.getElementById('newvisit-modal').classList.remove('open');
-window.toggleAdditionalContact=force=>{
-  const row=document.getElementById('inp-additional-contact'),btn=document.getElementById('inp-add-contact-btn');
-  if(!row||!btn)return;
-  const open=typeof force==='boolean'?force:!row.classList.contains('open');
-  row.classList.toggle('open',open);
-  btn.classList.toggle('btn-blue',open);
-  btn.classList.toggle('btn-muted',!open);
-  btn.setAttribute('aria-expanded',String(open));
-  btn.title=open?'Remover contato adicional':'Adicionar nome e telefone de outro contato';
-  btn.setAttribute('aria-label',btn.title);
-  btn.innerHTML=`<i class="fa-solid ${open?'fa-minus':'fa-plus'}"></i>`;
-  if(!open){
-    const phone2=document.getElementById('inp-phone2'),phone2Name=document.getElementById('inp-phone2Name');
-    if(phone2)phone2.value='';
-    if(phone2Name)phone2Name.value='';
-  }
-};
 window.openCompany=()=>document.getElementById('company-modal').classList.add('open');
 window.closeCompany=()=>document.getElementById('company-modal').classList.remove('open');
 window.homeSearch=val=>{const box=document.getElementById('home-results');if(!box)return;if(!val||val.length<2){box.classList.remove('open');return}const q=val.toLowerCase(),qd=normPhone(val);const results=all.filter(c=>(c.name||'').toLowerCase().includes(q)||(qd&&normPhone(c.phone).includes(qd))||(c.address||'').toLowerCase().includes(q)).slice(0,12);if(!results.length){box.classList.remove('open');return}box.classList.add('open');box.innerHTML=results.map(c=>{const lastDone=findLastConcludedLayer(c,-1);return `<div class="csr-item ${c.deleted?'deleted':''}"><div style="flex:1;min-width:0"><strong>${c.name||'—'}${c.deleted?' <span style="color:var(--red)">(Lixeira)</span>':''}</strong><span>${c.phone||''} ${c.address?'· '+c.address:''}</span></div><div style="display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end">${lastDone?`<button type="button" class="btn btn-sm" style="background:#3b2a06;border:1px solid #f59e0b;color:#fbbf24" onclick="event.stopPropagation();openWarrantyPreview('${c.id}')"><i class="fa-solid fa-shield-halved"></i> Garantia</button>`:''}<button type="button" class="btn btn-outline-blue btn-sm" onclick="event.stopPropagation();pickClient('${c.id}')"><i class="fa-solid fa-plus"></i> Nova visita</button>${c.deleted?`<button type="button" class="btn btn-muted btn-sm" onclick="event.stopPropagation();restoreClient('${c.id}');document.getElementById('home-results').classList.remove('open');document.getElementById('home-search-input').value=''"><i class="fa-solid fa-recycle"></i> Restaurar</button>`:''}</div></div>`}).join('')};
 window.toggleTBD=(inputId,chkEl)=>{const inp=document.getElementById(inputId);if(!inp)return;if(chkEl.checked){inp.dataset.prev=inp.value;inp.value='';inp.placeholder='A definir';inp.disabled=true}else{inp.disabled=false;inp.placeholder='dd/mm/aaaa hh:mm';inp.value=inp.dataset.prev||''}};
 window.toggleTBDSwitch=(chkId,inputId,btn)=>{const chk=document.getElementById(chkId);chk.checked=!chk.checked;btn.classList.toggle('active',chk.checked);toggleTBD(inputId,chk)};
 window.syncTBDBtn=chkId=>{const chk=document.getElementById(chkId);if(!chk)return;chk.nextElementSibling?.classList.toggle('active',chk.checked)};
-window.pickClient=id=>{const c=all.find(x=>x.id===id);if(!c)return;if(!c.deleted)window._selectedClientId=id;['name','phone','address','ref','equip'].forEach(f=>{const el=document.getElementById('inp-'+f);if(el)el.value=c[f]||''});const phone2=document.getElementById('inp-phone2'),phone2Name=document.getElementById('inp-phone2Name');if(phone2)phone2.value=c.phone2||'';if(phone2Name)phone2Name.value=c.phone2Name||'';toggleAdditionalContact(!!(c.phone2||c.phone2Name));document.getElementById('inp-datetime').value='';const tbd=document.getElementById('inp-tbd');if(tbd&&tbd.checked){tbd.checked=false;toggleTBD('inp-datetime',tbd)}syncTBDBtn('inp-tbd');checkTrashMatch(true);document.getElementById('home-results')?.classList.remove('open');const si=document.getElementById('home-search-input');if(si)si.value='';openNewVisit()};
+window.pickClient=id=>{const c=all.find(x=>x.id===id);if(!c)return;if(!c.deleted)window._selectedClientId=id;['name','phone','email','address','number','ref','equip'].forEach(f=>{const el=document.getElementById('inp-'+f);if(el)el.value=c[f]||''});document.getElementById('inp-neighborhood').value=c.neighborhood||c.bairro||'';document.getElementById('inp-city').value=c.city||c.cidade||'';renderAdditionalContacts('inp',storedAdditionalContacts(c));window._additionalContactsTouched=false;document.getElementById('inp-datetime').value='';const tbd=document.getElementById('inp-tbd');if(tbd&&tbd.checked){tbd.checked=false;toggleTBD('inp-datetime',tbd)}syncTBDBtn('inp-tbd');checkTrashMatch(true);document.getElementById('home-results')?.classList.remove('open');const si=document.getElementById('home-search-input');if(si)si.value='';openNewVisit()};
 document.addEventListener('click',e=>{if(!e.target.closest('.home-search'))document.getElementById('home-results')?.classList.remove('open');if(!e.target.closest('.filter-wrap'))document.getElementById('filter-menu')?.classList.remove('open')});
 function makeLayer(status,datetime='',warranty=false){return {status,quote:'',quoteObs:'',techReport:null,approval:warranty?{warranty:true}:null,done:false,createdAt:new Date().toISOString(),datetime}}
 async function addVisitToExisting(c,data,status,warranty=false){const previous=c.deleted?(warranty?getLayers(c).filter(l=>l.done&&l.concludedAt):[]):getLayers(c).filter(l=>!l.done||!!l.concludedAt);const layers=[...previous,makeLayer(status,data.datetime,warranty)];await updateDoc(doc(db,'clients',c.id),{...data,phoneNorm:normPhone(data.phone),deleted:false,recurrent:true,layers,status,updatedAt:new Date().toISOString()})}
@@ -919,8 +947,40 @@ window.checkNewVisitWarranty=(chkId,btn)=>{toggleChk(chkId,btn);const el=documen
 window.openWarrantyPreview=(id)=>{const c=all.find(x=>x.id===id);if(!c)return;const last=findLastConcludedLayer(c,-1);if(!last){alert('🛡️ Este cliente não possui nenhum serviço concluído.');return}const type=reportServiceType(last.techReport||{});const isLaudo=type.includes('Laudo');const days=warrantyDaysFor(type);const concluded=new Date(last.concludedAt);const deadline=new Date(concluded.getTime()+days*86400000);const expired=!isLaudo&&new Date()>deadline;const photos=last.techReport?.photos||[];const bimg=last.budgetImage?.data||'';const statusHtml=isLaudo?`<p class="indicator" style="background:#1e293b;border-color:#64748b;color:#cbd5e1"><i class="fa-solid fa-circle-info"></i> Último serviço foi um Laudo (avaliação) — sem garantia.</p>`:`<p class="indicator" style="background:${expired?'#3b0d0d':'#06281b'};border-color:${expired?'#ef4444':'#10b981'};color:${expired?'#fecaca':'#6ee7b7'}"><i class="fa-solid ${expired?'fa-triangle-exclamation':'fa-circle-check'}"></i> ${expired?'GARANTIA VENCIDA':'Dentro da garantia'} — ${days} dias, válida até ${fdt(deadline.toISOString())}</p>`;document.getElementById('warranty-modal-body').innerHTML=`<h3><i class="fa-solid fa-shield-halved"></i> Garantia — ${c.name||'—'}</h3><p><b>Telefone:</b> ${c.phone||'—'}</p><p><b>Endereço:</b> ${c.address||'—'}</p><p><b>Equipamento:</b> ${last.techReport?.model||c.equip||'—'}</p><p><b>Tipo de serviço:</b> ${type}</p>${statusHtml}<p><b>Concluído em:</b> ${fdt(last.concludedAt)}</p><p><b>Avaliação do técnico:</b><br><span style="white-space:pre-wrap">${reportTextOnly(last.techReport)}</span></p><p><b>Forma de pagamento:</b> ${last.approval?.payment||'—'}</p>${photos.length?`<div><span class="fl">Fotos</span><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">${photos.map(p=>`<img src="${p}" onclick="openLb('${p}')" style="width:70px;height:70px;object-fit:cover;border-radius:8px;cursor:pointer">`).join('')}</div></div>`:''}${bimg?`<div class="doc-box"><span class="fl">Imagem do orçamento / print</span><img class="budget-preview" src="${bimg}" onclick="openLb('${bimg}')"></div>`:''}<div class="mact"><button class="btn btn-muted" onclick="closeWarrantyModal()">Fechar</button><button type="button" class="btn" style="background:#3b2a06;border:1px solid #f59e0b;color:#fbbf24" onclick="startWarrantyVisit('${id}')"><i class="fa-solid fa-plus"></i> Iniciar nova visita (garantia)</button></div>`;document.getElementById('warranty-modal').classList.add('open')};
 window.closeWarrantyModal=()=>document.getElementById('warranty-modal').classList.remove('open');
 window.startWarrantyVisit=(id)=>{closeWarrantyModal();pickClient(id);setTimeout(()=>{const chk=document.getElementById('inp-warranty');if(chk){chk.checked=true;chk.nextElementSibling?.classList.add('active')}},60)};
-window.addClient=async()=>{const name=document.getElementById('inp-name').value.trim();if(!name)return alert('Informe o nome.');const shop=document.getElementById('inp-workshop').checked;const status=shop?'workshop_pending':document.getElementById('inp-status').value;const tbdChecked=document.getElementById('inp-tbd').checked;const phone=document.getElementById('inp-phone').value.trim();const phone2=document.getElementById('inp-phone2')?.value.trim()||'',phone2Name=document.getElementById('inp-phone2Name')?.value.trim()||'';const warranty=document.getElementById('inp-warranty')?.checked||false;const data={name,phone,address:document.getElementById('inp-address').value.trim(),ref:document.getElementById('inp-ref').value.trim(),equip:document.getElementById('inp-equip').value.trim(),datetime:tbdChecked?TBD:brToIso(document.getElementById('inp-datetime').value),notes:document.getElementById('inp-notes').value.trim(),workshopDropoff:shop,...(phone2||phone2Name?{phone2,phone2Name}:{})};const trashedMatch=findTrashedMatch(name,phone);if(trashedMatch){await addVisitToExisting(trashedMatch,data,status,warranty);toast('♻️ Cliente já estava na lixeira — restaurado com nova visita','var(--yellow)')}else{await createOrAppendClient(data,status,warranty)}clearForm()};
-window.clearForm=()=>{['inp-name','inp-phone','inp-phone2','inp-phone2Name','inp-address','inp-ref','inp-datetime','inp-equip','inp-notes'].forEach(i=>{const el=document.getElementById(i);if(el)el.value=''});toggleAdditionalContact(false);const tbd=document.getElementById('inp-tbd');if(tbd){tbd.checked=false;document.getElementById('inp-datetime').disabled=false;document.getElementById('inp-datetime').placeholder='dd/mm/aaaa hh:mm';syncTBDBtn('inp-tbd')}const wchk=document.getElementById('inp-warranty');if(wchk){wchk.checked=false;wchk.nextElementSibling?.classList.remove('active')}const box=document.getElementById('new-visit-trash-warning');if(box){box.style.display='none';box.innerHTML=''}};
+window.addClient=async()=>{
+  const name=document.getElementById('inp-name').value.trim();if(!name)return alert('Informe o nome.');
+  const shop=document.getElementById('inp-workshop').checked;
+  const status=shop?'workshop_pending':document.getElementById('inp-status').value;
+  const tbdChecked=document.getElementById('inp-tbd').checked;
+  const phone=document.getElementById('inp-phone').value.trim();
+  const contacts=readAdditionalContactInputs('inp');
+  const warranty=document.getElementById('inp-warranty')?.checked||false;
+  const city=document.getElementById('inp-city').value.trim(),neighborhood=document.getElementById('inp-neighborhood').value.trim();
+  const data={
+    name,phone,
+    email:document.getElementById('inp-email').value.trim(),
+    address:document.getElementById('inp-address').value.trim(),
+    number:document.getElementById('inp-number').value.trim(),
+    neighborhood,bairro:neighborhood,city,cidade:city,
+    ref:document.getElementById('inp-ref').value.trim(),
+    equip:document.getElementById('inp-equip').value.trim(),
+    datetime:tbdChecked?TBD:brToIso(document.getElementById('inp-datetime').value),
+    notes:document.getElementById('inp-notes').value.trim(),
+    workshopDropoff:shop,
+    ...(contacts.length||window._additionalContactsTouched?{additionalContacts:contacts,phone2:contacts[0]?.phone||'',phone2Name:contacts[0]?.name||''}:{})
+  };
+  const trashedMatch=findTrashedMatch(name,phone);
+  if(trashedMatch){await addVisitToExisting(trashedMatch,data,status,warranty);toast('♻️ Cliente já estava na lixeira — restaurado com nova visita','var(--yellow)')}else{await createOrAppendClient(data,status,warranty)}
+  clearForm()
+};
+window.clearForm=()=>{
+  ['inp-name','inp-phone','inp-email','inp-address','inp-number','inp-neighborhood','inp-city','inp-ref','inp-datetime','inp-equip','inp-notes'].forEach(i=>{const el=document.getElementById(i);if(el)el.value=''});
+  renderAdditionalContacts('inp',[]);window._additionalContactsTouched=false;
+  const tbd=document.getElementById('inp-tbd');if(tbd){tbd.checked=false;document.getElementById('inp-datetime').disabled=false;document.getElementById('inp-datetime').placeholder='dd/mm/aaaa hh:mm';syncTBDBtn('inp-tbd')}
+  const wchk=document.getElementById('inp-warranty');if(wchk){wchk.checked=false;wchk.nextElementSibling?.classList.remove('active')}
+  const shop=document.getElementById('inp-workshop');if(shop){shop.checked=false;shop.nextElementSibling?.classList.remove('active')}
+  const box=document.getElementById('new-visit-trash-warning');if(box){box.style.display='none';box.innerHTML=''}
+};
 window.addCompanyVisit=async()=>{const name=document.getElementById('emp-name').value.trim(),phone=document.getElementById('emp-phone').value.trim(),email=document.getElementById('emp-email').value.trim(),datetime=brToIso(document.getElementById('emp-datetime').value),notes=document.getElementById('emp-notes').value.trim();if(!name||!datetime)return alert('Informe nome da empresa e horário (dd/mm/aaaa hh:mm).');await addDoc(col,{type:'company',companyMode:true,name,phone,phoneNorm:normPhone(phone),email,address:'',ref:'',equip:'',notes,datetime,status:'approved',layers:[{status:'approved',quote:'',quoteObs:notes,approval:{serviceDate:datetime,serviceInWorkshop:false},done:false,createdAt:new Date().toISOString(),companyMode:true}],deleted:false,createdAt:new Date().toISOString()});['emp-name','emp-phone','emp-email','emp-datetime','emp-notes'].forEach(i=>document.getElementById(i).value='');toast('🏢 Visita empresa enviada')};
 window.generateCadastroLink=async()=>{const token=Math.random().toString(36).slice(2,8).toUpperCase()+Date.now().toString(36).slice(-4).toUpperCase();const now=Date.now();await setDoc(doc(db,'cadastroTokens',token),{token,createdAt:new Date(now).toISOString(),createdAtMs:now,expiresAt:new Date(now+6*60*60*1000).toISOString(),expiresAtMs:now+6*60*60*1000,used:false});const link=`https://mfcpecasservicos.github.io/mfc/cadastro.html?token=${token}`;const msg=`Para prosseguirmos com o agendamento, preencha o formulário abaixo: ${link}`;try{await navigator.clipboard.writeText(msg);toast('🔗 Link copiado')}catch{prompt('Copie o link:',msg);toast('🔗 Link gerado')}};
 function editPinIcon(confirmed){return L.divIcon({className:'',html:`<div class="mfc-view-pin ${confirmed?'':'approx'}"><i class="fa-solid fa-house"></i></div>`,iconSize:[36,36],iconAnchor:[18,36]})}
@@ -931,10 +991,10 @@ function setEditLocation(lat,lng,{source='manager',confirmed=true,zoom=18}={}){c
 async function initEditLocation(c){if(editLocationMap){editLocationMap.remove();editLocationMap=null;editLocationMarker=null}ensureEditLocationMap();const current=MFCLocation.read(c);if(current.valid){setEditLocation(current.lat,current.lng,{source:current.source||'cadastro',confirmed:current.confirmed,zoom:current.source==='address'?16:18});return}editLocationStatus('Buscando uma localização aproximada pelo endereço…');const result=await MFCLocation.geocode(c);if(editId!==c.id)return;if(result)setEditLocation(result.lat,result.lng,{source:'address',confirmed:false,zoom:16});else editLocationStatus('Endereço não localizado automaticamente. Toque no mapa para marcar ou revise os campos e busque novamente.','#fca5a5')}
 window.searchEditLocation=async()=>{if(!editId)return;ensureEditLocationMap();editLocationStatus('Buscando o endereço informado…');const isCompany=document.getElementById('edit-modal').dataset.company==='1';const candidate={address:document.getElementById('e-address').value.trim(),number:isCompany?'':document.getElementById('e-number').value.trim(),neighborhood:isCompany?'':document.getElementById('e-neighborhood').value.trim(),city:isCompany?'':document.getElementById('e-city').value.trim()};const result=await MFCLocation.geocode(candidate,true);if(result)setEditLocation(result.lat,result.lng,{source:'address',confirmed:false,zoom:16});else editLocationStatus('Não encontrei esse endereço. Toque diretamente no mapa para posicionar o alfinete.','#fca5a5')};
 window.removeEditLocation=()=>{editLocationPoint=null;editLocationRemoved=true;if(editLocationMarker&&editLocationMap){editLocationMap.removeLayer(editLocationMarker);editLocationMarker=null}editLocationStatus('Alfinete removido. Salve para apagar a localização.','#fca5a5')};
-window.openEdit=id=>{const c=all.find(x=>x.id===id);if(!c)return;editId=id;editLocationRemoved=false;const isCompany=!!(c.companyMode||c.type==='company');['name','phone','phone2','phone2Name','address','ref','equip','notes'].forEach(f=>document.getElementById('e-'+f).value=c[f]||'');document.getElementById('e-number').value=c.number||'';document.getElementById('e-neighborhood').value=c.neighborhood||c.bairro||'';document.getElementById('e-city').value=c.city||c.cidade||'';document.getElementById('e-email').value=c.email||'';document.getElementById('e-requester').value=c.requester||'';document.getElementById('e-cnpj').value=c.cnpj||'';const accChk=document.getElementById('e-access-required');accChk.checked=!!c.accessRequired;accChk.nextElementSibling.classList.toggle('active',accChk.checked);const dtInp=document.getElementById('e-datetime');const tbdChk=document.getElementById('e-tbd');if(c.datetime===TBD){tbdChk.checked=true;toggleTBD('e-datetime',tbdChk)}else{tbdChk.checked=false;dtInp.disabled=false;dtInp.placeholder='dd/mm/aaaa hh:mm';dtInp.value=isoToBr(c.datetime||'')}syncTBDBtn('e-tbd');document.querySelectorAll('.ec-client-only').forEach(el=>el.style.display=isCompany?'none':'');document.querySelectorAll('.ec-company-only').forEach(el=>el.style.display=isCompany?'':'none');document.getElementById('e-modal-title').innerHTML=isCompany?'<i class="fa-solid fa-building"></i> Editar empresa':'<i class="fa-solid fa-pen"></i> Editar cliente';document.getElementById('e-notes-label').textContent='Descrição do problema';document.getElementById('edit-modal').dataset.company=isCompany?'1':'';document.getElementById('edit-modal').classList.add('open');setTimeout(()=>initEditLocation(c),0)};
+window.openEdit=id=>{const c=all.find(x=>x.id===id);if(!c)return;editId=id;editLocationRemoved=false;const isCompany=!!(c.companyMode||c.type==='company');['name','phone','address','ref','equip','notes'].forEach(f=>document.getElementById('e-'+f).value=c[f]||'');renderAdditionalContacts('e',storedAdditionalContacts(c));document.getElementById('e-number').value=c.number||'';document.getElementById('e-neighborhood').value=c.neighborhood||c.bairro||'';document.getElementById('e-city').value=c.city||c.cidade||'';document.getElementById('e-email').value=c.email||'';document.getElementById('e-requester').value=c.requester||'';document.getElementById('e-cnpj').value=c.cnpj||'';const accChk=document.getElementById('e-access-required');accChk.checked=!!c.accessRequired;accChk.nextElementSibling.classList.toggle('active',accChk.checked);const dtInp=document.getElementById('e-datetime');const tbdChk=document.getElementById('e-tbd');if(c.datetime===TBD){tbdChk.checked=true;toggleTBD('e-datetime',tbdChk)}else{tbdChk.checked=false;dtInp.disabled=false;dtInp.placeholder='dd/mm/aaaa hh:mm';dtInp.value=isoToBr(c.datetime||'')}syncTBDBtn('e-tbd');document.querySelectorAll('.ec-client-only').forEach(el=>el.style.display=isCompany?'none':'');document.querySelectorAll('.ec-company-only').forEach(el=>el.style.display=isCompany?'':'none');document.getElementById('e-modal-title').innerHTML=isCompany?'<i class="fa-solid fa-building"></i> Editar empresa':'<i class="fa-solid fa-pen"></i> Editar cliente';document.getElementById('e-notes-label').textContent='Descrição do problema';document.getElementById('edit-modal').dataset.company=isCompany?'1':'';document.getElementById('edit-modal').classList.add('open');setTimeout(()=>initEditLocation(c),0)};
 window.closeEdit=()=>{editId=null;editLocationPoint=null;editLocationRemoved=false;if(editLocationMap){editLocationMap.remove();editLocationMap=null;editLocationMarker=null}document.getElementById('edit-modal').classList.remove('open')};
 window.saveGestorObs=async(id,val)=>{await updateDoc(doc(db,'clients',id),{gestorObs:val.trim()});const badge=document.getElementById('obs-saved-'+id);if(badge){badge.classList.add('show');setTimeout(()=>badge.classList.remove('show'),1800)}};
-window.saveEdit=async()=>{if(!editId)return;const isCompany=document.getElementById('edit-modal').dataset.company==='1';const phone=document.getElementById('e-phone').value.trim();const tbdChecked=document.getElementById('e-tbd').checked;const datetime=tbdChecked?TBD:(brToIso(document.getElementById('e-datetime').value)||all.find(x=>x.id===editId)?.datetime||'');const payload={name:document.getElementById('e-name').value.trim(),phone,phoneNorm:normPhone(phone),phone2:document.getElementById('e-phone2').value.trim(),phone2Name:document.getElementById('e-phone2Name').value.trim(),email:document.getElementById('e-email').value.trim(),datetime,notes:document.getElementById('e-notes').value.trim(),address:document.getElementById('e-address').value.trim(),equip:document.getElementById('e-equip').value.trim()};if(isCompany){payload.requester=document.getElementById('e-requester').value.trim();payload.cnpj=document.getElementById('e-cnpj').value.trim();payload.accessRequired=document.getElementById('e-access-required').checked}else{const city=document.getElementById('e-city').value.trim(),neighborhood=document.getElementById('e-neighborhood').value.trim();payload.city=city;payload.cidade=city;payload.number=document.getElementById('e-number').value.trim();payload.neighborhood=neighborhood;payload.bairro=neighborhood;payload.ref=document.getElementById('e-ref').value.trim()}if(editLocationPoint)Object.assign(payload,locationSavePayload(editLocationPoint,editLocationPoint.confirmed,editLocationPoint.source));else if(editLocationRemoved)Object.assign(payload,{latitude:null,longitude:null,locationAccuracy:null,locationProvided:false,locationConfirmed:false,locationSource:'',locationConfirmedAt:null,locationGeocodedAt:null,location:null});await updateDoc(doc(db,'clients',editId),payload);closeEdit();toast('✅ Cadastro e localização atualizados')};
+window.saveEdit=async()=>{if(!editId)return;const isCompany=document.getElementById('edit-modal').dataset.company==='1';const phone=document.getElementById('e-phone').value.trim();const contacts=readAdditionalContactInputs('e');const tbdChecked=document.getElementById('e-tbd').checked;const datetime=tbdChecked?TBD:(brToIso(document.getElementById('e-datetime').value)||all.find(x=>x.id===editId)?.datetime||'');const payload={name:document.getElementById('e-name').value.trim(),phone,phoneNorm:normPhone(phone),additionalContacts:contacts,phone2:contacts[0]?.phone||'',phone2Name:contacts[0]?.name||'',email:document.getElementById('e-email').value.trim(),datetime,notes:document.getElementById('e-notes').value.trim(),address:document.getElementById('e-address').value.trim(),equip:document.getElementById('e-equip').value.trim()};if(isCompany){payload.requester=document.getElementById('e-requester').value.trim();payload.cnpj=document.getElementById('e-cnpj').value.trim();payload.accessRequired=document.getElementById('e-access-required').checked}else{const city=document.getElementById('e-city').value.trim(),neighborhood=document.getElementById('e-neighborhood').value.trim();payload.city=city;payload.cidade=city;payload.number=document.getElementById('e-number').value.trim();payload.neighborhood=neighborhood;payload.bairro=neighborhood;payload.ref=document.getElementById('e-ref').value.trim()}if(editLocationPoint)Object.assign(payload,locationSavePayload(editLocationPoint,editLocationPoint.confirmed,editLocationPoint.source));else if(editLocationRemoved)Object.assign(payload,{latitude:null,longitude:null,locationAccuracy:null,locationProvided:false,locationConfirmed:false,locationSource:'',locationConfirmedAt:null,locationGeocodedAt:null,location:null});await updateDoc(doc(db,'clients',editId),payload);closeEdit();toast('✅ Cadastro e localização atualizados')};
 window.togglePin=async(id,li)=>{const c=all.find(x=>x.id===id);const layers=getLayers(c).map((l,i)=>({...l,pinned:i===li?!l.pinned:false}));const idx=all.findIndex(x=>x.id===id);if(idx>-1){all[idx]={...all[idx],layers};render()}await updateDoc(doc(db,'clients',id),{layers,updatedAt:new Date().toISOString()});toast(layers[li].pinned?'📌 Visita fixada':'Visita desafixada')};
 function pinBtnHtml(c,li){if(li==null||li<0)return'';const l=getLayers(c)[li];if(!l)return'';return `<button type="button" class="btn btn-sm ${l.pinned?'btn-cyan':'btn-muted'}" onclick="togglePin('${c.id}',${li})">${l.pinned?'<i class="fa-solid fa-thumbtack"></i> Visita fixada':'<i class="fa-solid fa-thumbtack"></i> Fixar visita'}</button>`}
 window.addLayer=async id=>{const c=all.find(x=>x.id===id);const layers=[...getLayers(c),makeLayer('waiting')];await updateDoc(doc(db,'clients',id),{layers,status:'waiting'});toast('➕ Nova visita')};
@@ -1236,5 +1296,5 @@ window.uploadBudgetImage=async(id,li,input)=>{const file=input.files?.[0];if(!fi
 window.removeBudgetImage=async(id,li)=>{const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];layers[li].budgetImage=null;await updateDoc(doc(db,'clients',id),{layers})};
 </script>
 <div id="fin-print-area"></div>
-<script src="layout-guide.js?v=137b"></script>
+<script src="layout-guide.js?v=137c"></script>
 </body></html>
