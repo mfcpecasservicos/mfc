@@ -8,7 +8,7 @@ messaging.onBackgroundMessage(payload=>{
   self.registration.showNotification(title,{body,icon:'./icon-192.png',badge:'./icon-192.png'});
 });
 
-const CACHE_NAME = 'mfc-tecnico-v137i';
+const CACHE_NAME = 'mfc-tecnico-v137j';
 const FIREBASE_MODULES = [
   'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js',
   'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js',
@@ -21,6 +21,7 @@ const APP_SHELL = [
   './cadastro.html',
   './layout-guide.js',
   './report-media.js',
+  './report-media.js?v=137j',
   './location-view.js',
   './vendor/leaflet/leaflet.js',
   './vendor/leaflet/leaflet.css',
