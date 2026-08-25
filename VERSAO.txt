@@ -1,6 +1,6 @@
-MFC v137j
+MFC v137k
 
-VERSÃO ATUAL — LIMPEZA DE MÍDIAS LEGADAS
+VERSÃO ATUAL — DIAGNÓSTICO REAL DO ENVIO
 
 Esta é a única versão de referência válida. O histórico antigo foi removido porque continha regras substituídas que estavam sendo confundidas com o funcionamento atual.
 
@@ -54,6 +54,10 @@ Editar cliente agora possui os switches Serviço de garantia e Equipamento trazi
 GESTOR — CICLO DAS IMAGENS
 
 Fotos do técnico e imagem do orçamento permanecem disponíveis durante o atendimento ativo até a etapa anterior a Serviço finalizado. Ao marcar Serviço finalizado, mover a visita para Concluídos, descartar ou restaurar da lixeira, todas as imagens são removidas do Firestore e somente textos, datas, status e valores permanecem. Cadastros antigos já concluídos ou descartados são limpos automaticamente ao abrir o Gestor. O sistema não usa Firebase Storage nem Cloud Functions para esse ciclo e não exige o plano Blaze.
+
+INDEX — DIAGNÓSTICO DE FALHA
+
+O alerta de falha agora mostra o código e a mensagem técnica reais do navegador ou Firebase e identifica corretamente a v137k. O sufixo v137i que permanecia fixo no texto foi removido.
 
 INDEX — LIMPEZA DE CAMPOS ANTIGOS
 
@@ -127,10 +131,10 @@ A navegação continua abrindo o Google Maps por URL, sem chave de API.
 
 CACHE
 
-Cache atualizado para mfc-tecnico-v137j, incluindo location-view.js, Leaflet local, fontes, páginas no APP_SHELL e módulos Firebase 11 necessários ao Index offline.
+Cache atualizado para mfc-tecnico-v137k, incluindo location-view.js, Leaflet local, fontes, páginas no APP_SHELL e módulos Firebase 11 necessários ao Index offline.
 
 REGRA
 
-Toda atualização futura deve partir da v137j ou de versão posterior aprovada. CHECKLIST_MFC.txt e VERSAO.txt devem conter somente regras atuais; uma regra substituída deve ser removida, não acumulada como se ainda estivesse ativa.
+Toda atualização futura deve partir da v137k ou de versão posterior aprovada. CHECKLIST_MFC.txt e VERSAO.txt devem conter somente regras atuais; uma regra substituída deve ser removida, não acumulada como se ainda estivesse ativa.
 
 Atualizações pequenas e localizadas usam sufixos por letra na versão atual, por exemplo v137a, v137b e v137c. O número inteiro seguinte fica reservado para mudanças maiores ou conjuntos amplos de alterações.
