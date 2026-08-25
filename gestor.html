@@ -119,7 +119,7 @@ button{font-family:inherit}
 .home-search .si{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:var(--muted)}
 .home-results{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:16px;max-height:280px;overflow-y:auto;display:none;z-index:90;box-shadow:var(--shadow)}
 .home-results.open{display:block}
-.csr-item{padding:11px 16px;font-size:.86rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.csr-item{padding:11px 16px;font-size:.86rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer}
 .csr-item:last-child{border-bottom:none}
 .csr-item:hover{background:var(--surface2)}
 .csr-item.deleted{opacity:.9;border-left:3px solid var(--red)}
@@ -346,6 +346,16 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 .mbg.open{display:flex}
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:22px;width:100%;max-width:640px;display:flex;flex-direction:column;gap:12px;max-height:92vh;overflow-y:auto}
 .modal h3{font-size:1rem;font-weight:900}
+.summary-head{display:flex;align-items:flex-start;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.summary-head-icon{width:42px;height:42px;border-radius:12px;background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--cyan);font-size:1.1rem;flex-shrink:0}
+.summary-info{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.summary-field{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:9px 11px;min-width:0}
+.summary-field label{display:block;color:var(--muted);font-size:.68rem;font-weight:900;text-transform:uppercase;margin-bottom:4px}
+.summary-field strong{display:block;font-size:.84rem;overflow-wrap:anywhere}
+.summary-service{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:7px}
+.summary-service h4{font-size:.9rem}.summary-service p{font-size:.8rem;line-height:1.45}
+.summary-warranty{border-radius:9px;padding:8px 10px;font-size:.76rem;font-weight:800}
+@media(max-width:600px){.summary-info{grid-template-columns:1fr}}
 .mact{display:flex;gap:8px;justify-content:flex-end}
 #etr-modal{display:none;position:fixed;inset:0;background:#000c;z-index:9999;align-items:center;justify-content:center;padding:16px}
 #etr-modal .etr-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;width:100%;max-width:480px;display:flex;flex-direction:column;gap:12px}
@@ -503,6 +513,11 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
   </div>
 </div>
 
+<!-- ===== RESUMO DO CLIENTE ===== -->
+<div class="mbg" id="client-summary-modal">
+  <div class="modal" id="client-summary-modal-body" style="max-width:680px"></div>
+</div>
+
 <!-- ===== MODAL GARANTIA (PREVIEW) ===== -->
 <div class="mbg" id="warranty-modal">
   <div class="modal" id="warranty-modal-body" style="max-width:580px"></div>
@@ -574,7 +589,7 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
 import { getFirestore, collection, addDoc, onSnapshot, updateDoc, deleteDoc, doc, query, orderBy, getDocs, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-import {externalizeLayers,deleteMediaIds,layerPhotoSources,layerBudgetSource,layerMediaIds,mediaRetentionExpired} from "./report-media.js?v=137n";
+import {externalizeLayers,deleteMediaIds,layerPhotoSources,layerBudgetSource,layerMediaIds,mediaRetentionExpired} from "./report-media.js?v=137o";
 const app=initializeApp({
   apiKey:"AIzaSyAUUid850sbmBAVS9JzeZ94SbC-qzkk0B8",
   authDomain:"roteiro-mfc-d3053.firebaseapp.com",
@@ -900,6 +915,7 @@ window.goHome=()=>{selectedId=null;render()};
 /* ===== BASIC FNS ===== */
 window.phoneMask=el=>{let v=el.value.replace(/\D/g,'');if(v.length>11)v=v.slice(0,11);if(v.length<=2)el.value=v;else if(v.length<=7)el.value=v.slice(0,2)+' '+v.slice(2);else if(v.length<=10)el.value=v.slice(0,2)+' '+v.slice(2,6)+'-'+v.slice(6);else el.value=v.slice(0,2)+' '+v.slice(2,3)+' '+v.slice(3,7)+'-'+v.slice(7)};
 function escAttr(v){return String(v??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
+function escHtml(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function storedAdditionalContacts(c){
   const saved=Array.isArray(c?.additionalContacts)?c.additionalContacts:[];
   const contacts=saved.map(x=>({name:String(x?.name||'').trim(),phone:String(x?.phone||'').trim()})).filter(x=>x.name||x.phone);
@@ -944,7 +960,15 @@ window.openNewVisit=()=>document.getElementById('newvisit-modal').classList.add(
 window.closeNewVisit=()=>document.getElementById('newvisit-modal').classList.remove('open');
 window.openCompany=()=>document.getElementById('company-modal').classList.add('open');
 window.closeCompany=()=>document.getElementById('company-modal').classList.remove('open');
-window.homeSearch=val=>{const box=document.getElementById('home-results');if(!box)return;if(!val||val.length<2){box.classList.remove('open');return}const q=val.toLowerCase(),qd=normPhone(val);const results=all.filter(c=>(c.name||'').toLowerCase().includes(q)||(qd&&normPhone(c.phone).includes(qd))||(c.address||'').toLowerCase().includes(q)).slice(0,12);if(!results.length){box.classList.remove('open');return}box.classList.add('open');box.innerHTML=results.map(c=>{const lastDone=findLastConcludedLayer(c,-1);return `<div class="csr-item ${c.deleted?'deleted':''}"><div style="flex:1;min-width:0"><strong>${c.name||'—'}${c.deleted?' <span style="color:var(--red)">(Lixeira)</span>':''}</strong><span>${c.phone||''} ${c.address?'· '+c.address:''}</span></div><div style="display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end">${lastDone?`<button type="button" class="btn btn-sm" style="background:#3b2a06;border:1px solid #f59e0b;color:#fbbf24" onclick="event.stopPropagation();openWarrantyPreview('${c.id}')"><i class="fa-solid fa-shield-halved"></i> Garantia</button>`:''}<button type="button" class="btn btn-outline-blue btn-sm" onclick="event.stopPropagation();pickClient('${c.id}')"><i class="fa-solid fa-plus"></i> Nova visita</button>${c.deleted?`<button type="button" class="btn btn-muted btn-sm" onclick="event.stopPropagation();restoreClient('${c.id}');document.getElementById('home-results').classList.remove('open');document.getElementById('home-search-input').value=''"><i class="fa-solid fa-recycle"></i> Restaurar</button>`:''}</div></div>`}).join('')};
+window.homeSearch=val=>{const box=document.getElementById('home-results');if(!box)return;if(!val||val.length<2){box.classList.remove('open');return}const q=val.toLowerCase(),qd=normPhone(val);const results=all.filter(c=>(c.name||'').toLowerCase().includes(q)||(qd&&normPhone(c.phone).includes(qd))||(c.address||'').toLowerCase().includes(q)).slice(0,12);if(!results.length){box.classList.remove('open');return}box.classList.add('open');box.innerHTML=results.map(c=>`<div class="csr-item ${c.deleted?'deleted':''}" onclick="openClientSummary('${c.id}')"><div style="flex:1;min-width:0"><strong>${escHtml(c.name||'—')}${c.deleted?' <span style="color:var(--red)">(Lixeira)</span>':''}</strong><span>${escHtml(c.phone||'')} ${c.address?'· '+escHtml(c.address):''}</span></div><i class="fa-solid fa-chevron-right" style="color:var(--muted)"></i></div>`).join('')};
+
+function summaryField(label,value){const clean=String(value??'').trim();return clean?`<div class="summary-field"><label>${escHtml(label)}</label><strong>${escHtml(clean)}</strong></div>`:''}
+function summaryWarranty(l,finishedAt){const type=reportServiceType(l.techReport||{}),inWarranty=!!l.approval?.warranty;if(type.includes('Laudo'))return`<div class="summary-warranty" style="background:#1e293b;color:#cbd5e1;border:1px solid #64748b"><i class="fa-solid fa-circle-info"></i> Laudo técnico — sem garantia${inWarranty?' · Atendimento de garantia':''}</div>`;if(!finishedAt)return`<div class="summary-warranty" style="background:#3b2a06;color:#fbbf24;border:1px solid #f59e0b"><i class="fa-solid fa-shield-halved"></i> Garantia sem data de conclusão registrada</div>`;const days=warrantyDaysFor(type),deadline=new Date(new Date(finishedAt).getTime()+days*86400000),expired=new Date()>deadline;return`<div class="summary-warranty" style="background:${expired?'#3b0d0d':'#06281b'};color:${expired?'#fecaca':'#86efac'};border:1px solid ${expired?'#ef4444':'#10b981'}"><i class="fa-solid fa-shield-halved"></i> ${inWarranty?'Atendimento realizado em garantia · ':''}${expired?'Garantia vencida':'Garantia válida'} até ${fdt(deadline.toISOString())} (${days} dias)</div>`}
+window.closeClientSummary=()=>document.getElementById('client-summary-modal').classList.remove('open');
+window.summaryNewVisit=id=>{closeClientSummary();pickClient(id)};
+window.summaryWarranty=id=>{closeClientSummary();openWarrantyPreview(id)};
+window.summaryRestore=async id=>{await restoreClient(id);closeClientSummary()};
+window.openClientSummary=id=>{const c=all.find(x=>x.id===id);if(!c)return;document.getElementById('home-results')?.classList.remove('open');const si=document.getElementById('home-search-input');if(si)si.value='';const services=getLayers(c).filter(l=>l.done||l.status==='done'||l.status==='service_finished'||l.concludedAt||l.serviceFinishedAt).sort((a,b)=>new Date(b.concludedAt||b.serviceFinishedAt||0)-new Date(a.concludedAt||a.serviceFinishedAt||0)),lastDone=services[0]||null,deletedDate=c.deletedAt||c.discardedAt||'',statusText=c.deleted?'Na lixeira':c.status==='discarded'?'Descartado':'Ativo',serviceHtml=services.length?services.map((l,index)=>{const finishedAt=l.concludedAt||l.serviceFinishedAt||'',type=reportServiceType(l.techReport||{})||'Serviço',assessment=reportTextOnly(l.techReport)||l.warrantyAdjustment||'Sem avaliação técnica registrada.',equipment=l.techReport?.model||c.equip||'';return`<div class="summary-service"><h4><i class="fa-solid fa-screwdriver-wrench"></i> ${escHtml(type)} — ${finishedAt?fdt(finishedAt):'data não registrada'}</h4>${equipment?`<p><b>Equipamento:</b> ${escHtml(equipment)}</p>`:''}<p><b>Avaliação técnica:</b><br><span style="white-space:pre-wrap">${escHtml(assessment)}</span></p>${summaryWarranty(l,finishedAt)}</div>`}).join(''):'<div class="empty" style="padding:18px">Nenhum serviço concluído.</div>',actions=c.deleted?`<button class="btn btn-muted" onclick="closeClientSummary()">Fechar</button><button class="btn btn-green" onclick="summaryRestore('${c.id}')"><i class="fa-solid fa-recycle"></i> Restaurar</button>`:`<button class="btn btn-muted" onclick="closeClientSummary()">Fechar</button>${lastDone?`<button class="btn" style="background:#3b2a06;border:1px solid #f59e0b;color:#fbbf24" onclick="summaryWarranty('${c.id}')"><i class="fa-solid fa-shield-halved"></i> Garantia</button>`:''}<button class="btn btn-blue" onclick="summaryNewVisit('${c.id}')"><i class="fa-solid fa-plus"></i> Nova visita</button>`;document.getElementById('client-summary-modal-body').innerHTML=`<div class="summary-head"><div class="summary-head-icon"><i class="fa-solid ${c.companyMode||c.type==='company'?'fa-building':'fa-user'}"></i></div><div style="flex:1;min-width:0"><h3>${escHtml(c.name||'Cliente')}</h3><p style="color:var(--muted);font-size:.8rem;margin-top:3px">${escHtml(statusText)}</p></div></div><div class="summary-info">${summaryField('Telefone',c.phone)}${summaryField('E-mail',c.email)}${summaryField('Endereço',fullAddress(c))}${summaryField('Equipamento',c.equip)}${summaryField('Data de exclusão',deletedDate?fdt(deletedDate):'Não está na lixeira')}</div><h3 style="margin-top:4px"><i class="fa-solid fa-circle-check"></i> Serviços concluídos (${services.length})</h3>${serviceHtml}<div class="mact">${actions}</div>`;document.getElementById('client-summary-modal').classList.add('open')};
 window.toggleTBD=(inputId,chkEl)=>{const inp=document.getElementById(inputId);if(!inp)return;if(chkEl.checked){inp.dataset.prev=inp.value;inp.value='';inp.placeholder='A definir';inp.disabled=true}else{inp.disabled=false;inp.placeholder='dd/mm/aaaa hh:mm';inp.value=inp.dataset.prev||''}};
 window.toggleTBDSwitch=(chkId,inputId,btn)=>{const chk=document.getElementById(chkId);chk.checked=!chk.checked;btn.classList.toggle('active',chk.checked);toggleTBD(inputId,chk)};
 window.syncTBDBtn=chkId=>{const chk=document.getElementById(chkId);if(!chk)return;chk.nextElementSibling?.classList.toggle('active',chk.checked)};
@@ -1273,7 +1297,7 @@ function renderTrash(){
   if(q)deleted=deleted.filter(c=>(c.name||'').toLowerCase().includes(q)||(qd&&normPhone(c.phone).includes(qd))||(c.address||'').toLowerCase().includes(q));
   const el=document.getElementById('trash-list');
   if(!deleted.length){el.innerHTML=`<div class="empty">${q?'Nada encontrado.':'Lixeira vazia.'}</div>`;return}
-  el.innerHTML=deleted.map(c=>`<div class="trash-item"><span>${c.name||'—'} — ${c.phone||''}</span><button class="btn btn-outline-blue btn-sm" onclick="pickClient('${c.id}')"><i class="fa-solid fa-plus"></i> Nova visita</button><button class="btn btn-muted btn-sm" onclick="restoreClient('${c.id}')"><i class="fa-solid fa-recycle"></i> Restaurar</button><button class="btn btn-red btn-sm" onclick="hardDelete('${c.id}')">Excluir permanentemente</button></div>`).join('');
+  el.innerHTML=deleted.map(c=>`<div class="trash-item" style="cursor:pointer" onclick="openClientSummary('${c.id}')"><span>${c.name||'—'} — ${c.phone||''}</span><button class="btn btn-outline-blue btn-sm" onclick="event.stopPropagation();openClientSummary('${c.id}')"><i class="fa-solid fa-eye"></i> Resumo</button><button class="btn btn-muted btn-sm" onclick="event.stopPropagation();restoreClient('${c.id}')"><i class="fa-solid fa-recycle"></i> Restaurar</button><button class="btn btn-red btn-sm" onclick="event.stopPropagation();hardDelete('${c.id}')">Excluir permanentemente</button></div>`).join('');
 }
 window.renderTrash=renderTrash;
 
