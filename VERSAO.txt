@@ -1,6 +1,6 @@
-MFC v137k
+MFC v137l
 
-VERSÃO ATUAL — DIAGNÓSTICO REAL DO ENVIO
+VERSÃO ATUAL — CORREÇÃO DO ENVIO DO RELATÓRIO
 
 Esta é a única versão de referência válida. O histórico antigo foi removido porque continha regras substituídas que estavam sendo confundidas com o funcionamento atual.
 
@@ -57,7 +57,7 @@ Fotos do técnico e imagem do orçamento permanecem disponíveis durante o atend
 
 INDEX — DIAGNÓSTICO DE FALHA
 
-O alerta de falha agora mostra o código e a mensagem técnica reais do navegador ou Firebase e identifica corretamente a v137k. O sufixo v137i que permanecia fixo no texto foi removido.
+O alerta de falha agora mostra o código e a mensagem técnica reais do navegador ou Firebase e identifica corretamente a v137l. O sufixo v137i que permanecia fixo no texto foi removido.
 
 INDEX — LIMPEZA DE CAMPOS ANTIGOS
 
@@ -131,10 +131,10 @@ A navegação continua abrindo o Google Maps por URL, sem chave de API.
 
 CACHE
 
-Cache atualizado para mfc-tecnico-v137k, incluindo location-view.js, Leaflet local, fontes, páginas no APP_SHELL e módulos Firebase 11 necessários ao Index offline.
+Cache atualizado para mfc-tecnico-v137l, incluindo location-view.js, Leaflet local, fontes, páginas no APP_SHELL e módulos Firebase 11 necessários ao Index offline.
 
 REGRA
 
-Toda atualização futura deve partir da v137k ou de versão posterior aprovada. CHECKLIST_MFC.txt e VERSAO.txt devem conter somente regras atuais; uma regra substituída deve ser removida, não acumulada como se ainda estivesse ativa.
+Toda atualização futura deve partir da v137l ou de versão posterior aprovada. CHECKLIST_MFC.txt e VERSAO.txt devem conter somente regras atuais; uma regra substituída deve ser removida, não acumulada como se ainda estivesse ativa.
 
 Atualizações pequenas e localizadas usam sufixos por letra na versão atual, por exemplo v137a, v137b e v137c. O número inteiro seguinte fica reservado para mudanças maiores ou conjuntos amplos de alterações.
