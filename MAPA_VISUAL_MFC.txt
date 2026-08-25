@@ -1,4 +1,4 @@
-MAPA VISUAL MFC — v128
+MAPA VISUAL MFC — v138a
 
 ATIVAÇÃO PARTICULAR
 
@@ -37,6 +37,7 @@ GESTOR-MODAL-GARANTIA-01 — Modal Garantia
 GESTOR-MODAL-EDITAR-01 — Modal Editar cliente
 GESTOR-MODAL-EDITAR-MAPA-01 — Mapa para corrigir, arrastar ou remover o alfinete
 GESTOR-MODAL-RELATORIO-01 — Modal Editar relatório do técnico
+GESTOR-MODAL-RESUMO-01 — Resumo do cliente pesquisado
 
 INDEX DO TÉCNICO
 
