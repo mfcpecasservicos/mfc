@@ -27,6 +27,8 @@ GESTOR — LISTA E FLUXO
 [x] Editar cliente possui switches Serviço de garantia e Equipamento trazido à loja.
 [x] Os switches do editor carregam e salvam o estado da visita ativa.
 [x] Nova visita grava Equipamento trazido à loja diretamente na camada do atendimento.
+[x] Index comprime fotos novas e mídias antigas quando o cadastro se aproxima do limite do Firestore.
+[x] Falhas de relatório distinguem limite de mídia, permissão e conexão sem apagar o formulário.
 [x] Nova visita e Editar cliente exibem Endereço + Nº, depois Bairro + Cidade e Ponto de referência em largura inteira.
 [x] Nova visita e Editar cliente possuem botão + ao lado do telefone principal.
 [x] Cada formulário aceita até três contatos adicionais.
@@ -139,7 +141,7 @@ MAPA VISUAL PARTICULAR
 [x] MAPA_VISUAL_MFC.txt contém códigos e instruções atuais.
 
 SERVICE WORKER E ARQUIVOS
-[x] CACHE_NAME atual: mfc-tecnico-v137e.
+[x] CACHE_NAME atual: mfc-tecnico-v137f.
 [x] APP_SHELL inclui páginas, imagens, fontes, layout-guide.js, location-view.js e Leaflet local.
 [x] Cache anterior é removido durante activate.
 [x] Alterações pequenas usam sufixo por letra na versão atual; número inteiro novo fica reservado para mudanças maiores.
