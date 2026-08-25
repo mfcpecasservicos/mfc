@@ -201,7 +201,7 @@
 <script src="vendor/leaflet/leaflet.js"></script>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, query, where, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+  import { getFirestore, collection, getDocs, query, where, doc, getDoc, runTransaction } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
   const app = initializeApp({
     apiKey: "AIzaSyAUUid850sbmBAVS9JzeZ94SbC-qzkk0B8",
@@ -225,6 +225,8 @@
   };
 
   const phoneDigitsOnly = normalizePhoneDigits;
+  const neutralizeHtmlString = (value) => { const text=String(value??''); return /<\s*\/?\s*[a-z!]|on\w+\s*=/i.test(text) ? text.replaceAll('<','＜').replaceAll('>','＞') : text; };
+  document.addEventListener('input', event => { const field=event.target; if (!(field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement)) return; const safe=neutralizeHtmlString(field.value); if (safe!==field.value) field.value=safe; }, true);
 
   const findFirstByPhone = async (collectionName, phoneDigits) => {
     if (!phoneDigits) return null;
@@ -233,14 +235,33 @@
       const item = snap.docs[0];
       return { id: item.id, ...item.data() };
     }
-    const allSnap = await getDocs(collection(db, collectionName));
-    let found = null;
-    allSnap.forEach(item => {
-      const data = item.data();
-      const p = data.phoneDigits || data.phoneNorm || normalizePhoneDigits(data.phone || data.telefone || '');
-      if (!found && p === phoneDigits) found = { id: item.id, ...data };
+    const normSnap = await getDocs(query(collection(db, collectionName), where('phoneNorm', '==', phoneDigits)));
+    if (!normSnap.empty) {
+      const item = normSnap.docs[0];
+      return { id: item.id, ...item.data() };
+    }
+    return null;
+  };
+
+  const tokenDataIsValid = (data) => {
+    if (!data || data.used) return false;
+    const now=Date.now(), expiresMs=Number(data.expiresAtMs||0), createdMs=Number(data.createdAtMs||0);
+    if (expiresMs) return now<=expiresMs;
+    if (createdMs) return (now-createdMs)<=6*60*60*1000;
+    const createdRaw=data.createdAt?.toDate?data.createdAt.toDate():new Date(data.createdAt||0);
+    const createdTime=createdRaw.getTime();
+    return !!createdTime&&(now-createdTime)<=6*60*60*1000;
+  };
+
+  const saveLeadUsingToken = async (existingLead, finalLeadData, phoneDigits) => {
+    if (!tokenRef) throw Object.assign(new Error('Link de cadastro inválido.'), {code:'token-invalid'});
+    const leadRef=existingLead?.id?doc(db,'leads',existingLead.id):doc(collection(db,'leads'));
+    await runTransaction(db, async transaction => {
+      const tokenSnap=await transaction.get(tokenRef);
+      if (!tokenSnap.exists() || !tokenDataIsValid(tokenSnap.data())) throw Object.assign(new Error('Este link já foi usado ou expirou.'), {code:'token-invalid'});
+      transaction.set(leadRef,finalLeadData,{merge:!!existingLead?.id});
+      transaction.update(tokenRef,{used:true,usedAt:new Date().toISOString(),phoneDigits});
     });
-    return found;
   };
 
   const validateToken = async () => {
@@ -248,21 +269,7 @@
     tokenRef = doc(db, 'cadastroTokens', tokenParam);
     const snap = await getDoc(tokenRef);
     if (!snap.exists()) return false;
-    const data = snap.data();
-    if (data.used) return false;
-
-    const now = Date.now();
-    const createdMs = Number(data.createdAtMs || 0);
-    const expiresMs = Number(data.expiresAtMs || 0);
-
-    // Preferir expiresAtMs criado pelo gestor. Mantém compatibilidade com tokens antigos.
-    if (expiresMs) return now <= expiresMs;
-    if (createdMs) return (now - createdMs) <= 6 * 60 * 60 * 1000;
-
-    const createdRaw = data.createdAt?.toDate ? data.createdAt.toDate() : new Date(data.createdAt || 0);
-    const createdTime = createdRaw.getTime();
-    if (!createdTime) return false;
-    return (now - createdTime) <= 6 * 60 * 60 * 1000;
+    return tokenDataIsValid(snap.data());
   };
 
   let tipoCadastro = null;
@@ -494,22 +501,14 @@
         recurrent: !!existingClient?.id,
         updatedAt: new Date().toISOString()
       };
-      if (existingLead?.id) {
-        await updateDoc(doc(db, 'leads', existingLead.id), finalLeadData);
-      } else {
-        await addDoc(collection(db, 'leads'), finalLeadData);
-      }
-
-      if (tokenRef) {
-        await updateDoc(tokenRef, { used: true, usedAt: new Date().toISOString(), phoneDigits });
-      }
+      await saveLeadUsingToken(existingLead, finalLeadData, phoneDigits);
 
       btn.style.display = 'none'; successMsg.style.display = 'block';
       setTimeout(() => {
         window.location.href = 'https://wa.me/5571981122167?text=' + encodeURIComponent('Eu, ' + (leadData.name || '') + ' finalizei o cadastro');
       }, 1200);
     } catch (err) {
-      console.error(err); alert("Erro ao enviar cadastro. Tente novamente.");
+      console.error(err); alert(err?.code==='token-invalid' ? 'Este link já foi usado ou expirou. Peça um novo link ao atendimento.' : "Erro ao enviar cadastro. Tente novamente.");
       btn.disabled = false; text.style.display = 'block'; loader.style.display = 'none';
     }
   });
@@ -554,26 +553,18 @@
         recurrent: !!existingClient?.id,
         updatedAt: new Date().toISOString()
       };
-      if (existingLead?.id) {
-        await updateDoc(doc(db, 'leads', existingLead.id), finalLeadData);
-      } else {
-        await addDoc(collection(db, 'leads'), finalLeadData);
-      }
-
-      if (tokenRef) {
-        await updateDoc(tokenRef, { used: true, usedAt: new Date().toISOString(), phoneDigits });
-      }
+      await saveLeadUsingToken(existingLead, finalLeadData, phoneDigits);
 
       btn.style.display = 'none'; successMsg.style.display = 'block';
       setTimeout(() => {
         window.location.href = 'https://wa.me/5571981122167?text=' + encodeURIComponent('Eu, ' + (leadData.name || '') + ' finalizei o cadastro');
       }, 1200);
     } catch (err) {
-      console.error(err); alert("Erro ao enviar cadastro. Tente novamente.");
+      console.error(err); alert(err?.code==='token-invalid' ? 'Este link já foi usado ou expirou. Peça um novo link ao atendimento.' : "Erro ao enviar cadastro. Tente novamente.");
       btn.disabled = false; text.style.display = 'block'; loader.style.display = 'none';
     }
   });
 </script>
-<script src="layout-guide.js"></script>
+<script src="layout-guide.js?v=138a"></script>
 </body>
 </html>
