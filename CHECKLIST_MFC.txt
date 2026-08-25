@@ -1,185 +1,95 @@
-CHECKLIST ATUAL — MFC v134
+CHECKLIST MFC — v138a
 
-REGRA DE DOCUMENTAÇÃO
-[x] Este arquivo contém somente regras e funções atualmente válidas.
-[x] Regras substituídas e histórico de versões antigas foram removidos para evitar contradições.
-[x] Toda atualização deve preservar o que já funciona, alterar apenas o solicitado e validar este checklist.
+LAYOUT E ACESSIBILIDADE
 
-GESTOR — LISTA E FLUXO
-[x] Gestor-Lista e Gestor-Detalhe permanecem juntos no mesmo gestor.html e visíveis simultaneamente.
-[x] O controle que ocultava a lista foi removido; selecionar um cliente atualiza somente o conteúdo do detalhe.
-[x] Gestor-Lista possui altura limitada ao viewport, overflow vertical próprio e overscroll-behavior contain.
-[x] Gestor-Detalhe possui altura limitada ao viewport, overflow vertical próprio e overscroll-behavior contain.
-[x] Rolar a lista não move o detalhe nem a página; rolar o detalhe não move a lista nem a página.
-[x] Em telas estreitas, lista e detalhe são empilhados dentro do mesmo viewport e mantêm scroll independente.
-[x] A lista mostra todos os atendimentos filtrados continuamente; não existe paginação nem botões de páginas.
-[x] Barras de rolagem usam trilho e polegar escuros compatíveis com o tema, sem faixa ou setas brancas chamativas.
-[x] Status workshop_pending usa o texto "Aguardando Avaliação" e identificação ciano.
-[x] Clientes com "Data a definir" aparecem primeiro.
-[x] Os demais clientes são agrupados por dia mais recente; dentro do mesmo dia, o horário mais cedo aparece primeiro.
-[x] Anti-duplicação usa telefone normalizado e identifica cliente recorrente.
-[x] Novo cadastro com nome e telefone correspondentes a cliente da lixeira restaura o cadastro e adiciona nova visita sem criar duplicata.
-[x] Nova visita segue a ordem visual do Editar cliente.
-[x] Nova visita inclui E-mail, Número, Bairro e Cidade.
-[x] Serviço de garantia e Equipamento trazido à loja ficam depois de Data a definir.
-[x] Equipamento ocupa uma linha inteira em Nova visita e Editar cliente.
-[x] Data/Hora fica à esquerda e Data a definir à direita, na mesma linha, em ambos os formulários.
-[x] Editar cliente possui switches Serviço de garantia e Equipamento trazido à loja.
-[x] Os switches do editor carregam e salvam o estado da visita ativa.
-[x] Nova visita grava Equipamento trazido à loja diretamente na camada do atendimento.
-[x] Index comprime fotos novas e mídias antigas quando o cadastro se aproxima do limite do Firestore.
-[x] Falhas de relatório distinguem limite de mídia, permissão e conexão sem apagar o formulário.
-[x] Fotos e orçamento permanecem durante o atendimento ativo até a etapa anterior a Serviço finalizado.
-[x] Ao marcar Serviço finalizado, arquivar em Concluídos, descartar ou restaurar, as imagens são removidas e o texto permanece.
-[x] Gestor limpa automaticamente mídias antigas de visitas já concluídas ou descartadas.
-[x] Index também limpa mídias de Serviço finalizado, Concluídos e Lixeira ao receber dados do servidor.
-[x] Se a compressão comum não bastar, prints de orçamento são descartados e as fotos recebem compressão adicional.
-[x] Fotos e prints são armazenados separadamente em clients/{id}/reportMedia, nunca dentro do documento principal do cliente.
-[x] O cadastro principal guarda apenas referências pequenas e permanece abaixo do limite por documento.
-[x] Index e Gestor carregam as mídias referenciadas automaticamente.
-[x] A solução usa apenas Firestore e não exige Firebase Storage, Cloud Functions ou plano Blaze.
-[x] Index remove data URIs legadas ou duplicadas antes de salvar o cadastro principal.
-[x] A limpeza preserva textos, datas, status, valores e referências de reportMedia.
-[x] Se o tamanho ainda exceder o limite interno, o alerta informa os KB restantes.
-[x] Falhas desconhecidas mostram código, mensagem técnica real e versão v138; não existe sufixo antigo fixo.
-[x] O ciclo de relatórios não usa Firebase Storage nem Cloud Functions e não exige plano Blaze.
-[x] Nova visita e Editar cliente exibem Endereço + Nº, depois Bairro + Cidade e Ponto de referência em largura inteira.
-[x] Nova visita e Editar cliente possuem botão + ao lado do telefone principal.
-[x] Cada formulário aceita até três contatos adicionais.
-[x] Cada contato adicional possui Nome, Telefone e botão − próprio para exclusão.
-[x] Contatos adicionais ficam alinhados como campos normais, sem caixa deslocada.
-[x] A lista usa additionalContacts e preserva phone2Name/phone2 para compatibilidade.
-[x] Ao abrir cliente existente, todos os contatos adicionais salvos são carregados automaticamente.
-[x] Duplicados da lixeira são unificados automaticamente por telefone.
-[x] Cliente concluído é enviado à lixeira após 120 dias.
-[x] Cliente na lixeira é excluído definitivamente após 90 dias.
-[x] Conclusão definitiva do serviço é feita pelo gestor.
-[x] Serviço descartado pelo técnico aguarda revisão do gestor antes de ir para a lixeira.
+[x] Informações gerais preenchidas aparecem em quadrados; campos vazios não aparecem.
+[x] A última fileira permanece alinhada à esquerda.
+[x] E-mail pode ser copiado com um clique.
+[x] Mapa, descrição do problema e observações usam painéis grandes.
+[x] A ampliação nativa do navegador permanece habilitada.
+[x] A grade evita esmagar os quadrados e usa rolagem quando faltar largura.
+[x] Nova visita e Editar cliente seguem a mesma ordem de campos.
+[x] Endereço + Nº; Bairro + Cidade; Ponto de referência inteiro; Equipamento inteiro.
+[x] Data/Hora fica ao lado do controle Data a definir.
+[x] Editar cliente possui Serviço de garantia e Equipamento trazido à loja.
+[x] Até três contatos adicionais podem ser incluídos.
 
-GESTOR — DETALHES DO CLIENTE
-[x] Todas as informações gerais ficam em quadrados na área esquerda; não existe seção suplementar separada.
-[x] Campo geral vazio não gera quadrado nem exibe marcador artificial.
-[x] A última linha de quadrados permanece alinhada à esquerda quando possui menos de quatro itens.
-[x] E-mail possui sublinhado tracejado e pode ser copiado com um clique.
-[x] Clientes possuem seis quadrados: Nome, Número de contato, E-mail, Endereço, Ponto de referência e Equipamento.
-[x] Nos clientes, quatro quadrados formam a primeira linha e os dois restantes ficam centralizados na segunda.
-[x] Empresas possuem oito quadrados: Nome da empresa, Número de contato, E-mail, Data da visita, Nome do solicitante, CNPJ, Endereço da empresa e Equipamento.
-[x] Nas empresas, os oito quadrados são distribuídos em duas linhas de quatro.
-[x] Os quadrados possuem largura mínima suficiente para evitar texto excessivamente comprimido.
-[x] O mapa ocupa o painel grande à direita das duas linhas de informações gerais.
-[x] Descrição do problema só aparece quando preenchida; Observações permanece editável e ocupa a largura inferior quando estiver sozinha.
-[x] Rua, número, bairro e cidade aparecem juntos em um único bloco de endereço.
-[x] Ponto de referência permanece em bloco separado no detalhe do cliente.
-[x] Campos de endereço continuam separados no Firestore para edição e compatibilidade.
-[x] Observações crescem ao digitar e também ao carregar texto já salvo.
-[x] Conteúdo excepcionalmente grande em bloco comum permanece acessível por rolagem interna.
-[x] Nome e telefones podem ser selecionados e copiados.
-[x] No zoom do Chrome para computador, a grade mantém formato e ordem; quando faltar largura, o Gestor-Detalhe usa rolagem horizontal temática.
-[x] A ampliação nativa do navegador permanece habilitada para acessibilidade.
-[x] Em aparelho estreito de toque, os blocos continuam responsivos à largura do celular.
-[x] Existe somente um botão de Maps nos detalhes: o botão de rota localizado dentro do bloco do mapa.
-[x] A rota usa primeiro o alfinete; sem coordenadas, usa rua, número, bairro e cidade.
+PESQUISA E HISTÓRICO
 
-LOCALIZAÇÃO E MAPAS
-[x] Cadastros novos de cliente e empresa podem enviar latitude e longitude pelo GPS ou ajuste manual.
-[x] Coordenadas válidas aparecem no Gestor e no Index mesmo quando o segundo botão de confirmação não foi concluído.
-[x] Cadastros antigos sem coordenadas tentam localizar o endereço quando os detalhes são abertos.
-[x] A busca aproximada usa Nominatim/OpenStreetMap somente sob demanda, sem varredura em massa.
-[x] Consultas são enfileiradas com intervalo mínimo de 1,1 segundo e armazenadas em cache local por 30 dias.
-[x] A busca tenta endereço completo e alternativas progressivas; caso necessário, pode mostrar bairro ou centro da cidade.
-[x] Local obtido pelo endereço é identificado em amarelo como aproximado e não confirmado.
-[x] Quando o Gestor encontra um ponto aproximado, salva as coordenadas no cliente para reutilização no Gestor e no Index.
-[x] O modal Editar cliente/empresa possui mapa próprio.
-[x] O mapa de edição abre imediatamente centralizado na região, sem depender do término da busca de endereço.
-[x] A busca de endereço possui limite de espera de 9 segundos e, se falhar, mantém o mapa disponível para marcação manual.
-[x] No mapa de edição, o gestor pode buscar novamente pelo endereço, tocar no mapa, arrastar ou remover o alfinete.
-[x] Ponto tocado ou arrastado pelo gestor é salvo como confirmado manualmente.
-[x] Editar cliente também permite corrigir número e bairro.
-[x] Sem coordenadas e sem endereço aproveitável, nenhum mapa vazio é exibido.
-[x] Leaflet e seus recursos estão armazenados localmente; mapas e geocodificação exibem atribuição OpenStreetMap.
-[x] Botão de rota abre o Google Maps por URL, sem chave de API.
+[x] Clicar no resultado abre o resumo do cliente.
+[x] O resumo funciona para cliente ativo e para cliente na lixeira.
+[x] Serviços concluídos mostram data, avaliação técnica e garantia.
+[x] Cliente ativo oferece Garantia e Nova visita.
+[x] Cliente na lixeira oferece Restaurar.
+[x] Restaurar ou adicionar visita preserva todas as camadas e textos anteriores.
+[x] Unificação automática insegura de duplicados da lixeira foi desativada.
 
-GESTOR — RELATÓRIOS, GARANTIA E PAGAMENTO
-[x] Cada cliente pode possuir múltiplos relatórios ativos e concluídos.
-[x] Uma visita fixada determina o status principal e a aba aberta por padrão.
-[x] Relatório concluído preserva modelo, serviço, texto, fotos, orçamento e data de conclusão.
-[x] Garantia usa o último serviço concluído: Corretiva e Instalação = 90 dias; Preventiva = 15 dias; Laudo não possui garantia.
-[x] Garantia oferece Ajuste simples ou Novo relatório/orçamento.
-[x] Ajuste simples mantém identificação própria e texto editável.
-[x] Pagamento atual usa valor livre de entrada, forma da entrada, saldo automático e forma do saldo.
-[x] Não existe cálculo fixo de entrada de 40%.
-[x] "Serviço já foi pago" e "Falta pagar" continuam controles separados.
+RELATÓRIOS E MÍDIAS
 
-INDEX — TÉCNICO
-[x] Lista segue a mesma ordenação atual do Gestor: Data a definir primeiro, dia mais recente e horário crescente dentro do dia.
-[x] Técnico vê cliente, contatos, e-mail, endereço completo, referência, equipamento, problema e observação do gestor.
-[x] WhatsApp e Ligar aparecem próximos aos contatos.
-[x] Endereço aparece uma única vez; cidade, número e bairro não são repetidos em blocos separados.
-[x] Mapa aparece dentro do conteúdo do detalhe quando houver coordenadas ou endereço localizável.
-[x] Local obtido somente pelo endereço aparece como aproximado.
-[x] Existe somente um botão de Maps nos detalhes: o botão de rota localizado dentro do bloco do mapa.
-[x] Avaliação exige modelo, ao menos um tipo de serviço e relatório; foto é opcional.
-[x] Fotos são comprimidas antes do salvamento e falhas não apagam o rascunho.
-[x] Técnico pode editar avaliação já enviada.
-[x] "Precisa retirar o equipamento" funciona como botão com estado visual.
-[x] Técnico pode criar relatórios adicionais e excluir extras, mantendo ao menos um relatório no fluxo comum.
-[x] No fluxo de garantia, a aba Relatório 1 só aparece após escolher Novo relatório/orçamento.
-[x] Histórico de garantia permanece separado em Concluídos conforme a quantidade e o fluxo atual.
-[x] Descartar exige justificativa, muda para "Serviço descartado" e aguarda decisão do gestor.
-[x] Não existem efeitos sonoros de nova visita.
-[x] Notificação push é independente de som e depende da configuração/deploy do Firebase Messaging.
-[x] Botão voltar físico fecha o detalhe antes de sair do aplicativo.
-[x] Index permanece sem modo claro e sem lightbox de zoom manual.
-[x] O Index mantém clientes em cache persistente no aparelho após pelo menos uma abertura online.
-[x] Relatórios e ajustes salvos sem internet ficam na fila local do Firestore e são enviados automaticamente quando a conexão volta.
-[x] A página não recarrega por troca de service worker; recarrega somente na transição real de offline para online, após tentar concluir os envios pendentes.
-[x] Sem dados offline preparados, o Index mostra orientação explícita em vez de loading infinito.
+[x] Fotos e orçamento ficam em clients/{id}/reportMedia.
+[x] O documento do cliente contém referências, não imagens pesadas.
+[x] Index e Gestor carregam referências em atendimentos ativos, concluídos e garantia.
+[x] Finalização mantém imagens antes de completar 30 dias.
+[x] Lixeira ou descarte mantém imagens antes de completar 15 dias.
+[x] Após o prazo, imagens e referências são removidas; texto e cadastro permanecem.
+[x] Excluir relatório remove suas referências de foto.
+[x] Remover visita remove todas as mídias ligadas à camada.
+[x] Remover orçamento limpa o documento e a referência.
+[x] Exclusão definitiva remove a subcoleção antes do documento do cliente.
+[x] Falha na exclusão das mídias impede apagar o cadastro e evita órfãos.
+[x] Exclusões de mídia possuem novas tentativas e log visível no console.
+[x] Não existe exclusão automática de texto ou cadastro.
+[x] Limpeza de mídia roda ao abrir Index ou Gestor conectado.
 
 CADASTRO PÚBLICO
-[x] Link exige token Firebase válido por 6 horas e de uso único.
-[x] Cliente escolhe se reside em Dias D'Ávila; "Sim" grava Dias D'Ávila e "Não" exige a cidade digitada.
-[x] Cliente informa rua, número, bairro e ponto de referência em campos separados.
-[x] Cliente e empresa podem usar GPS e ajustar o alfinete manualmente.
-[x] Negar GPS ou ocorrer falha de localização não bloqueia o cadastro.
-[x] Cadastro finalizado redireciona para o WhatsApp 5571981122167.
-[x] Anti-duplicação usa telefone normalizado.
-[x] Rodapé informa "30 anos atendendo em Dias D'Ávila e região".
 
-MAPA VISUAL PARTICULAR
-[x] Gestor, Index e Cadastro possuem modo particular de identificação de layout.
-[x] No Gestor, o botão do mapa visual fica dentro de GESTOR-MENU-01, imediatamente acima do status de conexão.
-[x] O botão do mapa visual usa somente o ícone Font Awesome de código </>, sem texto permanente.
-[x] Ativação inicial usa ?mfc_layout=1; remoção usa ?mfc_layout=0.
-[x] Ctrl+Shift+L alterna o modo no computador após a ativação inicial.
-[x] O recurso é somente visual e não altera dados de clientes.
-[x] MAPA_VISUAL_MFC.txt contém códigos e instruções atuais.
+[x] Link exige token válido por 6 horas e de uso único.
+[x] Token novo usa crypto.getRandomValues.
+[x] Gravação do lead e consumo do token usam uma transação atômica.
+[x] Busca de telefone usa phoneDigits e phoneNorm indexados.
+[x] Não existe varredura completa das coleções a cada novo telefone.
+[x] Token novo recebe expiresAtTs para futura política TTL.
 
-SERVICE WORKER E ARQUIVOS
-[x] CACHE_NAME atual: mfc-tecnico-v138.
-[x] APP_SHELL inclui páginas, imagens, fontes, layout-guide.js, location-view.js e Leaflet local.
-[x] Cache anterior é removido durante activate.
-[x] Alterações pequenas usam sufixo por letra na versão atual; número inteiro novo fica reservado para mudanças maiores.
-[x] Páginas HTML usam rede primeiro e cache como fallback.
-[x] Módulos Firebase 11 do Index são armazenados pelo service worker para permitir nova abertura offline após uma primeira abertura online.
-[x] Recursos externos de mapas, geocodificação e demais domínios continuam fora do cache local; o mapa-base pode depender da disponibilidade de tiles já vistos.
-[x] O primeiro uso do Index em cada aparelho deve ocorrer online para preparar arquivos e dados do modo offline.
-[x] CHECKLIST_MFC.txt e VERSAO.txt refletem somente o funcionamento atual.
+SEGURANÇA
 
-VALIDAÇÃO OBRIGATÓRIA
-[x] Sintaxe dos scripts validada.
-[x] Estrutura HTML validada.
-[x] Endereço sem duplicação validado.
-[x] Mapa exato, mapa aproximado e edição manual validados.
-[x] Compatibilidade com clientes novos, antigos e sem endereço validada.
-[x] Arquivos obrigatórios do APP_SHELL conferidos.
-[x] Service worker atualizado para mfc-tecnico-v134.
+[x] Dados carregados do Firestore neutralizam marcação HTML suspeita.
+[x] Inputs e textareas neutralizam marcação suspeita antes do salvamento.
+[ ] Regras do Firestore revisadas e publicadas no Firebase Console.
+[ ] Acesso do Gestor e do Index protegido por Firebase Authentication.
 
+NOTIFICAÇÕES
 
-[ ] RETENÇÃO v138: finalização mantém imagens antes de completar 30 dias.
-[ ] RETENÇÃO v138: lixeira mantém imagens antes de completar 15 dias.
-[ ] RETENÇÃO v138: após o prazo, referências e documentos de mídia são removidos, mantendo o texto.
+[x] Link do push aponta para https://mfcpecasservicos.github.io/mfc/.
+[x] Sem token FCM, nenhuma reserva de notificação é criada.
+[x] Falha de envio libera a reserva para nova tentativa.
+[x] Chaves distinguem eventos futuros do mesmo cliente.
+[x] _notified recebe expiresAt para futura política TTL.
+[ ] Cloud Functions da v138a publicadas no Firebase.
+[ ] TTL ativado para _notified.expiresAt.
 
+RESEND E WHATSAPP
 
-[ ] PESQUISA v138: clicar em cliente ativo abre o resumo completo.
-[ ] PESQUISA v138: clicar em cliente da lixeira abre o mesmo resumo e mostra Restaurar.
-[ ] PESQUISA v138: serviços concluídos mostram data, avaliação técnica e garantia.
+[ ] Chave Resend exposta anteriormente foi revogada e substituída.
+[ ] DNS do domínio foi verificado no Resend.
+[ ] Nova chave foi salva como segredo do Firebase, nunca no HTML/GitHub.
+[ ] Envio automático de e-mail foi implementado e publicado.
+[ ] Conta, número e token do WhatsApp Business Cloud API foram configurados.
+
+SERVICE WORKER E VERSÃO
+
+[x] CACHE_NAME atual: mfc-tecnico-v138a.
+[x] APP_SHELL inclui páginas, imagens, fontes, mapas e módulos locais.
+[x] Falha de um arquivo não cancela todo o pré-cache.
+[x] Index, Gestor e Cadastro carregam layout-guide.js?v=138a.
+[x] Index e Gestor carregam report-media.js?v=138a.
+[x] Atualizações pequenas usam sufixo por letra.
+
+VALIDAÇÃO DA v138a
+
+[x] Sintaxe de todos os scripts validada.
+[x] JSON dos arquivos de configuração validado.
+[x] Referências antigas de cache e módulos conferidas.
+[x] Limites de retenção de 30 e 15 dias conferidos.
+[ ] Teste real de cadastro público com um token novo.
+[ ] Teste real de relatório com foto no aparelho do técnico.
+[ ] Teste real de resumo, garantia e exclusão no Gestor.
