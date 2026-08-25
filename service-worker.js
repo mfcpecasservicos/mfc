@@ -21,7 +21,7 @@ const APP_SHELL = [
   './cadastro.html',
   './layout-guide.js',
   './report-media.js',
-  './report-media.js?v=137k',
+  './report-media.js?v=137l',
   './location-view.js',
   './vendor/leaflet/leaflet.js',
   './vendor/leaflet/leaflet.css',
