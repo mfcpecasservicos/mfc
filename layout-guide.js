@@ -18,7 +18,7 @@
       ['GESTOR-FINANCEIRO-01','#view-fin','Tela Financeiro'],['GESTOR-CADASTROS-01','#view-leads','Tela Novos Cadastros'],['GESTOR-CADASTROS-LISTA-01','#leads-list','Lista de novos cadastros'],
       ['GESTOR-LIXEIRA-01','#view-trash','Tela Lixeira'],['GESTOR-LIXEIRA-LISTA-01','#trash-list','Lista da lixeira'],['GESTOR-MODAL-VISITA-01','#newvisit-modal .modal','Modal Nova visita'],
       ['GESTOR-MODAL-EMPRESA-01','#company-modal .modal','Modal Visita Empresa'],['GESTOR-MODAL-GARANTIA-01','#warranty-modal .modal','Modal Garantia'],['GESTOR-MODAL-EDITAR-01','#edit-modal .modal','Modal Editar cliente'],['GESTOR-MODAL-EDITAR-MAPA-01','#e-location-map','Mapa para corrigir o alfinete'],
-      ['GESTOR-MODAL-RELATORIO-01','#etr-modal .etr-box','Modal Editar relatório do técnico']
+      ['GESTOR-MODAL-RELATORIO-01','#etr-modal .etr-box','Modal Editar relatório do técnico'],['GESTOR-MODAL-RESUMO-01','#client-summary-modal .modal','Resumo do cliente pesquisado']
     ]},
     index:{test:()=>!!document.getElementById('detail')&&!!document.getElementById('d-body'),items:[
       ['INDEX-CABECALHO-01','body > header','Cabeçalho do técnico'],['INDEX-BUSCA-01','.search-wrap','Busca de visitas'],['INDEX-LISTA-01','.list-wrap','Lista de visitas'],['INDEX-CARD-01','.list-wrap .card','Cartão de visita'],
