@@ -34,6 +34,10 @@ GESTOR — LISTA E FLUXO
 [x] Gestor limpa automaticamente mídias antigas de visitas já concluídas ou descartadas.
 [x] Index também limpa mídias de Serviço finalizado, Concluídos e Lixeira ao receber dados do servidor.
 [x] Se a compressão comum não bastar, prints de orçamento são descartados e as fotos recebem compressão adicional.
+[x] Fotos e prints são armazenados separadamente em clients/{id}/reportMedia, nunca dentro do documento principal do cliente.
+[x] O cadastro principal guarda apenas referências pequenas e permanece abaixo do limite por documento.
+[x] Index e Gestor carregam as mídias referenciadas automaticamente.
+[x] A solução usa apenas Firestore e não exige Firebase Storage, Cloud Functions ou plano Blaze.
 [x] O ciclo de relatórios não usa Firebase Storage nem Cloud Functions e não exige plano Blaze.
 [x] Nova visita e Editar cliente exibem Endereço + Nº, depois Bairro + Cidade e Ponto de referência em largura inteira.
 [x] Nova visita e Editar cliente possuem botão + ao lado do telefone principal.
@@ -147,7 +151,7 @@ MAPA VISUAL PARTICULAR
 [x] MAPA_VISUAL_MFC.txt contém códigos e instruções atuais.
 
 SERVICE WORKER E ARQUIVOS
-[x] CACHE_NAME atual: mfc-tecnico-v137h.
+[x] CACHE_NAME atual: mfc-tecnico-v137i.
 [x] APP_SHELL inclui páginas, imagens, fontes, layout-guide.js, location-view.js e Leaflet local.
 [x] Cache anterior é removido durante activate.
 [x] Alterações pequenas usam sufixo por letra na versão atual; número inteiro novo fica reservado para mudanças maiores.
