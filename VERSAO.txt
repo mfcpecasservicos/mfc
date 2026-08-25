@@ -1,6 +1,6 @@
-MFC v137e
+MFC v137f
 
-VERSÃO ATUAL — ENDEREÇO E REFERÊNCIA REORGANIZADOS
+VERSÃO ATUAL — CORREÇÃO DO ENVIO DE RELATÓRIOS
 
 Esta é a única versão de referência válida. O histórico antigo foi removido porque continha regras substituídas que estavam sendo confundidas com o funcionamento atual.
 
@@ -50,6 +50,10 @@ Em Nova visita e Editar cliente, Equipamento ocupa uma linha inteira. Logo abaix
 Em Nova visita e Editar cliente, Endereço divide a linha com um campo compacto Nº; Bairro e Cidade ficam juntos na linha seguinte; Ponto de referência ocupa uma linha inteira.
 
 Editar cliente agora possui os switches Serviço de garantia e Equipamento trazido à loja. Eles carregam o estado da visita ativa e, ao salvar, atualizam a camada correspondente. Equipamento trazido à loja também passa a ser gravado diretamente na camada ao criar uma visita nova.
+
+INDEX — ENVIO DE RELATÓRIOS
+
+As fotos novas do relatório são reduzidas antes do envio. Quando o cadastro se aproxima do limite do Firestore, as mídias antigas do mesmo cliente também são recomprimidas progressivamente, preservando o relatório e evitando a falha genérica de armazenamento. Erros de limite, permissão e conexão agora exibem mensagens específicas sem apagar o formulário.
 
 INDEX — FUNCIONAMENTO OFFLINE
 
@@ -111,10 +115,10 @@ A navegação continua abrindo o Google Maps por URL, sem chave de API.
 
 CACHE
 
-Cache atualizado para mfc-tecnico-v137e, incluindo location-view.js, Leaflet local, fontes, páginas no APP_SHELL e módulos Firebase 11 necessários ao Index offline.
+Cache atualizado para mfc-tecnico-v137f, incluindo location-view.js, Leaflet local, fontes, páginas no APP_SHELL e módulos Firebase 11 necessários ao Index offline.
 
 REGRA
 
-Toda atualização futura deve partir da v137e ou de versão posterior aprovada. CHECKLIST_MFC.txt e VERSAO.txt devem conter somente regras atuais; uma regra substituída deve ser removida, não acumulada como se ainda estivesse ativa.
+Toda atualização futura deve partir da v137f ou de versão posterior aprovada. CHECKLIST_MFC.txt e VERSAO.txt devem conter somente regras atuais; uma regra substituída deve ser removida, não acumulada como se ainda estivesse ativa.
 
 Atualizações pequenas e localizadas usam sufixos por letra na versão atual, por exemplo v137a, v137b e v137c. O número inteiro seguinte fica reservado para mudanças maiores ou conjuntos amplos de alterações.
