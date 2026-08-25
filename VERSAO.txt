@@ -1,6 +1,6 @@
-MFC v137m
+MFC v137n
 
-VERSÃO ATUAL — LIMPEZA DE CAMPOS INVÁLIDOS
+VERSÃO ATUAL — RETENÇÃO AUTOMÁTICA DE IMAGENS
 
 Esta é a única versão de referência válida. O histórico antigo foi removido porque continha regras substituídas que estavam sendo confundidas com o funcionamento atual.
 
@@ -57,7 +57,7 @@ Fotos do técnico e imagem do orçamento permanecem disponíveis durante o atend
 
 INDEX — DIAGNÓSTICO DE FALHA
 
-O alerta de falha agora mostra o código e a mensagem técnica reais do navegador ou Firebase e identifica corretamente a v137m. O sufixo v137i que permanecia fixo no texto foi removido.
+O alerta de falha agora mostra o código e a mensagem técnica reais do navegador ou Firebase e identifica corretamente a v137n. O sufixo v137i que permanecia fixo no texto foi removido.
 
 INDEX — LIMPEZA DE CAMPOS ANTIGOS
 
@@ -131,10 +131,17 @@ A navegação continua abrindo o Google Maps por URL, sem chave de API.
 
 CACHE
 
-Cache atualizado para mfc-tecnico-v137m, incluindo location-view.js, Leaflet local, fontes, páginas no APP_SHELL e módulos Firebase 11 necessários ao Index offline.
+Cache atualizado para mfc-tecnico-v137n, incluindo location-view.js, Leaflet local, fontes, páginas no APP_SHELL e módulos Firebase 11 necessários ao Index offline.
 
 REGRA
 
-Toda atualização futura deve partir da v137m ou de versão posterior aprovada. CHECKLIST_MFC.txt e VERSAO.txt devem conter somente regras atuais; uma regra substituída deve ser removida, não acumulada como se ainda estivesse ativa.
+Toda atualização futura deve partir da v137n ou de versão posterior aprovada. CHECKLIST_MFC.txt e VERSAO.txt devem conter somente regras atuais; uma regra substituída deve ser removida, não acumulada como se ainda estivesse ativa.
 
 Atualizações pequenas e localizadas usam sufixos por letra na versão atual, por exemplo v137a, v137b e v137c. O número inteiro seguinte fica reservado para mudanças maiores ou conjuntos amplos de alterações.
+
+
+RETENÇÃO DE MÍDIA — v137n
+- Fotos do relatório e imagens de orçamento: excluídas após 30 dias da finalização.
+- Clientes na lixeira ou descartados: mídias excluídas após 15 dias.
+- Texto do relatório e dados do cadastro são preservados.
+- A limpeza roda ao abrir o Index ou o Gestor conectado à internet, sem função agendada paga.
