@@ -89,7 +89,7 @@ header h1{font-size:1rem;font-weight:800;flex:1}.reload-btn,.install-btn{backgro
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
 import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, waitForPendingWrites, collection, onSnapshot, updateDoc, doc, query, orderBy, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-messaging.js";
-import {externalizeLayers,deleteMediaIds,layerPhotoSources,layerBudgetSource,mediaRetentionExpired} from "./report-media.js?v=137n";
+import {externalizeLayers,deleteMediaIds,layerPhotoSources,layerBudgetSource,mediaRetentionExpired} from "./report-media.js?v=137o";
 const app=initializeApp({apiKey:"AIzaSyAUUid850sbmBAVS9JzeZ94SbC-qzkk0B8",authDomain:"roteiro-mfc-d3053.firebaseapp.com",projectId:"roteiro-mfc-d3053",storageBucket:"roteiro-mfc-d3053.firebasestorage.app",messagingSenderId:"1030114859934",appId:"1:1030114859934:web:ad353eafb55205d6b4148f"});
 let db;try{db=initializeFirestore(app,{localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})})}catch(e){console.warn('Cache persistente indisponível; usando cache da sessão.',e);db=getFirestore(app)}const col=collection(db,'clients');let allClients=[],currentId=null,currentLayerIdx=0,localPhotos={},knownIds=null,currentDetailClient=null;
 const VAPID_KEY='BOtInjFKOxsWL18q-TNq_UzylDPQxnCtSMzTRM2LZedNxMfPvAErWMERdmAnSKHGnswe6PxIFacPvEYXwnKFU8Q';
