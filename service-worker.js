@@ -8,7 +8,7 @@ messaging.onBackgroundMessage(payload=>{
   self.registration.showNotification(title,{body,icon:'./icon-192.png',badge:'./icon-192.png'});
 });
 
-const CACHE_NAME = 'mfc-tecnico-v138';
+const CACHE_NAME = 'mfc-tecnico-v138a';
 const FIREBASE_MODULES = [
   'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js',
   'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js',
@@ -20,8 +20,9 @@ const APP_SHELL = [
   './gestor.html',
   './cadastro.html',
   './layout-guide.js',
+  './layout-guide.js?v=138a',
   './report-media.js',
-  './report-media.js?v=138',
+  './report-media.js?v=138a',
   './location-view.js',
   './vendor/leaflet/leaflet.js',
   './vendor/leaflet/leaflet.css',
@@ -43,8 +44,8 @@ const APP_SHELL = [
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(async cache => {
-    await cache.addAll(APP_SHELL).catch(() => null);
-    await Promise.allSettled(FIREBASE_MODULES.map(url => cache.add(url)));
+    const results=await Promise.allSettled([...APP_SHELL,...FIREBASE_MODULES].map(url=>cache.add(url)));
+    results.forEach((result,index)=>{if(result.status==='rejected')console.warn('Falha ao preparar arquivo offline:',[...APP_SHELL,...FIREBASE_MODULES][index],result.reason)});
   }));
   self.skipWaiting();
 });
