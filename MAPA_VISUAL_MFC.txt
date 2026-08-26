@@ -1,15 +1,15 @@
-MAPA VISUAL MFC — v140
+MAPA VISUAL MFC — v140a
 
-ATIVAÇÃO PARTICULAR
+ACESSO
 
-1. Abra qualquer página acrescentando ?mfc_layout=1 ao endereço.
-   Exemplo: gestor.html?mfc_layout=1
-2. O botão com ícone de código </> ficará disponível apenas nesse navegador. No Gestor, ele aparece no final do menu lateral, acima de "Conectado".
-3. Ligue o botão e clique em uma etiqueta amarela para copiar seu código.
-4. Para desativar e remover o recurso desse navegador, abra qualquer página com ?mfc_layout=0.
-5. No computador, Ctrl+Shift+L também liga/desliga o mapa depois da primeira ativação.
+1. No Gestor, o botão Mapa visual fica sempre disponível no final do menu lateral, acima de "Conectado".
+2. No Index aberto em computador, ele fica sempre disponível no canto inferior direito da janela, fora da coluna do aplicativo.
+3. No Index aberto em celular, o botão e as marcações ficam ocultos.
+4. Clique no botão para ligar ou desligar as marcações.
+5. Clique em uma etiqueta amarela para copiar seu código.
+6. No computador, Ctrl+Shift+L também liga/desliga o mapa.
 
-O parâmetro é removido automaticamente do endereço. O modo não altera nem grava dados de clientes.
+O recurso não altera nem grava dados de clientes. O Cadastro continua com acesso particular por ?mfc_layout=1.
 
 GESTOR
 
