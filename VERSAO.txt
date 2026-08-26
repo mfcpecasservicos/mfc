@@ -1,8 +1,8 @@
-MFC v138c
+MFC v138d
 
 VERSÃO ATUAL — REVISÃO DE CONSISTÊNCIA E SEGURANÇA
 
-Esta é a referência vigente do aplicativo. A v138c é uma correção pequena sobre a v138.
+Esta é a referência vigente do aplicativo. A v138d é uma correção pequena sobre a v138.
 
 AUTENTICAÇÃO PREPARADA
 
@@ -58,6 +58,10 @@ SEGURANÇA DE CONTEÚDO
 
 NOTIFICAÇÕES
 
+- A exibição manual duplicada foi removida do service worker; mensagens com payload de notificação ficam a cargo do próprio FCM.
+- O sino do Index agora alterna entre ativar e desativar notificações neste aparelho.
+- Ao desativar, o token local é cancelado e o token do servidor só é limpo se ainda pertencer a este aparelho.
+- Ao ativar, este aparelho passa a ser o único destino atual dos avisos do técnico.
 - A notificação abre o endereço correto do Index no GitHub Pages.
 - A reserva antirrepetição só ocorre depois de existir token FCM.
 - Falha de envio libera a reserva para tentativa futura.
@@ -77,7 +81,7 @@ OFFLINE E CACHE
 - O Index mantém cache persistente do Firestore após uma primeira abertura online.
 - Páginas HTML usam rede primeiro e cache como alternativa.
 - A instalação trata cada arquivo separadamente; um recurso com falha não cancela todo o pacote offline.
-- Cache atual: mfc-tecnico-v138c.
+- Cache atual: mfc-tecnico-v138d.
 - O link padrão https://mfcpecasservicos.github.io/mfc/ continua válido para o técnico.
 
 REGRA DE VERSÃO
