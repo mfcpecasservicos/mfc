@@ -1,8 +1,18 @@
-MFC v138a
+MFC v138b
 
 VERSÃO ATUAL — REVISÃO DE CONSISTÊNCIA E SEGURANÇA
 
-Esta é a referência vigente do aplicativo. A v138a é uma correção pequena sobre a v138.
+Esta é a referência vigente do aplicativo. A v138b é uma correção pequena sobre a v138.
+
+AUTENTICAÇÃO PREPARADA
+
+- Gestor e Index agora exigem login com Google antes de iniciar as leituras do Firestore.
+- A sessão usa persistência local: depois do primeiro login, permanece salva no aparelho.
+- O técnico pode ser conectado uma única vez pelo gestor e continuar abrindo o aplicativo normalmente.
+- O Gestor exibe a conta conectada e oferece botão para sair.
+- O Cadastro público continua sem login, mas agora usa somente o token para criar seu próprio lead.
+- O Cadastro deixou de consultar as coleções clients e leads, preparando o banco para regras fechadas.
+- As regras do Firestore ainda precisam ser publicadas depois que os UIDs autorizados forem registrados.
 
 LAYOUT E PESQUISA
 
@@ -61,7 +71,7 @@ OFFLINE E CACHE
 - O Index mantém cache persistente do Firestore após uma primeira abertura online.
 - Páginas HTML usam rede primeiro e cache como alternativa.
 - A instalação trata cada arquivo separadamente; um recurso com falha não cancela todo o pacote offline.
-- Cache atual: mfc-tecnico-v138a.
+- Cache atual: mfc-tecnico-v138b.
 - O link padrão https://mfcpecasservicos.github.io/mfc/ continua válido para o técnico.
 
 REGRA DE VERSÃO
