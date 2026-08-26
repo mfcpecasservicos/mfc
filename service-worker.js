@@ -1,14 +1,11 @@
 importScripts('https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.13.2/firebase-messaging-compat.js');
 firebase.initializeApp({apiKey:"AIzaSyAUUid850sbmBAVS9JzeZ94SbC-qzkk0B8",authDomain:"roteiro-mfc-d3053.firebaseapp.com",projectId:"roteiro-mfc-d3053",storageBucket:"roteiro-mfc-d3053.firebasestorage.app",messagingSenderId:"1030114859934",appId:"1:1030114859934:web:ad353eafb55205d6b4148f"});
-const messaging=firebase.messaging();
-messaging.onBackgroundMessage(payload=>{
-  const title=payload.notification?.title||'MFC';
-  const body=payload.notification?.body||'';
-  self.registration.showNotification(title,{body,icon:'./icon-192.png',badge:'./icon-192.png'});
-});
+// Mensagens enviadas com payload "notification" já são exibidas pelo FCM.
+// Não chamar showNotification aqui evita que o mesmo aviso apareça duas vezes.
+firebase.messaging();
 
-const CACHE_NAME = 'mfc-tecnico-v138c';
+const CACHE_NAME = 'mfc-tecnico-v138d';
 const FIREBASE_MODULES = [
   'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js',
   'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js',
@@ -21,9 +18,9 @@ const APP_SHELL = [
   './gestor.html',
   './cadastro.html',
   './layout-guide.js',
-  './layout-guide.js?v=138c',
+  './layout-guide.js?v=138d',
   './report-media.js',
-  './report-media.js?v=138c',
+  './report-media.js?v=138d',
   './location-view.js',
   './vendor/leaflet/leaflet.js',
   './vendor/leaflet/leaflet.css',
