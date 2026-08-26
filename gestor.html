@@ -20,6 +20,7 @@
 *::-webkit-scrollbar-corner{background:var(--bg)}
 html,body{width:100%;height:100%;overflow:hidden}
 body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:15px}
+#auth-gate{position:fixed;inset:0;z-index:5000;background:linear-gradient(155deg,#020617,#0b1120);display:flex;align-items:center;justify-content:center;padding:24px}.auth-card{width:min(100%,420px);background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:30px 26px;text-align:center;box-shadow:var(--shadow)}.auth-card img{width:76px;height:76px;object-fit:contain;border-radius:17px;margin-bottom:12px}.auth-card h2{font-size:1.3rem;margin-bottom:7px}.auth-card p{color:var(--muted);font-size:.88rem;line-height:1.45;margin-bottom:20px}.auth-google{width:100%;min-height:52px;border:1px solid #93c5fd55;border-radius:14px;background:#fff;color:#172033;font-size:.96rem;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px}.auth-google:disabled{opacity:.55;cursor:wait}.auth-google .g{font-size:1.18rem;font-weight:900;color:#4285f4}.auth-error{min-height:18px;color:#fca5a5;font-size:.77rem;margin-top:10px}.auth-account{display:none;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:8px 10px;font-size:.68rem;color:var(--muted);word-break:break-word}.auth-account button{margin-top:7px;width:100%;border:1px solid var(--border);background:transparent;color:var(--muted);border-radius:7px;padding:6px;cursor:pointer}
 a{color:inherit}
 button{font-family:inherit}
 
@@ -425,6 +426,7 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 </style>
 </head>
 <body>
+<div id="auth-gate"><div class="auth-card"><img src="mfc-logo.png" alt="MFC"><h2>Acesso do gestor</h2><p>Entre com a conta autorizada para abrir o painel de gestão.</p><button type="button" class="auth-google" id="auth-login-btn" onclick="mfcGoogleLogin()"><span class="g">G</span> Entrar com Google</button><div class="auth-error" id="auth-error"></div></div></div>
 <div class="app" id="app">
 
   <!-- ===== SIDEBAR ===== -->
@@ -436,6 +438,7 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
       <button class="nav-item" id="nav-leads" onclick="switchView('leads')"><i class="fa-solid fa-inbox"></i> <span>Novos Cadastros</span><span class="nbadge" id="leads-count" style="display:none">0</span></button>
       <button class="nav-item nav-trash" id="nav-trash" onclick="switchView('trash')"><i class="fa-solid fa-trash-can"></i> <span>Lixeira</span></button>
     </nav>
+    <div class="auth-account" id="auth-account"><span id="auth-email"></span><button type="button" onclick="mfcSignOut()"><i class="fa-solid fa-right-from-bracket"></i> Sair desta conta</button></div>
     <span id="conn"><i class="fa-solid fa-circle" style="color:#ef4444"></i> Conectando...</span>
   </aside>
 
@@ -589,7 +592,8 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
 import { getFirestore, collection, addDoc, onSnapshot, updateDoc, deleteDoc, doc, query, orderBy, getDocs, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-import {externalizeLayers,deleteMediaIds,deleteAllClientMedia,layerPhotoSources,layerBudgetSource,layerMediaIds,mediaRetentionExpired} from "./report-media.js?v=138a";
+import {getAuth,GoogleAuthProvider,onAuthStateChanged,setPersistence,browserLocalPersistence,signInWithPopup,signInWithRedirect,getRedirectResult,signOut} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import {externalizeLayers,deleteMediaIds,deleteAllClientMedia,layerPhotoSources,layerBudgetSource,layerMediaIds,mediaRetentionExpired} from "./report-media.js?v=138b";
 const app=initializeApp({
   apiKey:"AIzaSyAUUid850sbmBAVS9JzeZ94SbC-qzkk0B8",
   authDomain:"roteiro-mfc-d3053.firebaseapp.com",
@@ -599,6 +603,11 @@ const app=initializeApp({
   appId:"1:1030114859934:web:ad353eafb55205d6b4148f"
 });
 const db=getFirestore(app);const col=collection(db,'clients');const leadsCol=collection(db,'leads');const tokenCol=collection(db,'cadastroTokens');
+const auth=getAuth(app),googleProvider=new GoogleAuthProvider();googleProvider.setCustomParameters({prompt:'select_account'});setPersistence(auth,browserLocalPersistence).catch(console.warn);
+function authError(message=''){const el=document.getElementById('auth-error');if(el)el.textContent=message}
+window.mfcGoogleLogin=async()=>{const btn=document.getElementById('auth-login-btn');if(btn)btn.disabled=true;authError('');try{if(matchMedia('(display-mode: standalone)').matches||innerWidth<700)await signInWithRedirect(auth,googleProvider);else await signInWithPopup(auth,googleProvider)}catch(error){console.error(error);authError('Não foi possível entrar. Verifique a internet e tente novamente.');if(btn)btn.disabled=false}};
+window.mfcSignOut=()=>signOut(auth);
+getRedirectResult(auth).catch(error=>{console.error(error);authError('O login não foi concluído. Tente novamente.')});
 let all=[],leads=[],filter='all',editId=null,cleanupDone=false,selectedId=null,view='main',finData={},selectedFin=null;
 let editLocationMap=null,editLocationMarker=null,editLocationPoint=null,editLocationRemoved=false;
 const approximateLocationSaves=new Set();
@@ -773,17 +782,17 @@ function setConn(t){document.getElementById('conn').innerHTML=t}
 function cleanupOld(){if(cleanupDone)return;cleanupDone=true;all.forEach(async c=>{const deletedAt=c.deleted?c.deletedAt:(c.status==='discarded'?c.discardedAt:null),original=getLayers(c),needsMediaCleanup=original.some(l=>shouldClearStoredMedia(l,deletedAt)&&layerHasStoredMedia(l)),legacy=legacyMediaCleanup(c,deletedAt);if(!needsMediaCleanup&&!Object.keys(legacy).length)return;const layers=needsMediaCleanup?original.map(l=>clearStoredMedia(l,deletedAt)):original;try{await updateDoc(doc(db,'clients',c.id),{layers,...legacy,mediaCleanedAt:new Date().toISOString()});if(needsMediaCleanup)await deleteClosedLayerMedia(c.id,original,deletedAt)}catch(e){console.warn('Limpeza automática de imagens pendente:',c.id,e)}})}
 
 /* ===== SNAPSHOTS ===== */
-onSnapshot(query(col,orderBy('createdAt','desc')),snap=>{all=snap.docs.map(d=>neutralizeRecord({id:d.id,...d.data()}));setConn('<i class="fa-solid fa-circle" style="color:#22c55e"></i> Conectado');cleanupOld();render();renderTrash();renderLeads();},err=>{console.error(err);setConn('<i class="fa-solid fa-circle" style="color:#ef4444"></i> Erro')});
-onSnapshot(query(leadsCol,orderBy('createdAt','desc')),snap=>{leads=snap.docs.map(d=>neutralizeRecord({id:d.id,...d.data()}));const b=document.getElementById('leads-count');b.textContent=leads.length;b.style.display=leads.length?'inline':'none';renderLeads();});
+const finRef=doc(db,'config','financeiro');
+let gestorUnsubs=[];
+function startGestorData(){if(gestorUnsubs.length)return;gestorUnsubs.push(onSnapshot(query(col,orderBy('createdAt','desc')),snap=>{all=snap.docs.map(d=>neutralizeRecord({id:d.id,...d.data()}));setConn('<i class="fa-solid fa-circle" style="color:#22c55e"></i> Conectado');cleanupOld();render();renderTrash();renderLeads();},err=>{console.error(err);setConn('<i class="fa-solid fa-circle" style="color:#ef4444"></i> Acesso recusado')}));gestorUnsubs.push(onSnapshot(query(leadsCol,orderBy('createdAt','desc')),snap=>{leads=snap.docs.map(d=>neutralizeRecord({id:d.id,...d.data()}));const b=document.getElementById('leads-count');b.textContent=leads.length;b.style.display=leads.length?'inline':'none';renderLeads();},console.error));gestorUnsubs.push(onSnapshot(finRef,snap=>{finData=snap.exists()?neutralizeRecord(snap.data()):{};if(view==='fin')renderFin();},console.error))}
+onAuthStateChanged(auth,user=>{const gate=document.getElementById('auth-gate'),btn=document.getElementById('auth-login-btn'),account=document.getElementById('auth-account'),email=document.getElementById('auth-email');if(user){gate.style.display='none';account.style.display='block';email.textContent=user.email||'Conta autenticada';startGestorData()}else{gestorUnsubs.forEach(unsub=>unsub());gestorUnsubs=[];all=[];leads=[];finData={};account.style.display='none';gate.style.display='flex';if(btn)btn.disabled=false;setConn('<i class="fa-solid fa-lock"></i> Aguardando login')}});
 
 /* ===== FINANCEIRO ===== */
-const finRef=doc(db,'config','financeiro');
 const RES=[
   {key:'embasa',nome:'Embasa',icon:'<i class="fa-solid fa-droplet"></i>',end:'Boa Esperança, 1364',cod:'073469912',doc:'814.064.605-91'},
   {key:'coelba1',nome:'Coelba',icon:'<i class="fa-solid fa-bolt"></i>',end:'Belo Horizonte, 105',cod:'230958084',doc:'40.628.562/0001-07'},
   {key:'coelba2',nome:'Coelba',icon:'<i class="fa-solid fa-bolt"></i>',end:'Almirante Tamandaré, 80',cod:'34519307',doc:'385.599.865-53'}
 ];
-onSnapshot(finRef,snap=>{finData=snap.exists()?neutralizeRecord(snap.data()):{};if(view==='fin')renderFin();});
 function todayIso(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function getContas(key){return (finData[key]?.contas||[]).slice()}
 function isOverdue(conta){return conta.venc&&conta.venc<todayIso()}
@@ -1311,5 +1320,5 @@ window.uploadBudgetImage=async(id,li,input)=>{const file=input.files?.[0];if(!fi
 window.removeBudgetImage=async(id,li)=>{const c=all.find(x=>x.id===id);const layers=[...getLayers(c)],layer=layers[li]||{},rawRef=layer.budgetImageRef||layer.budgetImage?.ref;const budgetRef=typeof rawRef==='string'?rawRef:rawRef?.id||'';layers[li]={...layer,budgetImage:null,budgetImageRef:null};await updateDoc(doc(db,'clients',id),{layers});await deleteMediaIds(db,id,[budgetRef])};
 </script>
 <div id="fin-print-area"></div>
-<script src="layout-guide.js?v=138a"></script>
+<script src="layout-guide.js?v=138b"></script>
 </body></html>
