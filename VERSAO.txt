@@ -15,6 +15,10 @@ AUTENTICAÇÃO PREPARADA
 - O Cadastro público continua sem login, mas agora usa somente o token para criar seu próprio lead.
 - O Cadastro deixou de consultar as coleções clients e leads, preparando o banco para regras fechadas.
 - As regras do Firestore ainda precisam ser publicadas depois que os UIDs autorizados forem registrados.
+- firestore.rules já contém os UIDs registrados do Gestor e do Técnico.
+- O Gestor possui acesso administrativo completo; o Técnico acessa somente clientes, relatórios e o token de notificações.
+- O formulário público só pode consultar um token ainda válido e criar exatamente o lead ligado a ele na mesma transação.
+- A publicação das regras no Firebase Console continua sendo a única etapa manual pendente desta proteção.
 
 LAYOUT E PESQUISA
 
