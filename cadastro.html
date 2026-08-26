@@ -201,7 +201,7 @@
 <script src="vendor/leaflet/leaflet.js"></script>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-  import { getFirestore, collection, getDocs, query, where, doc, getDoc, runTransaction } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+  import { getFirestore, doc, getDoc, runTransaction } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
   const app = initializeApp({
     apiKey: "AIzaSyAUUid850sbmBAVS9JzeZ94SbC-qzkk0B8",
@@ -228,21 +228,6 @@
   const neutralizeHtmlString = (value) => { const text=String(value??''); return /<\s*\/?\s*[a-z!]|on\w+\s*=/i.test(text) ? text.replaceAll('<','＜').replaceAll('>','＞') : text; };
   document.addEventListener('input', event => { const field=event.target; if (!(field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement)) return; const safe=neutralizeHtmlString(field.value); if (safe!==field.value) field.value=safe; }, true);
 
-  const findFirstByPhone = async (collectionName, phoneDigits) => {
-    if (!phoneDigits) return null;
-    const snap = await getDocs(query(collection(db, collectionName), where('phoneDigits', '==', phoneDigits)));
-    if (!snap.empty) {
-      const item = snap.docs[0];
-      return { id: item.id, ...item.data() };
-    }
-    const normSnap = await getDocs(query(collection(db, collectionName), where('phoneNorm', '==', phoneDigits)));
-    if (!normSnap.empty) {
-      const item = normSnap.docs[0];
-      return { id: item.id, ...item.data() };
-    }
-    return null;
-  };
-
   const tokenDataIsValid = (data) => {
     if (!data || data.used) return false;
     const now=Date.now(), expiresMs=Number(data.expiresAtMs||0), createdMs=Number(data.createdAtMs||0);
@@ -253,13 +238,13 @@
     return !!createdTime&&(now-createdTime)<=6*60*60*1000;
   };
 
-  const saveLeadUsingToken = async (existingLead, finalLeadData, phoneDigits) => {
+  const saveLeadUsingToken = async (finalLeadData, phoneDigits) => {
     if (!tokenRef) throw Object.assign(new Error('Link de cadastro inválido.'), {code:'token-invalid'});
-    const leadRef=existingLead?.id?doc(db,'leads',existingLead.id):doc(collection(db,'leads'));
+    const leadRef=doc(db,'leads',tokenParam);
     await runTransaction(db, async transaction => {
       const tokenSnap=await transaction.get(tokenRef);
       if (!tokenSnap.exists() || !tokenDataIsValid(tokenSnap.data())) throw Object.assign(new Error('Este link já foi usado ou expirou.'), {code:'token-invalid'});
-      transaction.set(leadRef,finalLeadData,{merge:!!existingLead?.id});
+      transaction.set(leadRef,finalLeadData);
       transaction.update(tokenRef,{used:true,usedAt:new Date().toISOString(),phoneDigits});
     });
   };
@@ -492,16 +477,13 @@
     };
 
     try {
-      const existingLead = await findFirstByPhone('leads', phoneDigits);
-      const existingClient = await findFirstByPhone('clients', phoneDigits);
-
       const finalLeadData = {
         ...leadData,
-        existingClientId: existingClient?.id || '',
-        recurrent: !!existingClient?.id,
+        existingClientId: '',
+        recurrent: false,
         updatedAt: new Date().toISOString()
       };
-      await saveLeadUsingToken(existingLead, finalLeadData, phoneDigits);
+      await saveLeadUsingToken(finalLeadData, phoneDigits);
 
       btn.style.display = 'none'; successMsg.style.display = 'block';
       setTimeout(() => {
@@ -544,16 +526,13 @@
     };
 
     try {
-      const existingLead = await findFirstByPhone('leads', phoneDigits);
-      const existingClient = await findFirstByPhone('clients', phoneDigits);
-
       const finalLeadData = {
         ...leadData,
-        existingClientId: existingClient?.id || '',
-        recurrent: !!existingClient?.id,
+        existingClientId: '',
+        recurrent: false,
         updatedAt: new Date().toISOString()
       };
-      await saveLeadUsingToken(existingLead, finalLeadData, phoneDigits);
+      await saveLeadUsingToken(finalLeadData, phoneDigits);
 
       btn.style.display = 'none'; successMsg.style.display = 'block';
       setTimeout(() => {
@@ -565,6 +544,6 @@
     }
   });
 </script>
-<script src="layout-guide.js?v=138a"></script>
+<script src="layout-guide.js?v=138b"></script>
 </body>
 </html>
