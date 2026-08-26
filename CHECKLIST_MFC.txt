@@ -1,4 +1,4 @@
-CHECKLIST MFC — v138d
+CHECKLIST MFC — v139
 
 LAYOUT E ACESSIBILIDADE
 
@@ -20,7 +20,10 @@ PESQUISA E HISTÓRICO
 [x] O resumo funciona para cliente ativo e para cliente na lixeira.
 [x] Serviços concluídos mostram data, avaliação técnica e garantia.
 [x] Cliente ativo oferece Garantia e Nova visita.
-[x] Cliente na lixeira oferece Restaurar.
+[x] Cliente na lixeira oferece Restaurar e Nova visita.
+[x] Nova visita da lixeira restaura o cadastro original sem duplicar.
+[x] Seleção por ID preserva o vínculo mesmo se nome ou telefone forem corrigidos.
+[x] Cancelar ou limpar o formulário remove a seleção anterior.
 [x] Restaurar ou adicionar visita preserva todas as camadas e textos anteriores.
 [x] Unificação automática insegura de duplicados da lixeira foi desativada.
 
@@ -66,8 +69,8 @@ SEGURANÇA
 [x] firestore.rules preparado com os UIDs do Gestor e Técnico.
 [x] Técnico limitado a clientes, relatórios e settings/tecnico.
 [x] Cadastro público limitado a token válido, uso único e gravação atômica do lead.
-[ ] Regras do Firestore revisadas e publicadas no Firebase Console.
-[ ] Regras distinguem permissões de Gestor e Técnico pelos UIDs autorizados.
+[x] Regras do Firestore revisadas e publicadas no Firebase Console.
+[x] Regras distinguem permissões de Gestor e Técnico pelos UIDs autorizados.
 
 NOTIFICAÇÕES
 
@@ -85,15 +88,15 @@ NOTIFICAÇÕES
 
 SERVICE WORKER E VERSÃO
 
-[x] CACHE_NAME atual: mfc-tecnico-v138d.
+[x] CACHE_NAME atual: mfc-tecnico-v139.
 [x] APP_SHELL inclui páginas, imagens, fontes, mapas e módulos locais.
 [x] Falha de um arquivo não cancela todo o pré-cache.
-[x] Index, Gestor e Cadastro carregam layout-guide.js?v=138b.
-[x] Index e Gestor carregam report-media.js?v=138b.
+[x] Index, Gestor e Cadastro carregam layout-guide.js?v=139.
+[x] Index e Gestor carregam report-media.js?v=139.
 [x] firebase-auth.js está incluído no cache offline.
 [x] Atualizações pequenas usam sufixo por letra.
 
-VALIDAÇÃO DA v138d
+VALIDAÇÃO DA v139
 
 [x] Sintaxe de todos os scripts validada.
 [x] JSON dos arquivos de configuração validado.
