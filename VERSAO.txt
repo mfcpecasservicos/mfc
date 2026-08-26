@@ -1,8 +1,8 @@
-MFC v138d
+MFC v139
 
-VERSÃO ATUAL — REVISÃO DE CONSISTÊNCIA E SEGURANÇA
+VERSÃO ATUAL — NOVA VISITA PARA CLIENTES NA LIXEIRA
 
-Esta é a referência vigente do aplicativo. A v138d é uma correção pequena sobre a v138.
+Esta é a referência vigente do aplicativo. A v139 inicia uma nova versão principal.
 
 AUTENTICAÇÃO PREPARADA
 
@@ -14,11 +14,11 @@ AUTENTICAÇÃO PREPARADA
 - O Gestor exibe a conta conectada e oferece botão para sair.
 - O Cadastro público continua sem login, mas agora usa somente o token para criar seu próprio lead.
 - O Cadastro deixou de consultar as coleções clients e leads, preparando o banco para regras fechadas.
-- As regras do Firestore ainda precisam ser publicadas depois que os UIDs autorizados forem registrados.
+- As regras do Firestore estão publicadas com os UIDs autorizados registrados.
 - firestore.rules já contém os UIDs registrados do Gestor e do Técnico.
 - O Gestor possui acesso administrativo completo; o Técnico acessa somente clientes, relatórios e o token de notificações.
 - O formulário público só pode consultar um token ainda válido e criar exatamente o lead ligado a ele na mesma transação.
-- A publicação das regras no Firebase Console continua sendo a única etapa manual pendente desta proteção.
+- As regras publicadas distinguem as permissões do Gestor, do Técnico e do cadastro público.
 
 LAYOUT E PESQUISA
 
@@ -27,6 +27,9 @@ LAYOUT E PESQUISA
 - Mapa, descrição do problema e observações mantêm os painéis grandes.
 - O zoom nativo do navegador continua habilitado e a grade evita esmagar os blocos.
 - A busca abre um resumo com cadastro, serviços, avaliação, garantia, exclusão e ações adequadas.
+- O resumo de clientes na lixeira oferece Restaurar e Nova visita.
+- Nova visita usa o cadastro original, preserva o histórico e restaura o cliente ao salvar.
+- A seleção usa o ID do cadastro para evitar duplicação mesmo se nome ou telefone forem corrigidos.
 - Nova visita e Editar cliente mantêm Endereço + Nº, Bairro + Cidade, Ponto de referência inteiro, Equipamento inteiro e Data/Hora ao lado de Data a definir.
 
 RELATÓRIOS E MÍDIAS
@@ -81,7 +84,7 @@ OFFLINE E CACHE
 - O Index mantém cache persistente do Firestore após uma primeira abertura online.
 - Páginas HTML usam rede primeiro e cache como alternativa.
 - A instalação trata cada arquivo separadamente; um recurso com falha não cancela todo o pacote offline.
-- Cache atual: mfc-tecnico-v138d.
+- Cache atual: mfc-tecnico-v139.
 - O link padrão https://mfcpecasservicos.github.io/mfc/ continua válido para o técnico.
 
 REGRA DE VERSÃO
