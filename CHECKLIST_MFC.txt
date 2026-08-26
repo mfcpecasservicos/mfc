@@ -62,7 +62,10 @@ SEGURANÇA
 [x] Usuário interno é convertido para o identificador exigido pelo Firebase.
 [x] Cadastro público não consulta mais clients nem lista leads.
 [x] Primeiro login do gestor concluído e UID registrado.
-[ ] Primeiro login do técnico concluído e UID registrado.
+[x] Conta do técnico criada e UID registrado.
+[x] firestore.rules preparado com os UIDs do Gestor e Técnico.
+[x] Técnico limitado a clientes, relatórios e settings/tecnico.
+[x] Cadastro público limitado a token válido, uso único e gravação atômica do lead.
 [ ] Regras do Firestore revisadas e publicadas no Firebase Console.
 [ ] Regras distinguem permissões de Gestor e Técnico pelos UIDs autorizados.
 
