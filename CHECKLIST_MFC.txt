@@ -1,4 +1,4 @@
-CHECKLIST MFC — v138c
+CHECKLIST MFC — v138d
 
 LAYOUT E ACESSIBILIDADE
 
@@ -71,6 +71,10 @@ SEGURANÇA
 
 NOTIFICAÇÕES
 
+[x] Exibição manual duplicada removida do service worker.
+[x] Sino do Index alterna ativação e desativação por aparelho.
+[x] Desativação cancela o token local com deleteToken().
+[x] Um aparelho não limpa o token do outro ao desativar.
 [x] Link do push aponta para https://mfcpecasservicos.github.io/mfc/.
 [x] Sem token FCM, nenhuma reserva de notificação é criada.
 [x] Falha de envio libera a reserva para nova tentativa.
@@ -81,7 +85,7 @@ NOTIFICAÇÕES
 
 SERVICE WORKER E VERSÃO
 
-[x] CACHE_NAME atual: mfc-tecnico-v138c.
+[x] CACHE_NAME atual: mfc-tecnico-v138d.
 [x] APP_SHELL inclui páginas, imagens, fontes, mapas e módulos locais.
 [x] Falha de um arquivo não cancela todo o pré-cache.
 [x] Index, Gestor e Cadastro carregam layout-guide.js?v=138b.
@@ -89,7 +93,7 @@ SERVICE WORKER E VERSÃO
 [x] firebase-auth.js está incluído no cache offline.
 [x] Atualizações pequenas usam sufixo por letra.
 
-VALIDAÇÃO DA v138c
+VALIDAÇÃO DA v138d
 
 [x] Sintaxe de todos os scripts validada.
 [x] JSON dos arquivos de configuração validado.
