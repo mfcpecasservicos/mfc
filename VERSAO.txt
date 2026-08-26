@@ -1,92 +1,22 @@
-MFC v139
+MFC v140
 
-VERSÃO ATUAL — NOVA VISITA PARA CLIENTES NA LIXEIRA
+VERSÃO ATUAL — TESTE E CONFIRMAÇÃO DE VAZAMENTO
 
-Esta é a referência vigente do aplicativo. A v139 inicia uma nova versão principal.
+- Ação do serviço no Index inclui Teste de vazamento.
+- A ação pode ser combinada com Corretiva, Preventiva, Instalação ou Laudo.
+- Depois da aprovação, o técnico recebe Confirmar vazamento.
+- O local do vazamento é obrigatório antes de concluir o serviço ou marcar Pronto para entrega.
+- A informação aparece no relatório como “Vazamento: local informado”.
+- O Index mostra um bloco próprio abaixo do orçamento.
+- O Gestor mostra o vazamento no relatório ativo e no histórico concluído.
+- O cache do aplicativo foi atualizado para mfc-tecnico-v140.
+- O link padrão do Index continua válido.
 
-AUTENTICAÇÃO PREPARADA
+VERSÃO ANTERIOR
 
-- O Gestor exige login com Google antes de iniciar as leituras do Firestore.
-- O Index do técnico aceita usuário e senha, sem exigir uma conta Google ou endereço de e-mail real.
-- Internamente, o usuário é convertido em um identificador no formato exigido pelo Firebase Authentication.
-- A sessão usa persistência local: depois do primeiro login, permanece salva no aparelho.
-- O técnico pode ser conectado uma única vez pelo gestor e continuar abrindo o aplicativo normalmente.
-- O Gestor exibe a conta conectada e oferece botão para sair.
-- O Cadastro público continua sem login, mas agora usa somente o token para criar seu próprio lead.
-- O Cadastro deixou de consultar as coleções clients e leads, preparando o banco para regras fechadas.
-- As regras do Firestore estão publicadas com os UIDs autorizados registrados.
-- firestore.rules já contém os UIDs registrados do Gestor e do Técnico.
-- O Gestor possui acesso administrativo completo; o Técnico acessa somente clientes, relatórios e o token de notificações.
-- O formulário público só pode consultar um token ainda válido e criar exatamente o lead ligado a ele na mesma transação.
-- As regras publicadas distinguem as permissões do Gestor, do Técnico e do cadastro público.
-
-LAYOUT E PESQUISA
-
-- Gestor-Lista e Gestor-Detalhe continuam lado a lado, com rolagem independente.
-- Informações gerais preenchidas aparecem em quadrados alinhados à esquerda; campos vazios não geram blocos.
-- Mapa, descrição do problema e observações mantêm os painéis grandes.
-- O zoom nativo do navegador continua habilitado e a grade evita esmagar os blocos.
-- A busca abre um resumo com cadastro, serviços, avaliação, garantia, exclusão e ações adequadas.
-- O resumo de clientes na lixeira oferece Restaurar e Nova visita.
-- Nova visita usa o cadastro original, preserva o histórico e restaura o cliente ao salvar.
-- A seleção usa o ID do cadastro para evitar duplicação mesmo se nome ou telefone forem corrigidos.
-- Nova visita e Editar cliente mantêm Endereço + Nº, Bairro + Cidade, Ponto de referência inteiro, Equipamento inteiro e Data/Hora ao lado de Data a definir.
-
-RELATÓRIOS E MÍDIAS
-
-- Fotos do relatório e imagens de orçamento ficam em documentos separados em clients/{id}/reportMedia.
-- O documento principal guarda apenas referências pequenas, evitando o limite de 1 MB do Firestore.
-- Index e Gestor carregam mídias referenciadas também nos históricos concluídos e na garantia.
-- Fotos e orçamento são mantidos por 30 dias após a finalização do serviço.
-- Em clientes excluídos ou descartados, as mídias são mantidas por 15 dias.
-- Após o prazo, somente imagens e referências são removidas; textos, datas, status, valores e cadastro permanecem.
-- A limpeza roda quando Index ou Gestor abre conectado. Não há função agendada paga.
-- Excluir relatório, visita, orçamento ou cliente remove os documentos de mídia correspondentes.
-- Exclusão definitiva primeiro confere se todas as mídias foram removidas; em falha, o cadastro é preservado.
-- Restauração e nova visita preservam todo o histórico textual existente.
-- A unificação automática de duplicados da lixeira foi desativada para não misturar históricos nem deixar mídia órfã.
-
-CADASTRO PÚBLICO
-
-- O link usa token criptograficamente aleatório, válido por 6 horas e de uso único.
-- O consumo do token e a gravação do cadastro são atômicos: dois envios não usam o mesmo link.
-- A procura por telefone usa campos indexados e não varre toda a coleção do Firestore.
-- Tokens novos recebem expiresAtTs, preparado para TTL do Firestore.
-
-SEGURANÇA DE CONTEÚDO
-
-- Conteúdo semelhante a HTML inserido por clientes ou registros antigos é neutralizado antes de ser exibido.
-- Inputs e textareas também neutralizam marcação suspeita antes do salvamento.
-- Regras de acesso do Firestore e autenticação estão configuradas no Firebase Console.
-
-NOTIFICAÇÕES
-
-- A exibição manual duplicada foi removida do service worker; mensagens com payload de notificação ficam a cargo do próprio FCM.
-- O sino do Index agora alterna entre ativar e desativar notificações neste aparelho.
-- Ao desativar, o token local é cancelado e o token do servidor só é limpo se ainda pertencer a este aparelho.
-- Ao ativar, este aparelho passa a ser o único destino atual dos avisos do técnico.
-- A notificação abre o endereço correto do Index no GitHub Pages.
-- A reserva antirrepetição só ocorre depois de existir token FCM.
-- Falha de envio libera a reserva para tentativa futura.
-- Eventos novos permitem notificar visitas e aprovações futuras do mesmo cliente.
-- Registros de controle recebem expiresAt, preparado para TTL do Firestore.
-- Alterações em functions/index.js só entram em produção depois do deploy das Cloud Functions.
-
-ARMAZENAMENTO E EXCLUSÃO
-
-- Não existe exclusão automática do texto ou do cadastro do cliente.
-- Na lixeira, o botão Excluir permanentemente é a única exclusão definitiva do cadastro.
-- Orçamentos podem ser removidos e reenviados sem depender de restauração automática.
-- O ciclo usa Firestore; não usa Firebase Storage.
-
-OFFLINE E CACHE
-
-- O Index mantém cache persistente do Firestore após uma primeira abertura online.
-- Páginas HTML usam rede primeiro e cache como alternativa.
-- A instalação trata cada arquivo separadamente; um recurso com falha não cancela todo o pacote offline.
-- Cache atual: mfc-tecnico-v139.
-- O link padrão https://mfcpecasservicos.github.io/mfc/ continua válido para o técnico.
+- v139 adicionou Nova visita ao resumo de clientes na lixeira, preservando o cadastro e o histórico.
 
 REGRA DE VERSÃO
 
-Atualizações pequenas desta base usarão letras (v139a, v139b...). Um novo número inteiro fica reservado para mudança maior.
+Atualizações pequenas desta base usarão letras (v140a, v140b...). Um novo número inteiro fica reservado para mudança maior.
+
