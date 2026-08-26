@@ -1,4 +1,4 @@
-CHECKLIST MFC — v138a
+CHECKLIST MFC — v138b
 
 LAYOUT E ACESSIBILIDADE
 
@@ -54,8 +54,15 @@ SEGURANÇA
 
 [x] Dados carregados do Firestore neutralizam marcação HTML suspeita.
 [x] Inputs e textareas neutralizam marcação suspeita antes do salvamento.
+[x] Google e E-mail/senha foram ativados no Firebase Authentication.
+[x] mfcpecasservicos.github.io foi incluído nos domínios autorizados.
+[x] Gestor e Index esperam autenticação antes de ler o Firestore.
+[x] A sessão autenticada permanece salva no aparelho.
+[x] Cadastro público não consulta mais clients nem lista leads.
+[ ] Primeiro login do gestor concluído e UID registrado.
+[ ] Primeiro login do técnico concluído e UID registrado.
 [ ] Regras do Firestore revisadas e publicadas no Firebase Console.
-[ ] Acesso do Gestor e do Index protegido por Firebase Authentication.
+[ ] Regras distinguem permissões de Gestor e Técnico pelos UIDs autorizados.
 
 NOTIFICAÇÕES
 
@@ -64,27 +71,20 @@ NOTIFICAÇÕES
 [x] Falha de envio libera a reserva para nova tentativa.
 [x] Chaves distinguem eventos futuros do mesmo cliente.
 [x] _notified recebe expiresAt para futura política TTL.
-[ ] Cloud Functions da v138a publicadas no Firebase.
+[ ] Cloud Functions da v138b publicadas no Firebase.
 [ ] TTL ativado para _notified.expiresAt.
-
-RESEND E WHATSAPP
-
-[ ] Chave Resend exposta anteriormente foi revogada e substituída.
-[ ] DNS do domínio foi verificado no Resend.
-[ ] Nova chave foi salva como segredo do Firebase, nunca no HTML/GitHub.
-[ ] Envio automático de e-mail foi implementado e publicado.
-[ ] Conta, número e token do WhatsApp Business Cloud API foram configurados.
 
 SERVICE WORKER E VERSÃO
 
-[x] CACHE_NAME atual: mfc-tecnico-v138a.
+[x] CACHE_NAME atual: mfc-tecnico-v138b.
 [x] APP_SHELL inclui páginas, imagens, fontes, mapas e módulos locais.
 [x] Falha de um arquivo não cancela todo o pré-cache.
-[x] Index, Gestor e Cadastro carregam layout-guide.js?v=138a.
-[x] Index e Gestor carregam report-media.js?v=138a.
+[x] Index, Gestor e Cadastro carregam layout-guide.js?v=138b.
+[x] Index e Gestor carregam report-media.js?v=138b.
+[x] firebase-auth.js está incluído no cache offline.
 [x] Atualizações pequenas usam sufixo por letra.
 
-VALIDAÇÃO DA v138a
+VALIDAÇÃO DA v138b
 
 [x] Sintaxe de todos os scripts validada.
 [x] JSON dos arquivos de configuração validado.
