@@ -1,107 +1,29 @@
-CHECKLIST MFC — v139
+CHECKLIST PÚBLICO MFC — v140
 
-LAYOUT E ACESSIBILIDADE
+TESTE DE VAZAMENTO
 
-[x] Informações gerais preenchidas aparecem em quadrados; campos vazios não aparecem.
-[x] A última fileira permanece alinhada à esquerda.
-[x] E-mail pode ser copiado com um clique.
-[x] Mapa, descrição do problema e observações usam painéis grandes.
-[x] A ampliação nativa do navegador permanece habilitada.
-[x] A grade evita esmagar os quadrados e usa rolagem quando faltar largura.
-[x] Nova visita e Editar cliente seguem a mesma ordem de campos.
-[x] Endereço + Nº; Bairro + Cidade; Ponto de referência inteiro; Equipamento inteiro.
-[x] Data/Hora fica ao lado do controle Data a definir.
-[x] Editar cliente possui Serviço de garantia e Equipamento trazido à loja.
-[x] Até três contatos adicionais podem ser incluídos.
+[x] Ação do serviço inclui Teste de vazamento.
+[x] Pode ser combinado com outras ações.
+[x] Após a aprovação, o Index exige Confirmar vazamento.
+[x] O técnico informa o local em campo próprio.
+[x] Serviço concluído e Pronto para entrega ficam bloqueados até a confirmação.
+[x] O local aparece em bloco abaixo do orçamento no Index.
+[x] Relatório ativo e histórico concluído do Gestor exibem o vazamento.
+[x] A edição preserva a confirmação enquanto o teste continuar ativo.
 
-PESQUISA E HISTÓRICO
+VERSÃO E CACHE
 
-[x] Clicar no resultado abre o resumo do cliente.
-[x] O resumo funciona para cliente ativo e para cliente na lixeira.
-[x] Serviços concluídos mostram data, avaliação técnica e garantia.
-[x] Cliente ativo oferece Garantia e Nova visita.
-[x] Cliente na lixeira oferece Restaurar e Nova visita.
-[x] Nova visita da lixeira restaura o cadastro original sem duplicar.
-[x] Seleção por ID preserva o vínculo mesmo se nome ou telefone forem corrigidos.
-[x] Cancelar ou limpar o formulário remove a seleção anterior.
-[x] Restaurar ou adicionar visita preserva todas as camadas e textos anteriores.
-[x] Unificação automática insegura de duplicados da lixeira foi desativada.
+[x] CACHE_NAME atual: mfc-tecnico-v140.
+[x] Index, Gestor e Cadastro carregam layout-guide.js?v=140.
+[x] Index e Gestor carregam report-media.js?v=140.
+[x] Sintaxe dos scripts validada.
+[x] Configuração JSON validada.
 
-RELATÓRIOS E MÍDIAS
+TESTES MANUAIS
 
-[x] Fotos e orçamento ficam em clients/{id}/reportMedia.
-[x] O documento do cliente contém referências, não imagens pesadas.
-[x] Index e Gestor carregam referências em atendimentos ativos, concluídos e garantia.
-[x] Finalização mantém imagens antes de completar 30 dias.
-[x] Lixeira ou descarte mantém imagens antes de completar 15 dias.
-[x] Após o prazo, imagens e referências são removidas; texto e cadastro permanecem.
-[x] Excluir relatório remove suas referências de foto.
-[x] Remover visita remove todas as mídias ligadas à camada.
-[x] Remover orçamento limpa o documento e a referência.
-[x] Exclusão definitiva remove a subcoleção antes do documento do cliente.
-[x] Falha na exclusão das mídias impede apagar o cadastro e evita órfãos.
-[x] Exclusões de mídia possuem novas tentativas e log visível no console.
-[x] Não existe exclusão automática de texto ou cadastro.
-[x] Limpeza de mídia roda ao abrir Index ou Gestor conectado.
+[ ] Criar avaliação com Teste de vazamento.
+[ ] Aprovar o orçamento no Gestor.
+[ ] Confirmar o local do vazamento no Index.
+[ ] Conferir o texto no Index e no Gestor.
+[ ] Concluir o serviço após a confirmação.
 
-CADASTRO PÚBLICO
-
-[x] Link exige token válido por 6 horas e de uso único.
-[x] Token novo usa crypto.getRandomValues.
-[x] Gravação do lead e consumo do token usam uma transação atômica.
-[x] Busca de telefone usa phoneDigits e phoneNorm indexados.
-[x] Não existe varredura completa das coleções a cada novo telefone.
-[x] Token novo recebe expiresAtTs para futura política TTL.
-
-SEGURANÇA
-
-[x] Dados carregados do Firestore neutralizam marcação HTML suspeita.
-[x] Inputs e textareas neutralizam marcação suspeita antes do salvamento.
-[x] Google e E-mail/senha foram ativados no Firebase Authentication.
-[x] mfcpecasservicos.github.io foi incluído nos domínios autorizados.
-[x] Gestor e Index esperam autenticação antes de ler o Firestore.
-[x] A sessão autenticada permanece salva no aparelho.
-[x] Index permite login do técnico por usuário e senha sem conta Google.
-[x] Usuário interno é convertido para o identificador exigido pelo Firebase.
-[x] Cadastro público não consulta mais clients nem lista leads.
-[x] Primeiro login do gestor concluído e UID registrado.
-[x] Conta do técnico criada e UID registrado.
-[x] firestore.rules preparado com os UIDs do Gestor e Técnico.
-[x] Técnico limitado a clientes, relatórios e settings/tecnico.
-[x] Cadastro público limitado a token válido, uso único e gravação atômica do lead.
-[x] Regras do Firestore revisadas e publicadas no Firebase Console.
-[x] Regras distinguem permissões de Gestor e Técnico pelos UIDs autorizados.
-
-NOTIFICAÇÕES
-
-[x] Exibição manual duplicada removida do service worker.
-[x] Sino do Index alterna ativação e desativação por aparelho.
-[x] Desativação cancela o token local com deleteToken().
-[x] Um aparelho não limpa o token do outro ao desativar.
-[x] Link do push aponta para https://mfcpecasservicos.github.io/mfc/.
-[x] Sem token FCM, nenhuma reserva de notificação é criada.
-[x] Falha de envio libera a reserva para nova tentativa.
-[x] Chaves distinguem eventos futuros do mesmo cliente.
-[x] _notified recebe expiresAt para futura política TTL.
-[ ] Cloud Functions da v138b publicadas no Firebase.
-[ ] TTL ativado para _notified.expiresAt.
-
-SERVICE WORKER E VERSÃO
-
-[x] CACHE_NAME atual: mfc-tecnico-v139.
-[x] APP_SHELL inclui páginas, imagens, fontes, mapas e módulos locais.
-[x] Falha de um arquivo não cancela todo o pré-cache.
-[x] Index, Gestor e Cadastro carregam layout-guide.js?v=139.
-[x] Index e Gestor carregam report-media.js?v=139.
-[x] firebase-auth.js está incluído no cache offline.
-[x] Atualizações pequenas usam sufixo por letra.
-
-VALIDAÇÃO DA v139
-
-[x] Sintaxe de todos os scripts validada.
-[x] JSON dos arquivos de configuração validado.
-[x] Referências antigas de cache e módulos conferidas.
-[x] Limites de retenção de 30 e 15 dias conferidos.
-[ ] Teste real de cadastro público com um token novo.
-[ ] Teste real de relatório com foto no aparelho do técnico.
-[ ] Teste real de resumo, garantia e exclusão no Gestor.
