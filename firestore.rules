@@ -1,0 +1,163 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isManager() {
+      return request.auth != null
+        && request.auth.uid == 'N2aZUHNGu8c1fAQJ5RSsecXpT0o2';
+    }
+
+    function isTechnician() {
+      return request.auth != null
+        && request.auth.uid == 'ta6KRJKTFQd3vqitDAuB5gLkVXr2';
+    }
+
+    function validText(data, field, maxLength) {
+      return data.get(field, '') is string
+        && data.get(field, '').size() <= maxLength;
+    }
+
+    function validLatitude(value) {
+      return value == null
+        || (value is number && value >= -90 && value <= 90);
+    }
+
+    function validLongitude(value) {
+      return value == null
+        || (value is number && value >= -180 && value <= 180);
+    }
+
+    function validAccuracy(value) {
+      return value == null
+        || (value is number && value >= 0 && value <= 100000);
+    }
+
+    function validLocationMap(value) {
+      return value == null
+        || (value is map
+          && value.keys().hasOnly([
+            'latitude', 'longitude', 'accuracy', 'provided',
+            'confirmed', 'source', 'confirmedAt'
+          ])
+          && validLatitude(value.get('latitude', null))
+          && validLongitude(value.get('longitude', null))
+          && validAccuracy(value.get('accuracy', null))
+          && value.get('provided', false) is bool
+          && value.get('confirmed', false) is bool
+          && validText(value, 'source', 24)
+          && validText(value, 'confirmedAt', 40));
+    }
+
+    function validLead(data) {
+      return data.keys().hasAll([
+          'type', 'name', 'phone', 'phoneDigits', 'email', 'address',
+          'equip', 'problem', 'latitude', 'longitude', 'locationAccuracy',
+          'locationProvided', 'locationConfirmed', 'locationSource',
+          'locationConfirmedAt', 'location', 'createdAt',
+          'existingClientId', 'recurrent', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'type', 'name', 'phone', 'phoneDigits', 'email', 'address',
+          'equip', 'problem', 'latitude', 'longitude', 'locationAccuracy',
+          'locationProvided', 'locationConfirmed', 'locationSource',
+          'locationConfirmedAt', 'location', 'createdAt',
+          'existingClientId', 'recurrent', 'updatedAt',
+          'city', 'cidade', 'number', 'neighborhood', 'bairro', 'ref',
+          'companyName', 'requester', 'cnpj', 'accessRequired'
+        ])
+        && (data.type == 'cliente' || data.type == 'company')
+        && data.name is string && data.name.size() >= 2 && data.name.size() <= 160
+        && data.phone is string && data.phone.size() >= 8 && data.phone.size() <= 40
+        && data.phoneDigits is string
+        && data.phoneDigits.size() >= 10 && data.phoneDigits.size() <= 11
+        && validText(data, 'email', 200)
+        && data.address is string && data.address.size() >= 2 && data.address.size() <= 500
+        && data.equip is string && data.equip.size() >= 2 && data.equip.size() <= 300
+        && data.problem is string && data.problem.size() >= 2 && data.problem.size() <= 4000
+        && validText(data, 'city', 120)
+        && validText(data, 'cidade', 120)
+        && validText(data, 'number', 40)
+        && validText(data, 'neighborhood', 160)
+        && validText(data, 'bairro', 160)
+        && validText(data, 'ref', 500)
+        && validText(data, 'companyName', 200)
+        && validText(data, 'requester', 160)
+        && validText(data, 'cnpj', 30)
+        && validLatitude(data.latitude)
+        && validLongitude(data.longitude)
+        && validAccuracy(data.locationAccuracy)
+        && data.locationProvided is bool
+        && data.locationConfirmed is bool
+        && validText(data, 'locationSource', 24)
+        && validText(data, 'locationConfirmedAt', 40)
+        && validLocationMap(data.location)
+        && validText(data, 'createdAt', 40)
+        && data.existingClientId == ''
+        && data.recurrent == false
+        && validText(data, 'updatedAt', 40)
+        && data.get('accessRequired', false) is bool
+        && (data.type != 'company'
+          || (data.companyName is string && data.companyName.size() >= 2
+            && data.requester is string && data.requester.size() >= 2));
+    }
+
+    function activeToken(tokenData) {
+      return tokenData.used == false
+        && tokenData.expiresAtTs is timestamp
+        && request.time < tokenData.expiresAtTs;
+    }
+
+    function validPublicLead(tokenId) {
+      let tokenPath = /databases/$(database)/documents/cadastroTokens/$(tokenId);
+      let tokenBefore = get(tokenPath);
+      let tokenAfter = getAfter(tokenPath);
+      return tokenId.size() == 20
+        && activeToken(tokenBefore.data)
+        && tokenAfter.data.used == true
+        && tokenAfter.data.phoneDigits == request.resource.data.phoneDigits
+        && validLead(request.resource.data);
+    }
+
+    function validTokenConsumption(tokenId) {
+      let leadAfter = getAfter(/databases/$(database)/documents/leads/$(tokenId));
+      return activeToken(resource.data)
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['used', 'usedAt', 'phoneDigits'])
+        && request.resource.data.used == true
+        && request.resource.data.usedAt is string
+        && request.resource.data.usedAt.size() <= 40
+        && request.resource.data.phoneDigits is string
+        && request.resource.data.phoneDigits.size() >= 10
+        && request.resource.data.phoneDigits.size() <= 11
+        && leadAfter.data.phoneDigits == request.resource.data.phoneDigits;
+    }
+
+    // Gestor: acesso administrativo completo, inclusive para futuras coleções.
+    match /{document=**} {
+      allow read, write: if isManager();
+    }
+
+    // Técnico: roteiro e relatórios, sem acesso a financeiro, leads ou lixeira administrativa.
+    match /clients/{clientId} {
+      allow read, update: if isTechnician();
+
+      match /reportMedia/{mediaId} {
+        allow read, create, update, delete: if isTechnician();
+      }
+    }
+
+    match /settings/tecnico {
+      allow read, create, update: if isTechnician();
+    }
+
+    // Formulário público: só lê um token válido e grava um único lead com o mesmo ID.
+    match /cadastroTokens/{tokenId} {
+      allow get: if activeToken(resource.data);
+      allow update: if validTokenConsumption(tokenId);
+    }
+
+    match /leads/{tokenId} {
+      allow create: if validPublicLead(tokenId);
+    }
+  }
+}
