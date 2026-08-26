@@ -1,4 +1,4 @@
-CHECKLIST MFC — v138b
+CHECKLIST MFC — v138c
 
 LAYOUT E ACESSIBILIDADE
 
@@ -58,8 +58,10 @@ SEGURANÇA
 [x] mfcpecasservicos.github.io foi incluído nos domínios autorizados.
 [x] Gestor e Index esperam autenticação antes de ler o Firestore.
 [x] A sessão autenticada permanece salva no aparelho.
+[x] Index permite login do técnico por usuário e senha sem conta Google.
+[x] Usuário interno é convertido para o identificador exigido pelo Firebase.
 [x] Cadastro público não consulta mais clients nem lista leads.
-[ ] Primeiro login do gestor concluído e UID registrado.
+[x] Primeiro login do gestor concluído e UID registrado.
 [ ] Primeiro login do técnico concluído e UID registrado.
 [ ] Regras do Firestore revisadas e publicadas no Firebase Console.
 [ ] Regras distinguem permissões de Gestor e Técnico pelos UIDs autorizados.
@@ -76,7 +78,7 @@ NOTIFICAÇÕES
 
 SERVICE WORKER E VERSÃO
 
-[x] CACHE_NAME atual: mfc-tecnico-v138b.
+[x] CACHE_NAME atual: mfc-tecnico-v138c.
 [x] APP_SHELL inclui páginas, imagens, fontes, mapas e módulos locais.
 [x] Falha de um arquivo não cancela todo o pré-cache.
 [x] Index, Gestor e Cadastro carregam layout-guide.js?v=138b.
@@ -84,7 +86,7 @@ SERVICE WORKER E VERSÃO
 [x] firebase-auth.js está incluído no cache offline.
 [x] Atualizações pequenas usam sufixo por letra.
 
-VALIDAÇÃO DA v138b
+VALIDAÇÃO DA v138c
 
 [x] Sintaxe de todos os scripts validada.
 [x] JSON dos arquivos de configuração validado.
