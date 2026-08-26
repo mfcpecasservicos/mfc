@@ -1,4 +1,12 @@
-CHECKLIST PÚBLICO MFC — v140
+CHECKLIST PÚBLICO MFC — v140a
+
+MAPA VISUAL
+
+[x] Botão disponível permanentemente no Gestor.
+[x] Botão disponível no canto inferior direito do Index em computador.
+[x] Botão e marcações ocultos no Index em celular.
+[x] Zoom do navegador não remove o botão em computador com mouse.
+[x] Gestor e Index não dependem de ?mfc_layout=1.
 
 TESTE DE VAZAMENTO
 
@@ -13,8 +21,8 @@ TESTE DE VAZAMENTO
 
 VERSÃO E CACHE
 
-[x] CACHE_NAME atual: mfc-tecnico-v140.
-[x] Index, Gestor e Cadastro carregam layout-guide.js?v=140.
+[x] CACHE_NAME atual: mfc-tecnico-v140a.
+[x] Index, Gestor e Cadastro carregam layout-guide.js?v=140a.
 [x] Index e Gestor carregam report-media.js?v=140.
 [x] Sintaxe dos scripts validada.
 [x] Configuração JSON validada.
@@ -26,4 +34,3 @@ TESTES MANUAIS
 [ ] Confirmar o local do vazamento no Index.
 [ ] Conferir o texto no Index e no Gestor.
 [ ] Concluir o serviço após a confirmação.
-
