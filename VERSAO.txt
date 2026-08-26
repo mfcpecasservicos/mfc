@@ -57,7 +57,7 @@ SEGURANÇA DE CONTEÚDO
 
 - Conteúdo semelhante a HTML inserido por clientes ou registros antigos é neutralizado antes de ser exibido.
 - Inputs e textareas também neutralizam marcação suspeita antes do salvamento.
-- Regras de acesso do Firestore e autenticação ainda dependem de configuração no Firebase Console.
+- Regras de acesso do Firestore e autenticação estão configuradas no Firebase Console.
 
 NOTIFICAÇÕES
 
@@ -89,4 +89,4 @@ OFFLINE E CACHE
 
 REGRA DE VERSÃO
 
-Atualizações pequenas usam letras (v138a, v138b...). Um novo número inteiro fica reservado para mudança maior.
+Atualizações pequenas desta base usarão letras (v139a, v139b...). Um novo número inteiro fica reservado para mudança maior.
