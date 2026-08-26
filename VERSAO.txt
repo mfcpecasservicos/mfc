@@ -1,22 +1,19 @@
-MFC v140
+MFC v140a
 
-VERSÃO ATUAL — TESTE E CONFIRMAÇÃO DE VAZAMENTO
+VERSÃO ATUAL — MAPA VISUAL PERMANENTE
 
-- Ação do serviço no Index inclui Teste de vazamento.
-- A ação pode ser combinada com Corretiva, Preventiva, Instalação ou Laudo.
-- Depois da aprovação, o técnico recebe Confirmar vazamento.
-- O local do vazamento é obrigatório antes de concluir o serviço ou marcar Pronto para entrega.
-- A informação aparece no relatório como “Vazamento: local informado”.
-- O Index mostra um bloco próprio abaixo do orçamento.
-- O Gestor mostra o vazamento no relatório ativo e no histórico concluído.
-- O cache do aplicativo foi atualizado para mfc-tecnico-v140.
+- O botão Mapa visual fica permanentemente disponível no Gestor.
+- No Index, o botão fica no canto inferior direito da tela do computador, fora da coluna do aplicativo.
+- O botão e as marcações ficam ocultos no celular.
+- Não é mais necessário acrescentar ?mfc_layout=1 ao Gestor ou ao Index.
+- O estado ligado/desligado continua salvo no navegador.
+- O cache do aplicativo foi atualizado para mfc-tecnico-v140a.
 - O link padrão do Index continua válido.
 
 VERSÃO ANTERIOR
 
-- v139 adicionou Nova visita ao resumo de clientes na lixeira, preservando o cadastro e o histórico.
+- v140 adicionou Teste de vazamento, confirmação obrigatória e exibição do local no Index e no Gestor.
 
 REGRA DE VERSÃO
 
-Atualizações pequenas desta base usarão letras (v140a, v140b...). Um novo número inteiro fica reservado para mudança maior.
-
+Atualizações pequenas desta base usarão letras (v140b, v140c...). Um novo número inteiro fica reservado para mudança maior.
