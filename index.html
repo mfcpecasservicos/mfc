@@ -329,6 +329,6 @@ installBtn?.addEventListener('click',async()=>{if(!deferredInstallPrompt)return;
 if('serviceWorker'in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js',{scope:'./'}).then(reg=>reg.update()).catch(()=>null))}
 setTimeout(()=>{if(!window.__mfcIndexReady&&!navigator.onLine){const wrap=document.getElementById('list-wrap');if(wrap)wrap.innerHTML='<div class="empty"><i class="fa-solid fa-triangle-exclamation"></i> O modo offline ainda não foi preparado neste aparelho. Conecte à internet uma vez e abra o Index novamente.</div>'}},7000);
 </script>
-<script src="layout-guide.js?v=140"></script>
+<script src="layout-guide.js?v=140a"></script>
 </body>
 </html>
