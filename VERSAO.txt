@@ -1,12 +1,10 @@
-MFC v141f
+MFC v141g
 
-AJUSTES DO INDEX
+AJUSTES DA AVALIAÇÃO NO INDEX
 
-- Botão de excluir avaliação voltou ao padrão compacto do sistema.
-- Mapa limitado à própria área para não cobrir títulos.
-- O botão + mostra Sim, Não e Cancelar diretamente na página.
-- Sim cria imediatamente a próxima avaliação padrão do mesmo equipamento.
-- Não pede somente o nome do novo equipamento e abre a avaliação padrão.
-- Removido o pedido de descrição do problema no fluxo do técnico.
-- Botões usam Font Awesome e o padrão visual instalado.
-- Cache atualizado para mfc-tecnico-v141f.
+- Removida a lixeira do cabeçalho do accordion.
+- Mantida somente a lixeira ao lado de Salvar avaliação.
+- Lixeira lateral agora usa o padrão vermelho do sistema.
+- Avaliações enviadas exibem Editar ao lado do título.
+- Editar abre o formulário existente com os dados preenchidos para corrigir e reenviar.
+- Cache atualizado para mfc-tecnico-v141g.
