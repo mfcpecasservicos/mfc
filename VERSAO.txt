@@ -1,22 +1,13 @@
-MFC v140d
+MFC v141
 
-VERSÃO ATUAL — OBSERVAÇÃO POR ABA SEM ALTERAR O LAYOUT
+EQUIPAMENTOS E RELATÓRIOS INDEPENDENTES
 
-- No Gestor, o campo Observação voltou exatamente à posição original abaixo do mapa e da descrição do problema.
-- O título do campo no Gestor é apenas Observação.
-- O mesmo campo muda de conteúdo ao trocar entre Relatório 1, Relatório 2 e demais relatórios.
-- No Index, a Observação permanece no bloco original de informações do cliente (INDEX-CLIENTE-BLOCO-01.04).
-- O alerta do Index muda conforme o relatório selecionado.
-- Nenhum bloco, medida ou ordem visual foi alterado além da reversão da posição equivocada da v140c.
-- O cache do aplicativo foi atualizado para mfc-tecnico-v140d.
-
-VERSÃO ANTERIOR
-
-- v140c colocou incorretamente a Observação acima do orçamento.
-- v140b separou os dados das Observações por relatório.
-- v140a tornou o Mapa visual permanente no Gestor e disponível apenas no computador no Index.
-- v140 adicionou Teste de vazamento e confirmação obrigatória.
-
-REGRA DE VERSÃO
-
-Atualizações pequenas desta base usarão letras (v140e, v140f...). Um novo número inteiro fica reservado para mudança maior.
+- Cadastro com até 10 equipamentos no mesmo envio.
+- Cada equipamento e problema gera um relatório separado.
+- Nova visita permite escolher um equipamento existente ou cadastrar outro.
+- O mesmo equipamento pode ter relatórios diferentes, cada um com problema, observação, orçamento e status próprios.
+- Equipamento, problema e observação mudam com a aba no Gestor e no Index.
+- Remover um relatório preserva os demais e permite restauração pelo Gestor.
+- Blocos mantidos nas posições existentes e integrados aos temas atuais.
+- Compatibilidade mantida com cadastros antigos.
+- Cache atualizado para mfc-tecnico-v141.
