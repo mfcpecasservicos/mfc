@@ -1218,6 +1218,7 @@ function renderDetail(){
     const pct=total>0?Math.min(100,Math.round(entrada/total*100)):0;
     const restante=Math.max(0,total-entrada);
     return `<div id="vp-${c.id}-${i}" data-vp="${c.id}" class="vpanel ${first?'active':''}">
+      ${layerObsBlock(c,l,i)}
       <div class="dcards">
       </div>
       ${warrantyMode?`<p class="indicator" style="background:#3b2a06;border-color:#f59e0b;color:#fbbf24;margin-bottom:10px"><i class="fa-solid fa-shield-halved"></i> ${warrantyMode}</p>`:''}
@@ -1259,7 +1260,6 @@ function renderDetail(){
           </div>
         </div>
       </div></div>
-      ${layerObsBlock(c,l,i)}
       <div class="bottom-acts">
         <button class="btn btn-green" onclick="saveLayer('${c.id}',${i})"><i class="fa-solid fa-floppy-disk"></i> Salvar</button>
         <button class="btn btn-outline-blue" onclick="concludeLayer('${c.id}',${i})"><i class="fa-solid fa-check"></i> Serviço finalizado</button>
