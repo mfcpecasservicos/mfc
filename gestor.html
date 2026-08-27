@@ -1323,5 +1323,5 @@ window.uploadBudgetImage=async(id,li,input)=>{const file=input.files?.[0];if(!fi
 window.removeBudgetImage=async(id,li)=>{const c=all.find(x=>x.id===id);const layers=[...getLayers(c)],layer=layers[li]||{},rawRef=layer.budgetImageRef||layer.budgetImage?.ref;const budgetRef=typeof rawRef==='string'?rawRef:rawRef?.id||'';layers[li]={...layer,budgetImage:null,budgetImageRef:null};await updateDoc(doc(db,'clients',id),{layers});await deleteMediaIds(db,id,[budgetRef])};
 </script>
 <div id="fin-print-area"></div>
-<script src="layout-guide.js?v=140"></script>
+<script src="layout-guide.js?v=140a"></script>
 </body></html>
