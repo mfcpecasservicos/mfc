@@ -1,4 +1,4 @@
-MFC v141b
+MFC v141c
 
 CORREÇÃO VISUAL E AGRUPAMENTO POR EQUIPAMENTO
 
@@ -9,4 +9,4 @@ CORREÇÃO VISUAL E AGRUPAMENTO POR EQUIPAMENTO
 - O botão + abre a escolha diretamente na página, sem popup.
 - Cada avaliação mantém observação, orçamento e status independentes no Index e no Gestor.
 - Posições dos blocos existentes e temas foram preservados.
-- Cache atualizado para mfc-tecnico-v141b.
+- Cache atualizado para mfc-tecnico-v141c.
