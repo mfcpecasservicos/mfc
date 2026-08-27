@@ -1,18 +1,22 @@
-MFC v140c
+MFC v140d
 
-VERSÃO ATUAL — POSIÇÃO DAS OBSERVAÇÕES
+VERSÃO ATUAL — OBSERVAÇÃO POR ABA SEM ALTERAR O LAYOUT
 
-- A Observação exclusiva de cada relatório aparece logo abaixo das abas de relatórios.
-- O campo fica antes de Orçamento e Status e permanece visível sem precisar abrir ou percorrer o orçamento.
-- A separação por relatório criada na v140b foi mantida.
-- O cache do aplicativo foi atualizado para mfc-tecnico-v140c.
+- No Gestor, o campo Observação voltou exatamente à posição original abaixo do mapa e da descrição do problema.
+- O título do campo no Gestor é apenas Observação.
+- O mesmo campo muda de conteúdo ao trocar entre Relatório 1, Relatório 2 e demais relatórios.
+- No Index, a Observação permanece no bloco original de informações do cliente (INDEX-CLIENTE-BLOCO-01.04).
+- O alerta do Index muda conforme o relatório selecionado.
+- Nenhum bloco, medida ou ordem visual foi alterado além da reversão da posição equivocada da v140c.
+- O cache do aplicativo foi atualizado para mfc-tecnico-v140d.
 
 VERSÃO ANTERIOR
 
-- v140b separou as Observações por relatório e preservou a observação antiga no primeiro relatório.
+- v140c colocou incorretamente a Observação acima do orçamento.
+- v140b separou os dados das Observações por relatório.
 - v140a tornou o Mapa visual permanente no Gestor e disponível apenas no computador no Index.
-- v140 adicionou Teste de vazamento, confirmação obrigatória e exibição do local no Index e no Gestor.
+- v140 adicionou Teste de vazamento e confirmação obrigatória.
 
 REGRA DE VERSÃO
 
-Atualizações pequenas desta base usarão letras (v140d, v140e...). Um novo número inteiro fica reservado para mudança maior.
+Atualizações pequenas desta base usarão letras (v140e, v140f...). Um novo número inteiro fica reservado para mudança maior.
