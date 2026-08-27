@@ -1,19 +1,19 @@
-MFC v140a
+MFC v140b
 
-VERSÃO ATUAL — MAPA VISUAL PERMANENTE
+VERSÃO ATUAL — OBSERVAÇÕES POR RELATÓRIO
 
-- O botão Mapa visual fica permanentemente disponível no Gestor.
-- No Index, o botão fica no canto inferior direito da tela do computador, fora da coluna do aplicativo.
-- O botão e as marcações ficam ocultos no celular.
-- Não é mais necessário acrescentar ?mfc_layout=1 ao Gestor ou ao Index.
-- O estado ligado/desligado continua salvo no navegador.
-- O cache do aplicativo foi atualizado para mfc-tecnico-v140a.
-- O link padrão do Index continua válido.
+- Cada relatório/visita possui sua própria Observação no Gestor.
+- Uma nova visita começa com a Observação vazia.
+- Alterar a Observação de um relatório não modifica os demais.
+- Relatórios concluídos mantêm e exibem a própria Observação.
+- A antiga observação geral é preservada no primeiro relatório na primeira gravação.
+- O cache do aplicativo foi atualizado para mfc-tecnico-v140b.
 
 VERSÃO ANTERIOR
 
+- v140a tornou o Mapa visual permanente no Gestor e disponível apenas no computador no Index.
 - v140 adicionou Teste de vazamento, confirmação obrigatória e exibição do local no Index e no Gestor.
 
 REGRA DE VERSÃO
 
-Atualizações pequenas desta base usarão letras (v140b, v140c...). Um novo número inteiro fica reservado para mudança maior.
+Atualizações pequenas desta base usarão letras (v140c, v140d...). Um novo número inteiro fica reservado para mudança maior.
