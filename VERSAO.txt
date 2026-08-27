@@ -1,12 +1,12 @@
-MFC v141d
+MFC v141e
 
-CORREÇÃO VISUAL E AGRUPAMENTO POR EQUIPAMENTO
+AJUSTES DO INDEX
 
-- Cadastro exibe corretamente Adicionar outro equipamento e a descrição de cada item.
-- Relatório representa um equipamento.
-- Avaliações do mesmo equipamento ficam no mesmo relatório em accordions details/summary.
-- Outro equipamento cria uma nova aba de relatório.
-- O botão + abre a escolha diretamente na página, sem popup.
-- Cada avaliação mantém observação, orçamento e status independentes no Index e no Gestor.
-- Posições dos blocos existentes e temas foram preservados.
-- Cache atualizado para mfc-tecnico-v141d.
+- Botão de excluir avaliação voltou ao padrão compacto do sistema.
+- Mapa limitado à própria área para não cobrir títulos.
+- O botão + mostra Sim, Não e Cancelar diretamente na página.
+- Sim cria imediatamente a próxima avaliação padrão do mesmo equipamento.
+- Não pede somente o nome do novo equipamento e abre a avaliação padrão.
+- Removido o pedido de descrição do problema no fluxo do técnico.
+- Botões usam Font Awesome e o padrão visual instalado.
+- Cache atualizado para mfc-tecnico-v141e.
