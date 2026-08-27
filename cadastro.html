@@ -111,7 +111,7 @@
   .location-action{min-height:48px;border-radius:14px;border:1px solid #bfdbfe;background:#fff;color:#075985;font-weight:900;font-size:.9rem;cursor:pointer;padding:9px}.location-action.confirm{background:#16a34a;border-color:#16a34a;color:#fff}.location-action.active{background:#fff7cc;border-color:#eab308;color:#854d0e}
   .mfc-pin{width:38px;height:38px;border-radius:50% 50% 50% 0;background:#ef4444;color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;transform:rotate(-45deg);border:3px solid #fff;box-shadow:0 4px 12px #0007}.mfc-pin i{transform:rotate(45deg)}
   @media(max-width:420px){.location-actions{grid-template-columns:1fr}.location-map{height:200px}}
-</style>
+.equipment-section{margin:0 0 16px;padding:16px;border:1px solid var(--border);border-radius:18px;background:var(--surface)}.equipment-section-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}.equipment-section-head p{color:var(--muted);font-size:.82rem;margin-top:4px}.equipment-section-head span{font-size:.72rem;color:var(--primary);border:1px solid var(--primary);border-radius:999px;padding:5px 8px;white-space:nowrap}.equipment-list{display:grid;gap:12px}.equipment-item{padding:14px;border:1px solid var(--border);border-radius:14px;background:color-mix(in srgb,var(--surface) 88%,var(--primary) 12%)}.equipment-item-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.equipment-item-head strong{color:var(--primary)}.equipment-remove{border:1px solid #ef4444;color:#ef4444;background:transparent;border-radius:9px;padding:7px 9px;cursor:pointer}.equipment-fields{display:grid;gap:10px}.equipment-fields label{display:block;margin-bottom:6px}.add-equipment-btn{width:100%;margin-top:12px;padding:12px;border:1px dashed var(--primary);border-radius:12px;background:transparent;color:var(--primary);font-weight:800;cursor:pointer}</style>
 </head>
 <body>
 <div id="type-overlay">
@@ -338,6 +338,15 @@
       .replace(/D'Avila/gi, "D'Ávila");
   };
 
+  const equipmentRows={cliente:[],empresa:[]};
+  const makeEquipmentId=()=>('EQ-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8)).toUpperCase();
+  const equipmentPrefix=kind=>kind==='cliente'?'f':'e';
+  function renderEquipmentRows(kind){const prefix=equipmentPrefix(kind),list=document.getElementById(prefix+'-equipment-list'),rows=equipmentRows[kind];if(!list)return;list.innerHTML=rows.map((row,i)=>`<div class="equipment-item"><div class="equipment-item-head"><strong>Equipamento ${i+1}</strong>${rows.length>1?`<button type="button" class="equipment-remove" onclick="removeEquipment('${kind}',${i})"><i class="fa-solid fa-trash-can"></i></button>`:''}</div><div class="equipment-fields"><div><label>❄️ Nome do equipamento <span class="req">*</span></label><input required id="${prefix}-equip-${i}" value="${row.equip||''}" placeholder="Ex: Ar condicionado LG 12000 BTUs" oninput="equipmentRows['${kind}'][${i}].equip=this.value"></div><div><label>📝 Descrição do problema <span class="req">*</span></label><textarea required id="${prefix}-problema-${i}" placeholder="Descreva o que está acontecendo..." oninput="equipmentRows['${kind}'][${i}].problem=this.value">${row.problem||''}</textarea></div></div></div>`).join('')}
+  window.addEquipment=kind=>{if(equipmentRows[kind].length>=10)return alert('O limite é de 10 equipamentos.');equipmentRows[kind].push({id:makeEquipmentId(),equip:'',problem:''});renderEquipmentRows(kind)};
+  window.removeEquipment=(kind,i)=>{if(equipmentRows[kind].length<=1)return;equipmentRows[kind].splice(i,1);renderEquipmentRows(kind)};
+  function collectEquipmentRows(kind){const prefix=equipmentPrefix(kind);return equipmentRows[kind].map((row,i)=>({id:row.id,name:normalizeEquipment(document.getElementById(prefix+'-equip-'+i).value),problem:sentenceCase(document.getElementById(prefix+'-problema-'+i).value)}))}
+  equipmentRows.cliente=[{id:makeEquipmentId(),equip:'',problem:''}];equipmentRows.empresa=[{id:makeEquipmentId(),equip:'',problem:''}];renderEquipmentRows('cliente');renderEquipmentRows('empresa');
+
   const normalizeEquipment = (value) => {
     return titleCase(value)
       .replace(/\bLg\b/g, 'LG')
@@ -362,8 +371,6 @@
     byId('f-numero').value = (byId('f-numero').value || '').trim().toUpperCase().replace(/\s+/g,' ');
     byId('f-bairro').value = titleCase(byId('f-bairro').value);
     byId('f-ref').value = titleCase(byId('f-ref').value);
-    byId('f-equip').value = normalizeEquipment(byId('f-equip').value);
-    byId('f-problema').value = sentenceCase(byId('f-problema').value);
     byId('f-email').value = (byId('f-email').value || '').trim().toLowerCase();
     byId('f-telefone').value = maskPhone(byId('f-telefone').value);
     const outro = byId('f-cidade-outro');
@@ -375,8 +382,6 @@
     byId('e-empresa').value = titleCase(byId('e-empresa').value);
     byId('e-solicitante').value = titleCase(byId('e-solicitante').value);
     byId('e-endereco').value = titleCase(byId('e-endereco').value);
-    byId('e-equip').value = normalizeEquipment(byId('e-equip').value);
-    byId('e-problema').value = sentenceCase(byId('e-problema').value);
     byId('e-email').value = (byId('e-email').value || '').trim().toLowerCase();
     byId('e-telefone').value = maskPhone(byId('e-telefone').value);
     byId('e-cnpj').value = maskCNPJ(byId('e-cnpj').value);
@@ -456,6 +461,7 @@
     const finalCity = cidadeSwitchOn ? "Dias D'Ávila" : document.getElementById('f-cidade-outro').value.trim();
     const neighborhood = document.getElementById('f-bairro').value.trim();
     const phoneDigits = phoneDigitsOnly(document.getElementById('f-telefone').value);
+    const equipments=collectEquipmentRows('cliente');
 
     const leadData = {
       type: 'cliente',
@@ -470,8 +476,9 @@
       neighborhood: neighborhood,
       bairro: neighborhood,
       ref: document.getElementById('f-ref').value.trim(),
-      equip: document.getElementById('f-equip').value.trim(),
-      problem: document.getElementById('f-problema').value.trim(),
+      equip:equipments[0].name,
+      problem:equipments[0].problem,
+      ...(equipments.length>1?{equipments}:{}),
       ...locationPayload('cliente'),
       createdAt: new Date().toISOString()
     };
@@ -507,6 +514,7 @@
     applyTextStandardsEmpresa();
 
     const phoneDigits = phoneDigitsOnly(document.getElementById('e-telefone').value);
+    const equipments=collectEquipmentRows('empresa');
 
     const leadData = {
       type: 'company',
@@ -518,8 +526,9 @@
       cnpj: document.getElementById('e-cnpj').value.trim(),
       email: document.getElementById('e-email').value.trim(),
       address: document.getElementById('e-endereco').value.trim(),
-      equip: document.getElementById('e-equip').value.trim(),
-      problem: document.getElementById('e-problema').value.trim(),
+      equip:equipments[0].name,
+      problem:equipments[0].problem,
+      ...(equipments.length>1?{equipments}:{}),
       accessRequired: acessoSwitchOn,
       ...locationPayload('empresa'),
       createdAt: new Date().toISOString()
@@ -544,6 +553,6 @@
     }
   });
 </script>
-<script src="layout-guide.js?v=140"></script>
+<script src="layout-guide.js?v=141"></script>
 </body>
 </html>
