@@ -48,6 +48,30 @@ service cloud.firestore {
           && validText(value, 'confirmedAt', 40));
     }
 
+
+    function validEquipment(item) {
+      return item is map
+        && item.keys().hasAll(['id', 'name', 'problem'])
+        && item.keys().hasOnly(['id', 'name', 'problem'])
+        && item.id is string && item.id.size() >= 4 && item.id.size() <= 40
+        && item.name is string && item.name.size() >= 2 && item.name.size() <= 300
+        && item.problem is string && item.problem.size() >= 2 && item.problem.size() <= 4000;
+    }
+
+    function validEquipmentList(items) {
+      return items is list && items.size() >= 1 && items.size() <= 10
+        && validEquipment(items[0])
+        && (items.size() < 2 || validEquipment(items[1]))
+        && (items.size() < 3 || validEquipment(items[2]))
+        && (items.size() < 4 || validEquipment(items[3]))
+        && (items.size() < 5 || validEquipment(items[4]))
+        && (items.size() < 6 || validEquipment(items[5]))
+        && (items.size() < 7 || validEquipment(items[6]))
+        && (items.size() < 8 || validEquipment(items[7]))
+        && (items.size() < 9 || validEquipment(items[8]))
+        && (items.size() < 10 || validEquipment(items[9]));
+    }
+
     function validLead(data) {
       return data.keys().hasAll([
           'type', 'name', 'phone', 'phoneDigits', 'email', 'address',
@@ -63,7 +87,7 @@ service cloud.firestore {
           'locationConfirmedAt', 'location', 'createdAt',
           'existingClientId', 'recurrent', 'updatedAt',
           'city', 'cidade', 'number', 'neighborhood', 'bairro', 'ref',
-          'companyName', 'requester', 'cnpj', 'accessRequired'
+          'companyName', 'requester', 'cnpj', 'accessRequired', 'equipments'
         ])
         && (data.type == 'cliente' || data.type == 'company')
         && data.name is string && data.name.size() >= 2 && data.name.size() <= 160
@@ -74,6 +98,7 @@ service cloud.firestore {
         && data.address is string && data.address.size() >= 2 && data.address.size() <= 500
         && data.equip is string && data.equip.size() >= 2 && data.equip.size() <= 300
         && data.problem is string && data.problem.size() >= 2 && data.problem.size() <= 4000
+        && (!('equipments' in data) || validEquipmentList(data.equipments))
         && validText(data, 'city', 120)
         && validText(data, 'cidade', 120)
         && validText(data, 'number', 40)
