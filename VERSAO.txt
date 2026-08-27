@@ -1,13 +1,12 @@
-MFC v141
+MFC v141b
 
-EQUIPAMENTOS E RELATÓRIOS INDEPENDENTES
+CORREÇÃO VISUAL E AGRUPAMENTO POR EQUIPAMENTO
 
-- Cadastro com até 10 equipamentos no mesmo envio.
-- Cada equipamento e problema gera um relatório separado.
-- Nova visita permite escolher um equipamento existente ou cadastrar outro.
-- O mesmo equipamento pode ter relatórios diferentes, cada um com problema, observação, orçamento e status próprios.
-- Equipamento, problema e observação mudam com a aba no Gestor e no Index.
-- Remover um relatório preserva os demais e permite restauração pelo Gestor.
-- Blocos mantidos nas posições existentes e integrados aos temas atuais.
-- Compatibilidade mantida com cadastros antigos.
-- Cache atualizado para mfc-tecnico-v141.
+- Cadastro exibe corretamente Adicionar outro equipamento e a descrição de cada item.
+- Relatório representa um equipamento.
+- Avaliações do mesmo equipamento ficam no mesmo relatório em accordions details/summary.
+- Outro equipamento cria uma nova aba de relatório.
+- O botão + abre a escolha diretamente na página, sem popup.
+- Cada avaliação mantém observação, orçamento e status independentes no Index e no Gestor.
+- Posições dos blocos existentes e temas foram preservados.
+- Cache atualizado para mfc-tecnico-v141b.
