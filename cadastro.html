@@ -164,8 +164,7 @@
     <div class="card"><label>🏘️ Bairro <span class="req">*</span></label><input type="text" id="f-bairro" required placeholder="Seu bairro"></div>
     <div class="card"><label>🧭 Ponto de referência <span class="req">*</span></label><input type="text" id="f-ref" required placeholder="Próximo a..."></div>
     <div class="card location-card" data-location-block="cliente"><label><i class="fa-solid fa-location-dot"></i> Localização da visita <span style="font-size:.75rem;color:var(--muted)">(opcional)</span></label><p class="hint">Faça esta etapa no endereço onde será realizado o atendimento.</p><button type="button" class="location-main-btn" id="location-btn-cliente" onclick="requestVisitLocation('cliente')"><i class="fa-solid fa-location-crosshairs"></i> Confirmar localização desta casa</button><p class="location-status" id="location-status-cliente">Se preferir, você pode continuar sem confirmar a localização.</p><div class="location-preview" id="location-preview-cliente"><div class="location-map" id="location-map-cliente"></div><div class="location-actions"><button type="button" class="location-action confirm" onclick="confirmVisitLocation('cliente')"><i class="fa-solid fa-check"></i> Está correto</button><button type="button" class="location-action" id="location-adjust-cliente" onclick="adjustVisitLocation('cliente')"><i class="fa-solid fa-pen"></i> Ajustar localização</button></div></div></div>
-    <div class="card"><label>🧊 Equipamento <span class="req">*</span></label><p class="hint">Apenas o equipamento, marca, BTUs e KG, caso tenha.</p><input type="text" id="f-equip" required placeholder="Ex: Ar condicionado LG 12000 BTUs"></div>
-    <div class="card"><label>📝 Descrição do problema <span class="req">*</span></label><textarea id="f-problema" required placeholder="Descreva o que está acontecendo..."></textarea></div>
+    <div class="equipment-section"><div class="equipment-section-head"><div><strong>🧊 Equipamentos <span class="req">*</span></strong><p>Adicione até 10 equipamentos. Cada um deve ter sua própria descrição do problema.</p></div><span>Máximo 10</span></div><div id="f-equipment-list" class="equipment-list"></div><button type="button" class="add-equipment-btn" onclick="addEquipment('cliente')"><i class="fa-solid fa-plus"></i> Adicionar outro equipamento</button></div>
 
     <button type="submit" class="btn-submit" id="btn-submit-cliente"><span class="btn-text-lbl">Finalizar Cadastro</span><div class="loader"></div></button>
     <div class="success-msg-el" id="success-msg-cliente">✅ Cadastro finalizado com sucesso!</div>
@@ -187,8 +186,7 @@
       </div>
       <p class="acesso-desc" id="acesso-desc"></p>
     </div>
-    <div class="card"><label>🧊 Equipamento <span class="req">*</span></label><p class="hint">Apenas o equipamento, marca, BTUs e KG, caso tenha.</p><input type="text" id="e-equip" required placeholder="Ex: Ar condicionado LG 12000 BTUs"></div>
-    <div class="card"><label>📝 Descrição do problema <span class="req">*</span></label><textarea id="e-problema" required placeholder="Descreva o que está acontecendo..."></textarea></div>
+    <div class="equipment-section"><div class="equipment-section-head"><div><strong>🧊 Equipamentos <span class="req">*</span></strong><p>Adicione até 10 equipamentos. Cada um deve ter sua própria descrição do problema.</p></div><span>Máximo 10</span></div><div id="e-equipment-list" class="equipment-list"></div><button type="button" class="add-equipment-btn" onclick="addEquipment('empresa')"><i class="fa-solid fa-plus"></i> Adicionar outro equipamento</button></div>
 
     <button type="submit" class="btn-submit" id="btn-submit-empresa"><span class="btn-text-lbl">Finalizar Cadastro</span><div class="loader"></div></button>
     <div class="success-msg-el" id="success-msg-empresa">✅ Cadastro finalizado com sucesso!</div>
