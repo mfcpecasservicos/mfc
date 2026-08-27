@@ -1,19 +1,18 @@
-MFC v140b
+MFC v140c
 
-VERSÃO ATUAL — OBSERVAÇÕES POR RELATÓRIO
+VERSÃO ATUAL — POSIÇÃO DAS OBSERVAÇÕES
 
-- Cada relatório/visita possui sua própria Observação no Gestor.
-- Uma nova visita começa com a Observação vazia.
-- Alterar a Observação de um relatório não modifica os demais.
-- Relatórios concluídos mantêm e exibem a própria Observação.
-- A antiga observação geral é preservada no primeiro relatório na primeira gravação.
-- O cache do aplicativo foi atualizado para mfc-tecnico-v140b.
+- A Observação exclusiva de cada relatório aparece logo abaixo das abas de relatórios.
+- O campo fica antes de Orçamento e Status e permanece visível sem precisar abrir ou percorrer o orçamento.
+- A separação por relatório criada na v140b foi mantida.
+- O cache do aplicativo foi atualizado para mfc-tecnico-v140c.
 
 VERSÃO ANTERIOR
 
+- v140b separou as Observações por relatório e preservou a observação antiga no primeiro relatório.
 - v140a tornou o Mapa visual permanente no Gestor e disponível apenas no computador no Index.
 - v140 adicionou Teste de vazamento, confirmação obrigatória e exibição do local no Index e no Gestor.
 
 REGRA DE VERSÃO
 
-Atualizações pequenas desta base usarão letras (v140c, v140d...). Um novo número inteiro fica reservado para mudança maior.
+Atualizações pequenas desta base usarão letras (v140d, v140e...). Um novo número inteiro fica reservado para mudança maior.
