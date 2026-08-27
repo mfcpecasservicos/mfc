@@ -17,7 +17,7 @@
       ['GESTOR-FINANCEIRO-01','#view-fin','Tela Financeiro'],['GESTOR-CADASTROS-01','#view-leads','Tela Novos Cadastros'],['GESTOR-CADASTROS-LISTA-01','#leads-list','Lista de novos cadastros'],
       ['GESTOR-LIXEIRA-01','#view-trash','Tela Lixeira'],['GESTOR-LIXEIRA-LISTA-01','#trash-list','Lista da lixeira'],['GESTOR-MODAL-VISITA-01','#newvisit-modal .modal','Modal Nova visita'],
       ['GESTOR-MODAL-EMPRESA-01','#company-modal .modal','Modal Visita Empresa'],['GESTOR-MODAL-GARANTIA-01','#warranty-modal .modal','Modal Garantia'],['GESTOR-MODAL-EDITAR-01','#edit-modal .modal','Modal Editar cliente'],['GESTOR-MODAL-EDITAR-MAPA-01','#e-location-map','Mapa para corrigir o alfinete'],
-      ['GESTOR-MODAL-RELATORIO-01','#etr-modal .etr-box','Modal Editar relatório do técnico'],['GESTOR-MODAL-RESUMO-01','#client-summary-modal .modal','Resumo do cliente pesquisado']
+      ['GESTOR-MODAL-RELATORIO-01','#etr-modal .etr-box','Modal Editar relatório do técnico'],['GESTOR-MODAL-EQUIPAMENTO-01','#equipment-report-modal .modal','Novo relatório por equipamento'],['GESTOR-MODAL-RESUMO-01','#client-summary-modal .modal','Resumo do cliente pesquisado']
     ]},
     index:{test:()=>!!document.getElementById('detail')&&!!document.getElementById('d-body'),items:[
       ['INDEX-CABECALHO-01','body > header','Cabeçalho do técnico'],['INDEX-BUSCA-01','.search-wrap','Busca de visitas'],['INDEX-LISTA-01','.list-wrap','Lista de visitas'],['INDEX-CARD-01','.list-wrap .card','Cartão de visita'],
@@ -25,13 +25,13 @@
       ['INDEX-CLIENTE-01','#d-body .client-compact','Dados do cliente'],['INDEX-CLIENTE-BLOCO-01','#d-body .client-row','Bloco individual do cliente'],['INDEX-LOCALIZACAO-01','#d-body [data-location-view]','Mapa exato ou aproximado do atendimento'],['INDEX-ABAS-01','#d-body .v-tabs-wrap','Abas de relatórios'],
       ['INDEX-RELATORIO-01','#d-body .v-panel.active','Relatório atualmente aberto'],['INDEX-GARANTIA-ESCOLHA-01','#d-body .warranty-mode-grid','Escolha do atendimento de garantia'],
       ['INDEX-GARANTIA-HISTORICO-01','#d-body .warranty-history','Histórico da garantia'],['INDEX-SECAO-01','#d-body .box','Seção de informação/formulário'],['INDEX-AVALIACAO-01','#d-body .acc','Avaliação enviada'],
-      ['INDEX-FOTOS-01','#d-body .photo-area','Área de fotos'],['INDEX-MODAL-EDITAR-01','#edit-report-modal .modal','Modal Editar relatório'],['INDEX-MODAL-DESCARTAR-01','#discard-modal .modal','Modal Descartar visita']
+      ['INDEX-FOTOS-01','#d-body .photo-area','Área de fotos'],['INDEX-MODAL-EQUIPAMENTO-01','#equipment-report-modal .modal','Novo relatório por equipamento'],['INDEX-MODAL-EDITAR-01','#edit-report-modal .modal','Modal Editar relatório'],['INDEX-MODAL-DESCARTAR-01','#discard-modal .modal','Modal Descartar visita']
     ]},
     cadastro:{test:()=>!!document.getElementById('form-container'),items:[
       ['CADASTRO-TIPO-01','#type-overlay .type-box','Escolha Cliente ou Empresa'],['CADASTRO-GERAL-01','#form-container','Página do cadastro'],['CADASTRO-CAPA-01','.hero','Capa e apresentação'],
       ['CADASTRO-BENEFICIOS-01','.benefits','Benefícios exibidos'],['CADASTRO-BLOQUEIO-01','#blocked-box','Aviso de link expirado'],['CADASTRO-CLIENTE-01','#lead-form-cliente','Formulário de cliente'],
-      ['CADASTRO-CLIENTE-CAMPO-01','#lead-form-cliente .card','Bloco de campo do cliente'],['CADASTRO-CLIENTE-LOCALIZACAO-01','#lead-form-cliente [data-location-block]','Confirmação da localização do cliente'],['CADASTRO-CLIENTE-MAPA-01','#location-map-cliente','Mapa para conferir ou ajustar o cliente'],['CADASTRO-CLIENTE-ENVIAR-01','#btn-submit-cliente','Botão Finalizar cadastro do cliente'],
-      ['CADASTRO-EMPRESA-01','#lead-form-empresa','Formulário de empresa'],['CADASTRO-EMPRESA-CAMPO-01','#lead-form-empresa .card','Bloco de campo da empresa'],['CADASTRO-EMPRESA-LOCALIZACAO-01','#lead-form-empresa [data-location-block]','Confirmação da localização da empresa'],['CADASTRO-EMPRESA-MAPA-01','#location-map-empresa','Mapa para conferir ou ajustar a empresa'],
+      ['CADASTRO-CLIENTE-CAMPO-01','#lead-form-cliente .card','Bloco de campo do cliente'],['CADASTRO-CLIENTE-EQUIPAMENTOS-01','#f-equipment-list','Lista de equipamentos'],['CADASTRO-CLIENTE-LOCALIZACAO-01','#lead-form-cliente [data-location-block]','Confirmação da localização do cliente'],['CADASTRO-CLIENTE-MAPA-01','#location-map-cliente','Mapa para conferir ou ajustar o cliente'],['CADASTRO-CLIENTE-ENVIAR-01','#btn-submit-cliente','Botão Finalizar cadastro do cliente'],
+      ['CADASTRO-EMPRESA-01','#lead-form-empresa','Formulário de empresa'],['CADASTRO-EMPRESA-EQUIPAMENTOS-01','#e-equipment-list','Lista de equipamentos'],['CADASTRO-EMPRESA-CAMPO-01','#lead-form-empresa .card','Bloco de campo da empresa'],['CADASTRO-EMPRESA-LOCALIZACAO-01','#lead-form-empresa [data-location-block]','Confirmação da localização da empresa'],['CADASTRO-EMPRESA-MAPA-01','#location-map-empresa','Mapa para conferir ou ajustar a empresa'],
       ['CADASTRO-EMPRESA-ENVIAR-01','#btn-submit-empresa','Botão Finalizar cadastro da empresa'],['CADASTRO-RODAPE-01','.footer-brand','Rodapé do cadastro']
     ]}
   };
