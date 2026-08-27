@@ -1,4 +1,4 @@
-MFC v141e
+MFC v141f
 
 AJUSTES DO INDEX
 
@@ -9,4 +9,4 @@ AJUSTES DO INDEX
 - Não pede somente o nome do novo equipamento e abre a avaliação padrão.
 - Removido o pedido de descrição do problema no fluxo do técnico.
 - Botões usam Font Awesome e o padrão visual instalado.
-- Cache atualizado para mfc-tecnico-v141e.
+- Cache atualizado para mfc-tecnico-v141f.
