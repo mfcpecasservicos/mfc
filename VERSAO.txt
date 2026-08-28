@@ -1,10 +1,8 @@
-MFC v141g
+MFC v141h
 
-AJUSTES DA AVALIAÇÃO NO INDEX
+CORREÇÃO DO CADASTRO PÚBLICO
 
-- Removida a lixeira do cabeçalho do accordion.
-- Mantida somente a lixeira ao lado de Salvar avaliação.
-- Lixeira lateral agora usa o padrão vermelho do sistema.
-- Avaliações enviadas exibem Editar ao lado do título.
-- Editar abre o formulário existente com os dados preenchidos para corrigir e reenviar.
-- Cache atualizado para mfc-tecnico-v141g.
+- Corrigido o erro equipmentRows ao preencher equipamentos e problemas.
+- Cadastro sem localização agora envia o campo opcional no formato aceito pelas regras.
+- A transação pública volta a criar o lead e consumir o token de uma única vez.
+- Cache atualizado para mfc-tecnico-v141h.
