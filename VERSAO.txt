@@ -1,8 +1,8 @@
-MFC v141h
+MFC v141i
 
-CORREÇÃO DO CADASTRO PÚBLICO
+CORREÇÃO DAS ABAS DE RELATÓRIO NO INDEX
 
-- Corrigido o erro equipmentRows ao preencher equipamentos e problemas.
-- Cadastro sem localização agora envia o campo opcional no formato aceito pelas regras.
-- A transação pública volta a criar o lead e consumir o token de uma única vez.
-- Cache atualizado para mfc-tecnico-v141h.
+- Ao trocar de relatório, a avaliação correspondente abre automaticamente.
+- Voltar para uma aba previamente minimizada também reabre sua avaliação.
+- Nenhuma posição, formulário ou estilo foi alterado.
+- Cache atualizado para mfc-tecnico-v141i.
