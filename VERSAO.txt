@@ -1,8 +1,10 @@
-MFC v141i
+MFC v141j
 
-CORREÇÃO DAS ABAS DE RELATÓRIO NO INDEX
+AVALIAÇÕES PERMANECEM ABERTAS NO INDEX
 
-- Ao trocar de relatório, a avaliação correspondente abre automaticamente.
-- Voltar para uma aba previamente minimizada também reabre sua avaliação.
-- Nenhuma posição, formulário ou estilo foi alterado.
-- Cache atualizado para mfc-tecnico-v141i.
+- Avaliações ficam abertas por padrão após atualizar, salvar ou trocar de relatório.
+- Salvar não fecha mais a tela do cliente.
+- Somente uma minimização feita pelo técnico mantém a avaliação fechada.
+- A escolha manual é preservada durante atualizações do Firebase e novos acessos.
+- Nenhuma posição ou estilo foi alterado.
+- Cache atualizado para mfc-tecnico-v141j.
