@@ -75,6 +75,7 @@ button{font-family:inherit}
 .vc-status-row{display:flex;justify-content:flex-start;flex-wrap:wrap;gap:6px;margin-top:8px}
 .rep-chip{display:inline-flex;align-items:center;gap:4px}
 .rep-num{font-size:.62rem;font-weight:800;padding:3px 6px;border-radius:999px;background:var(--surface2);color:var(--muted);letter-spacing:.03em;flex-shrink:0}
+.rep-pickup{display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:7px;background:var(--surface2);border:1px solid #10b981;color:#34d399;font-size:.7rem;flex-shrink:0}
 .vc-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
 .day-head{display:flex;align-items:center;gap:10px;font-size:.62rem;font-weight:800;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;margin:14px 0 4px}
 .day-head::after{content:'';flex:1;height:1px;background:color-mix(in oklch,var(--border) 60%,transparent)}
@@ -716,6 +717,7 @@ function layerReportedProblem(c,l,i=0){return String(Object.prototype.hasOwnProp
 function mergeEquipmentCatalog(c,rows){const map=new Map(equipmentCatalog(c).map(item=>[item.id,{...item}]));rows.forEach(row=>{if(row?.id&&row?.name)map.set(row.id,{...(map.get(row.id)||{}),id:row.id,name:row.name,createdAt:map.get(row.id)?.createdAt||new Date().toISOString()})});return[...map.values()]}
 function resolveEquipmentRows(c,raw,fallbackName,fallbackProblem){const rows=Array.isArray(raw)&&raw.length?raw:[{id:equipmentCatalog(c||{})[0]?.id||newEquipmentId(),name:fallbackName||c?.equip||'Equipamento',problem:fallbackProblem||c?.problem||c?.notes||''}];return rows.slice(0,10).map(row=>({id:String(row.id||newEquipmentId()),name:String(row.name||row.equip||fallbackName||'Equipamento'),problem:String(row.problem||fallbackProblem||'')}))}
 function gestorEvaluationLabel(c,l,i){const eq=layerEquipmentId(c,l,i),groups=[];getLayers(c).forEach((item,idx)=>{const id=layerEquipmentId(c,item,idx);if(!groups.includes(id))groups.push(id)});const report=Math.max(1,groups.indexOf(eq)+1),same=getLayers(c).map((item,idx)=>({item,idx})).filter(x=>layerEquipmentId(c,x.item,x.idx)===eq),pos=Math.max(0,same.findIndex(x=>x.idx===i));return'Avaliação '+report+String.fromCharCode(65+pos)}
+function gestorEvaluationShortLabel(c,l,i){return gestorEvaluationLabel(c,l,i).replace('Avaliação ','')}
 function syncGestorLayerInfo(c,li){const l=getLayers(c)[li],eq=document.getElementById('gestor-equipment-'+c.id),pr=document.getElementById('gestor-problem-'+c.id);if(eq)eq.textContent=layerEquipmentName(c,l,li)||'—';if(pr)pr.textContent=layerReportedProblem(c,l,li)||'—';syncGestorObs(c,li)}
 
 function layerHasStoredMedia(l){return !!((Array.isArray(l?.techReport?.photos)&&l.techReport.photos.length)||(Array.isArray(l?.techReport?.photoRefs)&&l.techReport.photoRefs.length)||(Array.isArray(l?.photos)&&l.photos.length)||l?.budgetImage||l?.budgetImageRef)}
@@ -1108,17 +1110,18 @@ function render(){
   let listHtml='',lastDay=null;
   clients.forEach(c=>{
     const status=displayStatus(c);
+    const activeEntries=getLayers(c).map((l,i)=>({l,i})).filter(({l})=>!l.done),multipleEvaluations=activeEntries.length>1;
     const statusBadges=c.status==='discarded'
       ? `<span class="sbadge ${badgeCls.discarded}">${lbl('discarded')}</span>`
-      : (()=>{const act=getLayers(c).filter(l=>!l.done);return act.length
-          ? act.map((l,idx)=>{const s=l.status||'waiting';const num=act.length>1?`<span class="rep-num">R${idx+1}</span>`:'';return `<span class="rep-chip">${num}<span class="sbadge ${badgeCls[s]||'sw'}">${lbl(s)}</span></span>`}).join('')
-          : `<span class="sbadge ${badgeCls.done}">${lbl('done')}</span>`})();
+      : activeEntries.length
+          ? activeEntries.map(({l,i})=>{const s=l.status||'waiting',num=multipleEvaluations?`<span class="rep-num">${gestorEvaluationShortLabel(c,l,i)}</span>`:'',pickup=multipleEvaluations&&(l.needsPickup||l.techReport?.needsPickup)&&!layerServiceInWorkshop(l)?'<span class="rep-pickup" title="Retirar equipamento"><i class="fa-solid fa-truck-pickup"></i></span>':'';return `<span class="rep-chip">${num}<span class="sbadge ${badgeCls[s]||'sw'}">${lbl(s)}</span>${pickup}</span>`}).join('')
+          : `<span class="sbadge ${badgeCls.done}">${lbl('done')}</span>`;
     const dk=gDayKey(mainDate(c));
     if(dk!==lastDay){listHtml+=`<div class="day-head"><span>${dk}</span></div>`;lastDay=dk}
     const hh=gHourOf(mainDate(c));
     const chips=[];
     if(c.datetime===TBD||indLayers(c).some(l=>l.datetime===TBD))chips.push({t:'Data a definir',h:'<span class="chip chip-time"><i class="fa-solid fa-calendar-days"></i> Data a definir</span>'});
-    if(needsPickup(c))chips.push({t:'Retirar equipamento',h:'<span class="indicator ind-flag"><i class="fa-solid fa-flag"></i> Retirar equipamento</span>'});
+    if(!multipleEvaluations&&needsPickup(c))chips.push({t:'Retirar equipamento',h:'<span class="indicator ind-flag"><i class="fa-solid fa-flag"></i> Retirar equipamento</span>'});
     if(hasLaudo(c))chips.push({t:'Laudo',h:'<span class="indicator ind-laudo"><i class="fa-solid fa-clipboard"></i> Laudo</span>'});
     if((c.companyMode||c.type==='company')&&c.accessRequired!==undefined)chips.push({t:'Acesso',h:c.accessRequired?'<span class="indicator" style="background:#0d1f0d;border-color:#22c55e;color:#86efac" title="Portaria exige documentação do técnico"><i class="fa-solid fa-id-card"></i></span>':'<span class="indicator" style="background:#3b0d0d;border-color:#ef4444;color:#fecaca" title="Portaria não exige documentação"><i class="fa-solid fa-id-card"></i></span>'});
     if(c.workshopDropoff&&!hasServiceInWorkshop(c))chips.push({t:'Equipamento na loja',h:'<span class="indicator"><i class="fa-solid fa-industry"></i> Equipamento na loja</span>'});
