@@ -1,4 +1,4 @@
-MFC v142a
+MFC v142b
 
 STATUS IDENTIFICADO POR AVALIAÇÃO
 
@@ -8,4 +8,8 @@ STATUS IDENTIFICADO POR AVALIAÇÃO
 - O aviso geral de retirada permanece apenas quando existe uma única avaliação.
 - Alteração aplicada igualmente aos cartões do Gestor e do Index.
 - Componentes seguem as cores e os temas existentes.
-- Cache atualizado para mfc-tecnico-v142a.
+- Avaliações externas e o bloco interno “Avaliação enviada” abrem por padrão.
+- Salvar, atualizar ou trocar de relatório força a avaliação a permanecer aberta.
+- Minimizar manualmente vale apenas enquanto o técnico permanece naquela tela.
+- Removida a memória antiga que mantinha avaliações fechadas no navegador.
+- Cache atualizado para mfc-tecnico-v142b.
