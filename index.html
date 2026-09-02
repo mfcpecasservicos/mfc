@@ -40,6 +40,7 @@ header h1{font-size:1rem;font-weight:800;flex:1}.reload-btn,.install-btn{backgro
 .card-status-row{padding:6px 16px 6px 16px;display:flex;flex-direction:column;gap:6px}
 .rep-chip{display:inline-flex;align-items:center;gap:6px}
 .rep-num{font-size:.6rem;font-weight:800;padding:3px 7px;border-radius:999px;background:var(--surface2);color:var(--muted);letter-spacing:.03em;flex-shrink:0}
+.rep-divider{opacity:.45;margin:0 2px}
 .rep-pickup{display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:7px;background:var(--surface2);border:1px solid #10b981;color:#34d399;font-size:.7rem;flex-shrink:0}
 .card-foot{padding:2px 16px 16px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .chip{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:700;height:24px;padding:0 10px;border-radius:8px;white-space:nowrap;flex-shrink:0}
@@ -184,7 +185,7 @@ function layerEquipmentName(c,l,i=0){const id=layerEquipmentId(c,l,i),found=equi
 function layerReportedProblem(c,l,i=0){return String(Object.prototype.hasOwnProperty.call(l||{},'reportedProblem')?l.reportedProblem:(c?.problem||c?.notes||''))}
 function mergeEquipmentCatalog(c,rows){const map=new Map(equipmentCatalog(c).map(item=>[item.id,{...item}]));rows.forEach(row=>map.set(row.id,{...(map.get(row.id)||{}),id:row.id,name:row.name,createdAt:map.get(row.id)?.createdAt||new Date().toISOString()}));return[...map.values()]}
 function evaluationLabel(c,l,i){const eq=layerEquipmentId(c,l,i),groups=[];getLayers(c).forEach((item,idx)=>{const id=layerEquipmentId(c,item,idx);if(!groups.includes(id))groups.push(id)});const report=Math.max(1,groups.indexOf(eq)+1),same=getLayers(c).map((item,idx)=>({item,idx})).filter(x=>layerEquipmentId(c,x.item,x.idx)===eq),pos=Math.max(0,same.findIndex(x=>x.idx===i));return'Avaliação '+report+String.fromCharCode(65+pos)}
-function evaluationShortLabel(c,l,i){return evaluationLabel(c,l,i).replace('Avaliação ','')}
+function evaluationStatusRef(c,l,i){const match=evaluationLabel(c,l,i).match(/(\d+)([A-Z])$/),report=match?.[1]||'1',assessment=match?match[2].charCodeAt(0)-64:1;return`R${report}<span class="rep-divider">|</span>A${assessment}`}
 function evaluationDisclosureKey(cid,l,i){return'mfc-evaluation-closed:'+cid+':'+String(l?.createdAt||l?.updatedAt||l?.id||i)}
 function evaluationShouldOpen(cid,l,i){try{return localStorage.getItem(evaluationDisclosureKey(cid,l,i))!=='1'}catch{return true}}
 window.rememberEvaluationDisclosure=(cid,i,details)=>{setTimeout(()=>{const c=getClientForEdit(cid),l=getLayers(c||{})[Number(i)];if(!l||!details)return;try{const key=evaluationDisclosureKey(cid,l,Number(i));if(details.open)localStorage.removeItem(key);else localStorage.setItem(key,'1')}catch{}},0)};
@@ -247,7 +248,7 @@ let html='',lastDay=null;
 clients.forEach(c=>{
   const s=st(getStatus(c)),l=activeLayer(c),rc=getLayers(c).filter(x=>!x.done&&hasSubmittedReport(x)).length;
   const actLayers=getLayers(c).map((l,i)=>({l,i})).filter(({l})=>!l.done),multipleEvaluations=actLayers.length>1;
-  const statusBadges=actLayers.map(({l:x,i})=>{const ls=st(x.status),num=multipleEvaluations?`<span class="rep-num">${evaluationShortLabel(c,x,i)}</span>`:'',pickup=multipleEvaluations&&(x.needsPickup||x.techReport?.needsPickup)&&!serviceInWorkshop(x)?'<span class="rep-pickup" title="Retirar equipamento"><i class="fa-solid fa-truck-pickup"></i></span>':'';return `<div class="rep-chip">${num}<span class="badge" style="--sc:${STATUS_COLOR[ls]||STATUS_COLOR.waiting}">${lbl(ls)}</span>${pickup}</div>`}).join('');
+  const statusBadges=actLayers.map(({l:x,i})=>{const ls=st(x.status),num=multipleEvaluations?`<span class="rep-num">${evaluationStatusRef(c,x,i)}</span>`:'',pickup=multipleEvaluations&&(x.needsPickup||x.techReport?.needsPickup)&&!serviceInWorkshop(x)?'<span class="rep-pickup" title="Retirar equipamento"><i class="fa-solid fa-truck-pickup"></i></span>':'';return `<div class="rep-chip">${num}<span class="badge" style="--sc:${STATUS_COLOR[ls]||STATUS_COLOR.waiting}">${lbl(ls)}</span>${pickup}</div>`}).join('');
   const dk=dayKey(cardDate(c));
   if(dk!==lastDay){html+=`<div class="day-head">${dk}</div>`;lastDay=dk}
   const hh=hourOf(cardDate(c));
