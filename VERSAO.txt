@@ -1,4 +1,4 @@
-MFC v142b
+MFC v142c
 
 STATUS IDENTIFICADO POR AVALIAÇÃO
 
@@ -12,4 +12,7 @@ STATUS IDENTIFICADO POR AVALIAÇÃO
 - Salvar, atualizar ou trocar de relatório força a avaliação a permanecer aberta.
 - Minimizar manualmente vale apenas enquanto o técnico permanece naquela tela.
 - Removida a memória antiga que mantinha avaliações fechadas no navegador.
-- Cache atualizado para mfc-tecnico-v142b.
+- Horário de serviço aprovado ganha destaque com “Serviço marcado para HH:MM”.
+- O horário existente é reaproveitado, sem duplicação no card.
+- Destaque aplicado aos cartões do Gestor e do Index, respeitando os temas.
+- Cache atualizado para mfc-tecnico-v142c.
