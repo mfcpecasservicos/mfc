@@ -190,7 +190,7 @@ function evaluationNumbers(c,l,i,historical=false){const layers=getLayers(c),eq=
 function evaluationLabel(c,l,i){const n=evaluationNumbers(c,l,i,!!l?.done);return'Avaliação '+n.report+String.fromCharCode(64+n.assessment)}
 function evaluationStatusRef(c,l,i,historical=false){const n=evaluationNumbers(c,l,i,historical||!!l?.done);return`R${n.report}<span class="rep-divider">|</span>A${n.assessment}`}
 function pendingPaymentLayer(c){return getLayers(c).find(l=>!l.done&&(l.awaitingPaymentCompletion||(l.status==='service_finished'&&l.approval?.owes)))}
-function completedUnpaidChip(c){const l=pendingPaymentLayer(c),date=l?.serviceFinishedAt||l?.concludedAt;if(!l||!date)return'';return`<span class="chip chip-completed-unpaid"><i class="fa-solid fa-calendar-check"></i> Serviço concluído em ${fdt(date)} — falta pagar</span>`}
+function completedUnpaidChip(c){const pending=pendingPaymentLayer(c),l=pending||getLayers(c).find(item=>!item.done&&item.serviceFinishedAt),date=l?.serviceFinishedAt||l?.concludedAt;if(!l||!date)return'';return`<span class="chip chip-completed-unpaid"><i class="fa-solid fa-calendar-check"></i> Serviço concluído em ${fdt(date)}${pending?' — falta pagar':''}</span>`}
 function syncIndexLayerInfo(cid,li){const c=getClientForEdit(cid),l=getLayers(c||{})[li],eq=document.getElementById('index-equipment-'+cid),pr=document.getElementById('index-problem-'+cid);if(eq)eq.textContent=layerEquipmentName(c,l,li)||'—';if(pr)pr.textContent=layerReportedProblem(c,l,li)||'—';syncIndexGestorObs(cid,li)}
 
 function layerHasStoredMedia(l){return !!((Array.isArray(l?.techReport?.photos)&&l.techReport.photos.length)||(Array.isArray(l?.photos)&&l.photos.length)||l?.budgetImage)}

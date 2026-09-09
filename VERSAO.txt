@@ -1,4 +1,4 @@
-MFC v143
+MFC v143a
 
 CONCLUSÃO INDIVIDUAL POR AVALIAÇÃO
 
@@ -21,4 +21,7 @@ CONCLUSÃO INDIVIDUAL POR AVALIAÇÃO
 - O histórico concluído preserva o R/A original de cada avaliação.
 - Com “Falta pagar”, a avaliação permanece no painel e mostra a data da conclusão.
 - Ao retirar “Falta pagar” e salvar a data do pagamento, a avaliação vai automaticamente para Concluídos.
-- Cache atualizado para mfc-tecnico-v143.
+- Nova data editável de conclusão do serviço, destacada no card enquanto a avaliação estiver ativa.
+- Botões para limpar as datas do serviço, da conclusão e do pagamento.
+- Uma data apagada agora é removida do Firebase e deixa de aparecer no card.
+- Cache atualizado para mfc-tecnico-v143a.

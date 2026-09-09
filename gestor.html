@@ -178,6 +178,7 @@ button{font-family:inherit}
 .fi::placeholder{color:#94A3B8aa}
 textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-height:1.55}
 .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.date-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px}
 .address-number-row{display:grid;grid-template-columns:minmax(0,1fr) clamp(88px,20%,118px);gap:10px;min-width:0}
 .address-number-row>div{min-width:0}
 #edit-modal[data-company="1"] .address-number-row{grid-template-columns:1fr}
@@ -393,6 +394,7 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
   .toggle3{grid-template-columns:1fr}
   .bottom-acts{grid-template-columns:1fr 1fr}
   .add-conta .fgrid3{grid-template-columns:1fr}
+  .date-grid{grid-template-columns:1fr 1fr}
 }
 @media(max-width:620px){
   .app{grid-template-columns:1fr;grid-template-rows:64px minmax(210px,36dvh) minmax(0,1fr)}
@@ -402,6 +404,7 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
   .list-col,.detail-col{height:auto;min-height:0}
   .list-col{border-right:none;border-bottom:1px solid var(--border);padding:12px 10px}
   .detail-col{padding:14px 12px}
+  .date-grid{grid-template-columns:1fr}
 }
 .switch{width:44px;height:24px;border-radius:14px;background:var(--surface3);border:1px solid var(--border);position:relative;transition:all .2s;flex-shrink:0}.switch::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#94A3B8;transition:all .2s}.tg-btn.active .switch{background:#10B98144;border-color:#10B981}.tg-btn.active .switch::after{left:22px;background:#10B981}
 
@@ -666,9 +669,11 @@ function readLayerForm(id,li,base={}){
   const pagSum=moneyNum(entrada);
   const pay=[entryPayment,balancePayment].filter(Boolean).join(', ');
   const svcBr=getRaw('ly-svc','');
-  const svc=svcBr?(brToIso(svcBr)||base.approval?.serviceDate||''):(base.approval?.serviceDate||'');
+  const svc=svcBr?(brToIso(svcBr)||base.approval?.serviceDate||''):'';
   const paydateBr=getRaw('ly-paydate','');
-  const paymentDate=paydateBr?(brToIsoDate(paydateBr)||base.approval?.paymentDate||''):(base.approval?.paymentDate||'');
+  const paymentDate=paydateBr?(brToIsoDate(paydateBr)||base.approval?.paymentDate||''):'';
+  const finishedBr=getRaw('ly-finished','');
+  const serviceFinishedAt=finishedBr?(brToIso(finishedBr)||base.serviceFinishedAt||''):'';
   const dtBr=getRaw('ly-datetime','');
   const visitDatetime=dtBr?(brToIso(dtBr)||base.datetime||''):(base.datetime||'');
   const ent=getChk('ly-entry-approval',base.approval?.entryApproval||base.entryApproval||false);
@@ -677,7 +682,7 @@ function readLayerForm(id,li,base={}){
   const paid=getChk('ly-paid',base.approval?.paid||false);const owes=getChk('ly-owes',base.approval?.owes||false);const warranty=getChk('ly-warranty',base.approval?.warranty||false);
   const techReport=base.techReport?{...base.techReport,needsPickup:galpao?false:!!base.techReport.needsPickup}:base.techReport;
   const statusAt=st!==base.status?new Date().toISOString():base.statusAt;
-  const out={...base,status:st,datetime:visitDatetime,quote:base.quote||'',quoteObs:getVal('ly-obs',base.quoteObs||''),needsPickup:galpao?false:!!base.needsPickup,approval:{...(base.approval||{}),payment:pay,value:val,serviceDate:svc,paymentDate,entryApproval:ent,entryValue,entryPayment,balancePayment,pagamentos,serviceInWorkshop:galpao,paid,owes,warranty},serviceInWorkshop:galpao,entryApproval:ent};
+  const out={...base,status:st,datetime:visitDatetime,serviceFinishedAt,quote:base.quote||'',quoteObs:getVal('ly-obs',base.quoteObs||''),needsPickup:galpao?false:!!base.needsPickup,approval:{...(base.approval||{}),payment:pay,value:val,serviceDate:svc,paymentDate,entryApproval:ent,entryValue,entryPayment,balancePayment,pagamentos,serviceInWorkshop:galpao,paid,owes,warranty},serviceInWorkshop:galpao,entryApproval:ent};
   if(statusAt!==undefined)out.statusAt=statusAt;
   if(techReport!==undefined)out.techReport=techReport;
   return out;
@@ -1085,6 +1090,7 @@ window.toggleChk=(chkId,btn)=>{const el=document.getElementById(chkId);if(!el)re
 window.openPicker=id=>{const el=document.getElementById(id);if(!el)return;try{el.showPicker()}catch{el.click()}};
 window.pickToText=(picker,targetId,fire)=>{const t=document.getElementById(targetId);if(!t||!picker.value)return;t.value=isoToBr(picker.value);if(fire)t.dispatchEvent(new Event('change'))};
 window.pickDateToText=(picker,targetId)=>{const t=document.getElementById(targetId);if(!t||!picker.value)return;t.value=isoDateToBr(picker.value)};
+window.clearDateField=(targetId,pickerId)=>{const target=document.getElementById(targetId),picker=document.getElementById(pickerId);if(target){target.value='';target.dispatchEvent(new Event('input',{bubbles:true}))}if(picker)picker.value=''};
 
 
 /* ===== IMAGE VIEWER ===== */
@@ -1145,8 +1151,8 @@ function render(){
     if(dk!==lastDay){listHtml+=`<div class="day-head"><span>${dk}</span></div>`;lastDay=dk}
     const primary=primaryLayer(c),hh=gHourOf(mainDate(c)),serviceScheduled=!!(hh&&primary?.approval?.serviceDate);
     const chips=[];
-    const pendingPayment=gestorPendingPaymentLayer(c),pendingFinishedAt=pendingPayment?.serviceFinishedAt||pendingPayment?.concludedAt;
-    if(pendingFinishedAt)chips.push({t:'Conclusão pendente',h:`<span class="chip chip-completed-unpaid"><i class="fa-solid fa-calendar-check"></i> Serviço concluído em ${fdt(pendingFinishedAt)} — falta pagar</span>`});
+    const pendingPayment=gestorPendingPaymentLayer(c),completionLayer=pendingPayment||getLayers(c).find(l=>!l.done&&l.serviceFinishedAt),finishedAt=completionLayer?.serviceFinishedAt||completionLayer?.concludedAt;
+    if(finishedAt)chips.push({t:'Conclusão do serviço',h:`<span class="chip chip-completed-unpaid"><i class="fa-solid fa-calendar-check"></i> Serviço concluído em ${fdt(finishedAt)}${pendingPayment?' — falta pagar':''}</span>`});
     if(c.datetime===TBD||indLayers(c).some(l=>l.datetime===TBD))chips.push({t:'Data a definir',h:'<span class="chip chip-time"><i class="fa-solid fa-calendar-days"></i> Data a definir</span>'});
     if(!multipleEvaluations&&needsPickup(c))chips.push({t:'Retirar equipamento',h:'<span class="indicator ind-flag"><i class="fa-solid fa-flag"></i> Retirar equipamento</span>'});
     if(hasLaudo(c))chips.push({t:'Laudo',h:'<span class="indicator ind-laudo"><i class="fa-solid fa-clipboard"></i> Laudo</span>'});
@@ -1249,9 +1255,10 @@ function renderDetail(){
         </div>
         <div class="os-grid">
           <div class="os-left">
-            <div class="fgrid" style="margin-bottom:12px">
-              <div><span class="fl">Data e hora do serviço</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="ly-svc-${c.id}-${i}" placeholder="dd/mm/aaaa hh:mm" value="${isoToBr(l.approval?.serviceDate||'')}" oninput="dtMask(this)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px;height:44px" onclick="openPicker('pk-svc-${c.id}-${i}')"><i class="fa-solid fa-calendar-days"></i></button><input type="datetime-local" id="pk-svc-${c.id}-${i}" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'ly-svc-${c.id}-${i}',false)"></div></div>
-              <div><span class="fl">Data de pagamento</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="ly-paydate-${c.id}-${i}" placeholder="dd/mm/aaaa" value="${isoDateToBr(l.approval?.paymentDate||'')}" oninput="dMask(this)" style="flex:1"><button type="button" class="btn btn-muted btn-sm" style="padding:0 12px;height:44px" onclick="openPicker('pk-pd-${c.id}-${i}')"><i class="fa-solid fa-calendar-days"></i></button><input type="date" id="pk-pd-${c.id}-${i}" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickDateToText(this,'ly-paydate-${c.id}-${i}')"></div></div>
+            <div class="date-grid">
+              <div><span class="fl">Data e hora do serviço</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="ly-svc-${c.id}-${i}" placeholder="dd/mm/aaaa hh:mm" value="${isoToBr(l.approval?.serviceDate||'')}" oninput="dtMask(this)" style="flex:1;min-width:0"><button type="button" class="btn btn-muted btn-sm" title="Limpar data" style="padding:0 10px;height:44px" onclick="clearDateField('ly-svc-${c.id}-${i}','pk-svc-${c.id}-${i}')"><i class="fa-solid fa-xmark"></i></button><button type="button" class="btn btn-muted btn-sm" style="padding:0 10px;height:44px" onclick="openPicker('pk-svc-${c.id}-${i}')"><i class="fa-solid fa-calendar-days"></i></button><input type="datetime-local" id="pk-svc-${c.id}-${i}" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'ly-svc-${c.id}-${i}',false)"></div></div>
+              <div><span class="fl">Data de conclusão do serviço</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="ly-finished-${c.id}-${i}" placeholder="dd/mm/aaaa hh:mm" value="${isoToBr(l.serviceFinishedAt||'')}" oninput="dtMask(this)" style="flex:1;min-width:0"><button type="button" class="btn btn-muted btn-sm" title="Limpar data" style="padding:0 10px;height:44px" onclick="clearDateField('ly-finished-${c.id}-${i}','pk-finished-${c.id}-${i}')"><i class="fa-solid fa-xmark"></i></button><button type="button" class="btn btn-muted btn-sm" style="padding:0 10px;height:44px" onclick="openPicker('pk-finished-${c.id}-${i}')"><i class="fa-solid fa-calendar-days"></i></button><input type="datetime-local" id="pk-finished-${c.id}-${i}" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'ly-finished-${c.id}-${i}',false)"></div></div>
+              <div><span class="fl">Data de pagamento</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="ly-paydate-${c.id}-${i}" placeholder="dd/mm/aaaa" value="${isoDateToBr(l.approval?.paymentDate||'')}" oninput="dMask(this)" style="flex:1;min-width:0"><button type="button" class="btn btn-muted btn-sm" title="Limpar data" style="padding:0 10px;height:44px" onclick="clearDateField('ly-paydate-${c.id}-${i}','pk-pd-${c.id}-${i}')"><i class="fa-solid fa-xmark"></i></button><button type="button" class="btn btn-muted btn-sm" style="padding:0 10px;height:44px" onclick="openPicker('pk-pd-${c.id}-${i}')"><i class="fa-solid fa-calendar-days"></i></button><input type="date" id="pk-pd-${c.id}-${i}" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickDateToText(this,'ly-paydate-${c.id}-${i}')"></div></div>
             </div>
             <div style="margin-bottom:12px"><span class="fl">Valor do orçamento</span><input class="fi" id="ly-val-${c.id}-${i}" placeholder="R$ 0,00" value="${l.approval?.value||''}" oninput="recalcPag('${c.id}',${i})"></div>
             <div class="fgrid" style="margin-bottom:12px">
