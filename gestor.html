@@ -535,6 +535,27 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
   <div class="modal" id="client-summary-modal-body" style="max-width:680px"></div>
 </div>
 
+<!-- ===== MODAL CONCLUSÃO DO SERVIÇO ===== -->
+<div class="mbg" id="conclusion-modal">
+  <div class="modal" style="max-width:460px">
+    <h3><i class="fa-solid fa-circle-check"></i> Finalizar serviço</h3>
+    <p id="conclusion-client" style="color:var(--muted);font-size:.84rem"></p>
+    <div>
+      <span class="fl">Data e hora da conclusão</span>
+      <div style="display:flex;gap:7px;position:relative">
+        <input class="fi" id="conclusion-datetime" placeholder="dd/mm/aaaa hh:mm" oninput="dtMask(this)" style="flex:1;min-width:0">
+        <button type="button" class="btn btn-muted btn-sm" style="height:44px;padding:0 13px" onclick="openPicker('conclusion-picker')"><i class="fa-solid fa-calendar-days"></i></button>
+        <input type="datetime-local" id="conclusion-picker" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'conclusion-datetime',false)">
+      </div>
+    </div>
+    <div id="conclusion-unpaid-notice" class="indicator" style="display:none;height:auto;min-height:42px;padding:10px 12px;white-space:normal;background:#3b0d0d;border-color:#ef4444;color:#fecaca"><i class="fa-solid fa-circle-exclamation"></i> Este cliente ainda não pagou o serviço.</div>
+    <div class="mact">
+      <button type="button" class="btn btn-muted" onclick="closeConclusionModal()">Cancelar</button>
+      <button type="button" class="btn btn-green" id="confirm-conclusion-btn" onclick="confirmConclusion()"><i class="fa-solid fa-check"></i> Confirmar conclusão</button>
+    </div>
+  </div>
+</div>
+
 <!-- ===== MODAL GARANTIA (PREVIEW) ===== -->
 <div class="mbg" id="warranty-modal">
   <div class="modal" id="warranty-modal-body" style="max-width:580px"></div>
@@ -1088,17 +1109,34 @@ const gestorInlineMode={};window.addLayer=id=>{const box=document.getElementById
 window.editTechReport=(id,li)=>{const c=all.find(x=>x.id===id);if(!c)return;const layers=getLayers(c);const l=layers[li];if(!l?.techReport)return;const modal=document.getElementById('etr-modal');const TYPES=['🔧 Corretiva','🧽 Preventiva','🧰 Instalação','📋 Laudo','🧪 Teste de vazamento'];const saved=(l.techReport.serviceType||'').split(',').map(s=>s.trim()).filter(Boolean);modal.querySelector('#etr-model').value=l.techReport.model||'';modal.querySelector('#etr-report').value=reportTextOnly(l.techReport)||'';modal.querySelector('#etr-pickup').classList.toggle('active',!!l.techReport.needsPickup&&!layerServiceInWorkshop(l));const btns=modal.querySelector('#etr-types');btns.innerHTML=TYPES.map(t=>`<button type="button" class="btn btn-sm ${saved.includes(t)?'btn-cyan etr-active':'btn-muted'}" data-etr="${t}" onclick="this.classList.toggle('btn-cyan');this.classList.toggle('btn-muted');this.classList.toggle('etr-active')">${t}</button>`).join('');modal.dataset.id=id;modal.dataset.li=li;modal.dataset.mode=l.warrantyMode||'';modal.style.display='flex';};
 window.closeEtrModal=()=>{document.getElementById('etr-modal').style.display='none';};
 window.saveEtrModal=async()=>{const modal=document.getElementById('etr-modal');const id=modal.dataset.id;const li=parseInt(modal.dataset.li);const c=all.find(x=>x.id===id);if(!c)return;const layers=[...getLayers(c)];const adjustment=modal.dataset.mode==='adjustment';const model=modal.querySelector('#etr-model').value.trim();const report=modal.querySelector('#etr-report').value.trim();const types=Array.from(modal.querySelectorAll('[data-etr].etr-active')).map(b=>b.dataset.etr);if(!model)return alert('Preencha o modelo.');if(!report)return alert(adjustment?'Explique o ajuste realizado.':'Preencha o relatório.');const pickup=adjustment?false:modal.querySelector('#etr-pickup').classList.contains('active'),leakTest=!adjustment&&types.some(type=>type.includes('Teste de vazamento'));layers[li]={...layers[li],warrantyAdjustment:adjustment?report:layers[li].warrantyAdjustment,needsPickup:pickup,techReport:{...layers[li].techReport,model,problem:report,serviceType:adjustment?'🛡️ Ajuste em garantia':types.join(', '),needsPickup:pickup,leakTest,leakLocation:leakTest?(layers[li].techReport?.leakLocation||''):'',leakConfirmedAt:leakTest?(layers[li].techReport?.leakConfirmedAt||''):''}};await updateDoc(doc(db,'clients',id),{layers});modal.style.display='none';toast(adjustment?'✏️ Ajuste atualizado':'✏️ Relatório atualizado')};
-window.concludeLayer=async(id,li)=>{
+let pendingConclusion=null;
+function nowBrDateTime(){return new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}).replace(',','')}
+window.concludeLayer=(id,li)=>{
   const c=all.find(x=>x.id===id);if(!c)return alert('Cliente não encontrado. Atualize a página e tente novamente.');
+  const layers=getLayers(c),base=layers[li];if(!base)return alert('Avaliação não encontrada. Atualize a página e tente novamente.');
+  const current=readLayerForm(id,li,base),owes=!!current.approval?.owes;
+  pendingConclusion={id,li};
+  document.getElementById('conclusion-client').textContent=`${c.name||'Cliente'} — ${gestorEvaluationLabel(c,base,li)}`;
+  document.getElementById('conclusion-datetime').value=current.serviceFinishedAt?fdt(current.serviceFinishedAt).replace(',',''):nowBrDateTime();
+  document.getElementById('conclusion-picker').value='';
+  document.getElementById('conclusion-unpaid-notice').style.display=owes?'flex':'none';
+  document.getElementById('conclusion-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('conclusion-datetime')?.focus(),40);
+};
+window.closeConclusionModal=()=>{pendingConclusion=null;document.getElementById('conclusion-modal').classList.remove('open')};
+window.confirmConclusion=async()=>{
+  if(!pendingConclusion)return;
+  const{id,li}=pendingConclusion,c=all.find(x=>x.id===id);if(!c)return closeConclusionModal();
+  const concludedAt=brToIso(document.getElementById('conclusion-datetime')?.value||'');if(!concludedAt)return alert('Informe a data e a hora da conclusão.');
   const layers=[...getLayers(c)],base=layers[li];if(!base)return alert('Avaliação não encontrada. Atualize a página e tente novamente.');
   const current=readLayerForm(id,li,base),owes=!!current.approval?.owes;
-  if(!confirm(owes?'Confirmar que o serviço foi concluído? Ele continuará no painel principal até o pagamento ser registrado.':'Mover somente esta avaliação para Concluídos? As imagens ficarão disponíveis por 30 dias e o texto será mantido.'))return;
-  const concludedAt=new Date().toISOString();
-  if(owes){layers[li]={...current,status:'service_finished',done:false,pinned:false,serviceFinishedAt:current.serviceFinishedAt||concludedAt,awaitingPaymentCompletion:true}}
-  else{if(current.awaitingPaymentCompletion&&!current.approval?.paymentDate)return alert('Informe a data do pagamento antes de concluir esta avaliação.');const n=gestorEvaluationNumbers(c,current,li,true);layers[li]={...current,status:'done',done:true,pinned:false,concludedAt,serviceFinishedAt:current.serviceFinishedAt||concludedAt,awaitingPaymentCompletion:false,historyReportNumber:n.report,historyAssessmentNumber:n.assessment}}
-  const first=layers.find(l=>!l.done),status=first?first.status:'done',payload={layers,status,updatedAt:concludedAt};if(!first)payload.completedAt=concludedAt;
-  try{await updateDoc(doc(db,'clients',id),payload);const idx=all.findIndex(x=>x.id===id);if(idx>-1)all[idx]={...all[idx],...payload};render();toast(owes?'💳 Serviço concluído — aguardando pagamento':'✅ Avaliação movida para Concluídos')}
+  if(owes){layers[li]={...current,status:'service_finished',done:false,pinned:false,serviceFinishedAt:concludedAt,awaitingPaymentCompletion:true}}
+  else{if(current.awaitingPaymentCompletion&&!current.approval?.paymentDate)return alert('Informe a data do pagamento antes de concluir esta avaliação.');const n=gestorEvaluationNumbers(c,current,li,true);layers[li]={...current,status:'done',done:true,pinned:false,concludedAt,serviceFinishedAt:concludedAt,awaitingPaymentCompletion:false,historyReportNumber:n.report,historyAssessmentNumber:n.assessment}}
+  const first=layers.find(l=>!l.done),status=first?first.status:'done',payload={layers,status,updatedAt:new Date().toISOString()};if(!first)payload.completedAt=concludedAt;
+  const button=document.getElementById('confirm-conclusion-btn');button.disabled=true;
+  try{await updateDoc(doc(db,'clients',id),payload);const idx=all.findIndex(x=>x.id===id);if(idx>-1)all[idx]={...all[idx],...payload};closeConclusionModal();render();toast(owes?'💳 Serviço concluído — aguardando pagamento':'✅ Avaliação movida para Concluídos')}
   catch(error){console.error(error);alert('Não foi possível finalizar esta avaliação. Verifique a conexão e tente novamente.')}
+  finally{button.disabled=false}
 };
 window.saveLayer=async(id,li)=>{
   const c=all.find(x=>x.id===id);if(!c)return alert('Cliente não encontrado. Atualize a página e tente novamente.');
