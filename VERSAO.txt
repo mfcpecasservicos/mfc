@@ -1,4 +1,4 @@
-MFC v143d
+MFC v143e
 
 CONCLUSÃO INDIVIDUAL POR AVALIAÇÃO
 
@@ -32,4 +32,6 @@ CONCLUSÃO INDIVIDUAL POR AVALIAÇÃO
 - Cards, busca, concluídos e garantia exibem somente a data, inclusive em registros antigos.
 - Horários de visita e de serviço marcado permanecem inalterados.
 - Se “Falta pagar” estiver ativo, o pop-up informa que o serviço continuará no painel até o pagamento.
-- Cache atualizado para mfc-tecnico-v143d.
+- A aba Removidos possui a opção “Limpar removidos” para apagar definitivamente todos os relatórios removidos daquele cliente.
+- A limpeza exige confirmação e também exclui as imagens vinculadas aos relatórios apagados.
+- Cache atualizado para mfc-tecnico-v143e.
