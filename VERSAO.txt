@@ -1,4 +1,4 @@
-MFC v143a
+MFC v143b
 
 CONCLUSÃO INDIVIDUAL POR AVALIAÇÃO
 
@@ -24,4 +24,7 @@ CONCLUSÃO INDIVIDUAL POR AVALIAÇÃO
 - Nova data editável de conclusão do serviço, destacada no card enquanto a avaliação estiver ativa.
 - Botões para limpar as datas do serviço, da conclusão e do pagamento.
 - Uma data apagada agora é removida do Firebase e deixa de aparecer no card.
-- Cache atualizado para mfc-tecnico-v143a.
+- A data de conclusão pode ser editada diretamente no resumo da busca de clientes.
+- Cada serviço concluído possui ações para editar, limpar, salvar ou cancelar a data.
+- A garantia e o histórico são recalculados com a nova data.
+- Cache atualizado para mfc-tecnico-v143b.
