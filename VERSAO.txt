@@ -1,4 +1,4 @@
-MFC v143c
+MFC v143d
 
 CONCLUSÃO INDIVIDUAL POR AVALIAÇÃO
 
@@ -27,7 +27,9 @@ CONCLUSÃO INDIVIDUAL POR AVALIAÇÃO
 - A data de conclusão pode ser editada diretamente no resumo da busca de clientes.
 - Cada serviço concluído possui ações para editar, limpar, salvar ou cancelar a data.
 - A garantia e o histórico são recalculados com a nova data.
-- Ao finalizar um serviço, o Gestor solicita a data e a hora da conclusão.
-- O campo abre preenchido com o horário atual e pode ser ajustado antes da confirmação.
+- Ao finalizar um serviço, o Gestor solicita somente a data da conclusão.
+- A data de conclusão usa o formato dd/mm/aaaa em todos os campos.
+- Cards, busca, concluídos e garantia exibem somente a data, inclusive em registros antigos.
+- Horários de visita e de serviço marcado permanecem inalterados.
 - Se “Falta pagar” estiver ativo, o pop-up informa que o serviço continuará no painel até o pagamento.
-- Cache atualizado para mfc-tecnico-v143c.
+- Cache atualizado para mfc-tecnico-v143d.
