@@ -1,6 +1,6 @@
-MFC v142c
+MFC v143
 
-STATUS IDENTIFICADO POR AVALIAÇÃO
+CONCLUSÃO INDIVIDUAL POR AVALIAÇÃO
 
 - Em clientes com múltiplas avaliações, cada status mostra relatório e avaliação: R1 | A1.
 - Outro equipamento usa R2 | A1; nova avaliação do mesmo equipamento usa R1 | A2.
@@ -15,4 +15,10 @@ STATUS IDENTIFICADO POR AVALIAÇÃO
 - Horário de serviço aprovado ganha destaque com “Serviço marcado para HH:MM”.
 - O horário existente é reaproveitado, sem duplicação no card.
 - Destaque aplicado aos cartões do Gestor e do Index, respeitando os temas.
-- Cache atualizado para mfc-tecnico-v142c.
+- “Serviço finalizado” conclui somente a avaliação selecionada.
+- A avaliação concluída sai do painel principal e entra em Concluídos.
+- Os relatórios que permanecem ativos são renumerados a partir de R1.
+- O histórico concluído preserva o R/A original de cada avaliação.
+- Com “Falta pagar”, a avaliação permanece no painel e mostra a data da conclusão.
+- Ao retirar “Falta pagar” e salvar a data do pagamento, a avaliação vai automaticamente para Concluídos.
+- Cache atualizado para mfc-tecnico-v143.
