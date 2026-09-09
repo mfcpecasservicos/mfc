@@ -5,7 +5,7 @@ firebase.initializeApp({apiKey:"AIzaSyAUUid850sbmBAVS9JzeZ94SbC-qzkk0B8",authDom
 // Não chamar showNotification aqui evita que o mesmo aviso apareça duas vezes.
 firebase.messaging();
 
-const CACHE_NAME = 'mfc-tecnico-v144';
+const CACHE_NAME = 'mfc-tecnico-v143f';
 const FIREBASE_MODULES = [
   'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js',
   'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js',
@@ -48,26 +48,30 @@ function patchHtmlSource(source, url) {
   if (isIndex) {
     html = html.replace(
       "let clients=allClients.filter(c=>!c.deleted&&c.status!=='discarded').filter(c=>getLayers(c).some(l=>!l.done));",
-      "let clients=allClients.filter(c=>!c.deleted&&c.status!=='discarded').filter(c=>getLayers(c).some(l=>!l.done&&l.status!=='service_finished'));"
+      "let clients=allClients.filter(c=>!c.deleted&&c.status!=='discarded').filter(c=>getLayers(c).some(l=>!l.done&&l.status!=='done'&&l.status!=='service_finished'));"
     );
   }
 
   if (isGestor) {
     html = html.replace(
       '<div><span class="fl">Descrição do problema desta avaliação</span><textarea class="fi" id="gestor-inline-problem-${c.id}" placeholder="Descreva o defeito"></textarea></div>',
-      '<div><span class="fl">Data e hora da nova visita</span><input class="fi" id="gestor-inline-datetime-${c.id}" placeholder="dd/mm/aaaa hh:mm"></div><div><span class="fl">Descrição do problema desta avaliação</span><textarea class="fi" id="gestor-inline-problem-${c.id}" placeholder="Descreva o defeito"></textarea></div>'
+      '<div><span class="fl">Data e hora da nova visita</span><input class="fi" id="gestor-inline-datetime-${c.id}" placeholder="dd/mm/aaaa hh:mm" oninput="dtMask(this)"></div><div><span class="fl">Descrição do problema desta avaliação</span><textarea class="fi" id="gestor-inline-problem-${c.id}" placeholder="Descreva o defeito"></textarea></div>'
     );
     html = html.replace(
       "problem=document.getElementById('gestor-inline-problem-'+id).value.trim();if(!name||!problem)return alert('Informe o equipamento e a descrição do problema.');",
-      "problem=document.getElementById('gestor-inline-problem-'+id).value.trim(),datetimeBr=document.getElementById('gestor-inline-datetime-'+id)?.value.trim()||'',datetime=brToIso(datetimeBr);if(!name||!problem)return alert('Informe o equipamento e a descrição do problema.');if(!datetime)return alert('Informe a data e hora da nova visita.');"
+      "problem=document.getElementById('gestor-inline-problem-'+id).value.trim(),datetimeBr=document.getElementById('gestor-inline-datetime-'+id)?.value.trim()||'',datetime=brToIso(datetimeBr);if(!name||!problem)return alert('Informe o equipamento e a descrição do problema.');if(!datetime)return alert('Informe a data e hora da nova visita no formato dd/mm/aaaa hh:mm.');"
     );
     html = html.replace(
       "makeLayer('waiting','',false,false,row)",
       "makeLayer('waiting',datetime,false,false,row)"
     );
     html = html.replace(
-      "for(const s of PRIO){const found=act.find(l=>(l.status||'waiting')===s);if(found)return found}return act[0]",
-      "for(const s of PRIO){const matches=act.filter(l=>(l.status||'waiting')===s);if(matches.length)return matches.sort((a,b)=>{const da=new Date(layerMainDate(c,a)||0).getTime()||0,db=new Date(layerMainDate(c,b)||0).getTime()||0;return db-da})[0]}return act[0]"
+      "return l?.approval?.serviceDate||l?.deliveryDate||l?.readyDeliveryAt||c.datetime||l?.createdAt||c.createdAt||'';",
+      "return l?.approval?.serviceDate||l?.deliveryDate||l?.readyDeliveryAt||l?.datetime||c.datetime||l?.createdAt||c.createdAt||'';"
+    );
+    html = html.replace(
+      "function primaryLayer(c){const act=getLayers(c).filter(l=>!l.done);if(!act.length)return null;const pin=act.find(l=>l.pinned);if(pin)return pin;const PRIO=['waiting','workshop_pending','quoted','evaluated','approved','ready_delivery','service_finished','absent'];for(const s of PRIO){const found=act.find(l=>(l.status||'waiting')===s);if(found)return found}return act[0]}",
+      "function primaryLayer(c){const act=getLayers(c).filter(l=>!l.done);if(!act.length)return null;const pin=act.find(l=>l.pinned);if(pin)return pin;const PRIO=['waiting','workshop_pending','quoted','evaluated','approved','ready_delivery','service_finished','absent'];for(const s of PRIO){const matches=act.filter(l=>(l.status||'waiting')===s);if(matches.length)return matches.sort((a,b)=>(sortDateValue(layerMainDate(c,b))||0)-(sortDateValue(layerMainDate(c,a))||0))[0]}return act.slice().sort((a,b)=>(sortDateValue(layerMainDate(c,b))||0)-(sortDateValue(layerMainDate(c,a))||0))[0]}"
     );
   }
 
@@ -116,7 +120,7 @@ self.addEventListener('fetch', event => {
   if (isHtml) {
     event.respondWith((async()=>{
       try {
-        const res = await fetch(req);
+        const res = await fetch(req,{cache:'no-store'});
         const patched = await patchHtmlResponse(res, url);
         const copy = patched.clone();
         caches.open(CACHE_NAME).then(cache => cache.put(req, copy)).catch(() => {});
