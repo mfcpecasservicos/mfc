@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<!--
+  ========================================================
+  HISTÓRICO DE IMPLEMENTAÇÕES — NÃO REMOVER NENHUM ITEM
+  ========================================================
+  - [x] Página pública de confirmação de localização via token (?token=)
+  - [x] Sem login; token de uso único com validade de 24h
+  - [x] Pin arrastável + botão "Usar minha localização" (GPS)
+  - [x] Endereço aproximado exibido como referência (vindo do token, sem ler o cadastro do cliente)
+  - [x] Confirmação grava só no próprio documento de locationRequests; a Cloud Function propaga para o cliente
+  AO EDITAR ESTE ARQUIVO: preserve todos os itens acima.
+  ========================================================
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Confirmar localização - MFC Peças e Serviços</title>
+<link rel="stylesheet" href="fontawesome/css/all.min.css">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<style>
+  :root{--bg:#eef4fb;--surface:#ffffff;--primary:#06437a;--primary2:#0b63b6;--yellow:#ffd51f;--text:#0f172a;--muted:#64748b;--border:#dbe7f3;--error:#ef4444;--success:#22c55e;--radius:20px;--shadow:0 12px 34px rgba(15,23,42,.10)}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
+  body{background:radial-gradient(circle at top,#f8fbff 0,#eef4fb 48%,#e8f0fa 100%);color:var(--text);padding:18px 14px 28px;min-height:100vh;display:flex;justify-content:center}
+  .container{max-width:640px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+  .card{background:var(--surface);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);border:1px solid var(--border)}
+  .head{display:flex;align-items:center;gap:10px;color:var(--primary);margin-bottom:6px}
+  .head i{font-size:1.2rem}.head strong{font-size:.95rem;text-transform:uppercase;letter-spacing:.04em}
+  h1{font-size:1.3rem;color:var(--primary);margin-bottom:4px}
+  .sub{color:var(--muted);font-size:.9rem;line-height:1.4;margin-bottom:4px}
+  .addr{font-size:.86rem;color:#334155;background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin-top:8px;display:flex;gap:8px;align-items:flex-start}
+  .addr i{color:var(--primary2);margin-top:2px}
+  #map{height:360px;border-radius:16px;overflow:hidden;border:1px solid var(--border);margin-top:14px;background:#dbeafe}
+  .actions{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+  .btn{border:none;border-radius:16px;padding:16px;font-size:1rem;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:.15s}
+  .btn:active{transform:scale(.98)}
+  .btn-gps{background:#eaf4ff;color:var(--primary);border:1px solid #bfe0ff}
+  .btn-confirm{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;box-shadow:0 14px 30px rgba(6,67,122,.25)}
+  .btn-confirm:disabled{background:#94a3b8;box-shadow:none;cursor:not-allowed}
+  .status{font-size:.8rem;color:var(--muted);text-align:center;min-height:18px}
+  .state{display:none;text-align:center;padding:26px 10px}
+  .state.show{display:block}
+  .state i{font-size:2.4rem;margin-bottom:10px}
+  .state.success i{color:var(--success)}
+  .state.error i{color:var(--error)}
+  .state h2{font-size:1.15rem;margin-bottom:6px;color:var(--text)}
+  .state p{color:var(--muted);font-size:.9rem;line-height:1.4}
+  .footer-brand{text-align:center;padding:6px 0 0;color:#64748b;font-size:.8rem}
+  .loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:40px 10px;color:var(--muted)}
+  .loader{width:22px;height:22px;border:3px solid #dbe7f3;border-radius:50%;border-top-color:var(--primary2);animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="card" id="loading-card">
+    <div class="loading"><div class="loader"></div> Carregando…</div>
+  </div>
+
+  <div class="card" id="main-card" style="display:none">
+    <div class="head"><i class="fa-solid fa-location-dot"></i><strong>Localização do atendimento</strong></div>
+    <h1 id="greeting">Confirme o local do atendimento</h1>
+    <p class="sub">Arraste o mapa e posicione o pin exatamente no local, ou use sua localização atual pelo GPS.</p>
+    <div class="addr" id="addr-box" style="display:none"><i class="fa-solid fa-signs-post"></i><span id="addr-text"></span></div>
+    <div id="map"></div>
+    <div class="actions">
+      <button type="button" class="btn btn-gps" id="btn-gps"><i class="fa-solid fa-location-crosshairs"></i> Usar minha localização</button>
+      <button type="button" class="btn btn-confirm" id="btn-confirm"><i class="fa-solid fa-check"></i> Confirmar localização</button>
+    </div>
+    <p class="status" id="status-text"></p>
+  </div>
+
+  <div class="card state" id="success-state">
+    <i class="fa-solid fa-circle-check"></i>
+    <h2>Localização atualizada com sucesso!</h2>
+    <p>Obrigado! Já avisamos o atendimento. Você já pode fechar esta página.</p>
+  </div>
+
+  <div class="card state error" id="error-state">
+    <i class="fa-solid fa-triangle-exclamation"></i>
+    <h2 id="error-title">Link inválido ou expirado</h2>
+    <p id="error-text">Peça um novo link de localização ao atendimento.</p>
+  </div>
+
+  <div class="footer-brand">MFC Peças e Serviços</div>
+</div>
+
+<script src="vendor/leaflet/leaflet.js"></script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+  import { getFirestore, doc, getDoc, runTransaction, Timestamp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+  const app = initializeApp({
+    apiKey: "AIzaSyAUUid850sbMebarV9S9zeZ94SbC-qzkk0B8",
+    authDomain: "roteiro-mfc-d3053.firebaseapp.com",
+    projectId: "roteiro-mfc-d3053",
+    storageBucket: "roteiro-mfc-d3053.firebasestorage.app",
+    messagingSenderId: "1030114859934",
+    appId: "1:1030114859934:web:ad353eafb55205d6b4148f"
+  });
+  const db = getFirestore(app);
+
+  const $ = id => document.getElementById(id);
+  const token = new URLSearchParams(location.search).get('token') || '';
+  const DEFAULT_CENTER = [-12.6167, -38.3]; // Dias d'Ávila, BA — usado só se não houver nenhuma coordenada de referência
+
+  let map, marker, gpsAccuracyCircle, tokenRef, source = 'manual', accuracy = null;
+
+  function showError(title, text) {
+    $('loading-card').style.display = 'none';
+    $('main-card').style.display = 'none';
+    $('error-title').textContent = title;
+    $('error-text').textContent = text;
+    $('error-state').classList.add('show');
+  }
+
+  function showSuccess() {
+    $('main-card').style.display = 'none';
+    $('success-state').classList.add('show');
+  }
+
+  function tokenDataIsValid(data) {
+    if (!data || data.used === true) return false;
+    const expiresAt = data.expiresAtTs?.toDate ? data.expiresAtTs.toDate() : null;
+    return !!expiresAt && expiresAt.getTime() > Date.now();
+  }
+
+  function initMap(center, zoom) {
+    map = L.map('map', { zoomControl: true, attributionControl: true }).setView(center, zoom);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    const icon = L.divIcon({
+      className: '',
+      html: '<div style="width:38px;height:38px;border-radius:50% 50% 50% 0;background:#f97316;display:flex;align-items:center;justify-content:center;transform:rotate(-45deg);border:3px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.35)"><i class="fa-solid fa-house" style="color:#fff;transform:rotate(45deg);font-size:15px"></i></div>',
+      iconSize: [38, 38],
+      iconAnchor: [19, 38]
+    });
+    marker = L.marker(center, { icon, draggable: true }).addTo(map);
+    marker.on('dragend', () => { source = 'manual'; accuracy = null; clearAccuracyCircle(); });
+    map.on('click', e => { marker.setLatLng(e.latlng); source = 'manual'; accuracy = null; clearAccuracyCircle(); });
+    setTimeout(() => map.invalidateSize(), 60);
+  }
+
+  function clearAccuracyCircle() {
+    if (gpsAccuracyCircle) { try { map.removeLayer(gpsAccuracyCircle); } catch {} gpsAccuracyCircle = null; }
+  }
+
+  function useMyLocation() {
+    if (!navigator.geolocation) { $('status-text').textContent = 'Seu navegador não suporta GPS.'; return; }
+    $('status-text').textContent = 'Buscando sua localização…';
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        const { latitude, longitude, accuracy: acc } = pos.coords;
+        marker.setLatLng([latitude, longitude]);
+        map.setView([latitude, longitude], 18);
+        source = 'gps';
+        accuracy = Number.isFinite(acc) ? Math.round(acc) : null;
+        clearAccuracyCircle();
+        if (accuracy) {
+          gpsAccuracyCircle = L.circle([latitude, longitude], { radius: accuracy, color: '#0b63b6', fillOpacity: .08 }).addTo(map);
+        }
+        $('status-text').textContent = accuracy ? `Localização encontrada (precisão de ~${accuracy}m). Ajuste o pin se precisar.` : 'Localização encontrada. Ajuste o pin se precisar.';
+      },
+      err => { $('status-text').textContent = 'Não foi possível obter sua localização pelo GPS. Arraste o pin manualmente.'; },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  }
+
+  async function confirmLocation() {
+    const btn = $('btn-confirm');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando…';
+    try {
+      const { lat, lng } = marker.getLatLng();
+      await runTransaction(db, async (tx) => {
+        const snap = await tx.get(tokenRef);
+        if (!tokenDataIsValid(snap.data())) throw Object.assign(new Error('expired'), { code: 'token-invalid' });
+        tx.update(tokenRef, {
+          used: true,
+          usedAt: new Date().toISOString(),
+          confirmedLatitude: lat,
+          confirmedLongitude: lng,
+          confirmedAccuracy: accuracy,
+          confirmedSource: source
+        });
+      });
+      showSuccess();
+    } catch (err) {
+      console.error('Confirmar localização:', err);
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-check"></i> Confirmar localização';
+      if (err?.code === 'token-invalid') showError('Este link já foi usado ou expirou', 'Peça um novo link de localização ao atendimento.');
+      else $('status-text').textContent = 'Não foi possível enviar agora. Tente novamente.';
+    }
+  }
+
+  (async function start() {
+    if (!token) { showError('Link inválido', 'Este link não tem um código de acesso válido.'); return; }
+    tokenRef = doc(db, 'locationRequests', token);
+    let snap;
+    try { snap = await getDoc(tokenRef); }
+    catch (err) { console.error(err); showError('Não foi possível carregar', 'Verifique sua conexão e tente novamente.'); return; }
+    const data = snap.exists() ? snap.data() : null;
+    if (!tokenDataIsValid(data)) { showError('Este link já foi usado ou expirou', 'Peça um novo link de localização ao atendimento.'); return; }
+
+    $('loading-card').style.display = 'none';
+    $('main-card').style.display = 'block';
+    if (data.clientName) $('greeting').textContent = `Olá, ${String(data.clientName).split(' ')[0]}! Confirme o local do atendimento`;
+    if (data.displayAddress) { $('addr-box').style.display = 'flex'; $('addr-text').textContent = data.displayAddress; }
+
+    const hasInitial = Number.isFinite(data.initialLatitude) && Number.isFinite(data.initialLongitude);
+    initMap(hasInitial ? [data.initialLatitude, data.initialLongitude] : DEFAULT_CENTER, hasInitial ? 17 : 14);
+    if (!hasInitial) $('status-text').textContent = 'Não temos um ponto de referência ainda — use o GPS ou toque no mapa para marcar o local.';
+
+    $('btn-gps').addEventListener('click', useMyLocation);
+    $('btn-confirm').addEventListener('click', confirmLocation);
+  })();
+</script>
+</body>
+</html>

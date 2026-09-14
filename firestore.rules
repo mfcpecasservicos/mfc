@@ -132,6 +132,21 @@ service cloud.firestore {
         && request.time < tokenData.expiresAtTs;
     }
 
+    function validLocationTokenConfirmation(tokenId) {
+      return activeToken(resource.data)
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['used', 'usedAt', 'confirmedLatitude', 'confirmedLongitude', 'confirmedAccuracy', 'confirmedSource'])
+        && request.resource.data.used == true
+        && request.resource.data.usedAt is string
+        && request.resource.data.usedAt.size() <= 40
+        && request.resource.data.confirmedLatitude is number
+        && validLatitude(request.resource.data.confirmedLatitude)
+        && request.resource.data.confirmedLongitude is number
+        && validLongitude(request.resource.data.confirmedLongitude)
+        && validAccuracy(request.resource.data.get('confirmedAccuracy', null))
+        && validText(request.resource.data, 'confirmedSource', 24);
+    }
+
     function validPublicLead(tokenId) {
       let tokenPath = /databases/$(database)/documents/cadastroTokens/$(tokenId);
       let tokenBefore = get(tokenPath);
@@ -183,6 +198,13 @@ service cloud.firestore {
 
     match /leads/{tokenId} {
       allow create: if validPublicLead(tokenId);
+    }
+
+    // Localização pelo cliente: só lê um token válido e só pode confirmar o próprio pin.
+    // Nunca lê nem grava diretamente em clients/ — a Cloud Function propaga a confirmação.
+    match /locationRequests/{tokenId} {
+      allow get: if activeToken(resource.data);
+      allow update: if validLocationTokenConfirmation(tokenId);
     }
   }
 }

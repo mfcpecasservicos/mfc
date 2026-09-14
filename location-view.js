@@ -53,7 +53,7 @@
       const f=await loadFirebaseCompat(),auth=f.auth(),user=await waitForUser(auth);if(!user)throw new Error('Faça login no Gestor novamente.');
       const client=(window.all||[]).find(c=>c.id===clientId);if(!client)throw new Error('Cliente não encontrado.');
       const token=tokenId(),now=new Date(),expires=new Date(now.getTime()+24*60*60*1000),db=f.firestore();
-      const req={clientId,used:false,createdAtTs:f.firestore.Timestamp.fromDate(now),expiresAtTs:f.firestore.Timestamp.fromDate(expires),initialLatitude:Number.isFinite(coordinate(client.latitude))?coordinate(client.latitude):null,initialLongitude:Number.isFinite(coordinate(client.longitude))?coordinate(client.longitude):null};
+      const req={clientId,used:false,createdAtTs:f.firestore.Timestamp.fromDate(now),expiresAtTs:f.firestore.Timestamp.fromDate(expires),initialLatitude:Number.isFinite(coordinate(client.latitude))?coordinate(client.latitude):null,initialLongitude:Number.isFinite(coordinate(client.longitude))?coordinate(client.longitude):null,displayAddress:address(client)||'',clientName:String(client.name||client.companyName||'').slice(0,80)};
       await db.collection('locationRequests').doc(token).set(req);
       await db.collection('clients').doc(clientId).update({locationRequestToken:token,updatedAt:now.toISOString()});
       const link=new URL('./localizacao.html',location.origin);link.searchParams.set('token',token);

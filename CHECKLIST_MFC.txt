@@ -1,4 +1,17 @@
-CHECKLIST PÚBLICO MFC — v140a
+CHECKLIST PÚBLICO MFC — v144a
+
+SOLICITAR LOCALIZAÇÃO AO CLIENTE
+
+[x] Botão "Enviar localização" no card de localização do Gestor.
+[x] Token aleatório por cliente (não expõe o ID), uso único, expira em 24h.
+[x] Link enviado via WhatsApp abre localizacao.html sem exigir login.
+[x] Endereço aproximado exibido como referência, sem expor o cadastro completo.
+[x] Pin arrastável no mapa + botão "Usar minha localização" (GPS).
+[x] Confirmação grava só no próprio token (locationRequests).
+[x] Cloud Function applyLocationConfirmation propaga a coordenada para clients/{clientId}.
+[x] Regras do Firestore não permitem leitura nem escrita pública em clients/.
+[x] CACHE_NAME atual: mfc-tecnico-v144a.
+[ ] Deploy manual pendente: firebase deploy --only firestore:rules,functions.
 
 MAPA VISUAL
 

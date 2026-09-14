@@ -1,4 +1,16 @@
-MFC v143e
+MFC v144a
+
+SOLICITAR LOCALIZAÇÃO AO CLIENTE
+
+- Botão "Enviar localização" no card de localização do Gestor gera um link exclusivo por cliente.
+- Token aleatório (não é o ID do cliente), uso único, expira em 24h.
+- Nova página pública localizacao.html: sem login, mapa com pin arrastável, endereço aproximado como referência.
+- Cliente pode usar o GPS ("Usar minha localização") e ainda ajustar o pin manualmente.
+- Confirmação grava apenas no próprio token; Cloud Function applyLocationConfirmation propaga
+  latitude/longitude para o cadastro do cliente com privilégio de admin.
+- Regras do Firestore: acesso público restrito a locationRequests/{token}, sem leitura nem
+  escrita direta em clients/ pelo visitante.
+- Gestor recebe a atualização em tempo real assim que a Cloud Function grava o cadastro.
 
 CONCLUSÃO INDIVIDUAL POR AVALIAÇÃO
 

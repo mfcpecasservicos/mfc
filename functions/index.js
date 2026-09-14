@@ -1,4 +1,4 @@
-const { onDocumentWritten } = require('firebase-functions/v2/firestore');
+const { onDocumentWritten, onDocumentUpdated } = require('firebase-functions/v2/firestore');
 const { setGlobalOptions } = require('firebase-functions/v2');
 const admin = require('firebase-admin');
 
@@ -84,5 +84,40 @@ exports.notifyTecnico = onDocumentWritten('clients/{clientId}', async (event) =>
       console.error('Erro ao enviar notificação FCM:', err.message);
       await claimRef.delete().catch(deleteErr => console.error('Erro ao liberar tentativa de notificação:', deleteErr.message));
     }
+  }
+});
+
+// Cliente confirmou o pin em localizacao.html (?token=...): propaga para o cadastro dele.
+// O cliente só tem permissão para escrever no próprio documento de locationRequests;
+// esta função roda com privilégio de admin e é quem de fato atualiza clients/{clientId}.
+exports.applyLocationConfirmation = onDocumentUpdated('locationRequests/{token}', async (event) => {
+  const before = event.data.before.data();
+  const after = event.data.after.data();
+  if (!after || before?.used === true || after.used !== true) return;
+
+  const clientId = after.clientId;
+  const lat = after.confirmedLatitude;
+  const lng = after.confirmedLongitude;
+  if (!clientId || typeof lat !== 'number' || typeof lng !== 'number') return;
+
+  const now = new Date().toISOString();
+  const accuracy = typeof after.confirmedAccuracy === 'number' ? after.confirmedAccuracy : null;
+  const source = after.confirmedSource === 'gps' ? 'gps' : 'manual';
+
+  try {
+    await admin.firestore().doc(`clients/${clientId}`).update({
+      latitude: lat,
+      longitude: lng,
+      locationAccuracy: accuracy,
+      locationProvided: true,
+      locationConfirmed: true,
+      locationSource: source,
+      locationConfirmedAt: now,
+      location: { latitude: lat, longitude: lng, accuracy, provided: true, confirmed: true, source, confirmedAt: now },
+      locationRequestToken: admin.firestore.FieldValue.delete(),
+      updatedAt: now
+    });
+  } catch (err) {
+    console.error('Erro ao aplicar localização confirmada pelo cliente:', err.message);
   }
 });
