@@ -1,3 +1,12 @@
+MFC v144b
+
+CORREÇÃO: BOTÃO SOLICITAR LOCALIZAÇÃO
+
+- Corrigido erro "No Firebase App '[DEFAULT]' has been created" ao clicar no botão.
+  O SDK compat estava sendo iniciado com um app nomeado, mas o restante do código
+  chamava firebase.auth() esperando o app padrão — agora o app compat é o padrão.
+- Botão renomeado de "Enviar localização" para "Solicitar localização".
+
 MFC v144a
 
 SOLICITAR LOCALIZAÇÃO AO CLIENTE

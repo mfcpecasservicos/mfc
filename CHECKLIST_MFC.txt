@@ -10,7 +10,9 @@ SOLICITAR LOCALIZAÇÃO AO CLIENTE
 [x] Confirmação grava só no próprio token (locationRequests).
 [x] Cloud Function applyLocationConfirmation propaga a coordenada para clients/{clientId}.
 [x] Regras do Firestore não permitem leitura nem escrita pública em clients/.
-[x] CACHE_NAME atual: mfc-tecnico-v144a.
+[x] CACHE_NAME atual: mfc-tecnico-v144b.
+[x] Corrigido erro de app Firebase padrão ao clicar em "Solicitar localização".
+[x] Botão renomeado para "Solicitar localização".
 [ ] Deploy manual pendente: firebase deploy --only firestore:rules,functions.
 
 MAPA VISUAL
