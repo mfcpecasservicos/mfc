@@ -35,27 +35,18 @@
   const geocode=async(c,force=false)=>{const city=c?.city||c?.cidade||'',neighborhood=c?.neighborhood||c?.bairro||'',street=c?.address||'',number=c?.number||'';const candidates=[uniqueParts([street,number,neighborhood,city,'Bahia','Brasil']).join(', '),uniqueParts([street,neighborhood,city,'Bahia','Brasil']).join(', '),uniqueParts([neighborhood,city,'Bahia','Brasil']).join(', '),uniqueParts([city,'Bahia','Brasil']).join(', ')].filter(Boolean);for(const query of [...new Set(candidates)]){const result=await geocodeQuery(query,force);if(result)return result}return null};
   const statusText=value=>value.confirmed?'Ponto confirmado':value.source==='address'?'Local aproximado pelo endereço':'Ponto informado no cadastro';
 
-  async function loadFirebaseCompat(){
-    if(window.firebase?.firestore&&window.firebase?.auth)return window.firebase;
-    const add=src=>new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.onload=resolve;s.onerror=reject;document.head.appendChild(s)});
-    await add('https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js');
-    await add('https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js');
-    await add('https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js');
-    const config={apiKey:'AIzaSyAUUid850sbMebarV9S9zeZ94SbC-qzkk0B8',authDomain:'roteiro-mfc-d3053.firebaseapp.com',projectId:'roteiro-mfc-d3053',storageBucket:'roteiro-mfc-d3053.firebasestorage.app',messagingSenderId:'1030114859934',appId:'1:1030114859934:web:ad353eafb55205d6b4148f'};
-    let app=window.firebase.apps.length?window.firebase.apps[0]:window.firebase.initializeApp(config);
-    return window.firebase;
-  }
-  const waitForUser=auth=>new Promise((resolve,reject)=>{if(auth.currentUser)return resolve(auth.currentUser);const timer=setTimeout(()=>{unsub?.();reject(new Error('Sessão do Gestor não encontrada.'))},7000);const unsub=auth.onAuthStateChanged(user=>{if(user){clearTimeout(timer);unsub();resolve(user)}})});
   const tokenId=()=>{if(window.crypto?.randomUUID)return crypto.randomUUID().replace(/-/g,'');const a=new Uint8Array(16);crypto.getRandomValues(a);return [...a].map(v=>v.toString(16).padStart(2,'0')).join('')};
   const toastLocal=msg=>{if(typeof window.toast==='function')window.toast(msg);else alert(msg)};
   async function requestLocation(clientId){
     try{
-      const f=await loadFirebaseCompat(),auth=f.auth(),user=await waitForUser(auth);if(!user)throw new Error('Faça login no Gestor novamente.');
+      const mfc=window.MFC;
+      if(!mfc?.db||!mfc?.doc||!mfc?.setDoc||!mfc?.updateDoc)throw new Error('Recursos do Gestor ainda não carregaram. Atualize a página e tente de novo.');
+      if(!mfc.auth?.currentUser)throw new Error('Faça login no Gestor novamente.');
       const client=(window.all||[]).find(c=>c.id===clientId);if(!client)throw new Error('Cliente não encontrado.');
-      const token=tokenId(),now=new Date(),expires=new Date(now.getTime()+24*60*60*1000),db=f.firestore();
-      const req={clientId,used:false,createdAtTs:f.firestore.Timestamp.fromDate(now),expiresAtTs:f.firestore.Timestamp.fromDate(expires),initialLatitude:Number.isFinite(coordinate(client.latitude))?coordinate(client.latitude):null,initialLongitude:Number.isFinite(coordinate(client.longitude))?coordinate(client.longitude):null,displayAddress:address(client)||'',clientName:String(client.name||client.companyName||'').slice(0,80)};
-      await db.collection('locationRequests').doc(token).set(req);
-      await db.collection('clients').doc(clientId).update({locationRequestToken:token,updatedAt:now.toISOString()});
+      const token=tokenId(),now=new Date(),expires=new Date(now.getTime()+24*60*60*1000);
+      const req={clientId,used:false,createdAtTs:now,expiresAtTs:expires,initialLatitude:Number.isFinite(coordinate(client.latitude))?coordinate(client.latitude):null,initialLongitude:Number.isFinite(coordinate(client.longitude))?coordinate(client.longitude):null,displayAddress:address(client)||'',clientName:String(client.name||client.companyName||'').slice(0,80)};
+      await mfc.setDoc(mfc.doc(mfc.db,'locationRequests',token),req);
+      await mfc.updateDoc(mfc.doc(mfc.db,'clients',clientId),{locationRequestToken:token,updatedAt:now.toISOString()});
       const link=new URL('./localizacao.html',location.origin);link.searchParams.set('token',token);
       const msg=`Olá! Precisamos confirmar a localização exata do atendimento. Abra este link e permita o acesso à sua localização pelo celular:\n\n${link.toString()}`;
       try{await navigator.clipboard.writeText(msg)}catch{const ta=document.createElement('textarea');ta.value=msg;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove()}

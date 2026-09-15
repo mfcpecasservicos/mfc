@@ -639,6 +639,7 @@ const app=initializeApp({
 });
 const db=getFirestore(app);const col=collection(db,'clients');const leadsCol=collection(db,'leads');const tokenCol=collection(db,'cadastroTokens');
 const auth=getAuth(app),googleProvider=new GoogleAuthProvider();googleProvider.setCustomParameters({prompt:'select_account'});setPersistence(auth,browserLocalPersistence).catch(console.warn);
+window.MFC={db,doc,setDoc,updateDoc,getDoc,auth};
 function authError(message=''){const el=document.getElementById('auth-error');if(el)el.textContent=message}
 window.mfcGoogleLogin=async()=>{const btn=document.getElementById('auth-login-btn');if(btn)btn.disabled=true;authError('');try{if(matchMedia('(display-mode: standalone)').matches||innerWidth<700)await signInWithRedirect(auth,googleProvider);else await signInWithPopup(auth,googleProvider)}catch(error){console.error(error);authError('Não foi possível entrar. Verifique a internet e tente novamente.');if(btn)btn.disabled=false}};
 window.mfcSignOut=()=>signOut(auth);

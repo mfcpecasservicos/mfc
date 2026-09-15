@@ -1,3 +1,14 @@
+MFC v144c
+
+CORREÇÃO: SOLICITAR LOCALIZAÇÃO NÃO ENCONTRAVA A SESSÃO
+
+- O botão abria um segundo app Firebase (SDK compat) só para checar login,
+  e essa sessão paralela não enxergava o login já feito no Gestor (SDK modular) —
+  por isso "Sessão do Gestor não encontrada." e nenhum link era copiado.
+- Trocado: o botão agora reaproveita direto o db/auth já autenticados do
+  próprio Gestor (window.MFC), sem abrir nenhum app Firebase paralelo.
+- gestor.html expõe window.MFC={db,doc,setDoc,updateDoc,getDoc,auth} para isso.
+
 MFC v144b
 
 CORREÇÃO: BOTÃO SOLICITAR LOCALIZAÇÃO
