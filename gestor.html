@@ -414,6 +414,16 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 }
 .switch{width:44px;height:24px;border-radius:14px;background:var(--surface3);border:1px solid var(--border);position:relative;transition:all .2s;flex-shrink:0}.switch::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#94A3B8;transition:all .2s}.tg-btn.active .switch{background:#10B98144;border-color:#10B981}.tg-btn.active .switch::after{left:22px;background:#10B981}
 
+
+/* ===== IMPORTADOR PIX COPIA E COLA ===== */
+.pix-import-box{display:flex;flex-direction:column;gap:12px}
+.pix-import-textarea{width:100%;min-height:150px;resize:vertical;font-family:'JetBrains Mono',monospace;font-size:.78rem;line-height:1.45}
+.pix-result{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:13px;display:grid;gap:8px}
+.pix-result.ok{border-color:#22c55e66}.pix-result.warn{border-color:#f59e0b66}.pix-result.err{border-color:#ef444466}
+.pix-match{display:flex;align-items:center;gap:9px;background:#06281b;border:1px solid #10b98166;border-radius:10px;padding:10px 12px;color:#86efac;font-weight:900}
+.pix-kv{display:grid;grid-template-columns:130px minmax(0,1fr);gap:8px;font-size:.78rem}.pix-kv span{color:var(--muted);font-weight:700}.pix-kv b{overflow-wrap:anywhere}
+@media(max-width:620px){.pix-kv{grid-template-columns:1fr;gap:2px}}
+
 /* ===== GLOW CYBERPUNK — todo quadrado de informação/preenchimento ===== */
 :root{--glow:oklch(0.65 0.15 260)}
 .iblk,.dcard,.acc,.rescard,.fin-card,.img-drop,.doc-box,.fin-info{box-shadow:0 0 22px -10px color-mix(in oklch,var(--glow) 55%,transparent) !important}
@@ -580,6 +590,23 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
     <h3><i class="fa-solid fa-pen"></i> Apelido da conta</h3>
     <div><span class="fl">Apelido</span><input class="fi" id="ap-input" placeholder='Ex: Casa da mãe, Loja, Galpão'></div>
     <div class="mact"><button class="btn btn-muted" onclick="closeApelido()">Cancelar</button><button class="btn btn-green" onclick="saveApelido()">Salvar</button></div>
+  </div>
+</div>
+
+<!-- ===== MODAL IMPORTAR PIX ===== -->
+<div class="mbg" id="pix-import-modal">
+  <div class="modal" style="max-width:620px">
+    <h3><i class="fa-solid fa-link"></i> Importar Pix Copia e Cola</h3>
+    <p style="color:var(--muted);font-size:.8rem">Cole o Pix abaixo. O sistema procura o código do cliente/consumidor e compara com os códigos cadastrados no Financeiro.</p>
+    <div class="pix-import-box">
+      <textarea class="fi pix-import-textarea" id="pix-import-input" placeholder="Cole aqui o Pix Copia e Cola..."></textarea>
+      <div id="pix-import-result"></div>
+    </div>
+    <div class="mact">
+      <button class="btn btn-muted" onclick="closePixImport()">Cancelar</button>
+      <button class="btn btn-blue" id="pix-read-btn" onclick="readPixImport()"><i class="fa-solid fa-magnifying-glass"></i> Ler Pix</button>
+      <button class="btn btn-green" id="pix-confirm-btn" style="display:none" onclick="confirmPixImport()"><i class="fa-solid fa-check"></i> Confirmar lançamento</button>
+    </div>
   </div>
 </div>
 
@@ -874,6 +901,97 @@ window.addConta=async key=>{
   await setDoc(finRef,{[key]:{contas}},{merge:true});
   toast('➕ Conta adicionada');
 };
+function pixParseTlv(payload){
+  const out=[];
+  let i=0;
+  while(i+4<=payload.length){
+    const id=payload.slice(i,i+2),len=Number(payload.slice(i+2,i+4));
+    if(!/^\d{2}$/.test(id)||!Number.isFinite(len)||i+4+len>payload.length)break;
+    const value=payload.slice(i+4,i+4+len);
+    out.push({id,value});
+    i+=4+len;
+  }
+  return out;
+}
+function pixTreeValues(payload,depth=0){
+  if(depth>5)return[];
+  const nodes=pixParseTlv(payload),values=[];
+  nodes.forEach(n=>{
+    values.push({id:n.id,value:n.value});
+    if((Number(n.id)>=26&&Number(n.id)<=51)||n.id==='62'||(Number(n.id)>=80&&Number(n.id)<=99)){
+      values.push(...pixTreeValues(n.value,depth+1));
+    }
+  });
+  return values;
+}
+function pixExtract(payload){
+  const clean=String(payload||'').replace(/[\r\n\t ]+/g,'').trim();
+  if(!clean)return{valid:false,error:'Cole um Pix Copia e Cola.'};
+  if(!/^\d{10,}/.test(clean))return{valid:false,error:'O conteúdo não parece um Pix Copia e Cola válido.'};
+  const nodes=pixParseTlv(clean),tree=pixTreeValues(clean);
+  const get=(id)=>nodes.find(n=>n.id===id)?.value||'';
+  const nested=(id)=>tree.filter(n=>n.id===id).map(n=>n.value);
+  const amount=get('54');
+  const merchant=get('59');
+  const city=get('60');
+  const txid=nested('05').find(v=>v)||'';
+  const gui=nested('00').find(v=>v.toLowerCase()==='br.gov.bcb.pix')||'';
+  const urls=[...nested('25'),...nested('03')].filter(v=>/^https?:\/\//i.test(v));
+  const keyCandidates=[...nested('01')].filter(v=>v&&v.toLowerCase()!=='01');
+  return {valid:nodes.length>0,payload:clean,amount:amount&&/^\d+(?:\.\d+)?$/.test(amount)?Number(amount):null,amountRaw:amount,merchant,city,txid,gui,urls,keyCandidates,nodes,tree};
+}
+function pixFindClientCode(info){
+  const resources=getAllRes();
+  const texts=[info.payload,info.merchant,info.city,info.txid,...info.keyCandidates,...info.urls,...info.tree.map(x=>x.value)].filter(Boolean).map(String);
+  const matches=[];
+  resources.forEach(r=>{
+    const code=String(r.cod||'').trim();
+    if(!code)return;
+    const hit=texts.some(t=>t===code||t.includes(code));
+    if(hit)matches.push(r);
+  });
+  return matches;
+}
+function pixMoney(v){return Number.isFinite(v)?v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}):'—'}
+let pixPending=null;
+window.openPixImport=(preferredKey='')=>{
+  pixPending={preferredKey};
+  document.getElementById('pix-import-input').value='';
+  document.getElementById('pix-import-result').innerHTML='';
+  document.getElementById('pix-confirm-btn').style.display='none';
+  document.getElementById('pix-read-btn').style.display='';
+  document.getElementById('pix-import-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('pix-import-input')?.focus(),40);
+};
+window.closePixImport=()=>{pixPending=null;document.getElementById('pix-import-modal').classList.remove('open')};
+window.readPixImport=()=>{
+  const raw=document.getElementById('pix-import-input').value;
+  const info=pixExtract(raw),box=document.getElementById('pix-import-result'),confirm=document.getElementById('pix-confirm-btn');
+  confirm.style.display='none';pixPending={...(pixPending||{}),info,raw};
+  if(!info.valid){box.innerHTML=`<div class="pix-result err"><b>❌ ${escHtml(info.error||'Pix inválido.')}</b></div>`;return}
+  const matches=pixFindClientCode(info);
+  let match=null;
+  if(pixPending?.preferredKey)match=matches.find(r=>r.key===pixPending.preferredKey)||null;
+  if(!match&&matches.length===1)match=matches[0];
+  const amount=info.amount;
+  if(match){
+    if(amount===null){box.innerHTML=`<div class="pix-result warn"><div class="pix-match"><i class="fa-solid fa-circle-check"></i> Conta identificada: ${escHtml(match.nome)} ${getApelido(match.key)?'('+escHtml(getApelido(match.key))+')':''}</div><div class="pix-kv"><span>Código</span><b>${escHtml(match.cod)}</b></div><div class="pix-kv"><span>Valor</span><b>Não informado no Pix</b></div><div class="pix-kv"><span>Recebedor</span><b>${escHtml(info.merchant||'—')}</b></div><div class="pix-kv"><span>TXID</span><b>${escHtml(info.txid||'—')}</b></div><p style="color:#fbbf24;font-size:.76rem">O código foi identificado, mas este Pix não traz valor no payload. Nada será lançado automaticamente.</p></div>`;return}
+    pixPending.match=match;pixPending.amount=amount;
+    box.innerHTML=`<div class="pix-result ok"><div class="pix-match"><i class="fa-solid fa-circle-check"></i> Conta identificada: ${escHtml(match.nome)} ${getApelido(match.key)?'('+escHtml(getApelido(match.key))+')':''}</div><div class="pix-kv"><span>Código do cliente</span><b>${escHtml(match.cod)}</b></div><div class="pix-kv"><span>Valor da tarifa</span><b>${pixMoney(amount)}</b></div><div class="pix-kv"><span>Recebedor</span><b>${escHtml(info.merchant||'—')}</b></div><div class="pix-kv"><span>TXID</span><b>${escHtml(info.txid||'—')}</b></div>${info.urls.length?`<div class="pix-kv"><span>Pix dinâmico</span><b>URL encontrada</b></div>`:''}</div>`;
+    confirm.style.display='inline-flex';
+    return;
+  }
+  box.innerHTML=`<div class="pix-result warn"><b>⚠️ Não foi possível identificar uma única conta.</b><p style="color:var(--muted);font-size:.76rem;margin-top:6px">O código do cliente/consumidor não foi encontrado de forma confiável nos dados disponíveis deste Pix.</p><div class="pix-kv"><span>Recebedor</span><b>${escHtml(info.merchant||'—')}</b></div><div class="pix-kv"><span>Valor</span><b>${info.amount===null?'Não informado':pixMoney(info.amount)}</b></div><p style="color:#fbbf24;font-size:.76rem">Nenhuma despesa foi lançada.</p></div>`;
+};
+window.confirmPixImport=async()=>{
+  if(!pixPending?.match||pixPending.amount===null)return;
+  const key=pixPending.match.key,amount=pixPending.amount,raw=pixPending.raw||'',info=pixPending.info||'';
+  const contas=getContas(key);
+  contas.push({id:Date.now().toString(36),valor:amount.toFixed(2),venc:todayIso(),pix:raw,createdAt:new Date().toISOString(),source:'pix-import',pixCode:pixPending.match.cod,txid:info.txid||'',merchant:info.merchant||''});
+  await setDoc(finRef,{[key]:{contas}},{merge:true});
+  const r=pixPending.match;
+  closePixImport();selectedFin=key;renderFin();toast(`🔗 Pix lançado em ${r.nome}${getApelido(key)?' ('+getApelido(key)+')':''}`);
+};
 window.payConta=async(key,cid)=>{
   if(!confirm('Marcar como paga? A conta será excluída.'))return;
   const contas=getContas(key).filter(c=>c.id!==cid);
@@ -896,7 +1014,7 @@ window.printFinanceiro=()=>{
 };
 function renderFin(){
   // list column: residências
-  document.querySelector('.list-head').innerHTML=`<h1 id="list-title">Financeiro</h1><button class="btn btn-outline-blue btn-sm" onclick="printFinanceiro()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button>`;
+  document.querySelector('.list-head').innerHTML=`<h1 id="list-title">Financeiro</h1><div style="display:flex;gap:6px;align-items:center"><button class="btn btn-outline-blue btn-sm" onclick="openPixImport()"><i class="fa-solid fa-link"></i> Importar Pix</button><button class="btn btn-outline-blue btn-sm" onclick="printFinanceiro()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button></div>`;
   const list=document.getElementById('clist');
   const ALLRES=getAllRes();
   const grandTotal=ALLRES.reduce((s,r)=>s+totalSum(r.key),0);
@@ -918,7 +1036,7 @@ function renderFin(){
   // detail
   const wrap=document.getElementById('view-fin');
   const r=ALLRES.find(x=>x.key===selectedFin);
-  if(!r){wrap.innerHTML='<div class="detail-head"><h1><i class="fa-solid fa-sack-dollar"></i> Financeiro</h1></div><div class="empty" style="padding-top:80px"><i class="fa-solid fa-hand-point-left"></i> Selecione uma residência na lista para ver as contas.</div>';return}
+  if(!r){wrap.innerHTML='<div class="detail-head"><h1><i class="fa-solid fa-sack-dollar"></i> Financeiro</h1><button class="btn btn-outline-blue btn-sm" onclick="openPixImport()"><i class="fa-solid fa-link"></i> Importar Pix</button></div><div class="empty" style="padding-top:80px"><i class="fa-solid fa-hand-point-left"></i> Selecione uma residência na lista para ver as contas.</div>';return}
   const contas=getContas(r.key).sort((a,b)=>{
     const ao=isOverdue(a)?0:1,bo=isOverdue(b)?0:1;
     if(ao!==bo)return ao-bo;
@@ -926,7 +1044,7 @@ function renderFin(){
   });
   const sum=overdueSum(r.key);
   wrap.innerHTML=`
-    <div class="detail-head"><h1>${r.icon} ${r.nome}${getApelido(r.key)?` (${getApelido(r.key)})`:''} — ${r.end}</h1></div>
+    <div class="detail-head"><h1>${r.icon} ${r.nome}${getApelido(r.key)?` (${getApelido(r.key)})`:''} — ${r.end}</h1><button class="btn btn-outline-blue btn-sm" onclick="openPixImport('${r.key}')"><i class="fa-solid fa-link"></i> Importar Pix desta conta</button></div>
     <div class="contas-list">
       ${contas.length?contas.map(c=>`
         <div class="conta-item ${isOverdue(c)?'atrasada':''}">
@@ -1198,255 +1316,3 @@ function filterIconHtml(){return `<button class="filter-btn filter-btn-icon" tit
 /* ===== LIST RENDER ===== */
 function render(){
   if(view==='fin'){renderFin();return}
-  document.getElementById('list-title').textContent='Visitas';
-  const lfw=document.getElementById('list-filter-wrap');if(lfw)lfw.innerHTML=filterIconHtml();
-  const uiState=captureGestorUiState();
-  const list=document.getElementById('clist');
-  let clients=all.filter(c=>!c.deleted);
-  if(filter==='all')clients=clients.filter(c=>displayStatus(c)!=='done');
-  else clients=clients.filter(c=>displayStatus(c)===filter);
-  clients=[...clients].sort(appointmentSortCmp);
-  if(!clients.length){list.innerHTML='<div class="empty"><i class="fa-solid fa-clipboard"></i> Nenhum cliente.</div>';document.getElementById('list-footer').innerHTML='';renderDetail();return}
-  const STATUS_COLOR={waiting:'oklch(0.72 0.17 285)',workshop_pending:'oklch(0.70 0.14 220)',evaluated:'oklch(0.75 0.18 155)',quoted:'oklch(0.80 0.16 75)',approved:'oklch(0.75 0.18 45)',ready_delivery:'oklch(0.70 0.14 220)',service_finished:'oklch(0.75 0.18 155)',absent:'oklch(0.65 0.12 300)',done:'oklch(0.75 0.18 155)'};
-  function gDayKey(d){const t=new Date(d||'');if(!Number.isFinite(t.getTime()))return 'SEM DATA';const wd=t.toLocaleDateString('pt-BR',{weekday:'long'}).toUpperCase();return `${wd}, ${t.toLocaleDateString('pt-BR')}`}
-  function gHourOf(d){const t=new Date(d||'');if(!Number.isFinite(t.getTime()))return '';return t.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}
-  let listHtml='',lastDay=null;
-  clients.forEach(c=>{
-    const status=displayStatus(c);
-    const activeEntries=getLayers(c).map((l,i)=>({l,i})).filter(({l})=>!l.done),multipleEvaluations=activeEntries.length>1,showEvaluationRefs=getLayers(c).length>1;
-    const statusBadges=c.status==='discarded'
-      ? `<span class="sbadge ${badgeCls.discarded}">${lbl('discarded')}</span>`
-      : activeEntries.length
-          ? activeEntries.map(({l,i})=>{const s=l.status||'waiting',num=showEvaluationRefs?`<span class="rep-num">${gestorEvaluationStatusRef(c,l,i)}</span>`:'',pickup=multipleEvaluations&&(l.needsPickup||l.techReport?.needsPickup)&&!layerServiceInWorkshop(l)?'<span class="rep-pickup" title="Retirar equipamento"><i class="fa-solid fa-truck-pickup"></i></span>':'';return `<span class="rep-chip">${num}<span class="sbadge ${badgeCls[s]||'sw'}">${lbl(s)}</span>${pickup}</span>`}).join('')
-          : `<span class="sbadge ${badgeCls.done}">${lbl('done')}</span>`;
-    const dk=gDayKey(mainDate(c));
-    if(dk!==lastDay){listHtml+=`<div class="day-head"><span>${dk}</span></div>`;lastDay=dk}
-    const primary=primaryLayer(c),hh=gHourOf(mainDate(c)),serviceScheduled=!!(hh&&primary?.approval?.serviceDate);
-    const chips=[];
-    const pendingPayment=gestorPendingPaymentLayer(c),completionLayer=pendingPayment||getLayers(c).find(l=>!l.done&&l.serviceFinishedAt),finishedAt=completionLayer?.serviceFinishedAt||completionLayer?.concludedAt;
-    if(finishedAt)chips.push({t:'Conclusão do serviço',h:`<span class="chip chip-completed-unpaid"><i class="fa-solid fa-calendar-check"></i> Serviço concluído em ${isoDateToBr(finishedAt)}${pendingPayment?' — falta pagar':''}</span>`});
-    if(c.datetime===TBD||indLayers(c).some(l=>l.datetime===TBD))chips.push({t:'Data a definir',h:'<span class="chip chip-time"><i class="fa-solid fa-calendar-days"></i> Data a definir</span>'});
-    if(!multipleEvaluations&&needsPickup(c))chips.push({t:'Retirar equipamento',h:'<span class="indicator ind-flag"><i class="fa-solid fa-flag"></i> Retirar equipamento</span>'});
-    if(hasLaudo(c))chips.push({t:'Laudo',h:'<span class="indicator ind-laudo"><i class="fa-solid fa-clipboard"></i> Laudo</span>'});
-    if((c.companyMode||c.type==='company')&&c.accessRequired!==undefined)chips.push({t:'Acesso',h:c.accessRequired?'<span class="indicator" style="background:#0d1f0d;border-color:#22c55e;color:#86efac" title="Portaria exige documentação do técnico"><i class="fa-solid fa-id-card"></i></span>':'<span class="indicator" style="background:#3b0d0d;border-color:#ef4444;color:#fecaca" title="Portaria não exige documentação"><i class="fa-solid fa-id-card"></i></span>'});
-    if(c.workshopDropoff&&!hasServiceInWorkshop(c))chips.push({t:'Equipamento na loja',h:'<span class="indicator"><i class="fa-solid fa-industry"></i> Equipamento na loja</span>'});
-    if(hasServiceInWorkshop(c))chips.push({t:'Equipamento no galpão',h:'<span class="indicator"><i class="fa-solid fa-industry"></i> Equipamento no galpão</span>'});
-    if(hasPaidService(c))chips.push({t:'Serviço pago',h:'<span class="indicator"><i class="fa-solid fa-credit-card"></i> Serviço pago</span>'});
-    if(hasOwesService(c))chips.push({t:'Falta pagar',h:'<span class="chip chip-owe"><i class="fa-solid fa-circle-exclamation"></i> Falta pagar</span>'});
-    if(hasWarrantyService(c))chips.push({t:'Garantia',h:'<span class="indicator" style="background:#3b2a06;border-color:#f59e0b;color:#fbbf24"><i class="fa-solid fa-shield-halved"></i> Garantia</span>'});
-    if(c.companyMode||c.type==='company'){const pinL=getLayers(c).find(l=>!l.done&&l.pinned)||getLayers(c).find(l=>!l.done);const pd=pinL?.approval?.paymentDate;if(pd)chips.push({t:'Pagamento: '+isoDateToBr(pd),h:'<span class="chip chip-pay"><i class="fa-solid fa-dollar-sign"></i> Pagamento: '+isoDateToBr(pd)+'</span>'});}
-    chips.sort((a,b)=>a.t.length-b.t.length);
-    if(hh)chips.unshift({t:hh,h:serviceScheduled?`<span class="chip chip-time chip-service-time"><i class="fa-solid fa-calendar-check"></i> Serviço marcado para ${hh}</span>`:`<span class="chip chip-time"><i class="fa-regular fa-clock"></i> ${hh}</span>`});
-    const sc=STATUS_COLOR[status]||STATUS_COLOR.waiting;
-    listHtml+=`<div class="vcard ${selectedId===c.id?'selected':''}" style="--sc:${sc}" onclick="selectClient('${c.id}')">
-      <div class="vc-top"><div class="vc-info"><div class="vc-type-row"><span class="vc-dot"></span><span class="vc-type">${c.companyMode||c.type==='company'?'Empresa':'Cliente'}</span></div><div class="vc-name">${c.name||'—'}${(c.companyMode||c.type==='company')&&c.requester?` (${c.requester})`:''}</div></div><span class="vc-chevron">›</span></div>
-      <div class="vc-status-row">${statusBadges}</div>
-      ${chips.length?`<div class="vc-chips">${chips.map(x=>x.h).join('')}</div>`:''}
-    </div>`;
-  });
-  list.innerHTML=listHtml;
-  document.getElementById('list-footer').innerHTML='';
-  renderDetail();
-  restoreGestorUiState(uiState);
-}
-window.selectClient=id=>{selectedId=selectedId===id?null:id;switchView('main')};
-window.render=render;
-
-/* ===== HOME (toolbar) ===== */
-function homeHtml(){
-  return `<div class="home-wrap">
-    <div class="home-logo"><img src="mfc-logo.png" alt="MFC" onerror="this.style.display='none'"></div>
-    <div class="home-btns">
-      <button class="btn btn-outline-blue" onclick="generateCadastroLink()"><i class="fa-solid fa-link"></i> Gerar link de cadastro</button>
-      <button class="btn btn-green" onclick="openNewVisit()">＋ Nova visita</button>
-      <button class="btn btn-cyan" onclick="openCompany()"><i class="fa-solid fa-building"></i> Visita de empresa</button>
-    </div>
-    <div class="home-search-row">
-      <div class="home-search"><span class="si"><i class="fa-solid fa-magnifying-glass"></i></span><input id="home-search-input" placeholder="Buscar clientes existentes..." oninput="homeSearch(this.value)" autocomplete="off"><div class="home-results" id="home-results"></div></div>
-    </div>
-  </div>`;
-}
-
-/* ===== DETAIL RENDER ===== */
-function renderDetail(){
-  const wrap=document.getElementById('view-detail');
-  const c=all.find(x=>x.id===selectedId&&!x.deleted);
-  if(!c){wrap.innerHTML=homeHtml();return}
-  if(c.status==='discarded'){
-    wrap.innerHTML=`
-    <div class="detail-head"><div class="dh-left"><div class="dh-ic">${(c.name||'?').trim().charAt(0).toUpperCase()}</div><div><h1>Detalhes da visita</h1><p class="dh-sub">Informações completas da visita registrada</p></div></div><div class="detail-actions"><span class="sbadge sdisc">Serviço descartado</span><button class="btn btn-muted btn-sm" onclick="openEdit('${c.id}')"><i class="fa-solid fa-pen"></i> Editar</button></div></div>
-    ${clientInfoBlocks(c,0)}
-    <div class="box" style="background:#3b0d0d;border:1px solid #ef4444;border-radius:var(--radius);padding:16px">
-      <h3 style="color:#fecaca"><i class="fa-solid fa-ban"></i> Serviço descartado pelo técnico</h3>
-      <p style="margin-top:10px"><b>Motivo:</b> ${c.discardReason||'— (nenhum motivo informado)'}</p>
-      <p style="color:var(--muted);margin-top:8px"><i class="fa-regular fa-clock"></i> ${fdt(c.discardedAt)}</p>
-    </div>
-    <div class="bottom-acts" style="margin-top:16px">
-      <button class="btn btn-outline-red btn-wrap" onclick="softDelete('${c.id}')"><i class="fa-solid fa-trash-can"></i> Mover cliente para a lixeira</button>
-    </div>`;
-    initGestorLocation(c);
-    return;
-  }
-  const layers=getLayers(c);
-  const done=layers.filter(l=>l.done);const removedLayers=Array.isArray(c.removedLayers)?c.removedLayers:[];
-  const pinIdx=layers.findIndex(l=>!l.done&&l.pinned);
-  const firstActIdx=layers.findIndex(l=>!l.done);
-  const defaultIdx=pinIdx>=0?pinIdx:firstActIdx;
-  const headL=defaultIdx>=0?layers[defaultIdx]:null;
-  const status=headL?headL.status||'waiting':'done';
-  const activeGroups=[];layers.forEach((l,i)=>{if(l.done)return;const id=layerEquipmentId(c,l,i);let group=activeGroups.find(g=>g.id===id);if(!group){group={id,name:layerEquipmentName(c,l,i),items:[]};activeGroups.push(group)}group.items.push({l,i})});const defaultEqId=defaultIdx>=0?layerEquipmentId(c,layers[defaultIdx],defaultIdx):(activeGroups[0]?.id||'');const tabs=activeGroups.map((group,gi)=>{const first=group.items[0],active=group.id===defaultEqId;return`<button id="vt-${c.id}-${first.i}" data-vt="${c.id}" class="vtab ${active?'active':''} ${{waiting:'vtw',workshop_pending:'vtws',evaluated:'vte',quoted:'vtq',approved:'vta',ready_delivery:'vtrd',service_finished:'vte',absent:'vtab2'}[first.l.status]||'vtw'}" onclick="showVTab('${c.id}',${first.i})">Relatório ${gi+1}</button>`}).join('');const doneTab=done.length?`<button class="vtab vtd" data-vt="${c.id}" onclick="showDoneTab('${c.id}')">Concluídos (${done.length})</button>`:'';const removedTab=removedLayers.length?`<button class="vtab" data-vt="${c.id}" onclick="showRemovedTab('${c.id}')"><i class="fa-solid fa-box-archive"></i> Removidos (${removedLayers.length})</button>`:'';
-  const panels=layers.map((l,i)=>{
-    if(l.done)return'';
-    const first=layerEquipmentId(c,l,i)===defaultEqId;
-    const mediaReady=()=>{if(selectedId===c.id)renderDetail()};
-    const bimg=layerBudgetSource(db,c.id,l,mediaReady);
-    const photos=layerPhotoSources(db,c.id,l,mediaReady);
-    const warrantyMode=warrantyModeText(l);
-    const reportLabel=l.warrantyMode==='adjustment'?'Ajuste realizado':'Relatório';
-    const total=moneyNum(l.approval?.value);
-    const pagSumL=pagsOf(l).reduce((s,p)=>s+moneyNum(p.valor),0);
-    const entrada=l.approval?.paid?total:0;
-    const pct=total>0?Math.min(100,Math.round(entrada/total*100)):0;
-    const restante=Math.max(0,total-entrada);
-    return `<details id="vp-${c.id}-${i}" data-vp="${c.id}" data-equipment-id="${layerEquipmentId(c,l,i)}" class="vpanel gestor-evaluation ${first?'active':''}" ${i===defaultIdx?'open':''}><summary onclick="selectGestorEvaluation('${c.id}',${i})">${gestorEvaluationLabel(c,l,i)}</summary><div class="gestor-evaluation-body">
-      <div class="dcards">
-      </div>
-      ${warrantyMode?`<p class="indicator" style="background:#3b2a06;border-color:#f59e0b;color:#fbbf24;margin-bottom:10px"><i class="fa-solid fa-shield-halved"></i> ${warrantyMode}</p>`:''}
-      ${l.techReport?`<div class="acc"><div class="acc-hdr" id="th${c.id}${i}" onclick="toggleAcc('th${c.id}${i}','tb${c.id}${i}')"><span class="ic"><i class="fa-solid fa-wrench"></i></span>${l.warrantyMode==='adjustment'?'Ajuste da Garantia':'Relatório do Técnico'}<span class="acc-arr">▼</span></div><div class="acc-body" id="tb${c.id}${i}"><p><b>Equipamento:</b> ${l.techReport.model||'—'}</p><p><b>Tipo de Serviço:</b> ${reportServiceType(l.techReport)}</p><p><b>${reportLabel}:</b><br><span style="white-space:pre-wrap">${reportTextOnly(l.techReport)}</span></p>${leakReportHtml(l)}${l.techReport.needsPickup&&!layerServiceInWorkshop(l)?'<p class="indicator"><i class="fa-solid fa-industry"></i> Retirar equipamento</p>':''}${(l.techReport.serviceType||'').includes('Laudo')?'<p class="indicator ind-laudo"><i class="fa-solid fa-clipboard"></i> Laudo</p>':''}<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">${photos.map(p=>`<img src="${p}" onclick="openLb('${p}')" style="width:70px;height:70px;object-fit:cover;border-radius:8px;cursor:pointer">`).join('')}</div><div class="acts" style="margin-top:10px"><button class="btn btn-muted btn-sm" onclick="editTechReport('${c.id}',${i})"><i class="fa-solid fa-pen"></i> ${l.warrantyMode==='adjustment'?'Editar ajuste':'Editar relatório'}</button><button class="btn btn-red btn-sm" onclick="deleteTechReport('${c.id}',${i})"><i class="fa-solid fa-trash-can"></i> Excluir relatório</button></div></div></div>`:''}
-      <div class="acc"><div class="acc-hdr open" id="qh${c.id}${i}" onclick="toggleAcc('qh${c.id}${i}','qb${c.id}${i}')"><span class="ic"><i class="fa-solid fa-coins"></i></span>Orçamento e Status<span class="acc-arr">▼</span></div><div class="acc-body open" id="qb${c.id}${i}">
-        <div style="margin-bottom:12px"><span class="fl">Status desta visita</span><select class="fi" id="ly-st-${c.id}-${i}">${statusOpts(l.status)}</select></div>
-        <input type="checkbox" id="ly-service-workshop-${c.id}-${i}" ${l.serviceInWorkshop||l.approval?.serviceInWorkshop?'checked':''} style="display:none">
-        <input type="checkbox" id="ly-paid-${c.id}-${i}" ${l.approval?.paid?'checked':''} style="display:none">
-        <input type="checkbox" id="ly-owes-${c.id}-${i}" ${l.approval?.owes?'checked':''} style="display:none">
-        <input type="checkbox" id="ly-warranty-${c.id}-${i}" ${l.approval?.warranty?'checked':''} style="display:none">
-        <div class="toggle3">
-          <button type="button" class="tg-btn tg-galpao ${l.serviceInWorkshop||l.approval?.serviceInWorkshop?'active':''}" data-chk="ly-service-workshop-${c.id}-${i}" onclick="toggleChk('ly-service-workshop-${c.id}-${i}',this)"><i class="fa-solid fa-industry"></i> Equipamento no galpão</button>
-          <button type="button" class="tg-btn tg-paid ${l.approval?.paid?'active':''}" data-chk="ly-paid-${c.id}-${i}" onclick="toggleChk('ly-paid-${c.id}-${i}',this)"><i class="fa-solid fa-credit-card"></i> Serviço já foi pago</button>
-          <button type="button" class="tg-btn tg-owes ${l.approval?.owes?'active':''}" data-chk="ly-owes-${c.id}-${i}" onclick="toggleChk('ly-owes-${c.id}-${i}',this)"><i class="fa-solid fa-circle" style="color:#ef4444"></i> Falta pagar</button>
-          <button type="button" class="tg-btn tg-warranty ${l.approval?.warranty?'active':''}" data-chk="ly-warranty-${c.id}-${i}" onclick="toggleWarrantyChk('ly-warranty-${c.id}-${i}',this,'${c.id}',${i})"><i class="fa-solid fa-shield-halved"></i> Serviço de garantia</button>
-        </div>
-        <div class="os-grid">
-          <div class="os-left">
-            <div class="date-grid">
-              <div><span class="fl">Data e hora do serviço</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="ly-svc-${c.id}-${i}" placeholder="dd/mm/aaaa hh:mm" value="${isoToBr(l.approval?.serviceDate||'')}" oninput="dtMask(this)" style="flex:1;min-width:0"><button type="button" class="btn btn-muted btn-sm" title="Limpar data" style="padding:0 10px;height:44px" onclick="clearDateField('ly-svc-${c.id}-${i}','pk-svc-${c.id}-${i}')"><i class="fa-solid fa-xmark"></i></button><button type="button" class="btn btn-muted btn-sm" style="padding:0 10px;height:44px" onclick="openPicker('pk-svc-${c.id}-${i}')"><i class="fa-solid fa-calendar-days"></i></button><input type="datetime-local" id="pk-svc-${c.id}-${i}" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickToText(this,'ly-svc-${c.id}-${i}',false)"></div></div>
-              <div><span class="fl">Data de conclusão do serviço</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="ly-finished-${c.id}-${i}" placeholder="dd/mm/aaaa" value="${isoDateToBr(l.serviceFinishedAt||'')}" oninput="dMask(this)" style="flex:1;min-width:0"><button type="button" class="btn btn-muted btn-sm" title="Limpar data" style="padding:0 10px;height:44px" onclick="clearDateField('ly-finished-${c.id}-${i}','pk-finished-${c.id}-${i}')"><i class="fa-solid fa-xmark"></i></button><button type="button" class="btn btn-muted btn-sm" style="padding:0 10px;height:44px" onclick="openPicker('pk-finished-${c.id}-${i}')"><i class="fa-solid fa-calendar-days"></i></button><input type="date" id="pk-finished-${c.id}-${i}" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickDateToText(this,'ly-finished-${c.id}-${i}')"></div></div>
-              <div><span class="fl">Data de pagamento</span><div style="display:flex;gap:6px;position:relative"><input class="fi" id="ly-paydate-${c.id}-${i}" placeholder="dd/mm/aaaa" value="${isoDateToBr(l.approval?.paymentDate||'')}" oninput="dMask(this)" style="flex:1;min-width:0"><button type="button" class="btn btn-muted btn-sm" title="Limpar data" style="padding:0 10px;height:44px" onclick="clearDateField('ly-paydate-${c.id}-${i}','pk-pd-${c.id}-${i}')"><i class="fa-solid fa-xmark"></i></button><button type="button" class="btn btn-muted btn-sm" style="padding:0 10px;height:44px" onclick="openPicker('pk-pd-${c.id}-${i}')"><i class="fa-solid fa-calendar-days"></i></button><input type="date" id="pk-pd-${c.id}-${i}" style="position:absolute;opacity:0;width:1px;height:1px;bottom:0;right:0;border:0;padding:0" onchange="pickDateToText(this,'ly-paydate-${c.id}-${i}')"></div></div>
-            </div>
-            <div style="margin-bottom:12px"><span class="fl">Valor do orçamento</span><input class="fi" id="ly-val-${c.id}-${i}" placeholder="R$ 0,00" value="${l.approval?.value||''}" oninput="recalcPag('${c.id}',${i})"></div>
-            <div class="fgrid" style="margin-bottom:12px">
-              <div><span class="fl">Valor de entrada</span><input type="number" step="0.01" class="fi" id="ly-entry-value-${c.id}-${i}" placeholder="R$ 0,00" value="${l.approval?.entryValue||''}" oninput="recalcPag('${c.id}',${i})"></div>
-              <div><span class="fl">Forma de pagamento</span><select class="fi" id="ly-pay-ent-${c.id}-${i}">${PAG_OPTS.map(o=>`<option ${o===(l.approval?.entryPayment||'')?'selected':''}>${o}</option>`).join('')}</select></div>
-              <div><span class="fl">Saldo a receber (automático)</span><input class="fi" id="ly-saldo-${c.id}-${i}" placeholder="R$ 0,00" value="${(moneyNum(l.approval?.value)-moneyNum(l.approval?.entryValue))>0?(moneyNum(l.approval?.value)-moneyNum(l.approval?.entryValue)).toFixed(2).replace('.',','):''}" readonly style="opacity:.85"></div>
-              <div><span class="fl">Forma de pagamento</span><select class="fi" id="ly-pay-sal-${c.id}-${i}">${PAG_OPTS.map(o=>`<option ${o===(l.approval?.balancePayment||'')?'selected':''}>${o}</option>`).join('')}</select></div>
-            </div>
-            <div><span class="fl">Observação</span><textarea class="fi" id="ly-obs-${c.id}-${i}" placeholder="Observação sobre o orçamento/status" style="min-height:110px">${l.quoteObs||''}</textarea></div>
-          </div>
-          <div class="os-right">
-            <span class="fl">Imagem do orçamento / print</span>
-            <div class="img-drop ${bimg?'has-img':''}">
-              ${bimg?`<img class="budget-preview-big" src="${bimg}" onclick="openLb('${bimg}')">`:`<div class="img-empty"><i class="fa-regular fa-file-image"></i><p>Nenhuma imagem anexada.</p><button type="button" class="btn btn-muted btn-sm" onclick="document.getElementById('bud-file-${c.id}-${i}').click()">Escolher arquivo</button><span class="img-hint">PNG ou JPG</span></div>`}
-            </div>
-            <input type="file" id="bud-file-${c.id}-${i}" accept="image/*" style="display:none" onchange="uploadBudgetImage('${c.id}',${i},this)">
-            ${bimg?`<div class="img-acts"><button type="button" class="btn btn-outline-blue btn-sm" onclick="document.getElementById('bud-file-${c.id}-${i}').click()"><i class="fa-solid fa-upload"></i> Substituir imagem</button><button type="button" class="btn btn-outline-red btn-sm" onclick="removeBudgetImage('${c.id}',${i})"><i class="fa-regular fa-trash-can"></i> Remover imagem</button></div>`:''}
-          </div>
-        </div>
-      </div></div>
-      <div class="bottom-acts">
-        <button class="btn btn-green" onclick="saveLayer('${c.id}',${i})"><i class="fa-solid fa-floppy-disk"></i> Salvar</button>
-        <button class="btn btn-outline-blue" onclick="concludeLayer('${c.id}',${i})"><i class="fa-solid fa-check"></i> Serviço finalizado</button>
-        <button class="btn btn-muted btn-wrap" onclick="removeLayer('${c.id}',${i})"><i class="fa-solid fa-minus"></i> Remover visita/relatório</button>
-        <button class="btn btn-outline-red btn-wrap" onclick="softDelete('${c.id}')"><i class="fa-solid fa-trash-can"></i> Mover cliente para a lixeira</button>
-      </div>
-    </div></details>`;
-  }).join('');
-  wrap.innerHTML=`
-    <div class="detail-head"><div class="dh-left"><div class="dh-ic">${(c.name||'?').trim().charAt(0).toUpperCase()}</div><div><h1>Detalhes da visita</h1><p class="dh-sub">Informações completas da visita registrada</p></div></div><div class="detail-actions"><span class="sbadge ${badgeCls[status]||'sw'}" id="head-badge-${c.id}">${lbl(status)}</span>${(c.companyMode||c.type==='company')&&c.accessRequired!==undefined?(c.accessRequired?'<span class="sbadge" style="background:#0d1f0d33;color:#4ade80;border:1px solid #22c55e"><i class="fa-solid fa-id-card"></i> Documentação necessária</span>':'<span class="sbadge" style="background:#3b0d0d33;color:#fca5a5;border:1px solid #ef4444"><i class="fa-solid fa-id-card"></i> Documentação não necessária</span>'):''}<button class="btn btn-muted btn-sm" onclick="openEdit('${c.id}')"><i class="fa-solid fa-pen"></i> Editar</button></div></div>
-    ${clientInfoBlocks(c,defaultIdx>=0?defaultIdx:0)}
-    <div id="body-${c.id}">
-      <div class="vtabs-row"><div class="vtabs">${tabs}${doneTab}${removedTab}<button class="vtab vtab-new" onclick="addLayer('${c.id}')"><i class="fa-solid fa-plus"></i></button></div><div id="pin-btn-${c.id}">${pinBtnHtml(c,defaultIdx)}</div></div>
-      <div class="gestor-inline-builder" id="gestor-inline-builder-${c.id}"><b>Esta nova avaliação é para o mesmo equipamento?</b><div class="gestor-choice-row"><button class="gestor-choice" id="gestor-same-${c.id}" onclick="chooseGestorInline('${c.id}','same')">Sim, o mesmo</button><button class="gestor-choice" id="gestor-new-${c.id}" onclick="chooseGestorInline('${c.id}','new')">Não, outro equipamento</button></div><div class="gestor-inline-fields" id="gestor-inline-fields-${c.id}"><div id="gestor-new-name-wrap-${c.id}" style="display:none"><span class="fl">Nome do novo equipamento</span><input class="fi" id="gestor-inline-name-${c.id}" placeholder="Nome do equipamento"></div><div><span class="fl">Descrição do problema desta avaliação</span><textarea class="fi" id="gestor-inline-problem-${c.id}" placeholder="Descreva o defeito"></textarea></div><div class="mact"><button class="btn btn-muted" onclick="closeGestorInline('${c.id}')">Cancelar</button><button class="btn btn-cyan" onclick="saveGestorInline('${c.id}')">Adicionar</button></div></div></div>
-      ${panels}
-    </div>`;
-  setTimeout(()=>applyHeadBadgeClick(document.getElementById('head-badge-'+c.id),status,c.name),0);
-  initGestorLocation(c);
-}
-
-window.showDoneTab=cid=>{
-  document.querySelectorAll(`[data-vt="${cid}"]`).forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll(`[data-vp="${cid}"]`).forEach(p=>p.classList.remove('active'));
-  const doneBtn=Array.from(document.querySelectorAll(`[data-vt="${cid}"]`)).find(t=>(t.textContent||'').includes('Concluídos'));
-  doneBtn?.classList.add('active');
-  const hb=document.getElementById('head-badge-'+cid);if(hb){hb.className='sbadge sd';hb.textContent=lbl('done');applyHeadBadgeClick(hb,'done','')}
-  const pinBtn=document.getElementById('pin-btn-'+cid);if(pinBtn)pinBtn.innerHTML='';
-  const body=document.getElementById('body-'+cid);
-  if(!body)return;
-  let panel=document.getElementById(`vp-${cid}-done`);
-  const c=all.find(x=>x.id===cid);
-  const doneLayers=getLayers(c||{}).map((l,i)=>({l,i})).filter(({l})=>l.done);
-  if(!panel){
-    panel=document.createElement('div');
-    panel.id=`vp-${cid}-done`;
-    panel.dataset.vp=cid;
-    panel.className='vpanel';
-    const tabsRow=body.querySelector('.vtabs-row');
-    if(tabsRow&&tabsRow.nextSibling)body.insertBefore(panel,tabsRow.nextSibling);else body.appendChild(panel);
-  }
-  const mediaReady=()=>{if(document.getElementById(`vp-${cid}-done`)?.classList.contains('active'))showDoneTab(cid)};
-  panel.innerHTML=doneLayers.length?doneLayers.map(({l,i},idx)=>{
-    const photos=layerPhotoSources(db,cid,l,mediaReady);
-    const bimg=layerBudgetSource(db,cid,l,mediaReady);
-    const warrantyMode=warrantyModeText(l);
-    const reportLabel=l.warrantyMode==='adjustment'?'Ajuste realizado':'Relatório';
-    return `<div class="acc"><div class="acc-hdr open"><span class="ic"><i class="fa-solid fa-check"></i></span>Concluído — ${gestorEvaluationStatusRef(c,l,i,true)}<span class="acc-arr">▼</span></div><div class="acc-body open">${warrantyMode?`<p class="indicator" style="background:#3b2a06;border-color:#f59e0b;color:#fbbf24"><i class="fa-solid fa-shield-halved"></i> ${warrantyMode}</p>`:''}<p><b>Equipamento:</b> ${l.techReport?.model||'—'}</p><p><b>Tipo de Serviço:</b> ${reportServiceType(l.techReport)}</p><p><b>${reportLabel}:</b><br><span style="white-space:pre-wrap">${reportTextOnly(l.techReport)}</span></p>${leakReportHtml(l)}${l.concludedAt?`<p><b>Concluído em:</b> ${isoDateToBr(l.concludedAt)}</p>`:''}${photos.length?`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">${photos.map(p=>`<img src="${p}" onclick="openLb('${p}')" style="width:70px;height:70px;object-fit:cover;border-radius:8px;cursor:pointer">`).join('')}</div>`:''}${bimg?`<div class="doc-box" style="margin-top:8px"><span class="fl">Imagem do orçamento / print</span><img class="budget-preview" src="${bimg}" onclick="openLb('${bimg}')"></div>`:''}</div></div>`;
-  }).join(''):'<div class="empty">Nenhuma visita concluída.</div>';
-  panel.classList.add('active');
-};
-
-window.showRemovedTab=cid=>{
-  document.querySelectorAll(`[data-vt="${cid}"]`).forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll(`[data-vp="${cid}"]`).forEach(p=>p.classList.remove('active'));
-  const btn=Array.from(document.querySelectorAll(`[data-vt="${cid}"]`)).find(t=>(t.textContent||'').includes('Removidos'));
-  btn?.classList.add('active');
-  const body=document.getElementById('body-'+cid);if(!body)return;
-  let panel=document.getElementById(`vp-${cid}-removed`),c=all.find(x=>x.id===cid),items=Array.isArray(c?.removedLayers)?c.removedLayers:[];
-  if(!panel){panel=document.createElement('div');panel.id=`vp-${cid}-removed`;panel.dataset.vp=cid;panel.className='vpanel';body.appendChild(panel)}
-  const clearButton=items.length?`<div class="acts" style="justify-content:flex-end;margin:0 0 12px"><button type="button" class="btn btn-red btn-sm" onclick="clearRemovedLayers('${cid}')"><i class="fa-solid fa-trash-can"></i> Limpar removidos</button></div>`:'';
-  panel.innerHTML=clearButton+(items.map((l,i)=>`<div class="acc"><div class="acc-hdr open"><span class="ic"><i class="fa-solid fa-box-archive"></i></span>Relatório removido ${i+1}</div><div class="acc-body open"><p><b>Equipamento:</b> ${layerEquipmentName(c,l,i)}</p><p><b>Problema:</b> ${layerReportedProblem(c,l,i)||'—'}</p><p><b>Observação:</b> ${gestorObsValue(c,l,i)||'—'}</p><div class="acts"><button class="btn btn-muted btn-sm" onclick="restoreRemovedLayer('${cid}',${i})"><i class="fa-solid fa-rotate-left"></i> Restaurar</button></div></div></div>`).join('')||'<div class="empty">Nenhum relatório removido.</div>');
-  panel.classList.add('active')
-};
-window.restoreRemovedLayer=async(id,i)=>{const c=all.find(x=>x.id===id),removed=[...(c.removedLayers||[])],item=removed.splice(i,1)[0];if(!item)return;const{removedAt,...layer}=item,layers=[...getLayers(c),layer],first=layers.find(l=>!l.done);await updateDoc(doc(db,'clients',id),{layers,removedLayers:removed,status:first?.status||(layers.every(l=>l.done)?'done':'waiting'),updatedAt:new Date().toISOString()});toast('↩️ Relatório restaurado')};
-window.clearRemovedLayers=async id=>{
-  try{
-    const snap=await getDoc(doc(db,'clients',id));if(!snap.exists())return alert('Cliente não encontrado. Atualize a página e tente novamente.');
-    const fresh={id:snap.id,...snap.data()},removed=Array.isArray(fresh.removedLayers)?fresh.removedLayers:[];
-    if(!removed.length)return alert('Não existem relatórios removidos para limpar.');
-    if(!confirm(`Apagar definitivamente os ${removed.length} relatórios removidos deste cliente? Esta ação não poderá ser desfeita.`))return;
-    const mediaIds=removed.flatMap(layer=>layerMediaIds(layer)),updatedAt=new Date().toISOString();
-    await updateDoc(doc(db,'clients',id),{removedLayers:[],updatedAt});
-    const idx=all.findIndex(item=>item.id===id);if(idx>-1)all[idx]={...all[idx],removedLayers:[],updatedAt};
-    render();
-    const failures=await deleteMediaIds(db,id,mediaIds);
-    if(failures.length)alert('Os relatórios foram limpos, mas algumas imagens não puderam ser excluídas agora. A limpeza automática tentará novamente.');
-    toast('🗑️ Relatórios removidos apagados definitivamente');
-  }catch(error){console.error(error);alert('Não foi possível limpar os relatórios removidos. Verifique a conexão e tente novamente.')}
-};
-function renderTrash(){
-  const q=(document.getElementById('trash-search-input')?.value||'').toLowerCase().trim();
-  const qd=normPhone(q);
-  let deleted=all.filter(c=>c.deleted);
-  if(q)deleted=deleted.filter(c=>(c.name||'').toLowerCase().includes(q)||(qd&&normPhone(c.phone).includes(qd))||(c.address||'').toLowerCase().includes(q));
-  const el=document.getElementById('trash-list');
-  if(!deleted.length){el.innerHTML=`<div class="empty">${q?'Nada encontrado.':'Lixeira vazia.'}</div>`;return}
-  el.innerHTML=deleted.map(c=>`<div class="trash-item" style="cursor:pointer" onclick="openClientSummary('${c.id}')"><span>${c.name||'—'} — ${c.phone||''}</span><button class="btn btn-outline-blue btn-sm" onclick="event.stopPropagation();openClientSummary('${c.id}')"><i class="fa-solid fa-eye"></i> Resumo</button><button class="btn btn-muted btn-sm" onclick="event.stopPropagation();restoreClient('${c.id}')"><i class="fa-solid fa-recycle"></i> Restaurar</button><button class="btn btn-red btn-sm" onclick="event.stopPropagation();hardDelete('${c.id}')">Excluir permanentemente</button></div>`).join('');
-}
-window.renderTrash=renderTrash;
-
-window.saveLayerDatetime=async(id,li,brVal)=>{const iso=brToIso(brVal);if(!iso)return;const c=all.find(x=>x.id===id);const layers=[...getLayers(c)];layers[li]={...layers[li],datetime:iso};const first=layers.find(l=>!l.done);const upd={layers,updatedAt:new Date().toISOString()};if(li===0)upd.datetime=iso;await updateDoc(doc(db,'clients',id),upd);toast('📅 Data da visita atualizada')};
-window.removeLayer=async(id,li)=>{const c=all.find(x=>x.id===id),layers=[...getLayers(c)];if(layers.length<=1)return alert('Não é possível remover o único relatório.');if(!layers[li]||!confirm('Remover este relatório? Ele poderá ser restaurado.'))return;const removedLayers=[...(c.removedLayers||[]),{...layers[li],removedAt:new Date().toISOString()}];layers.splice(li,1);const first=layers.find(l=>!l.done);await updateDoc(doc(db,'clients',id),{layers,removedLayers,status:first?.status||(layers.every(l=>l.done)?'done':'waiting'),updatedAt:new Date().toISOString()});toast('🗃️ Relatório movido para Removidos')};
-function resizeImageFile(file,maxW=1000,quality=.6){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>{const sc=Math.min(1,maxW/img.width);const c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);c.getContext('2d').drawImage(img,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',quality))};img.onerror=rej;img.src=r.result};r.onerror=rej;r.readAsDataURL(file)})}
-window.uploadBudgetImage=async(id,li,input)=>{const file=input.files?.[0];if(!file)return;if(!file.type.startsWith('image/'))return alert('Envie apenas imagem.');const c=all.find(x=>x.id===id),layers=[...getLayers(c)],data=await resizeImageFile(file);layers[li]={...readLayerForm(id,li,layers[li]),budgetImage:{data,name:file.name,type:'image/jpeg',uploadedAt:new Date().toISOString()}};let pack=null;try{pack=await externalizeLayers(db,id,layers,{migrateActive:true});const first=pack.layers.find(l=>!l.done);await updateDoc(doc(db,'clients',id),{layers:pack.layers,status:first?first.status:'done',updatedAt:new Date().toISOString()});await deleteMediaIds(db,id,pack.deleteIds);input.value='';toast('🖼️ Imagem anexada')}catch(e){if(pack?.createdIds)await deleteMediaIds(db,id,pack.createdIds);console.error(e);alert('Não foi possível anexar o orçamento. Tente novamente.')}};
-window.removeBudgetImage=async(id,li)=>{const c=all.find(x=>x.id===id);const layers=[...getLayers(c)],layer=layers[li]||{},rawRef=layer.budgetImageRef||layer.budgetImage?.ref;const budgetRef=typeof rawRef==='string'?rawRef:rawRef?.id||'';layers[li]={...layer,budgetImage:null,budgetImageRef:null};await updateDoc(doc(db,'clients',id),{layers});await deleteMediaIds(db,id,[budgetRef])};
-</script>
-<div id="fin-print-area"></div>
-<script src="layout-guide.js?v=141"></script>
-</body></html>
