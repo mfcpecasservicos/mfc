@@ -1,3 +1,19 @@
+MFC v143f-recover
+
+RECUPERAÇÃO DE EMERGÊNCIA: gestor.html CORROMPIDO
+
+- O commit "Implementa importação local de Pix no Financeiro" cortou o gestor.html no meio
+  do arquivo (faltava a função render() inteira e todo o fechamento do HTML). Isso quebrava
+  o script inteiro e travava a tela de login ("mfcGoogleLogin is not defined").
+- Restaurado gestor.html para a última versão completa e íntegra (a que já tinha a correção
+  do gerador de link de cadastro no celular), sem a parte quebrada do Pix.
+- ATENÇÃO — duas coisas ficaram de fora e precisam ser refeitas quando quiser:
+  1) A feature "Importar Pix Copia e Cola" (só existia parcialmente, truncada).
+  2) TODA a feature "Solicitar localização ao cliente" (localizacao.html, as regras de
+     locationRequests no firestore.rules, e o botão/token em location-view.js) — o histórico
+     do repositório foi resetado para antes dela em algum momento e ela não existe mais no
+     código atual. Avise se quiser que eu reaplique essa parte.
+
 MFC v143e
 
 CONCLUSÃO INDIVIDUAL POR AVALIAÇÃO
