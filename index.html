@@ -81,7 +81,24 @@ header h1{font-size:1rem;font-weight:800;flex:1}.reload-btn,.install-btn{backgro
 .inline-report-builder h4{display:flex;align-items:center;justify-content:center;gap:10px;text-align:center;line-height:1.25;margin:0 0 14px}.inline-choice-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.inline-choice-row .service-type-btn{width:100%;min-width:0;min-height:64px;display:flex;align-items:center;justify-content:center;gap:10px;padding:12px 14px;text-align:center;line-height:1.15}.inline-choice-row .service-type-btn:last-child{grid-column:1/-1}.inline-choice-row .service-type-btn i{flex:0 0 auto}.evaluation-details summary{position:relative;min-height:76px;box-sizing:border-box;align-items:center;line-height:1.2}.evaluation-delete-system{width:48px!important;height:48px!important;min-width:48px!important;padding:0!important;top:14px!important;right:52px!important;display:flex!important;align-items:center!important;justify-content:center!important;border-radius:12px!important}.evaluation-delete-system i{margin:0!important}@media(max-width:520px){.inline-choice-row{grid-template-columns:1fr}.inline-choice-row .service-type-btn:last-child{grid-column:auto}.inline-choice-row .service-type-btn{min-height:58px}.evaluation-details summary{padding-left:14px;padding-right:100px}.evaluation-delete-system{right:48px!important}}
 .icon-trash-danger{background:#3b121955!important;border-color:#ef4444!important;color:#fca5a5!important}.icon-trash-danger:hover{background:#ef444422!important}.evaluation-edit-top{margin-left:auto;margin-right:30px;flex:0 0 auto}.evaluation-details summary{padding-right:16px}.evaluation-details summary:after{right:18px}.evaluation-details summary:has(.evaluation-edit-top){padding-right:16px}.evaluation-delete-system{display:none!important}@media(max-width:520px){.evaluation-edit-top{margin-right:28px;padding:8px 10px;font-size:.78rem}.evaluation-details summary{padding-right:12px}}
 
-</style>
+<style>
+@media(max-width:520px){
+  header{padding:14px 14px}
+  header h1{font-size:1.08rem}
+  .list-wrap{padding:14px 12px;gap:12px}
+  .day-head{font-size:.68rem;letter-spacing:.14em;margin:16px 2px 5px}
+  .card-inner{padding:17px 38px 12px 17px;gap:13px}
+  .card-type{font-size:.74rem}
+  .card-name{font-size:1.04rem;line-height:1.35}
+  .card-sub{font-size:.84rem;margin-top:5px}
+  .card-status-row{padding:7px 17px;gap:7px}
+  .badge{font-size:.69rem;padding:6px 11px}
+  .rep-num{font-size:.66rem}
+  .card-foot{padding:3px 17px 17px;gap:7px}
+  .chip,.indicator{font-size:.74rem;height:26px}
+  .chip-completed-unpaid{min-height:32px}
+}
+</style></style>
 </head>
 <body>
 <div id="auth-gate"><div class="auth-card"><img src="mfc-logo.png" alt="MFC"><h2>Acesso do técnico</h2><p>Entre uma vez neste aparelho. A sessão ficará salva para as próximas visitas.</p><form class="auth-form" onsubmit="mfcPasswordLogin(event)"><div class="auth-field"><label for="auth-username">Usuário</label><input id="auth-username" name="username" type="text" value="tecnico" autocomplete="username" autocapitalize="none" spellcheck="false" required></div><div class="auth-field"><label for="auth-password">Senha</label><input id="auth-password" name="password" type="password" autocomplete="current-password" required></div><button type="submit" class="auth-login" id="auth-login-btn"><i class="fa-solid fa-right-to-bracket"></i> Entrar</button><div class="auth-note">Depois do primeiro acesso, não será necessário digitar novamente.</div></form><div class="auth-error" id="auth-error" role="alert"></div></div></div>
@@ -242,7 +259,7 @@ const q=query(col,orderBy('createdAt','desc'));
 let indexUnsub=null;
 function startIndexData(){if(indexUnsub)return;indexUnsub=onSnapshot(q,{includeMetadataChanges:true},snap=>{window.__mfcIndexReady=true;allClients=snap.docs.map(d=>neutralizeRecord({id:d.id,...d.data()}));const cached=snap.metadata.fromCache,pending=snap.metadata.hasPendingWrites;if(!cached&&!pending)cleanupClosedMediaFromIndex();document.getElementById('conn').innerHTML=`<i class="fa-solid fa-circle" style="color:${pending?'#f59e0b':cached?'#a78bfa':'#22c55e'}"></i>`;renderList();if(currentId){const c=allClients.find(x=>x.id===currentId);if(c){currentDetailClient=c;renderDetailFull(c,true)}}},error=>{console.error(error);window.__mfcIndexReady=true;document.getElementById('conn').innerHTML='<i class="fa-solid fa-circle" style="color:#ef4444"></i>';const wrap=document.getElementById('list-wrap');if(wrap&&!allClients.length)wrap.innerHTML='<div class="empty"><i class="fa-solid fa-triangle-exclamation"></i> Acesso recusado ou conexão indisponível. Entre novamente e confira a internet.</div>'})}
 onAuthStateChanged(auth,user=>{const gate=document.getElementById('auth-gate'),btn=document.getElementById('auth-login-btn'),password=document.getElementById('auth-password');if(user){gate.style.display='none';if(password)password.value='';startIndexData();syncNotificationState()}else{gate.style.display='flex';if(btn)btn.disabled=false;renderNotificationButton(false);document.getElementById('list-wrap').innerHTML='<div class="empty">Entre para carregar as visitas.</div>'}});
-window.renderList=()=>{const wrap=document.getElementById('list-wrap'),search='';let clients=allClients.filter(c=>!c.deleted&&c.status!=='discarded').filter(c=>getLayers(c).some(l=>!l.done));if(search)clients=clients.filter(c=>(c.name||'').toLowerCase().includes(search)||(c.phone||'').includes(search));clients=[...clients].sort(appointmentSortCmp);if(!clients.length){wrap.innerHTML='<div class="empty"><i class="fa-solid fa-clipboard"></i> Sem clientes.</div>';return}
+window.renderList=()=>{const wrap=document.getElementById('list-wrap'),search='';function isIndexActiveLayer(l){if(!l||l.done)return false;const s=st(l.status);if(s==='service_finished'&&!l.awaitingPaymentCompletion&&!l.approval?.owes)return false;return true}let clients=allClients.filter(c=>!c.deleted&&c.status!=='discarded').filter(c=>getLayers(c).some(isIndexActiveLayer));if(search)clients=clients.filter(c=>(c.name||'').toLowerCase().includes(search)||(c.phone||'').includes(search));clients=[...clients].sort(appointmentSortCmp);if(!clients.length){wrap.innerHTML='<div class="empty"><i class="fa-solid fa-clipboard"></i> Sem clientes.</div>';return}
 const ICON_FA={waiting:'fa-clock',workshop_pending:'fa-industry',evaluated:'fa-check',quoted:'fa-dollar-sign',approved:'fa-circle',ready_delivery:'fa-box',service_finished:'fa-check',absent:'fa-ban',done:'fa-check'};
 const ICON_COLOR={waiting:'#3b82f6',workshop_pending:'#38bdf8',evaluated:'#10B981',quoted:'#F59E0B',approved:'#f97316',ready_delivery:'#38bdf8',service_finished:'#10B981',absent:'#a78bfa',done:'#10B981'};
 const STATUS_COLOR={waiting:'oklch(0.72 0.17 285)',workshop_pending:'oklch(0.70 0.14 220)',evaluated:'oklch(0.75 0.18 155)',quoted:'oklch(0.80 0.16 75)',approved:'oklch(0.75 0.18 45)',ready_delivery:'oklch(0.70 0.14 220)',service_finished:'oklch(0.75 0.18 155)',absent:'oklch(0.65 0.12 300)',discarded:'oklch(0.60 0.20 25)',done:'oklch(0.75 0.18 155)'};
@@ -250,8 +267,8 @@ function dayKey(d){const t=new Date(d||'');if(!Number.isFinite(t.getTime()))retu
 function hourOf(d){const t=new Date(d||'');if(!Number.isFinite(t.getTime()))return '';return t.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}
 let html='',lastDay=null;
 clients.forEach(c=>{
-  const s=st(getStatus(c)),l=activeLayer(c),rc=getLayers(c).filter(x=>!x.done&&hasSubmittedReport(x)).length;
-  const actLayers=getLayers(c).map((l,i)=>({l,i})).filter(({l})=>!l.done),multipleEvaluations=actLayers.length>1,showEvaluationRefs=getLayers(c).length>1;
+  const activeIndexLayers=getLayers(c).map((l,i)=>({l,i})).filter(({l})=>isIndexActiveLayer(l));const s=st(activeIndexLayers[0]?.l?.status||getStatus(c)),l=activeIndexLayers[0]?.l||activeLayer(c),rc=activeIndexLayers.filter(({l})=>hasSubmittedReport(l)).length;
+  const actLayers=activeIndexLayers,multipleEvaluations=actLayers.length>1,showEvaluationRefs=getLayers(c).length>1;
   const statusBadges=actLayers.map(({l:x,i})=>{const ls=st(x.status),num=showEvaluationRefs?`<span class="rep-num">${evaluationStatusRef(c,x,i)}</span>`:'',pickup=multipleEvaluations&&(x.needsPickup||x.techReport?.needsPickup)&&!serviceInWorkshop(x)?'<span class="rep-pickup" title="Retirar equipamento"><i class="fa-solid fa-truck-pickup"></i></span>':'';return `<div class="rep-chip">${num}<span class="badge" style="--sc:${STATUS_COLOR[ls]||STATUS_COLOR.waiting}">${lbl(ls)}</span>${pickup}</div>`}).join('');
   const dk=dayKey(cardDate(c));
   if(dk!==lastDay){html+=`<div class="day-head">${dk}</div>`;lastDay=dk}
