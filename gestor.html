@@ -335,6 +335,47 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 .add-conta{background:var(--surface);border:1px dashed var(--border);border-radius:14px;padding:16px}
 .add-conta .fgrid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
 
+/* ===== IMPORTAÇÃO PIX ===== */
+.pix-modal{max-width:760px}
+.pix-modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pix-modal-head h3{display:flex;align-items:center;gap:9px}
+.pix-close{width:34px;height:34px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-weight:900;cursor:pointer}
+.pix-close:hover{color:var(--text);border-color:var(--accent)}
+.pix-paste-wrap{display:flex;gap:8px;align-items:stretch}
+.pix-paste-wrap .fi{min-height:92px;resize:vertical}
+.pix-read-btn{align-self:flex-end}
+.pix-data{display:none;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px}
+.pix-data.open{display:block}
+.pix-data-title{font-size:.76rem;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.05em;margin-bottom:9px}
+.pix-data-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.pix-data-item{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:9px 10px;min-width:0}
+.pix-data-item.full{grid-column:1/-1}
+.pix-data-item label{display:block;color:var(--muted);font-size:.65rem;font-weight:900;text-transform:uppercase;margin-bottom:4px}
+.pix-data-item strong,.pix-data-item span{display:block;font-size:.82rem;overflow-wrap:anywhere}
+.pix-raw{max-height:74px;overflow:auto;word-break:break-all;font-family:ui-monospace,SFMono-Regular,monospace;font-size:.72rem !important;color:var(--muted)}
+.pix-status{display:none;margin-top:9px;padding:9px 11px;border-radius:9px;font-size:.75rem;font-weight:800;line-height:1.35}
+.pix-status.open{display:block}
+.pix-status.ok{background:#06281b;border:1px solid #10b981;color:#86efac}
+.pix-status.warn{background:#3b2a06;border:1px solid #f59e0b;color:#fde68a}
+.pix-status.err{background:#3b0d0d;border:1px solid #ef4444;color:#fecaca}
+.pix-accounts-title{font-size:.75rem;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
+.pix-accounts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.pix-account{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px;cursor:pointer;transition:.18s}
+.pix-account:hover{border-color:#3b82f666;background:var(--surface2)}
+.pix-account.selected{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan) inset,0 0 22px -12px var(--cyan)}
+.pix-account input{position:absolute;opacity:0;pointer-events:none}
+.pix-account-top{display:flex;align-items:center;gap:8px}
+.pix-radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--muted);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.pix-account.selected .pix-radio{border-color:var(--cyan)}
+.pix-account.selected .pix-radio::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--cyan)}
+.pix-account-name{font-size:.82rem;font-weight:900;line-height:1.2}
+.pix-account-code{margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:.7rem;color:var(--muted)}
+.pix-account-code b{display:block;color:var(--text);font-size:.8rem;margin-top:2px}
+.pix-account-match{margin-top:7px;font-size:.65rem;font-weight:900;color:#86efac}
+.pix-account-manual{margin-top:7px;font-size:.65rem;color:var(--muted)}
+.pix-confirm-note{font-size:.72rem;color:var(--muted);line-height:1.4}
+@media(max-width:700px){.pix-accounts{grid-template-columns:1fr}.pix-data-grid{grid-template-columns:1fr}.pix-data-item.full{grid-column:auto}.pix-paste-wrap{flex-direction:column}.pix-read-btn{align-self:stretch}}
+
 /* trash */
 .trash-item{display:flex;align-items:center;flex-wrap:wrap;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px}
 .trash-item span{flex:1;font-size:.88rem}
@@ -571,6 +612,41 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
     <div><span class="fl">CPF/CNPJ</span><input class="fi" id="ar-doc" placeholder="CPF ou CNPJ"></div>
     <div><span class="fl">Apelido</span><input class="fi" id="ar-ap" placeholder='Ex: Casa da mãe, Loja, Galpão'></div>
     <div class="mact"><button class="btn btn-muted" onclick="closeAddRes()">Cancelar</button><button class="btn btn-blue" onclick="saveNewRes()">Salvar</button></div>
+  </div>
+</div>
+
+<!-- ===== MODAL IMPORTAR PIX ===== -->
+<div class="mbg" id="pix-modal">
+  <div class="modal pix-modal">
+    <div class="pix-modal-head">
+      <h3><i class="fa-solid fa-link"></i> Implantar Pix</h3>
+      <button type="button" class="pix-close" onclick="closePixImport()" aria-label="Fechar">×</button>
+    </div>
+    <div>
+      <span class="fl">Copie e cole o Pix:</span>
+      <div class="pix-paste-wrap">
+        <textarea class="fi" id="pix-import-text" placeholder="Cole aqui o código Pix Copia e Cola..." oninput="schedulePixRead()"></textarea>
+        <button type="button" class="btn btn-outline-blue pix-read-btn" onclick="readPixImport()"><i class="fa-solid fa-magnifying-glass"></i> Ler Pix</button>
+      </div>
+    </div>
+    <div class="pix-data" id="pix-data-box">
+      <div class="pix-data-title">Dados do Pix</div>
+      <div class="pix-data-grid">
+        <div class="pix-data-item"><label>Código do cliente</label><strong id="pix-info-cod">—</strong></div>
+        <div class="pix-data-item"><label>CPF/CNPJ</label><strong id="pix-info-doc">—</strong></div>
+        <div class="pix-data-item"><label>Valor</label><span><input class="fi" id="pix-info-valor" inputmode="decimal" placeholder="R$ 0,00" style="height:38px"></span></div>
+        <div class="pix-data-item"><label>Vencimento</label><span><input class="fi" id="pix-info-venc" placeholder="dd/mm/aaaa" oninput="dMask(this)" style="height:38px"></span></div>
+        <div class="pix-data-item full"><label>Pix</label><span class="pix-raw" id="pix-info-raw">—</span></div>
+      </div>
+      <div class="pix-status" id="pix-status"></div>
+    </div>
+    <div class="pix-accounts-title">Conta de destino — selecionada automaticamente quando o código do cliente bater</div>
+    <div class="pix-accounts" id="pix-accounts"></div>
+    <div class="pix-confirm-note">Se o leitor não identificar o código, ou identificar uma conta incorretamente, selecione manualmente a conta correta antes de adicionar.</div>
+    <div class="mact">
+      <button type="button" class="btn btn-muted" onclick="closePixImport()">Cancelar</button>
+      <button type="button" class="btn btn-blue" id="pix-add-btn" onclick="confirmPixImport()" disabled><i class="fa-solid fa-plus"></i> Adicionar conta</button>
+    </div>
   </div>
 </div>
 
@@ -827,6 +903,103 @@ const RES=[
   {key:'coelba1',nome:'Coelba',icon:'<i class="fa-solid fa-bolt"></i>',end:'Belo Horizonte, 105',cod:'230958084',doc:'40.628.562/0001-07'},
   {key:'coelba2',nome:'Coelba',icon:'<i class="fa-solid fa-bolt"></i>',end:'Almirante Tamandaré, 80',cod:'34519307',doc:'385.599.865-53'}
 ];
+
+function pixNormalizeDigits(v){return String(v||'').replace(/\D/g,'')}
+function pixParseTlv(raw){
+  const out=[],text=String(raw||'').trim();let i=0;
+  while(i+4<=text.length){
+    const id=text.slice(i,i+2),len=Number(text.slice(i+2,i+4));
+    if(!/^\d{2}$/.test(id)||!Number.isFinite(len)||len<0||i+4+len>text.length)break;
+    const value=text.slice(i+4,i+4+len);
+    out.push({id,value,children:(value.length>=4&&/^\d{2}\d{2}/.test(value))?pixParseTlv(value):[]});i+=4+len;
+  }
+  return out;
+}
+function pixFlattenFields(fields,acc=[]){for(const f of fields||[]){acc.push(f);if(f.children?.length)pixFlattenFields(f.children,acc)}return acc}
+function pixValidDate(y,m,d){const dt=new Date(Date.UTC(Number(y),Number(m)-1,Number(d)));return Number(y)>=2020&&Number(y)<=2100&&dt.getUTCFullYear()===Number(y)&&dt.getUTCMonth()===Number(m)-1&&dt.getUTCDate()===Number(d)}
+function pixFindDate(values){
+  for(const raw of values){const v=String(raw||'').trim();let m=v.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+    if(m&&pixValidDate(m[3],m[2],m[1]))return brToIsoDate(v);
+    m=v.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m&&pixValidDate(m[1],m[2],m[3]))return v;
+    m=v.match(/^(\d{4})(\d{2})(\d{2})$/);if(m&&pixValidDate(m[1],m[2],m[3]))return v.slice(0,4)+'-'+v.slice(4,6)+'-'+v.slice(6,8);
+  }return '';
+}
+function pixMoney(v){const n=Number(String(v||'').replace(',','.'));return Number.isFinite(n)&&n>0?n.toFixed(2):''}
+function pixExtract(raw){
+  const clean=String(raw||'').trim().replace(/[\r\n\t]/g,''),fields=pixFlattenFields(pixParseTlv(clean));
+  const amountField=fields.find(f=>f.id==='54'&&/^\d+(\.\d{1,2})?$/.test(f.value));
+  const merchant=fields.find(f=>f.id==='59')?.value||'',city=fields.find(f=>f.id==='60')?.value||'',txid=fields.find(f=>f.id==='05'&&f.value)?.value||'';
+  const values=fields.map(f=>f.value),due=pixFindDate(values),amount=pixMoney(amountField?.value||'');
+  return {raw:clean,fields,values,amount,due,merchant,city,txid};
+}
+function pixContainsCode(text,code){const c=pixNormalizeDigits(code),d=pixNormalizeDigits(text);return !!c&&(d===c||d.includes(c))}
+function pixMatchAccounts(info){
+  const allres=getAllRes(),matches=allres.map(r=>{
+    const codeHit=info.values.some(v=>pixContainsCode(v,r.cod));
+    const rawHit=!codeHit&&new RegExp('(^|[^0-9])'+String(r.cod).replace(/\D/g,'')+'([^0-9]|$)').test(info.raw);
+    const docDigits=pixNormalizeDigits(r.doc),docHit=!!docDigits&&pixNormalizeDigits(info.raw).includes(docDigits);
+    return {r,codeHit,rawHit,docHit,score:codeHit?3:(rawHit?2:(docHit?1:0))};
+  }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score);
+  if(!matches.length)return {selected:null,matches:[],reason:'Código do cliente não identificado no Pix.'};
+  const top=matches[0],tied=matches.filter(x=>x.score===top.score);
+  if(tied.length>1)return {selected:null,matches,reason:'Mais de uma conta corresponde aos dados encontrados. Selecione manualmente.'};
+  return {selected:top.r,matches,reason:top.codeHit?'Código do cliente encontrado.':'Correspondência auxiliar encontrada; confirme manualmente se necessário.'};
+}
+let pixPending=null,pixReadTimer=null;
+function pixAccountLabel(r){
+  if(r.key==='embasa')return 'Embasa (Casa de mãe)';
+  if(r.key==='coelba1')return 'Coelba (Loja)';
+  if(r.key==='coelba2')return 'Coelba (Galpão)';
+  const ap=getApelido(r.key);return r.nome+(ap?' ('+ap+')':'');
+}
+function renderPixAccounts(selectedKey){
+  const el=document.getElementById('pix-accounts');if(!el)return;
+  const rows=getAllRes();
+  el.innerHTML=rows.map(r=>{
+    const sel=selectedKey===r.key;
+    return '<label class="pix-account '+(sel?'selected':'')+'" onclick="selectPixAccount(\\''+r.key+'\\')"><input type="radio" name="pix-account" value="'+r.key+'" '+(sel?'checked':'')+'><div class="pix-account-top"><span class="pix-radio"></span><span class="pix-account-name">'+pixAccountLabel(r)+'</span></div><div class="pix-account-code">Código do cliente<b>'+(r.cod||'Não informado')+'</b></div>'+(sel?'<div class="pix-account-match"><i class="fa-solid fa-circle-check"></i> Selecionada</div>':'<div class="pix-account-manual">Clique para selecionar manualmente</div>')+'</label>';
+  }).join('');
+}
+window.selectPixAccount=key=>{
+  if(!getAllRes().some(r=>r.key===key))return;
+  if(!pixPending)pixPending={};pixPending.selectedKey=key;renderPixAccounts(key);
+  const btn=document.getElementById('pix-add-btn');if(btn)btn.disabled=!pixPending.raw||!moneyNum(document.getElementById('pix-info-valor')?.value);
+};
+window.openPixImport=()=>{
+  pixPending={raw:'',selectedKey:'',sourceKey:selectedFin||''};
+  document.getElementById('pix-import-text').value='';
+  document.getElementById('pix-data-box').classList.remove('open');
+  document.getElementById('pix-status').className='pix-status';document.getElementById('pix-status').textContent='';
+  document.getElementById('pix-info-cod').textContent='—';document.getElementById('pix-info-doc').textContent='—';
+  document.getElementById('pix-info-valor').value='';document.getElementById('pix-info-venc').value='';document.getElementById('pix-info-raw').textContent='—';
+  renderPixAccounts('');document.getElementById('pix-modal').classList.add('open');setTimeout(()=>document.getElementById('pix-import-text')?.focus(),40);
+};
+window.closePixImport=()=>{pixPending=null;if(pixReadTimer)clearTimeout(pixReadTimer);document.getElementById('pix-modal')?.classList.remove('open')};
+window.schedulePixRead=()=>{if(pixReadTimer)clearTimeout(pixReadTimer);pixReadTimer=setTimeout(()=>readPixImport(),250)};
+window.readPixImport=()=>{
+  const raw=document.getElementById('pix-import-text')?.value?.trim()||'';if(!raw){document.getElementById('pix-data-box')?.classList.remove('open');return}
+  const info=pixExtract(raw),match=pixMatchAccounts(info),account=match.selected;
+  document.getElementById('pix-info-cod').textContent=account?.cod||'Não identificado';
+  document.getElementById('pix-info-doc').textContent=account?.doc||'Não identificado';
+  document.getElementById('pix-info-valor').value=info.amount?fmtMoney(info.amount):'';
+  document.getElementById('pix-info-venc').value=info.due?isoDateToBr(info.due):'';
+  document.getElementById('pix-info-raw').textContent=info.raw||'—';document.getElementById('pix-data-box').classList.add('open');
+  pixPending={raw:info.raw,info,selectedKey:account?.key||'',sourceKey:selectedFin||''};renderPixAccounts(account?.key||'');
+  const status=document.getElementById('pix-status');status.className='pix-status open '+(account?'ok':(match.matches.length?'warn':'err'));
+  status.innerHTML=account?'<i class="fa-solid fa-circle-check"></i> '+match.reason+' Conta selecionada: <b>'+pixAccountLabel(account)+'</b>.':'<i class="fa-solid fa-triangle-exclamation"></i> '+match.reason+' Nenhum lançamento foi feito. Você pode selecionar a conta manualmente.';
+  const btn=document.getElementById('pix-add-btn');if(btn)btn.disabled=!pixPending.selectedKey||!moneyNum(document.getElementById('pix-info-valor')?.value);
+};
+window.confirmPixImport=async()=>{
+  if(!pixPending?.raw)return alert('Cole e leia um Pix antes de adicionar.');
+  const key=pixPending.selectedKey;if(!key)return alert('Selecione a conta que receberá a tarifa.');
+  const valor=document.getElementById('pix-info-valor')?.value?.trim()||'',vencBr=document.getElementById('pix-info-venc')?.value?.trim()||'',amount=moneyNum(valor);
+  if(!amount)return alert('Informe o valor da tarifa.');
+  const venc=vencBr?brToIsoDate(vencBr):'',contas=getContas(key),account=getAllRes().find(r=>r.key===key);
+  contas.push({id:Date.now().toString(36),valor:amount.toFixed(2),venc,pix:pixPending.raw,createdAt:new Date().toISOString(),source:'pix-import',pixCode:account?.cod||'',txid:pixPending.info?.txid||'',merchant:pixPending.info?.merchant||''});
+  await setDoc(finRef,{[key]:{contas}},{merge:true});
+  const label=pixAccountLabel(account);closePixImport();toast('➕ Tarifa Pix adicionada em '+label);
+};
+
 function todayIso(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function getContas(key){return (finData[key]?.contas||[]).slice()}
 function isOverdue(conta){return conta.venc&&conta.venc<todayIso()}
@@ -896,7 +1069,7 @@ window.printFinanceiro=()=>{
 };
 function renderFin(){
   // list column: residências
-  document.querySelector('.list-head').innerHTML=`<h1 id="list-title">Financeiro</h1><button class="btn btn-outline-blue btn-sm" onclick="printFinanceiro()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button>`;
+  document.querySelector('.list-head').innerHTML=`<h1 id="list-title">Financeiro</h1><div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap"><button class="btn btn-outline-blue btn-sm" onclick="printFinanceiro()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button><button class="btn btn-blue btn-sm" onclick="openPixImport()"><i class="fa-solid fa-link"></i> Implantar Pix</button></div>`;
   const list=document.getElementById('clist');
   const ALLRES=getAllRes();
   const grandTotal=ALLRES.reduce((s,r)=>s+totalSum(r.key),0);
