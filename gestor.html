@@ -47,8 +47,11 @@ button{font-family:inherit}
 #conn{font-size:.72rem;color:var(--muted);text-align:center;margin-top:auto;padding:8px}
 
 /* ====== LIST COLUMN ====== */
-.list-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
-.list-head h1{font-size:1.15rem;font-weight:900}
+.list-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;min-width:0}
+.list-head h1{font-size:1.15rem;font-weight:900;min-width:0;flex:0 1 auto}
+.pix-head-actions{display:flex;gap:6px;align-items:center;justify-content:flex-end;flex:0 1 auto;min-width:0}
+.pix-head-actions .btn{padding:0 9px;font-size:.72rem;gap:5px;min-width:0}
+@media(max-width:620px){.pix-head-actions{flex-wrap:wrap}.pix-head-actions .btn{flex:1;min-width:0;padding:0 9px}}
 .btn{height:42px;padding:0 18px;display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:12px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;white-space:nowrap;transition:all .2s ease-in-out;box-shadow:0 2px 8px rgba(0,0,0,.2)}
 .btn-wrap{height:auto;min-height:42px;padding:10px 14px;white-space:normal;text-align:center;line-height:1.2}
 .btn:hover{filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.3)}
@@ -337,8 +340,7 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 
 /* ===== IMPORTAÇÃO PIX ===== */
 .pix-modal{max-width:760px;width:min(760px,calc(100vw - 32px))}
-.pix-head-actions{display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:nowrap}
-@media(max-width:620px){.pix-head-actions{flex-wrap:wrap}.pix-head-actions .btn{flex:1;min-width:130px}}
+
 
 .pix-modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .pix-modal-head h3{display:flex;align-items:center;gap:9px}
