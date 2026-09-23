@@ -957,7 +957,7 @@ function renderPixAccounts(selectedKey){
   const rows=getAllRes();
   el.innerHTML=rows.map(r=>{
     const sel=selectedKey===r.key;
-    return '<label class="pix-account '+(sel?'selected':'')+'" onclick="selectPixAccount(\\''+r.key+'\\')"><input type="radio" name="pix-account" value="'+r.key+'" '+(sel?'checked':'')+'><div class="pix-account-top"><span class="pix-radio"></span><span class="pix-account-name">'+pixAccountLabel(r)+'</span></div><div class="pix-account-code">Código do cliente<b>'+(r.cod||'Não informado')+'</b></div>'+(sel?'<div class="pix-account-match"><i class="fa-solid fa-circle-check"></i> Selecionada</div>':'<div class="pix-account-manual">Clique para selecionar manualmente</div>')+'</label>';
+    return '<label class="pix-account '+(sel?'selected':'')+'" onclick="selectPixAccount(&quot;'+r.key+'&quot;)"><input type="radio" name="pix-account" value="'+r.key+'" '+(sel?'checked':'')+'><div class="pix-account-top"><span class="pix-radio"></span><span class="pix-account-name">'+pixAccountLabel(r)+'</span></div><div class="pix-account-code">Código do cliente<b>'+(r.cod||'Não informado')+'</b></div>'+(sel?'<div class="pix-account-match"><i class="fa-solid fa-circle-check"></i> Selecionada</div>':'<div class="pix-account-manual">Clique para selecionar manualmente</div>')+'</label>';
   }).join('');
 }
 window.selectPixAccount=key=>{
