@@ -11,6 +11,22 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="stylesheet" href="fontawesome/css/all.min.css">
 <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<script>
+(function(){
+  try{
+    const touch=Number(navigator.maxTouchPoints||0)>0;
+    const sw=Math.min(Number(screen.width)||0,Number(screen.height)||0);
+    const iw=Number(window.innerWidth)||0;
+    const desktopRequested=touch&&sw>0&&sw<=700&&iw>sw*1.5;
+    if(desktopRequested){
+      const root=document.documentElement;
+      root.classList.add('mfc-force-mobile');
+      root.style.setProperty('--mfc-mobile-width',sw+'px');
+      root.style.setProperty('--mfc-mobile-zoom',Math.max(1,Math.min(4,iw/sw)));
+    }
+  }catch(e){}
+})();
+</script>
 <style>
 :root{--bg:#0F172A;--surface:#1E293B;--surface2:#26334a;--surface3:#2f3e59;--accent:#3B82F6;--text:#FFFFFF;--muted:#94A3B8;--border:#334155;--green:#10B981;--green2:#059669;--yellow:#F59E0B;--orange:#f97316;--red:#EF4444;--purple:#a78bfa;--cyan:#38bdf8;--radius:14px;--shadow:0 12px 28px rgba(0,0,0,.28)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -102,7 +118,45 @@ header h1{font-size:1rem;font-weight:800;flex:1}.reload-btn,.install-btn{backgro
   .chip,.indicator{font-size:.76rem;height:28px;padding-left:10px;padding-right:10px}
   .chip-completed-unpaid{min-height:34px}
 }
-</style></style>
+<style>
+html.mfc-force-mobile,html.mfc-force-mobile body{overflow-x:hidden!important;overflow-y:auto!important}
+html.mfc-force-mobile body{
+  width:var(--mfc-mobile-width)!important;
+  max-width:var(--mfc-mobile-width)!important;
+  min-width:var(--mfc-mobile-width)!important;
+  margin:0 auto!important;
+  zoom:var(--mfc-mobile-zoom)!important;
+}
+html.mfc-force-mobile header,
+html.mfc-force-mobile .list-wrap{
+  width:100%!important;
+  max-width:none!important;
+}
+html.mfc-force-mobile #detail{
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+}
+html.mfc-force-mobile .list-wrap{
+  padding:14px 10px 28px!important;
+  gap:12px!important;
+}
+html.mfc-force-mobile .card{
+  width:100%!important;
+  max-width:none!important;
+}
+html.mfc-force-mobile .card-inner{
+  padding:18px 42px 14px 18px!important;
+  min-height:92px!important;
+}
+html.mfc-force-mobile .card-name{font-size:1.08rem!important}
+html.mfc-force-mobile .card-type{font-size:.76rem!important}
+html.mfc-force-mobile .card-sub{font-size:.84rem!important}
+html.mfc-force-mobile .day-head{font-size:.72rem!important}
+html.mfc-force-mobile .card-status-row{padding:8px 18px!important}
+html.mfc-force-mobile .card-foot{padding:4px 18px 18px!important}
+</style>
+</style>
 </head>
 <body>
 <div id="auth-gate"><div class="auth-card"><img src="mfc-logo.png" alt="MFC"><h2>Acesso do técnico</h2><p>Entre uma vez neste aparelho. A sessão ficará salva para as próximas visitas.</p><form class="auth-form" onsubmit="mfcPasswordLogin(event)"><div class="auth-field"><label for="auth-username">Usuário</label><input id="auth-username" name="username" type="text" value="tecnico" autocomplete="username" autocapitalize="none" spellcheck="false" required></div><div class="auth-field"><label for="auth-password">Senha</label><input id="auth-password" name="password" type="password" autocomplete="current-password" required></div><button type="submit" class="auth-login" id="auth-login-btn"><i class="fa-solid fa-right-to-bracket"></i> Entrar</button><div class="auth-note">Depois do primeiro acesso, não será necessário digitar novamente.</div></form><div class="auth-error" id="auth-error" role="alert"></div></div></div>
