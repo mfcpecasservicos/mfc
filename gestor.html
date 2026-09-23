@@ -336,7 +336,10 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 .add-conta .fgrid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
 
 /* ===== IMPORTAÇÃO PIX ===== */
-.pix-modal{max-width:760px}
+.pix-modal{max-width:760px;width:min(760px,calc(100vw - 32px))}
+.pix-head-actions{display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:nowrap}
+@media(max-width:620px){.pix-head-actions{flex-wrap:wrap}.pix-head-actions .btn{flex:1;min-width:130px}}
+
 .pix-modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .pix-modal-head h3{display:flex;align-items:center;gap:9px}
 .pix-close{width:34px;height:34px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-weight:900;cursor:pointer}
@@ -929,8 +932,53 @@ function pixExtract(raw){
   const clean=String(raw||'').trim().replace(/[\r\n\t]/g,''),fields=pixFlattenFields(pixParseTlv(clean));
   const amountField=fields.find(f=>f.id==='54'&&/^\d+(\.\d{1,2})?$/.test(f.value));
   const merchant=fields.find(f=>f.id==='59')?.value||'',city=fields.find(f=>f.id==='60')?.value||'',txid=fields.find(f=>f.id==='05'&&f.value)?.value||'';
+  const urlField=fields.find(f=>f.id==='25'&&/^https?:\/\//i.test(f.value));
   const values=fields.map(f=>f.value),due=pixFindDate(values),amount=pixMoney(amountField?.value||'');
-  return {raw:clean,fields,values,amount,due,merchant,city,txid};
+  return {raw:clean,fields,values,amount,due,merchant,city,txid,dynamicUrl:urlField?.value||''};
+}
+function pixDeepFind(obj,predicate,path=''){
+  const found=[];
+  if(obj&&typeof obj==='object'){
+    for(const [k,v] of Object.entries(obj)){
+      const p=path?path+'.'+k:k;
+      if(predicate(k,v,p))found.push({key:k,value:v,path:p});
+      if(v&&typeof v==='object')found.push(...pixDeepFind(v,predicate,p));
+    }
+  }
+  return found;
+}
+function pixJsonFindAmount(data){
+  const hits=pixDeepFind(data,(k,v)=>/^(original|valor)$/i.test(k)&&typeof v==='string'&&/^\d+(\.\d{1,2})?$/.test(v));
+  for(const h of hits){const n=pixMoney(h.value);if(n)return n}
+  return '';
+}
+function pixJsonFindDue(data){
+  const hits=pixDeepFind(data,(k,v)=>/vencimento|due.?date/i.test(k)&&typeof v==='string');
+  for(const h of hits){const d=pixFindDate([h.value]);if(d)return d}
+  return '';
+}
+function pixJsonFindRegisteredMatch(data){
+  const text=JSON.stringify(data||{});
+  const normalized=pixNormalizeDigits(text);
+  for(const r of getAllRes()){
+    const cod=pixNormalizeDigits(r.cod),doc=pixNormalizeDigits(r.doc);
+    if(cod&&normalized.includes(cod))return {account:r,type:'code'};
+    if(doc&&normalized.includes(doc))return {account:r,type:'doc'};
+  }
+  return null;
+}
+async function pixResolveDynamic(info){
+  if(!info.dynamicUrl)return info;
+  try{
+    const res=await fetch(info.dynamicUrl,{method:'GET',headers:{Accept:'application/json'},cache:'no-store'});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const data=await res.json();
+    const amount=info.amount||pixJsonFindAmount(data),due=info.due||pixJsonFindDue(data),match=pixJsonFindRegisteredMatch(data);
+    const extraValues=pixDeepFind(data,()=>true).map(x=>typeof x.value==='string'?x.value:'').filter(Boolean);
+    return {...info,dynamicData:data,values:[...info.values,...extraValues],amount,due,dynamicMatch:match,dynamicResolved:true};
+  }catch(e){
+    return {...info,dynamicResolved:false,dynamicError:String(e?.message||e)};
+  }
 }
 function pixContainsCode(text,code){const c=pixNormalizeDigits(code),d=pixNormalizeDigits(text);return !!c&&(d===c||d.includes(c))}
 function pixMatchAccounts(info){
@@ -962,7 +1010,8 @@ function renderPixAccounts(selectedKey){
 }
 window.selectPixAccount=key=>{
   if(!getAllRes().some(r=>r.key===key))return;
-  if(!pixPending)pixPending={};pixPending.selectedKey=key;renderPixAccounts(key);
+  if(!pixPending)pixPending={raw:document.getElementById('pix-import-text')?.value?.trim()||''};
+  pixPending.selectedKey=key;renderPixAccounts(key);
   const btn=document.getElementById('pix-add-btn');if(btn)btn.disabled=!pixPending.raw||!moneyNum(document.getElementById('pix-info-valor')?.value);
 };
 window.openPixImport=()=>{
@@ -976,17 +1025,29 @@ window.openPixImport=()=>{
 };
 window.closePixImport=()=>{pixPending=null;if(pixReadTimer)clearTimeout(pixReadTimer);document.getElementById('pix-modal')?.classList.remove('open')};
 window.schedulePixRead=()=>{if(pixReadTimer)clearTimeout(pixReadTimer);pixReadTimer=setTimeout(()=>readPixImport(),250)};
-window.readPixImport=()=>{
+window.readPixImport=async()=>{
   const raw=document.getElementById('pix-import-text')?.value?.trim()||'';if(!raw){document.getElementById('pix-data-box')?.classList.remove('open');return}
-  const info=pixExtract(raw),match=pixMatchAccounts(info),account=match.selected;
-  document.getElementById('pix-info-cod').textContent=account?.cod||'Não identificado';
-  document.getElementById('pix-info-doc').textContent=account?.doc||'Não identificado';
+  const status=document.getElementById('pix-status');
+  status.className='pix-status open warn';status.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Lendo o Pix...';
+  let info=pixExtract(raw);
+  if(info.dynamicUrl)info=await pixResolveDynamic(info);
+  const match=pixMatchAccounts(info),dynamicMatch=info.dynamicMatch?.account||null,account=dynamicMatch||match.selected;
+  const code=account?.cod||'Não identificado',doc=account?.doc||'Não identificado';
+  document.getElementById('pix-info-cod').textContent=code;
+  document.getElementById('pix-info-doc').textContent=doc;
   document.getElementById('pix-info-valor').value=info.amount?fmtMoney(info.amount):'';
   document.getElementById('pix-info-venc').value=info.due?isoDateToBr(info.due):'';
   document.getElementById('pix-info-raw').textContent=info.raw||'—';document.getElementById('pix-data-box').classList.add('open');
   pixPending={raw:info.raw,info,selectedKey:account?.key||'',sourceKey:selectedFin||''};renderPixAccounts(account?.key||'');
-  const status=document.getElementById('pix-status');status.className='pix-status open '+(account?'ok':(match.matches.length?'warn':'err'));
-  status.innerHTML=account?'<i class="fa-solid fa-circle-check"></i> '+match.reason+' Conta selecionada: <b>'+pixAccountLabel(account)+'</b>.':'<i class="fa-solid fa-triangle-exclamation"></i> '+match.reason+' Nenhum lançamento foi feito. Você pode selecionar a conta manualmente.';
+  status.className='pix-status open '+(account?'ok':(match.matches.length?'warn':'err'));
+  if(account){
+    const source=info.dynamicMatch?' no payload da cobrança dinâmica':' no Pix';
+    status.innerHTML='<i class="fa-solid fa-circle-check"></i> Conta identificada'+source+': <b>'+pixAccountLabel(account)+'</b>.';
+  }else if(info.dynamicUrl&&!info.dynamicResolved){
+    status.innerHTML='<i class="fa-solid fa-triangle-exclamation"></i> Este é um Pix dinâmico. O código contém uma URL, mas os dados da cobrança não puderam ser consultados pelo navegador. Você pode selecionar a conta manualmente e informar valor/vencimento.';
+  }else{
+    status.innerHTML='<i class="fa-solid fa-triangle-exclamation"></i> Código do cliente não identificado. Nenhum lançamento foi feito. Você pode selecionar a conta manualmente.';
+  }
   const btn=document.getElementById('pix-add-btn');if(btn)btn.disabled=!pixPending.selectedKey||!moneyNum(document.getElementById('pix-info-valor')?.value);
 };
 window.confirmPixImport=async()=>{
@@ -1069,7 +1130,7 @@ window.printFinanceiro=()=>{
 };
 function renderFin(){
   // list column: residências
-  document.querySelector('.list-head').innerHTML=`<h1 id="list-title">Financeiro</h1><div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap"><button class="btn btn-outline-blue btn-sm" onclick="printFinanceiro()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button><button class="btn btn-blue btn-sm" onclick="openPixImport()"><i class="fa-solid fa-link"></i> Implantar Pix</button></div>`;
+  document.querySelector('.list-head').innerHTML=`<h1 id="list-title">Financeiro</h1><div class="pix-head-actions"><button class="btn btn-outline-blue btn-sm" onclick="printFinanceiro()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button><button class="btn btn-blue btn-sm" onclick="openPixImport()"><i class="fa-solid fa-link"></i> Implantar Pix</button></div>`;
   const list=document.getElementById('clist');
   const ALLRES=getAllRes();
   const grandTotal=ALLRES.reduce((s,r)=>s+totalSum(r.key),0);
