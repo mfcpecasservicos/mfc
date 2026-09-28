@@ -136,6 +136,13 @@ button{font-family:inherit}
 .csr-item:hover{background:var(--surface2)}
 .csr-item.deleted{opacity:.9;border-left:3px solid var(--red)}
 .csr-item strong{display:block}.csr-item span{font-size:.74rem;color:var(--muted)}
+.list-head-tools{display:flex;align-items:center;justify-content:flex-end;gap:8px;min-width:0;flex:1}
+.client-search{height:34px;width:min(230px,42vw);min-width:130px;padding:0 11px 0 34px;border-radius:18px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:.78rem;font-weight:700;outline:none;box-sizing:border-box}
+.client-search:focus{border-color:#3b82f6;box-shadow:0 0 0 2px #3b82f633}
+.client-search::placeholder{color:var(--muted)}
+.client-search-wrap{position:relative;min-width:0}
+.client-search-wrap .si{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.72rem;pointer-events:none}
+@media(max-width:620px){.client-search{width:150px;min-width:0}.list-head-tools{gap:6px}}
 .filter-wrap{position:relative}
 .filter-btn{height:50px;padding:0 20px;border-radius:26px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-weight:800;font-size:.9rem;cursor:pointer;display:flex;align-items:center;gap:8px}
 .filter-btn:hover{color:var(--text);background:var(--surface2)}
@@ -728,7 +735,7 @@ function authError(message=''){const el=document.getElementById('auth-error');if
 window.mfcGoogleLogin=async()=>{const btn=document.getElementById('auth-login-btn');if(btn)btn.disabled=true;authError('');try{if(matchMedia('(display-mode: standalone)').matches||innerWidth<700)await signInWithRedirect(auth,googleProvider);else await signInWithPopup(auth,googleProvider)}catch(error){console.error(error);authError('Não foi possível entrar. Verifique a internet e tente novamente.');if(btn)btn.disabled=false}};
 window.mfcSignOut=()=>signOut(auth);
 getRedirectResult(auth).catch(error=>{console.error(error);authError('O login não foi concluído. Tente novamente.')});
-let all=[],leads=[],filter='all',editId=null,cleanupDone=false,selectedId=null,view='main',finData={},selectedFin=null;
+let all=[],leads=[],filter='all',clientSearch='',editId=null,cleanupDone=false,selectedId=null,view='main',finData={},selectedFin=null;
 let editLocationMap=null,editLocationMarker=null,editLocationPoint=null,editLocationRemoved=false;
 const approximateLocationSaves=new Set();
 
@@ -1432,19 +1439,22 @@ function pagsOf(l){const a=l?.approval;if(Array.isArray(a?.pagamentos)&&a.pagame
 
 /* ===== FILTER MENU ===== */
 const FILTERS=[['all','<i class="fa-solid fa-clipboard"></i> Todos (ativos)'],['waiting','<i class="fa-regular fa-clock"></i> Aguardando visita'],['workshop_pending','<i class="fa-solid fa-industry"></i> Aguardando Avaliação'],['evaluated','<i class="fa-solid fa-check"></i> Avaliação concluída'],['quoted','<i class="fa-solid fa-sack-dollar"></i> Aguardando aprovação'],['approved','<i class="fa-solid fa-circle" style="color:#f97316"></i> Aprovado'],['ready_delivery','<i class="fa-solid fa-box"></i> Pronto para entrega'],['service_finished','<i class="fa-solid fa-check"></i> Serviço finalizado'],['absent','<i class="fa-solid fa-ban"></i> Cliente ausente'],['discarded','<i class="fa-solid fa-trash-can"></i> Serviço descartado'],['done','<i class="fa-solid fa-check"></i> Concluídos']];
-window.setFilter=f=>{filter=f;document.getElementById('filter-menu')?.classList.remove('open');render()};
-function filterIconHtml(){return `<button class="filter-btn filter-btn-icon" title="Filtro" onclick="document.getElementById('filter-menu').classList.toggle('open')"><i class="fa-solid fa-filter"></i></button><div class="filter-menu" id="filter-menu">${FILTERS.map(([f,l])=>`<button class="${filter===f?'active':''}" onclick="setFilter('${f}')">${l}</button>`).join('')}</div>`}
+function clientMatchesStatus(c,status){if(status==='all')return displayStatus(c)!=='done';if(status==='done')return displayStatus(c)==='done';if(status==='discarded')return c.status==='discarded'||displayStatus(c)==='discarded';return getLayers(c).filter(l=>!l.done).some(l=>(l.status||'waiting')===status)}
+function clientMatchesSearch(c){const q=String(clientSearch||'').trim().toLocaleLowerCase('pt-BR');if(!q)return true;const layers=getLayers(c);const parts=[c.name,c.phone,c.address,c.number,c.neighborhood,c.bairro,c.city,c.cidade,c.requester,c.email,c.document,c.cpf,c.cnpj,c.equip,...layers.flatMap(l=>[l.techReport?.model,l.techReport?.serviceType,l.techReport?.problem,l.quote,l.quoteObs])];return parts.some(v=>String(v||'').toLocaleLowerCase('pt-BR').includes(q))}
+window.setFilter=f=>{if(!FILTERS.some(([key])=>key===f))return;filter=f;document.getElementById('filter-menu')?.classList.remove('open');render()};
+let clientSearchTimer=null;
+window.setClientSearch=v=>{clientSearch=String(v||'');clearTimeout(clientSearchTimer);clientSearchTimer=setTimeout(()=>render(),120)};
+function filterIconHtml(){return `<button class="filter-btn filter-btn-icon" title="Filtro de status" aria-label="Filtro de status" onclick="event.stopPropagation();document.getElementById('filter-menu').classList.toggle('open')"><i class="fa-solid fa-filter"></i></button><div class="filter-menu" id="filter-menu">${FILTERS.map(([f,l])=>`<button type="button" class="${filter===f?'active':''}" onclick="setFilter('${f}')">${l}</button>`).join('')}</div>`}
 
 /* ===== LIST RENDER ===== */
 function render(){
   if(view==='fin'){renderFin();return}
   document.getElementById('list-title').textContent='Visitas';
-  const lfw=document.getElementById('list-filter-wrap');if(lfw)lfw.innerHTML=filterIconHtml();
+  const lfw=document.getElementById('list-filter-wrap');if(lfw)lfw.innerHTML=`<div class="list-head-tools"><div class="client-search-wrap"><span class="si"><i class="fa-solid fa-magnifying-glass"></i></span><input class="client-search" id="client-search-input" value="${escHtml(clientSearch)}" placeholder="Pesquisar cliente..." autocomplete="off" oninput="setClientSearch(this.value)" onclick="event.stopPropagation()"></div>${filterIconHtml()}</div>`;
   const uiState=captureGestorUiState();
   const list=document.getElementById('clist');
   let clients=all.filter(c=>!c.deleted);
-  if(filter==='all')clients=clients.filter(c=>displayStatus(c)!=='done');
-  else clients=clients.filter(c=>displayStatus(c)===filter);
+  clients=clients.filter(c=>clientMatchesStatus(c,filter)&&clientMatchesSearch(c));
   clients=[...clients].sort(appointmentSortCmp);
   if(!clients.length){list.innerHTML='<div class="empty"><i class="fa-solid fa-clipboard"></i> Nenhum cliente.</div>';document.getElementById('list-footer').innerHTML='';renderDetail();return}
   const STATUS_COLOR={waiting:'oklch(0.72 0.17 285)',workshop_pending:'oklch(0.70 0.14 220)',evaluated:'oklch(0.75 0.18 155)',quoted:'oklch(0.80 0.16 75)',approved:'oklch(0.75 0.18 45)',ready_delivery:'oklch(0.70 0.14 220)',service_finished:'oklch(0.75 0.18 155)',absent:'oklch(0.65 0.12 300)',done:'oklch(0.75 0.18 155)'};
