@@ -1450,7 +1450,9 @@ function filterIconHtml(){return `<button class="filter-btn filter-btn-icon" tit
 function render(){
   if(view==='fin'){renderFin();return}
   document.getElementById('list-title').textContent='Visitas';
+  const searchWasFocused=document.activeElement?.id==='client-search-input',searchCursor=document.activeElement?.selectionStart??null;
   const lfw=document.getElementById('list-filter-wrap');if(lfw)lfw.innerHTML=`<div class="list-head-tools"><div class="client-search-wrap"><span class="si"><i class="fa-solid fa-magnifying-glass"></i></span><input class="client-search" id="client-search-input" value="${escHtml(clientSearch)}" placeholder="Pesquisar cliente..." autocomplete="off" oninput="setClientSearch(this.value)" onclick="event.stopPropagation()"></div>${filterIconHtml()}</div>`;
+  if(searchWasFocused){const si=document.getElementById('client-search-input');if(si){si.focus();const p=searchCursor===null?si.value.length:Math.min(searchCursor,si.value.length);si.setSelectionRange(p,p)}}
   const uiState=captureGestorUiState();
   const list=document.getElementById('clist');
   let clients=all.filter(c=>!c.deleted);
