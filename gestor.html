@@ -811,7 +811,8 @@ function readLayerForm(id,li,base={}){
 
 /* ===== CONSTANTS ===== */
 const STATUS={waiting:'Aguardando visita',workshop_pending:'Aguardando Avaliação',evaluated:'Avaliação concluída',quoted:'Aguardando aprovação',approved:'Aprovado',ready_delivery:'Equipamento pronto para entrega',service_finished:'Serviço finalizado',absent:'Cliente ausente',discarded:'Serviço descartado',done:'Serviço Concluído'};
-function serviceTypeLabel(value){const v=String(value||'').trim();if(!v)return '';if(v.includes('Preventiva'))return '🧽 Preventiva';if(v.includes('Corretiva'))return '🔧 Corretiva';return v}
+function serviceTypeLabel(value){const v=String(value||'').trim();if(!v)return '';if(v.includes('Preventiva'))return '🧽 Preventiva';if(v.includes('Corretiva'))return '🔧 Corretiva';if(v.includes('Instala'))return '🧰 Instalação';if(v.includes('Laudo'))return '📋 Laudo';if(v.includes('Teste de vazamento'))return '🧪 Teste de vazamento';return v}
+function serviceTypeLabels(value){if(Array.isArray(value))return [...new Set(value.flatMap(serviceTypeLabels))];const v=String(value||'').trim();if(!v||v==='—')return [];const known=[['Corretiva','🔧 Corretiva'],['Preventiva','🧽 Preventiva'],['Instala','🧰 Instalação'],['Laudo','📋 Laudo'],['Teste de vazamento','🧪 Teste de vazamento']];const found=known.filter(([key])=>v.toLocaleLowerCase().includes(key.toLocaleLowerCase())).map(([,label])=>label);return found.length?found:[serviceTypeLabel(v)]}
 function inferServiceType(text){const t=String(text||'');if(t.includes('Preventiva'))return '🧽 Preventiva';if(t.includes('Corretiva'))return '🔧 Corretiva';return ''}
 function stripServiceTypeFromReport(text){return String(text||'').replace(/(?:^|\s*[|,-]\s*)[🔧🧽]?\s*(Corretiva|Preventiva)\s*(?:\|\s*)?/gi,'').replace(/^\s*[|,-]\s*/,'').trim()}
 function reportServiceType(r){const raw=r?.serviceType||inferServiceType(r?.problem||'');return raw||'—'}
@@ -1475,7 +1476,7 @@ function render(){
     const dk=gDayKey(mainDate(c));
     if(dk!==lastDay){listHtml+=`<div class="day-head"><span>${dk}</span></div>`;lastDay=dk}
     const primary=primaryLayer(c),hh=gHourOf(mainDate(c)),serviceScheduled=!!(hh&&primary?.approval?.serviceDate);
-    const serviceTypes=[...new Set(activeEntries.map(({l})=>reportServiceType(l.techReport||{})).filter(t=>t&&t!=='—').map(t=>serviceTypeLabel(t)||String(t).trim()))];
+    const serviceTypes=[...new Set(getLayers(c).flatMap(l=>serviceTypeLabels(l.techReport?.serviceType||l.serviceType||reportServiceType(l.techReport||{}))).filter(Boolean))];
     const serviceTypeHtml=serviceTypes.length?'<div class="vc-service-type" title="Tipo de Serviço"><i class="fa-solid fa-screwdriver-wrench"></i> '+serviceTypes.map(t=>escHtml(t)).join(' · ')+'</div>':'';
     const chips=[];
     const pendingPayment=gestorPendingPaymentLayer(c),completionLayer=pendingPayment||getLayers(c).find(l=>!l.done&&l.serviceFinishedAt),finishedAt=completionLayer?.serviceFinishedAt||completionLayer?.concludedAt;
