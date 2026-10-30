@@ -196,7 +196,6 @@ html.mfc-force-mobile .card-foot{padding:4px 18px 18px!important}
   margin-left:auto!important;
 }
 </style>
-</style>
 </head>
 <body>
 <div id="auth-gate"><div class="auth-card"><img src="mfc-logo.png" alt="MFC"><h2>Acesso do técnico</h2><p>Entre uma vez neste aparelho. A sessão ficará salva para as próximas visitas.</p><form class="auth-form" onsubmit="mfcPasswordLogin(event)"><div class="auth-field"><label for="auth-username">Usuário</label><input id="auth-username" name="username" type="text" value="tecnico" autocomplete="username" autocapitalize="none" spellcheck="false" required></div><div class="auth-field"><label for="auth-password">Senha</label><input id="auth-password" name="password" type="password" autocomplete="current-password" required></div><button type="submit" class="auth-login" id="auth-login-btn"><i class="fa-solid fa-right-to-bracket"></i> Entrar</button><div class="auth-note">Depois do primeiro acesso, não será necessário digitar novamente.</div></form><div class="auth-error" id="auth-error" role="alert"></div></div></div>
@@ -378,8 +377,8 @@ function hourOf(d){const t=new Date(d||'');if(!Number.isFinite(t.getTime()))retu
 let html='',lastDay=null;
 clients.forEach(c=>{
   const activeIndexLayers=getLayers(c).map((l,i)=>({l,i})).filter(({l})=>isIndexActiveLayer(l));const s=st(activeIndexLayers[0]?.l?.status||getStatus(c)),l=activeIndexLayers[0]?.l||activeLayer(c),rc=activeIndexLayers.filter(({l})=>hasSubmittedReport(l)).length;
-  const actLayers=activeIndexLayers,multipleEvaluations=actLayers.length>1,showEvaluationRefs=getLayers(c).length>1;
-  const statusBadges=actLayers.map(({l:x,i})=>{const ls=st(x.status),num=showEvaluationRefs?`<span class="rep-num">${evaluationStatusRef(c,x,i)}</span>`:'',types=serviceTypeLabels(currentServiceType(x)).map(t=>{const k=t.includes('Corretiva')?'corrective':t.includes('Preventiva')?'preventive':t.includes('Laudo')?'laudo':t.includes('Instala')?'install':'other';return `<span class="report-service-type type-${k}">${t}</span>`}).join(''),pickup=multipleEvaluations&&(x.needsPickup||x.techReport?.needsPickup)&&!serviceInWorkshop(x)?'<span class="rep-pickup" title="Retirar equipamento"><i class="fa-solid fa-truck-pickup"></i></span>':'';return `<div class="rep-chip">${num}${types}<span class="badge" style="--sc:${STATUS_COLOR[ls]||STATUS_COLOR.waiting}">${lbl(ls)}</span>${pickup}</div>`}).join('');
+  const actLayers=activeIndexLayers,multipleEvaluations=actLayers.length>1;
+  const statusBadges=actLayers.map(({l:x,i})=>{const ls=st(x.status),num=hasSubmittedReport(x)?`<span class="rep-num">${evaluationStatusRef(c,x,i)}</span>`:'',types=serviceTypeLabels(currentServiceType(x)).map(t=>{const k=t.includes('Corretiva')?'corrective':t.includes('Preventiva')?'preventive':t.includes('Laudo')?'laudo':t.includes('Instala')?'install':'other';return `<span class="report-service-type type-${k}">${t}</span>`}).join(''),pickup=multipleEvaluations&&(x.needsPickup||x.techReport?.needsPickup)&&!serviceInWorkshop(x)?'<span class="rep-pickup" title="Retirar equipamento"><i class="fa-solid fa-truck-pickup"></i></span>':'';return `<div class="rep-chip">${num}${types}<span class="badge" style="--sc:${STATUS_COLOR[ls]||STATUS_COLOR.waiting}">${lbl(ls)}</span>${pickup}</div>`}).join('');
   const dk=dayKey(cardDate(c));
   if(dk!==lastDay){html+=`<div class="day-head">${dk}</div>`;lastDay=dk}
   const hh=hourOf(cardDate(c));
