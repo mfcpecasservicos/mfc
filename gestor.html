@@ -641,6 +641,31 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 .mfc-summary-card .rep-chip>.report-service-type{display:inline-flex!important;flex:0 0 auto!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:flex-start!important;gap:4px!important;width:fit-content!important;inline-size:fit-content!important;min-width:fit-content!important;max-width:44%!important;white-space:nowrap!important;word-break:keep-all!important;overflow-wrap:normal!important}
 .mfc-summary-card .rep-chip>.report-service-type i,.mfc-summary-card .rep-chip>.report-service-type .fa-solid,.mfc-summary-card .rep-chip>.report-service-type .fa-wrench,.mfc-summary-card .rep-chip>.report-service-type .fa-screwdriver-wrench{display:inline-block!important;flex:0 0 auto!important;white-space:nowrap!important}
 .mfc-summary-card .rep-chip>.badge,.mfc-summary-card .rep-chip>.sbadge{display:inline-flex!important;flex:0 0 auto!important;flex-grow:0!important;flex-shrink:0!important;width:fit-content!important;inline-size:fit-content!important;min-width:0!important;max-width:46%!important;padding-inline:9px!important;margin-left:auto!important;align-self:center!important;box-sizing:border-box!important}
+
+/* GESTOR-MENU-01: compact icon-only taskbar; GESTOR-LISTA-01: wider visit list. */
+@media(min-width:901px){
+  .app{grid-template-columns:72px minmax(420px,460px) minmax(0,1fr)!important}
+  .sidebar{padding:14px 8px!important;align-items:center!important;gap:12px!important;overflow-x:hidden!important}
+  .side-brand{width:52px!important;height:52px!important;min-width:52px!important;justify-content:center!important;padding:4px!important;gap:0!important}
+  .side-brand img{width:40px!important;height:40px!important}
+  .side-brand h2,.side-brand p{display:none!important}
+  .side-nav{width:100%!important;align-items:center!important;gap:9px!important}
+  .sidebar .nav-item{position:relative!important;width:48px!important;height:48px!important;min-width:48px!important;justify-content:center!important;padding:0!important;gap:0!important;font-size:0!important;border-radius:12px!important}
+  .sidebar .nav-item>i{font-size:1.08rem!important;margin:0!important}
+  .sidebar .nav-item>span:not(.nbadge){display:none!important}
+  .sidebar .nav-item .nbadge{position:absolute!important;top:-4px!important;right:-4px!important;margin:0!important}
+  .sidebar .auth-account{display:flex!important;flex-direction:column!important;align-items:center!important;width:100%!important;padding:0!important;background:transparent!important;border:0!important}
+  .sidebar .auth-account>#auth-email{display:none!important}
+  .sidebar .auth-account button{width:44px!important;height:44px!important;margin:0!important;padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important;font-size:0!important}
+  .sidebar .auth-account button i{font-size:1rem!important}
+  .sidebar #conn{font-size:0!important;padding:6px!important}
+  .sidebar #conn i{font-size:.72rem!important}
+  .gestor-lista{min-width:0!important}
+}
+@media(min-width:901px) and (max-width:1200px){
+  .app{grid-template-columns:68px minmax(390px,42vw) minmax(0,1fr)!important}
+}
+
 </style>
 </head>
 <body>
