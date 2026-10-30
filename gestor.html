@@ -1507,11 +1507,11 @@ function render(){
   let listHtml='',lastDay=null;
   clients.forEach(c=>{
     const status=displayStatus(c);
-    const activeEntries=getLayers(c).map((l,i)=>({l,i})).filter(({l})=>!l.done),multipleEvaluations=activeEntries.length>1,showEvaluationRefs=getLayers(c).length>1;
+    const activeEntries=getLayers(c).map((l,i)=>({l,i})).filter(({l})=>!l.done),multipleEvaluations=activeEntries.length>1;
     const statusBadges=c.status==='discarded'
       ? `<span class="sbadge ${badgeCls.discarded}">${lbl('discarded')}</span>`
       : activeEntries.length
-          ? activeEntries.map(({l,i})=>{const s=l.status||'waiting',num=showEvaluationRefs?`<span class="rep-num">${gestorEvaluationStatusRef(c,l,i)}</span>`:'',types=serviceTypeLabels(l.techReport?.serviceType||l.serviceType||reportServiceType(l.techReport||{})).map(t=>{const k=t.includes('Corretiva')?'corrective':t.includes('Preventiva')?'preventive':t.includes('Laudo')?'laudo':t.includes('Instala')?'install':'other';return `<span class="report-service-type type-${k}">${escHtml(t)}</span>`}).join(''),pickup=multipleEvaluations&&(l.needsPickup||l.techReport?.needsPickup)&&!layerServiceInWorkshop(l)?'<span class="rep-pickup" title="Retirar equipamento"><i class="fa-solid fa-truck-pickup"></i></span>':'';return `<span class="rep-chip">${num}${types}<span class="sbadge ${badgeCls[s]||'sw'}">${lbl(s)}</span>${pickup}</span>`}).join('')
+          ? activeEntries.map(({l,i})=>{const s=l.status||'waiting',num=(l.techReport&&(String(l.techReport.serviceType||'').trim()||String(l.techReport.problem||'').trim()||(Array.isArray(l.techReport.photos)&&l.techReport.photos.length)||l.techReport.needsPickup))?`<span class="rep-num">${gestorEvaluationStatusRef(c,l,i)}</span>`:'',types=serviceTypeLabels(l.techReport?.serviceType||l.serviceType||reportServiceType(l.techReport||{})).map(t=>{const k=t.includes('Corretiva')?'corrective':t.includes('Preventiva')?'preventive':t.includes('Laudo')?'laudo':t.includes('Instala')?'install':'other';return `<span class="report-service-type type-${k}">${escHtml(t)}</span>`}).join(''),pickup=multipleEvaluations&&(l.needsPickup||l.techReport?.needsPickup)&&!layerServiceInWorkshop(l)?'<span class="rep-pickup" title="Retirar equipamento"><i class="fa-solid fa-truck-pickup"></i></span>':'';return `<span class="rep-chip">${num}${types}<span class="sbadge ${badgeCls[s]||'sw'}">${lbl(s)}</span>${pickup}</span>`}).join('')
           : `<span class="sbadge ${badgeCls.done}">${lbl('done')}</span>`;
     const dk=gDayKey(mainDate(c));
     if(dk!==lastDay){listHtml+=`<div class="day-head"><span>${dk}</span></div>`;lastDay=dk}
