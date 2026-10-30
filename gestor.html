@@ -574,6 +574,14 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
  .mfc-summary-card .rep-chip{display:flex!important;flex-wrap:wrap!important;justify-content:flex-start!important}
  .mfc-summary-card .rep-chip .badge,.mfc-summary-card .rep-chip .sbadge{flex:0 1 auto!important;max-width:170px!important;justify-self:auto!important}
 }
+
+/* All layer-specific approval flags stay inside their matching report row. */
+.mfc-summary-card .rep-chip{display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:flex-start!important;gap:5px!important;min-width:0!important}
+.mfc-summary-card .rep-chip .rep-meta{display:inline-flex;flex:1 1 100%!important;flex-wrap:wrap!important;align-items:center!important;gap:5px!important;min-width:0!important;margin-top:2px}
+.mfc-summary-card .rep-chip .rep-meta .indicator,.mfc-summary-card .rep-chip .rep-meta .chip{height:auto!important;min-height:22px!important;max-width:100%!important;padding:4px 7px!important;font-size:.59rem!important;line-height:1.15!important;white-space:normal!important;overflow-wrap:anywhere!important}
+.mfc-summary-card .rep-chip .badge,.mfc-summary-card .rep-chip .sbadge{flex:0 1 auto!important;max-width:150px!important;white-space:normal!important;overflow-wrap:anywhere!important;text-align:center!important}
+@media(min-width:520px){.mfc-summary-card .rep-chip .rep-meta{flex:0 1 auto!important;margin-top:0!important}}
+
 </style>
 </head>
 <body>
@@ -1550,7 +1558,7 @@ function render(){
     const statusBadges=c.status==='discarded'
       ? `<span class="sbadge ${badgeCls.discarded}">${lbl('discarded')}</span>`
       : activeEntries.length
-          ? activeEntries.map(({l,i})=>{const s=l.status||'waiting',num=`<span class="rep-num">${gestorEvaluationStatusRef(c,l,i)}</span>`,types=serviceTypeLabels(l.techReport?.serviceType||l.serviceType||reportServiceType(l.techReport||{})).map(t=>{const k=t.includes('Corretiva')?'corrective':t.includes('Preventiva')?'preventive':t.includes('Laudo')?'laudo':t.includes('Instala')?'install':'other';return `<span class="report-service-type type-${k}">${escHtml(t)}</span>`}).join(''),pickup=multipleEvaluations&&(l.needsPickup||l.techReport?.needsPickup)&&!layerServiceInWorkshop(l)?'<span class="rep-pickup" title="Retirar equipamento"><i class="fa-solid fa-truck-pickup"></i></span>':'';return `<span class="rep-chip">${num}${types}<span class="sbadge ${badgeCls[s]||'sw'}">${lbl(s)}</span>${pickup}</span>`}).join('')
+          ? activeEntries.map(({l,i})=>{const s=l.status||'waiting',num=`<span class="rep-num">${gestorEvaluationStatusRef(c,l,i)}</span>`,types=serviceTypeLabels(l.techReport?.serviceType||l.serviceType||reportServiceType(l.techReport||{})).map(t=>{const k=t.includes('Corretiva')?'corrective':t.includes('Preventiva')?'preventive':t.includes('Laudo')?'laudo':t.includes('Instala')?'install':'other';return `<span class="report-service-type type-${k}">${escHtml(t)}</span>`}).join(''),pickup=multipleEvaluations&&(l.needsPickup||l.techReport?.needsPickup)&&!layerServiceInWorkshop(l)?'<span class="rep-pickup" title="Retirar equipamento"><i class="fa-solid fa-truck-pickup"></i></span>':'',meta=`${layerServiceInWorkshop(l)?'<span class="indicator"><i class="fa-solid fa-industry"></i> Equipamento no galpão</span>':''}${l.approval?.paid?'<span class="indicator"><i class="fa-solid fa-credit-card"></i> Serviço pago</span>':''}${l.approval?.owes?'<span class="chip chip-owe"><i class="fa-solid fa-circle-exclamation"></i> Falta pagar</span>':''}${l.approval?.warranty?'<span class="indicator" style="background:#3b2a06;border-color:#f59e0b;color:#fbbf24"><i class="fa-solid fa-shield-halved"></i> Garantia</span>':''}`;return `<span class="rep-chip">${num}${types}<span class="sbadge ${badgeCls[s]||'sw'}">${lbl(s)}</span>${pickup}${meta?`<span class="rep-meta">${meta}</span>`:''}</span>`}).join('')
           : `<span class="sbadge ${badgeCls.done}">${lbl('done')}</span>`;
     const dk=gDayKey(mainDate(c));
     if(dk!==lastDay){listHtml+=`<div class="day-head"><span>${dk}</span></div>`;lastDay=dk}
@@ -1564,16 +1572,16 @@ function render(){
     if(hasLaudo(c))chips.push({t:'Laudo',h:'<span class="indicator ind-laudo"><i class="fa-solid fa-clipboard"></i> Laudo</span>'});
     if((c.companyMode||c.type==='company')&&c.accessRequired!==undefined)chips.push({t:'Acesso',h:c.accessRequired?'<span class="indicator" style="background:#0d1f0d;border-color:#22c55e;color:#86efac" title="Portaria exige documentação do técnico"><i class="fa-solid fa-id-card"></i></span>':'<span class="indicator" style="background:#3b0d0d;border-color:#ef4444;color:#fecaca" title="Portaria não exige documentação"><i class="fa-solid fa-id-card"></i></span>'});
     if(c.workshopDropoff&&!hasServiceInWorkshop(c))chips.push({t:'Equipamento na loja',h:'<span class="indicator"><i class="fa-solid fa-industry"></i> Equipamento na loja</span>'});
-    if(hasServiceInWorkshop(c))chips.push({t:'Equipamento no galpão',h:'<span class="indicator"><i class="fa-solid fa-industry"></i> Equipamento no galpão</span>'});
-    if(hasPaidService(c))chips.push({t:'Serviço pago',h:'<span class="indicator"><i class="fa-solid fa-credit-card"></i> Serviço pago</span>'});
-    if(hasOwesService(c))chips.push({t:'Falta pagar',h:'<span class="chip chip-owe"><i class="fa-solid fa-circle-exclamation"></i> Falta pagar</span>'});
-    if(hasWarrantyService(c))chips.push({t:'Garantia',h:'<span class="indicator" style="background:#3b2a06;border-color:#f59e0b;color:#fbbf24"><i class="fa-solid fa-shield-halved"></i> Garantia</span>'});
+    
+    
+    
+    
     if(c.companyMode||c.type==='company'){const pinL=getLayers(c).find(l=>!l.done&&l.pinned)||getLayers(c).find(l=>!l.done);const pd=pinL?.approval?.paymentDate;if(pd)chips.push({t:'Pagamento: '+isoDateToBr(pd),h:'<span class="chip chip-pay"><i class="fa-solid fa-dollar-sign"></i> Pagamento: '+isoDateToBr(pd)+'</span>'});}
     chips.sort((a,b)=>a.t.length-b.t.length);
     if(hh)chips.unshift({t:hh,h:serviceScheduled?`<span class="chip chip-time chip-service-time"><i class="fa-solid fa-calendar-check"></i> Serviço marcado para ${hh}</span>`:`<span class="chip chip-time"><i class="fa-regular fa-clock"></i> ${hh}</span>`});
     const sc=STATUS_COLOR[status]||STATUS_COLOR.waiting;
     const cardDateObj=new Date(mainDate(c)||'');const cardDay=Number.isFinite(cardDateObj.getTime())?cardDateObj.toLocaleDateString('pt-BR',{weekday:'long'}):'';const cardAddress=fullAddress(c);const cardTime=(c.datetime===TBD||primary?.datetime===TBD)?'Data a definir':hh;
-    listHtml+=`<div class="vcard mfc-summary-card ${selectedId===c.id?'selected':''}" style="--sc:${sc}" onclick="selectClient('${c.id}')"><div class="mfc-summary-top"><span class="mfc-summary-day"><i class="fa-regular fa-calendar"></i> ${cardDay?cardDay.charAt(0).toUpperCase()+cardDay.slice(1):'Visita'}</span>${cardTime?`<span class="mfc-summary-time"><i class="fa-regular fa-clock"></i> ${cardTime}</span>`:''}</div><div class="mfc-summary-name">${c.name||'—'}${(c.companyMode||c.type==='company')&&c.requester?` (${c.requester})`:''}</div>${cardAddress?`<div class="mfc-summary-address"><i class="fa-solid fa-location-dot"></i> ${escHtml(cardAddress)}</div>`:''}<div class="mfc-summary-bottom"><div class="mfc-summary-status">${statusBadges}</div></div>${chips.length?`<div class="vc-chips">${chips.map(x=>x.h).join('')}</div>`:''}</div>`;
+    listHtml+=`<div class="vcard mfc-summary-card ${selectedId===c.id?'selected':''}" style="--sc:${sc}" onclick="selectClient('${c.id}')"><div class="mfc-summary-top"><span class="mfc-summary-day"><i class="fa-regular fa-calendar"></i> ${cardDay?cardDay.charAt(0).toUpperCase()+cardDay.slice(1):'Visita'}</span>${cardTime?`<span class="mfc-summary-time"><i class="fa-regular fa-clock"></i> ${cardTime}</span>`:''}</div><div class="mfc-summary-name">${c.name||'—'}${(c.companyMode||c.type==='company')&&c.requester?` (${c.requester})`:''}</div>${cardAddress?`<div class="mfc-summary-address"><i class="fa-solid fa-location-dot"></i> ${escHtml(cardAddress)}</div>`:''}<div class="mfc-summary-bottom"><div class="mfc-summary-status">${statusBadges}</div></div></div>`;
   });
   list.innerHTML=listHtml;
   document.getElementById('list-footer').innerHTML='';
