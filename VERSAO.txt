@@ -1,4 +1,8 @@
-MFC v143h
+MFC v143i
+
+- Cabeçalhos de data no Gestor passam a exibir mês, dia, dia da semana e contagem de visitas.
+- Clientes de cada data agrupados por uma borda contígua no GESTOR-LISTA-01.
+- Campo de pesquisa expandido até o limite da lista, preservando espaço para o filtro.
 
 - Cabeçalhos dos grupos de dia no Index redesenhados com bloco de mês/dia e informações à direita.
 - Data e contagem de visitas geradas dinamicamente por grupo.
