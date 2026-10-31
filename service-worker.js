@@ -5,7 +5,7 @@ firebase.initializeApp({apiKey:"AIzaSyAUUid850sbmBAVS9JzeZ94SbC-qzkk0B8",authDom
 // Não chamar showNotification aqui evita que o mesmo aviso apareça duas vezes.
 firebase.messaging();
 
-const CACHE_NAME = 'mfc-tecnico-v143f-recover';
+const CACHE_NAME = 'mfc-tecnico-v143g-recover';
 const FIREBASE_MODULES = [
   'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js',
   'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js',
@@ -18,7 +18,7 @@ const APP_SHELL = [
   './gestor.html',
   './cadastro.html',
   './layout-guide.js',
-  './layout-guide.js?v=141b',
+  './layout-guide.js?v=142',
   './report-media.js',
   './report-media.js?v=140',
   './location-view.js',
