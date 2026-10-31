@@ -1,4 +1,7 @@
-MFC v143f-recover
+MFC v143h
+
+- Cabeçalhos dos grupos de dia no Index redesenhados com bloco de mês/dia e informações à direita.
+- Data e contagem de visitas geradas dinamicamente por grupo.
 
 RECUPERAÇÃO DE EMERGÊNCIA: gestor.html CORROMPIDO
 
