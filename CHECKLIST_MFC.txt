@@ -1,4 +1,4 @@
-CHECKLIST PÚBLICO MFC — v143i
+CHECKLIST PÚBLICO MFC — v143j
 
 MAPA VISUAL
 
@@ -7,6 +7,14 @@ MAPA VISUAL
 [x] Botão e marcações ocultos no Index em celular.
 [x] Zoom do navegador não remove o botão em computador com mouse.
 [x] Gestor e Index não dependem de ?mfc_layout=1.
+
+AGRUPAMENTO POR DATA — INDEX E GESTOR-LISTA-01
+
+[x] Um único .grupo-dia por data, sem grupos aninhados.
+[x] Container limpo antes de cada renderização.
+[x] Grupos separados por 20px; cards e menu lateral preservados.
+[x] Tag Equipamento horizontal, sem altura fixa nem largura forçada.
+[ ] Testar 1 grupo, 3 grupos e atualização subsequente com dados reais.
 
 TESTE DE VAZAMENTO
 
@@ -21,7 +29,7 @@ TESTE DE VAZAMENTO
 
 VERSÃO E CACHE
 
-[x] CACHE_NAME atual: mfc-tecnico-v140a.
+[x] CACHE_NAME atual: mfc-tecnico-v143j.
 [x] Index, Gestor e Cadastro carregam layout-guide.js?v=140a.
 [x] Index e Gestor carregam report-media.js?v=140.
 [x] Sintaxe dos scripts validada.
