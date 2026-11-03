@@ -1,4 +1,13 @@
-MFC v143i
+MFC v143j
+
+AGRUPAMENTO DE VISITAS POR DATA — INDEX E GESTOR-LISTA-01
+
+- Cada data é renderizada em um único elemento .grupo-dia, contendo apenas o cabeçalho e seus cards.
+- A lista é limpa antes de cada renderização; a atualização substitui o conteúdo anterior sem acumular molduras.
+- Corrigido o fechamento da seção de data no Gestor para </section>, sem elementos de grupo aninhados.
+- Moldura única por data com borda de 1px, raio de 14px, padding de 10px e 20px de espaço inferior.
+- Tag Equipamento permanece horizontal, sem altura fixa ou quebra de palavra forçada.
+- Cards de visita e menu lateral preservados.
 
 - Cabeçalhos de data no Gestor passam a exibir mês, dia, dia da semana e contagem de visitas.
 - Clientes de cada data agrupados por uma borda contígua no GESTOR-LISTA-01.
