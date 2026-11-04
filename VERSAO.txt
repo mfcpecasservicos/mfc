@@ -1,3 +1,12 @@
+MFC v143t
+
+TOPO DOS CARDS — INDEX E GESTOR
+
+- Removido o dia da semana do topo do card.
+- O horário passa para a esquerda, no lugar do dia.
+- À direita, no lugar do horário, o card indica "Cliente" (ícone de pessoa) ou "Empresa" (ícone de prédio).
+- Sem horário cadastrado, o card mostra "Sem horário"; visitas a definir continuam como "Data a definir".
+
 MFC v143s
 
 CHECK-UP GERAL — CORREÇÕES DE CONSISTÊNCIA

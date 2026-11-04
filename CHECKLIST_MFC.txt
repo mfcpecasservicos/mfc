@@ -1,4 +1,4 @@
-CHECKLIST PÚBLICO MFC — v143s
+CHECKLIST PÚBLICO MFC — v143t
 
 REGRAS — CLASSIFICAÇÃO DOS STATUS
 
@@ -84,7 +84,7 @@ TESTE DE VAZAMENTO
 
 VERSÃO E CACHE
 
-[x] CACHE_NAME atual: mfc-tecnico-v143s.
+[x] CACHE_NAME atual: mfc-tecnico-v143t.
 [x] Index, Gestor e Cadastro carregam layout-guide.js?v=142.
 [x] Index e Gestor carregam report-media.js?v=140.
 [x] Sintaxe dos scripts validada.
