@@ -1,4 +1,31 @@
-CHECKLIST PÚBLICO MFC — v143n
+CHECKLIST PÚBLICO MFC — v143o
+
+REGRAS — CLASSIFICAÇÃO DOS STATUS
+
+1. STATUS DE TIPO DE SERVIÇO
+- Corretiva
+- Preventiva
+- Teste de vazamento
+- Laudo
+- Instalação
+
+2. STATUS DE ESTADO DO CLIENTE
+- Aguardando visita
+- Aguardando Avaliação
+- Avaliação concluída
+- Aguardando aprovação
+- Aprovado
+- Equipamento pronto para entrega
+- Serviço finalizado
+- Serviço Concluído
+
+3. STATUS DE OBSERVAÇÃO
+- Equipamento no galpão
+- Serviço já foi pago
+- Falta pagar
+- Serviço de garantia
+
+REGRA DE ORGANIZAÇÃO: manter as três categorias separadas. Tipo de serviço identifica o que será feito; Estado do cliente identifica em que etapa o atendimento está; Observação registra informações complementares sobre o equipamento ou pagamento. Não tratar observações como etapa do atendimento.
 
 STATUS DOS CARDS — INDEX E GESTOR-LISTA-01
 
