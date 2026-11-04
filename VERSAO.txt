@@ -1,4 +1,12 @@
-MFC v143n
+MFC v143o
+
+PADRONIZAÇÃO DAS CATEGORIAS E NOMES DOS STATUS
+
+- Documentadas três categorias distintas: Tipo de serviço, Estado do cliente e Observação.
+- Tipo de serviço: Corretiva, Preventiva, Teste de vazamento, Laudo e Instalação.
+- Estado do cliente: Aguardando visita, Aguardando Avaliação, Avaliação concluída, Aguardando aprovação, Aprovado, Equipamento pronto para entrega, Serviço finalizado e Serviço Concluído.
+- Observação: Equipamento no galpão, Serviço já foi pago, Falta pagar e Serviço de garantia.
+- A classificação deve manter cada item em sua categoria, sem misturar tipo de serviço, andamento do cliente e observações.
 
 LIMPEZA DE STATUS OBSOLETOS
 
