@@ -1,4 +1,13 @@
-MFC v143o
+MFC v143p
+
+AGRUPAMENTO VISUAL INDIVIDUAL POR ORÇAMENTO — INDEX E GESTOR
+
+- Cada orçamento passa a ter bloco próprio com referência R | A.
+- Tipos de serviço agrupados em linha flexível, reutilizando .report-service-type e classes existentes.
+- Estado exibido em pílula colorida por STATUS_COLOR, em linha exclusiva com ícones de observação.
+- Galpão, pago, falta pagar e garantia apresentados por ícones Font Awesome com title completo.
+- Garantia pode ser indicada no cabeçalho do orçamento.
+- Mantida a lógica de dados; Teste de vazamento continua em .type-other.
 
 PADRONIZAÇÃO DAS CATEGORIAS E NOMES DOS STATUS
 
