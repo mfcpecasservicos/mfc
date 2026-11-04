@@ -1,3 +1,12 @@
+MFC v144a
+
+EDITAR CLIENTE RESPEITA O RELATÓRIO ABERTO — GESTOR
+
+- Antes, o Editar cliente sempre carregava o equipamento e o problema do Relatório 1, mesmo com o Relatório 2 (ou outro) aberto.
+- Agora o Editar usa o relatório aberto na tela (aba ativa e avaliação selecionada) para equipamento, descrição do problema, garantia e equipamento na loja.
+- Ao salvar, garantia e equipamento na loja também são gravados na avaliação editada, não mais na primeira avaliação.
+- Dados gerais do cliente (nome, telefone, endereço, localização) continuam valendo para o cliente inteiro.
+
 MFC v143z
 
 FILTRO DA LISTA E PESQUISADOS RECENTEMENTE — GESTOR

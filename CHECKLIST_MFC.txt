@@ -1,4 +1,4 @@
-CHECKLIST PÚBLICO MFC — v143z
+CHECKLIST PÚBLICO MFC — v144a
 
 REGRAS — CLASSIFICAÇÃO DOS STATUS
 
@@ -84,13 +84,15 @@ TESTE DE VAZAMENTO
 
 VERSÃO E CACHE
 
-[x] CACHE_NAME atual: mfc-tecnico-v143z.
+[x] CACHE_NAME atual: mfc-tecnico-v144a.
 [x] Index, Gestor e Cadastro carregam layout-guide.js?v=142.
 [x] Index e Gestor carregam report-media.js?v=140.
 [x] Sintaxe dos scripts validada.
 [x] Configuração JSON validada.
 
 TESTES MANUAIS
+
+[ ] Gestor: Editar cliente no Relatório 2 mostra e salva o equipamento do Relatório 2.
 
 [ ] Gestor: filtro ao lado da pesquisa da lista abre o menu e filtra.
 [ ] Gestor: cliente aberto pela busca aparece em Pesquisados recentemente.
