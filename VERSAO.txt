@@ -1,3 +1,16 @@
+MFC v143w
+
+AVALIAÇÕES NÃO MINIMIZAM SOZINHAS — GESTOR
+
+- Causa: no detalhe do cliente, só a avaliação principal era montada aberta; a cada salvamento ou atualização a tela era redesenhada e as demais voltavam fechadas.
+- Agora todas as avaliações abrem por padrão.
+- A avaliação que o gestor minimizar fica minimizada até ele abrir de novo, inclusive depois de salvar ou recarregar a página (estado guardado no navegador, por cliente e avaliação).
+
+REMOVIDA A FUNÇÃO FIXAR VISITA — GESTOR E INDEX
+
+- Removidos o botão "Fixar visita" e a função togglePin do Gestor.
+- A visita principal, o status do card, os ícones de observação, o editar cliente e a abertura do detalhe no Index seguem sempre a ordem normal de status; marcações antigas de visita fixada são ignoradas.
+
 MFC v143v
 
 NOVO CADASTRO JÁ APROVADO (SEM VISITA TÉCNICA) — GESTOR
