@@ -1,3 +1,11 @@
+MFC v143y
+
+CORREÇÃO: NOVA VISITA NÃO ABRIA — GESTOR
+
+- Na v143x, a linha que define window.openNewVisit foi removida por engano; o botão "+ Nova visita" e a Nova visita a partir da pesquisa de cliente não abriam o modal.
+- Restaurada a função openNewVisit.
+- Restaurado o contêiner inp-extra-equipments, onde aparecem os equipamentos adicionais do botão + (também ficou de fora na v143x).
+
 MFC v143x
 
 VÁRIOS EQUIPAMENTOS NA NOVA VISITA — GESTOR
