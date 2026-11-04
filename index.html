@@ -174,7 +174,6 @@ html.mfc-force-mobile .card-foot{padding:4px 18px 18px!important}
   min-width:0!important;
   box-sizing:border-box!important;
 }
-.mfc-summary-card .rep-chip .rep-num{flex:0 0 auto!important}
 .mfc-summary-card .rep-chip .report-service-type{
   display:inline-flex!important;
   flex:0 1 auto!important;
@@ -585,7 +584,7 @@ function indexGestorObsHtml(c,layers,i){const v=indexGestorObsValue(c,layers,i);
 function syncIndexGestorObs(cid,i){const c=getClientForEdit(cid),row=document.getElementById('index-gestor-obs-'+cid);if(!c||!row)return;row.outerHTML=indexGestorObsHtml(c,getLayers(c),Number(i))}
 function addressKey(value){return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()}
 function addressParts(c){const parts=[];[c.address,c.number,c.neighborhood||c.bairro,c.city||c.cidade].forEach(value=>{const clean=String(value||'').trim().replace(/^[,;\s]+|[,;\s]+$/g,'');const key=addressKey(clean),segments=parts.flatMap(part=>String(part).split(',')).map(addressKey);if(clean&&key&&!segments.includes(key))parts.push(clean)});return parts.join(', ')}
-function problemText(c){return c.problem||c.notes||''}
+
 function contactBlock(c){const mk=(num,name,top)=>{if(!num)return'';const pd=phoneDigits(num);const call=pd.startsWith('55')?pd.slice(2):pd;return `<div class="info-action-row"${top?' style="margin-top:6px"':''}><strong>${num}${name?' — '+name:''}</strong><div class="inline-actions"><a class="mini-action whats" href="https://wa.me/${pd}" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a><a class="mini-action call" href="tel:${call}"><i class="fa-solid fa-phone"></i> Ligar</a></div></div>`};
   const rows=[mk(c.phone,'',false),mk(c.phone2,c.phone2Name,true)].filter(Boolean);
   return rows.length?`<div class="client-row"><label>Contato</label>${rows.join('')}</div>`:'';
@@ -667,6 +666,6 @@ installBtn?.addEventListener('click',async()=>{if(!deferredInstallPrompt)return;
 if('serviceWorker'in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js',{scope:'./'}).then(reg=>reg.update()).catch(()=>null))}
 setTimeout(()=>{if(!window.__mfcIndexReady&&!navigator.onLine){const wrap=document.getElementById('list-wrap');if(wrap)wrap.innerHTML='<div class="empty"><i class="fa-solid fa-triangle-exclamation"></i> O modo offline ainda não foi preparado neste aparelho. Conecte à internet uma vez e abra o Index novamente.</div>'}},7000);
 </script>
-<script src="layout-guide.js?v=141"></script>
+<script src="layout-guide.js?v=142"></script>
 </body>
 </html>

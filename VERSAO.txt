@@ -1,3 +1,15 @@
+MFC v143s
+
+CHECK-UP GERAL — CORREÇÕES DE CONSISTÊNCIA
+
+- Service worker deixou de reescrever o HTML em tempo de execução (patchHtmlSource/patchHtmlResponse removidos).
+- As 4 correções que o service worker aplicava no Gestor foram incorporadas ao gestor.html: campo "Data e hora da nova visita", validação da data, gravação da data na nova visita e escolha da visita principal pela data mais recente.
+- Removida a reescrita obsoleta do Index (o filtro já foi substituído por isIndexClientVisible).
+- layout-guide.js padronizado em ?v=142 no Index, Gestor e Cadastro, igual ao cache offline.
+- Cache offline sem entradas repetidas de layout-guide.js e report-media.js sem versão.
+- Removidas funções nunca usadas: hasLeakTest, getStatus, hasPaidService, hasOwesService e hasWarrantyService (Gestor) e problemText (Index).
+- Removidas regras CSS idênticas repetidas (.rep-chip .rep-num no Index e no Gestor; .list-filter-row no Gestor).
+
 MFC v143r
 
 R | A JUNTOS E GARANTIA SEM REPETIÇÃO NOS CARDS — INDEX E GESTOR
