@@ -1,4 +1,10 @@
-MFC v143p
+MFC v143q
+
+CORREÇÃO DO CABEÇALHO R | A NOS CARDS — INDEX E GESTOR
+
+- Aplicado CSS para manter R1 | A1 compacto, alinhado à esquerda, sem distribuir os elementos pela largura do bloco.
+- Removido o comportamento de grid no cabeçalho; referências não esticam nem aumentam desnecessariamente a altura do card.
+- Alteração exclusivamente visual; dados e estados preservados.
 
 AGRUPAMENTO VISUAL INDIVIDUAL POR ORÇAMENTO — INDEX E GESTOR
 
