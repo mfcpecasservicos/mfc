@@ -1,4 +1,10 @@
-MFC v143l
+MFC v143m
+
+RESTAURAÇÃO DO NÚMERO DO RELATÓRIO E DA AVALIAÇÃO NOS CARDS
+
+- Restaurada a exibição de R1/A1 (e demais referências de relatório/avaliação) nos cards do Index e do Gestor.
+- Mantido o ajuste de quebra de linha e limite de largura dos status, sem atravessar a borda do card.
+- Preservados os demais indicadores, tipos de serviço e status.
 
 AJUSTE DO RESUMO DOS CARDS — REMOÇÃO DA REFERÊNCIA R/A
 
