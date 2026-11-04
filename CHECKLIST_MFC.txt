@@ -1,4 +1,4 @@
-CHECKLIST PÚBLICO MFC — v143k
+CHECKLIST PÚBLICO MFC — v143l
 
 STATUS DOS CARDS — INDEX E GESTOR-LISTA-01
 
@@ -6,6 +6,12 @@ STATUS DOS CARDS — INDEX E GESTOR-LISTA-01
 [x] Quebra automática sem atravessar a borda.
 [x] Indicadores e referência de relatório preservados.
 [ ] Conferir visualmente em celular e desktop após publicar.
+
+RESUMO DOS CARDS — REFERÊNCIA R/A
+
+[x] Ocultar R1/A1 e demais referências R/A no resumo dos cards.
+[x] Tipos de serviço, status e indicadores mantidos e alinhados desde o início da linha.
+[ ] Conferir visualmente no Index e no Gestor após publicar.
 
 MAPA VISUAL
 
@@ -36,7 +42,7 @@ TESTE DE VAZAMENTO
 
 VERSÃO E CACHE
 
-[x] CACHE_NAME atual: mfc-tecnico-v143k.
+[x] CACHE_NAME atual: mfc-tecnico-v143l.
 [x] Index, Gestor e Cadastro carregam layout-guide.js?v=140a.
 [x] Index e Gestor carregam report-media.js?v=140.
 [x] Sintaxe dos scripts validada.
