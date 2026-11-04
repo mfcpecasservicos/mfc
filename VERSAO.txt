@@ -1,3 +1,14 @@
+MFC v143v
+
+NOVO CADASTRO JÁ APROVADO (SEM VISITA TÉCNICA) — GESTOR
+
+- Em Novos Cadastros, cada card tem o interruptor "Já aprovado (sem visita técnica)".
+- Ligado: o campo de data passa a ser a data do serviço (obrigatória), o botão vira "Enviar como aprovado" e o cliente entra direto como Aprovado, com approval.serviceDate preenchido.
+- Desligado: fluxo de sempre, cliente entra como Aguardando visita.
+- Valor e forma de pagamento continuam sendo informados no detalhe do cliente.
+- Funciona também para cliente recorrente e cliente restaurado da lixeira; o campo auxiliar não é salvo no cadastro do cliente.
+- No Index, o técnico vê o serviço na data marcada com o botão Serviço Concluído (ou Pronto para Entrega, se estiver no galpão).
+
 MFC v143u
 
 HORÁRIO EM DESTAQUE NOS CARDS — INDEX E GESTOR

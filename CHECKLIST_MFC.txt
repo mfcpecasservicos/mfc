@@ -1,4 +1,4 @@
-CHECKLIST PÚBLICO MFC — v143u
+CHECKLIST PÚBLICO MFC — v143v
 
 REGRAS — CLASSIFICAÇÃO DOS STATUS
 
@@ -84,13 +84,16 @@ TESTE DE VAZAMENTO
 
 VERSÃO E CACHE
 
-[x] CACHE_NAME atual: mfc-tecnico-v143u.
+[x] CACHE_NAME atual: mfc-tecnico-v143v.
 [x] Index, Gestor e Cadastro carregam layout-guide.js?v=142.
 [x] Index e Gestor carregam report-media.js?v=140.
 [x] Sintaxe dos scripts validada.
 [x] Configuração JSON validada.
 
 TESTES MANUAIS
+
+[ ] Novo cadastro com "Já aprovado" ligado entra como Aprovado na data do serviço.
+[ ] Novo cadastro com "Já aprovado" desligado continua entrando como Aguardando visita.
 
 [ ] Criar avaliação com Teste de vazamento.
 [ ] Aprovar o orçamento no Gestor.
