@@ -1,4 +1,4 @@
-CHECKLIST PÚBLICO MFC — v143o
+CHECKLIST PÚBLICO MFC — v143p
 
 REGRAS — CLASSIFICAÇÃO DOS STATUS
 
@@ -26,6 +26,14 @@ REGRAS — CLASSIFICAÇÃO DOS STATUS
 - Serviço de garantia
 
 REGRA DE ORGANIZAÇÃO: manter as três categorias separadas. Tipo de serviço identifica o que será feito; Estado do cliente identifica em que etapa o atendimento está; Observação registra informações complementares sobre o equipamento ou pagamento. Não tratar observações como etapa do atendimento.
+
+AGRUPAMENTO VISUAL POR ORÇAMENTO — INDEX E GESTOR
+[x] Referência R | A no cabeçalho de cada bloco.
+[x] Tipos de serviço em linha flexível com classes existentes.
+[x] Estado em pílula própria e ícones de observação à direita.
+[x] Ícones Font Awesome existentes com title descritivo.
+[x] Garantia indicada no cabeçalho do orçamento.
+[ ] Testar orçamento com 1 e múltiplos tipos/status/observações em tela de 380px.
 
 STATUS DOS CARDS — INDEX E GESTOR-LISTA-01
 
@@ -76,7 +84,7 @@ TESTE DE VAZAMENTO
 
 VERSÃO E CACHE
 
-[x] CACHE_NAME atual: mfc-tecnico-v143n.
+[x] CACHE_NAME atual: mfc-tecnico-v143p.
 [x] Index, Gestor e Cadastro carregam layout-guide.js?v=140a.
 [x] Index e Gestor carregam report-media.js?v=140.
 [x] Sintaxe dos scripts validada.
