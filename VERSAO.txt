@@ -1,4 +1,10 @@
-MFC v143j
+MFC v143k
+
+CORREÇÃO DO STATUS NOS CARDS DE VISITA — INDEX E GESTOR-LISTA-01
+
+- Status agora respeita a largura interna do card, sem atravessar a borda.
+- Linha de relatório permite quebra automática; selo de status pode reduzir e quebrar texto sem overflow.
+- Mantidos o conteúdo, cores, indicadores e demais elementos dos cards.
 
 AGRUPAMENTO DE VISITAS POR DATA — INDEX E GESTOR-LISTA-01
 
