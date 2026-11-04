@@ -1,3 +1,10 @@
+MFC v144b
+
+TOPO DOS CARDS INVERTIDO — INDEX E GESTOR
+
+- Cliente/Empresa (com ícone) passa para a esquerda do topo do card.
+- O horário volta para a direita, na pílula, e mantém o destaque: negrito, branco, um pouco maior e relógio na cor do status.
+
 MFC v144a
 
 EDITAR CLIENTE RESPEITA O RELATÓRIO ABERTO — GESTOR

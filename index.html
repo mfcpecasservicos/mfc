@@ -375,9 +375,9 @@ html.mfc-force-mobile .card-foot{padding:4px 18px 18px!important}
 /* v143r — R|A agrupados (sem espalhar na largura do card) */
 .mfc-summary-card .mfc-report-ref,.vcard.mfc-summary-card .mfc-report-ref{display:inline-flex!important;align-items:center!important;gap:0!important;flex:0 0 auto!important;width:auto!important;white-space:nowrap!important}
 .mfc-summary-card .mfc-report-ref .rep-divider,.vcard.mfc-summary-card .mfc-report-ref .rep-divider{margin:0 5px!important;flex:0 0 auto!important;width:auto!important}
-/* v143u — horário da visita em destaque no topo do card */
-.mfc-summary-card .mfc-summary-day,.vcard.mfc-summary-card .mfc-summary-day{color:var(--text)!important;font-weight:800!important;font-size:.86rem!important;letter-spacing:.01em!important}
-.mfc-summary-card .mfc-summary-day i,.vcard.mfc-summary-card .mfc-summary-day i{color:var(--sc,var(--text))!important}
+/* v144b — horário da visita em destaque, à direita do topo do card */
+.mfc-summary-card .mfc-summary-time,.vcard.mfc-summary-card .mfc-summary-time{color:var(--text)!important;font-weight:800!important;font-size:.86rem!important;letter-spacing:.01em!important}
+.mfc-summary-card .mfc-summary-time i,.vcard.mfc-summary-card .mfc-summary-time i{color:var(--sc,var(--text))!important}
 </style>
 </head>
 <body>
@@ -572,7 +572,7 @@ clients.forEach(c=>{
   const tags=`${((c.companyMode||c.type==='company')&&c.accessRequired!==undefined)?(c.accessRequired?'<span class="indicator" style="background:#0d1f0d;border-color:#22c55e;color:#86efac" title="Portaria exige documentação do técnico"><i class="fa-solid fa-id-card"></i></span>':'<span class="indicator" style="background:#3b0d0d;border-color:#ef4444;color:#fecaca" title="Portaria não exige documentação"><i class="fa-solid fa-id-card"></i></span>'):''}${(c.datetime===TBD||l?.datetime===TBD)?'<span class="chip chip-time"><i class="fa-solid fa-calendar-days"></i> Data a definir</span>':(hh?(serviceScheduled?`<span class="chip chip-time chip-service-time"><i class="fa-solid fa-calendar-check"></i> Serviço marcado para ${hh}</span>`:`<span class="chip chip-time"><i class="fa-regular fa-clock"></i> ${hh}</span>`):'')}`;
   const sc=STATUS_COLOR[s]||STATUS_COLOR.waiting,cardTags=completedUnpaidChip(c)+tags;
   const cardIsCompany=!!(c.companyMode||c.type==='company');const cardAddress=addressParts(c);const cardTime=(c.datetime===TBD||l?.datetime===TBD)?'Data a definir':hh;
-  html+=`<div class="card mfc-summary-card" style="--sc:${sc}" onclick="openDetail('${c.id}')"><div class="mfc-summary-top"><span class="mfc-summary-day"><i class="fa-regular fa-clock"></i> ${cardTime||'Sem horário'}</span><span class="mfc-summary-time"><i class="fa-solid ${cardIsCompany?'fa-building':'fa-user'}"></i> ${cardIsCompany?'Empresa':'Cliente'}</span></div><div class="mfc-summary-name">${c.name||'—'}${(c.companyMode||c.type==='company')&&c.requester?` (${c.requester})`:''}</div>${cardAddress?`<div class="mfc-summary-address"><i class="fa-solid fa-location-dot"></i> ${cardAddress}</div>`:''}<div class="mfc-summary-bottom"><div class="mfc-summary-status">${statusBadges}</div></div></div>`;
+  html+=`<div class="card mfc-summary-card" style="--sc:${sc}" onclick="openDetail('${c.id}')"><div class="mfc-summary-top"><span class="mfc-summary-day"><i class="fa-solid ${cardIsCompany?'fa-building':'fa-user'}"></i> ${cardIsCompany?'Empresa':'Cliente'}</span><span class="mfc-summary-time"><i class="fa-regular fa-clock"></i> ${cardTime||'Sem horário'}</span></div><div class="mfc-summary-name">${c.name||'—'}${(c.companyMode||c.type==='company')&&c.requester?` (${c.requester})`:''}</div>${cardAddress?`<div class="mfc-summary-address"><i class="fa-solid fa-location-dot"></i> ${cardAddress}</div>`:''}<div class="mfc-summary-bottom"><div class="mfc-summary-status">${statusBadges}</div></div></div>`;
 });
 if(dayGroupOpen)html+='</section>';
 wrap.innerHTML=html};

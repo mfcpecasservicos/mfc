@@ -759,9 +759,9 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 /* v143r — R|A agrupados (sem espalhar na largura do card) */
 .mfc-summary-card .mfc-report-ref,.vcard.mfc-summary-card .mfc-report-ref{display:inline-flex!important;align-items:center!important;gap:0!important;flex:0 0 auto!important;width:auto!important;white-space:nowrap!important}
 .mfc-summary-card .mfc-report-ref .rep-divider,.vcard.mfc-summary-card .mfc-report-ref .rep-divider{margin:0 5px!important;flex:0 0 auto!important;width:auto!important}
-/* v143u — horário da visita em destaque no topo do card */
-.mfc-summary-card .mfc-summary-day,.vcard.mfc-summary-card .mfc-summary-day{color:var(--text)!important;font-weight:800!important;font-size:.86rem!important;letter-spacing:.01em!important}
-.mfc-summary-card .mfc-summary-day i,.vcard.mfc-summary-card .mfc-summary-day i{color:var(--sc,var(--text))!important}
+/* v144b — horário da visita em destaque, à direita do topo do card */
+.mfc-summary-card .mfc-summary-time,.vcard.mfc-summary-card .mfc-summary-time{color:var(--text)!important;font-weight:800!important;font-size:.86rem!important;letter-spacing:.01em!important}
+.mfc-summary-card .mfc-summary-time i,.vcard.mfc-summary-card .mfc-summary-time i{color:var(--sc,var(--text))!important}
 </style>
 </head>
 <body>
@@ -1778,7 +1778,7 @@ function render(){
     if(hh)chips.unshift({t:hh,h:serviceScheduled?`<span class="chip chip-time chip-service-time"><i class="fa-solid fa-calendar-check"></i> Serviço marcado para ${hh}</span>`:`<span class="chip chip-time"><i class="fa-regular fa-clock"></i> ${hh}</span>`});
     const sc=STATUS_COLOR[status]||STATUS_COLOR.waiting;
     const cardIsCompany=!!(c.companyMode||c.type==='company');const cardAddress=fullAddress(c);const cardTime=(c.datetime===TBD||primary?.datetime===TBD)?'Data a definir':hh;
-    listHtml+=`<div class="vcard mfc-summary-card ${selectedId===c.id?'selected':''}" style="--sc:${sc}" onclick="selectClient('${c.id}')"><div class="mfc-summary-top"><span class="mfc-summary-day"><i class="fa-regular fa-clock"></i> ${cardTime||'Sem horário'}</span><span class="mfc-summary-time"><i class="fa-solid ${cardIsCompany?'fa-building':'fa-user'}"></i> ${cardIsCompany?'Empresa':'Cliente'}</span></div><div class="mfc-summary-name">${c.name||'—'}${(c.companyMode||c.type==='company')&&c.requester?` (${c.requester})`:''}</div>${cardAddress?`<div class="mfc-summary-address"><i class="fa-solid fa-location-dot"></i> ${escHtml(cardAddress)}</div>`:''}<div class="mfc-summary-bottom"><div class="mfc-summary-status">${statusBadges}</div></div></div>`;
+    listHtml+=`<div class="vcard mfc-summary-card ${selectedId===c.id?'selected':''}" style="--sc:${sc}" onclick="selectClient('${c.id}')"><div class="mfc-summary-top"><span class="mfc-summary-day"><i class="fa-solid ${cardIsCompany?'fa-building':'fa-user'}"></i> ${cardIsCompany?'Empresa':'Cliente'}</span><span class="mfc-summary-time"><i class="fa-regular fa-clock"></i> ${cardTime||'Sem horário'}</span></div><div class="mfc-summary-name">${c.name||'—'}${(c.companyMode||c.type==='company')&&c.requester?` (${c.requester})`:''}</div>${cardAddress?`<div class="mfc-summary-address"><i class="fa-solid fa-location-dot"></i> ${escHtml(cardAddress)}</div>`:''}<div class="mfc-summary-bottom"><div class="mfc-summary-status">${statusBadges}</div></div></div>`;
   });
   if(dayGroupOpen)listHtml+=`</section>`;
   list.innerHTML=listHtml;
