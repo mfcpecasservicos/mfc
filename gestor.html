@@ -129,6 +129,18 @@ button{font-family:inherit}
 .home-search .si{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:var(--muted)}
 .home-results{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:16px;max-height:280px;overflow-y:auto;display:none;z-index:90;box-shadow:var(--shadow)}
 .home-results.open{display:block}
+.home-recent{width:100%;max-width:620px}
+.home-recent:empty{display:none}
+.home-recent-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:2px 4px 8px;color:var(--muted);font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.home-recent-head button{background:none;border:none;color:var(--muted);font-size:.74rem;font-weight:700;cursor:pointer;text-decoration:underline}
+.home-recent-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
+.home-recent-item{display:flex;align-items:center;gap:10px;min-width:0;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:var(--surface);color:var(--text);text-align:left;cursor:pointer;font:inherit}
+.home-recent-item:hover{background:var(--surface2)}
+.home-recent-item>i{color:var(--muted);flex:0 0 auto}
+.home-recent-item span{display:flex;flex-direction:column;min-width:0}
+.home-recent-item strong{font-size:.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.home-recent-item small{font-size:.7rem;color:var(--muted)}
+.home-recent-item em{margin-left:auto;font-style:normal;font-size:.66rem;color:var(--red)}
 .csr-item{padding:11px 16px;font-size:.86rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer}
 .csr-item:last-child{border-bottom:none}
 .csr-item:hover{background:var(--surface2)}
@@ -1460,7 +1472,7 @@ window.switchView=v=>{
   document.getElementById('view-fin').style.display=v==='fin'?'block':'none';
   document.getElementById('view-leads').style.display=v==='leads'?'block':'none';
   document.getElementById('view-trash').style.display=v==='trash'?'block':'none';
-  if(v==='fin')renderFin();else{document.querySelector('.list-head').innerHTML='<h1 id="list-title">Visitas</h1><div class="filter-wrap" id="list-filter-wrap"></div>';render()}
+  if(v==='fin')renderFin();else{document.querySelector('.list-head').innerHTML='<h1 id="list-title">Visitas</h1><div class="list-filter-row" id="list-filter-wrap"></div>';render()}
 };
 window.goHome=()=>{selectedId=null;render()};
 /* ===== BASIC FNS ===== */
@@ -1515,7 +1527,12 @@ window.openNewVisit=()=>document.getElementById('newvisit-modal').classList.add(
 window.closeNewVisit=()=>{document.getElementById('newvisit-modal').classList.remove('open');window.clearForm?.()};
 window.openCompany=()=>document.getElementById('company-modal').classList.add('open');
 window.closeCompany=()=>document.getElementById('company-modal').classList.remove('open');
-window.homeSearch=val=>{const box=document.getElementById('home-results');if(!box)return;if(!val||val.length<2){box.classList.remove('open');return}const q=val.toLowerCase(),qd=normPhone(val);const results=all.filter(c=>(c.name||'').toLowerCase().includes(q)||(qd&&normPhone(c.phone).includes(qd))||(c.address||'').toLowerCase().includes(q)).slice(0,12);if(!results.length){box.classList.remove('open');return}box.classList.add('open');box.innerHTML=results.map(c=>`<div class="csr-item ${c.deleted?'deleted':''}" onclick="openClientSummary('${c.id}')"><div style="flex:1;min-width:0"><strong>${escHtml(c.name||'—')}${c.deleted?' <span style="color:var(--red)">(Lixeira)</span>':''}</strong><span>${escHtml(c.phone||'')} ${c.address?'· '+escHtml(c.address):''}</span></div><i class="fa-solid fa-chevron-right" style="color:var(--muted)"></i></div>`).join('')};
+function readRecentSearches(){try{const v=JSON.parse(localStorage.getItem('mfc-gestor-recent-searches')||'[]');return Array.isArray(v)?v.map(String):[]}catch(e){return []}}
+function recentSearchesHtml(){const items=readRecentSearches().map(id=>all.find(c=>c.id===id)).filter(Boolean).slice(0,6);if(!items.length)return'';return `<div class="home-recent-head"><span><i class="fa-solid fa-clock-rotate-left"></i> Pesquisados recentemente</span><button type="button" onclick="clearRecentSearches()">Limpar</button></div><div class="home-recent-list">${items.map(c=>`<button type="button" class="home-recent-item" onclick="openRecentClient('${c.id}')"><i class="fa-solid ${(c.companyMode||c.type==='company')?'fa-building':'fa-user'}"></i><span><strong>${escHtml(c.name||'—')}</strong>${c.phone?`<small>${escHtml(c.phone)}</small>`:''}</span>${c.deleted?'<em>Lixeira</em>':''}</button>`).join('')}</div>`}
+function refreshRecentSearches(){const box=document.getElementById('home-recent');if(box)box.innerHTML=recentSearchesHtml()}
+window.openRecentClient=id=>{const list=readRecentSearches().filter(x=>x!==id);list.unshift(String(id));try{localStorage.setItem('mfc-gestor-recent-searches',JSON.stringify(list.slice(0,10)))}catch(e){}refreshRecentSearches();openClientSummary(id)};
+window.clearRecentSearches=()=>{try{localStorage.removeItem('mfc-gestor-recent-searches')}catch(e){}refreshRecentSearches()};
+window.homeSearch=val=>{const box=document.getElementById('home-results');if(!box)return;if(!val||val.length<2){box.classList.remove('open');return}const q=val.toLowerCase(),qd=normPhone(val);const results=all.filter(c=>(c.name||'').toLowerCase().includes(q)||(qd&&normPhone(c.phone).includes(qd))||(c.address||'').toLowerCase().includes(q)).slice(0,12);if(!results.length){box.classList.remove('open');return}box.classList.add('open');box.innerHTML=results.map(c=>`<div class="csr-item ${c.deleted?'deleted':''}" onclick="openRecentClient('${c.id}')"><div style="flex:1;min-width:0"><strong>${escHtml(c.name||'—')}${c.deleted?' <span style="color:var(--red)">(Lixeira)</span>':''}</strong><span>${escHtml(c.phone||'')} ${c.address?'· '+escHtml(c.address):''}</span></div><i class="fa-solid fa-chevron-right" style="color:var(--muted)"></i></div>`).join('')};
 
 function summaryField(label,value){const clean=String(value??'').trim();return clean?`<div class="summary-field"><label>${escHtml(label)}</label><strong>${escHtml(clean)}</strong></div>`:''}
 function summaryWarranty(l,finishedAt){const type=reportServiceType(l.techReport||{}),inWarranty=!!l.approval?.warranty;if(type.includes('Laudo'))return`<div class="summary-warranty" style="background:#1e293b;color:#cbd5e1;border:1px solid #64748b"><i class="fa-solid fa-circle-info"></i> Laudo técnico — sem garantia${inWarranty?' · Atendimento de garantia':''}</div>`;if(!finishedAt)return`<div class="summary-warranty" style="background:#3b2a06;color:#fbbf24;border:1px solid #f59e0b"><i class="fa-solid fa-shield-halved"></i> Garantia sem data de conclusão registrada</div>`;const days=warrantyDaysFor(type),deadline=new Date(new Date(finishedAt).getTime()+days*86400000),expired=new Date()>deadline;return`<div class="summary-warranty" style="background:${expired?'#3b0d0d':'#06281b'};color:${expired?'#fecaca':'#86efac'};border:1px solid ${expired?'#ef4444':'#10b981'}"><i class="fa-solid fa-shield-halved"></i> ${inWarranty?'Atendimento realizado em garantia · ':''}${expired?'Garantia vencida':'Garantia válida'} até ${isoDateToBr(deadline.toISOString())} (${days} dias)</div>`}
@@ -1709,7 +1726,7 @@ function clientMatchesSearch(c){const q=String(clientSearch||'').trim().toLocale
 window.setFilter=f=>{if(!FILTERS.some(([key])=>key===f))return;filter=f;document.getElementById('filter-menu')?.classList.remove('open');render()};
 let clientSearchTimer=null;
 window.setClientSearch=v=>{clientSearch=String(v||'');clearTimeout(clientSearchTimer);clientSearchTimer=setTimeout(()=>render(),120)};
-function filterIconHtml(){return `<button class="filter-btn filter-btn-icon" title="Filtro de status" aria-label="Filtro de status" onclick="event.stopPropagation();document.getElementById('filter-menu').classList.toggle('open')"><i class="fa-solid fa-filter"></i></button><div class="filter-menu" id="filter-menu">${FILTERS.map(([f,l])=>`<button type="button" class="${filter===f?'active':''}" onclick="setFilter('${f}')">${l}</button>`).join('')}</div>`}
+function filterIconHtml(){return `<div class="filter-wrap"><button class="filter-btn filter-btn-icon" title="Filtro de status" aria-label="Filtro de status" onclick="event.stopPropagation();document.getElementById('filter-menu').classList.toggle('open')"><i class="fa-solid fa-filter"></i></button><div class="filter-menu" id="filter-menu">${FILTERS.map(([f,l])=>`<button type="button" class="${filter===f?'active':''}" onclick="setFilter('${f}')">${l}</button>`).join('')}</div></div>`}
 
 /* ===== LIST RENDER ===== */
 function render(){
@@ -1783,6 +1800,7 @@ function homeHtml(){
     <div class="home-search-row">
       <div class="home-search"><span class="si"><i class="fa-solid fa-magnifying-glass"></i></span><input id="home-search-input" placeholder="Buscar clientes existentes..." oninput="homeSearch(this.value)" autocomplete="off"><div class="home-results" id="home-results"></div></div>
     </div>
+    <div class="home-recent" id="home-recent">${recentSearchesHtml()}</div>
   </div>`;
 }
 

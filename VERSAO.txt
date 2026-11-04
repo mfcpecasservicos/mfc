@@ -1,3 +1,12 @@
+MFC v143z
+
+FILTRO DA LISTA E PESQUISADOS RECENTEMENTE — GESTOR
+
+- Corrigido o botão de filtro ao lado da pesquisa no GESTOR-LISTA-01: o menu não tinha um contêiner posicionado (.filter-wrap) e abria fora da tela; agora o botão e o menu ficam dentro do próprio .filter-wrap.
+- O contêiner da lista passa a ter sempre a classe list-filter-row, igual ao carregamento inicial.
+- Abaixo da barra "Buscar clientes existentes..." aparece "Pesquisados recentemente", com os últimos 6 clientes abertos pela pesquisa; clicar reabre o resumo do cliente; botão Limpar apaga o histórico.
+- Histórico guardado no navegador do computador; clientes excluídos definitivamente somem da lista.
+
 MFC v143y
 
 CORREÇÃO: NOVA VISITA NÃO ABRIA — GESTOR
