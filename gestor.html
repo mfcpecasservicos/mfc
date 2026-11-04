@@ -745,6 +745,11 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 .mfc-summary-card .mfc-report-icons .indicator,.vcard.mfc-summary-card .mfc-report-icons .indicator{display:inline-flex!important;align-items:center!important;justify-content:center!important;width:24px!important;height:24px!important;min-width:24px!important;padding:0!important;border-radius:7px!important;flex:0 0 24px!important;font-size:.68rem!important;line-height:1!important}
 .mfc-summary-card .mfc-report-icons .indicator i,.vcard.mfc-summary-card .mfc-report-icons .indicator i{font-size:.72rem!important}
 @media(max-width:380px){.mfc-summary-card .mfc-report-block,.vcard.mfc-summary-card .mfc-report-block{padding:6px!important;gap:4px!important}.mfc-summary-card .mfc-report-state,.vcard.mfc-summary-card .mfc-report-state{gap:4px!important}.mfc-summary-card .mfc-report-icons,.vcard.mfc-summary-card .mfc-report-icons{gap:3px!important}}
+
+/* Fix: cabeçalho R|A não deve esticar na largura do card */
+.mfc-summary-card .rep-chip{display:flex!important;grid-template-columns:none!important;justify-content:flex-start!important;align-items:center!important;width:100%!important;gap:6px!important}
+.mfc-summary-card .rep-chip>.rep-num{display:inline-flex!important;align-items:center!important;justify-content:flex-start!important;width:auto!important;flex:0 0 auto!important;justify-self:start!important;gap:4px!important}
+.mfc-summary-card .rep-chip>.rep-num .rep-divider{margin:0 2px!important;flex:0 0 auto!important;width:auto!important}
 </style>
 </head>
 <body>
