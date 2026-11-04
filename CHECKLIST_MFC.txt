@@ -1,4 +1,4 @@
-CHECKLIST PÚBLICO MFC — v143p
+CHECKLIST PÚBLICO MFC — v143q
 
 REGRAS — CLASSIFICAÇÃO DOS STATUS
 
@@ -28,7 +28,7 @@ REGRAS — CLASSIFICAÇÃO DOS STATUS
 REGRA DE ORGANIZAÇÃO: manter as três categorias separadas. Tipo de serviço identifica o que será feito; Estado do cliente identifica em que etapa o atendimento está; Observação registra informações complementares sobre o equipamento ou pagamento. Não tratar observações como etapa do atendimento.
 
 AGRUPAMENTO VISUAL POR ORÇAMENTO — INDEX E GESTOR
-[x] Referência R | A no cabeçalho de cada bloco.
+[x] Referência R | A compacta e alinhada à esquerda no cabeçalho de cada bloco.
 [x] Tipos de serviço em linha flexível com classes existentes.
 [x] Estado em pílula própria e ícones de observação à direita.
 [x] Ícones Font Awesome existentes com title descritivo.
@@ -84,7 +84,7 @@ TESTE DE VAZAMENTO
 
 VERSÃO E CACHE
 
-[x] CACHE_NAME atual: mfc-tecnico-v143p.
+[x] CACHE_NAME atual: mfc-tecnico-v143q.
 [x] Index, Gestor e Cadastro carregam layout-guide.js?v=140a.
 [x] Index e Gestor carregam report-media.js?v=140.
 [x] Sintaxe dos scripts validada.
