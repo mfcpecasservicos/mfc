@@ -1,4 +1,10 @@
-MFC v143k
+MFC v143l
+
+AJUSTE DO RESUMO DOS CARDS — REMOÇÃO DA REFERÊNCIA R/A
+
+- Ocultada a etiqueta R1/A1 (e demais referências R/A) no resumo dos cards do Index e do Gestor.
+- Os elementos a partir da posição indicada pelo usuário passam a iniciar no começo da linha, sem alterar os dados dos relatórios.
+- Tipos de serviço, status e indicadores permanecem visíveis.
 
 CORREÇÃO DO STATUS NOS CARDS DE VISITA — INDEX E GESTOR-LISTA-01
 
