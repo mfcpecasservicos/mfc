@@ -1,4 +1,10 @@
-MFC v143m
+MFC v143n
+
+LIMPEZA DE STATUS OBSOLETOS
+
+- Removidos Cliente ausente e Serviço descartado das opções de status do cadastro e da edição das visitas.
+- Removidos esses dois itens do menu de filtros do Gestor.
+- Mantidos os identificadores e tratamentos internos para preservar registros antigos já gravados.
 
 RESTAURAÇÃO DO NÚMERO DO RELATÓRIO E DA AVALIAÇÃO NOS CARDS
 
