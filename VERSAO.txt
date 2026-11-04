@@ -1,3 +1,10 @@
+MFC v143u
+
+HORÁRIO EM DESTAQUE NOS CARDS — INDEX E GESTOR
+
+- Horário da visita no topo do card em negrito, na cor do texto principal e um pouco maior (antes cinza e pequeno).
+- Ícone do relógio na cor do status do card.
+
 MFC v143t
 
 TOPO DOS CARDS — INDEX E GESTOR
