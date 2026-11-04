@@ -1,3 +1,12 @@
+MFC v143x
+
+VÁRIOS EQUIPAMENTOS NA NOVA VISITA — GESTOR
+
+- Botão + ao lado de Equipamento no modal Nova visita, no mesmo estilo do contato adicional; até 10 equipamentos.
+- Cada equipamento vira uma avaliação própria (R1, R2, ...), com as Observações como descrição do problema.
+- Cliente existente: equipamento com o mesmo nome de um já cadastrado continua no mesmo relatório, sem duplicar.
+- Lista limpa ao fechar/salvar o modal e ao escolher um cliente na busca.
+
 MFC v143w
 
 AVALIAÇÕES NÃO MINIMIZAM SOZINHAS — GESTOR
