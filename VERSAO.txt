@@ -1,3 +1,11 @@
+MFC v143r
+
+R | A JUNTOS E GARANTIA SEM REPETIÇÃO NOS CARDS — INDEX E GESTOR
+
+- R1 | A1 agrupados em .mfc-report-ref; os três pedaços não se espalham mais pela largura do cabeçalho.
+- Removido o ícone de garantia duplicado do cabeçalho do orçamento; a garantia fica apenas junto aos ícones de observação.
+- Alteração exclusivamente visual; dados e estados preservados.
+
 MFC v143q
 
 CORREÇÃO DO CABEÇALHO R | A NOS CARDS — INDEX E GESTOR

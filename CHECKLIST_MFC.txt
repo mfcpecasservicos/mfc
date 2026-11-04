@@ -1,4 +1,4 @@
-CHECKLIST PÚBLICO MFC — v143q
+CHECKLIST PÚBLICO MFC — v143r
 
 REGRAS — CLASSIFICAÇÃO DOS STATUS
 
@@ -32,7 +32,7 @@ AGRUPAMENTO VISUAL POR ORÇAMENTO — INDEX E GESTOR
 [x] Tipos de serviço em linha flexível com classes existentes.
 [x] Estado em pílula própria e ícones de observação à direita.
 [x] Ícones Font Awesome existentes com title descritivo.
-[x] Garantia indicada no cabeçalho do orçamento.
+[x] Garantia exibida uma única vez por orçamento (junto às observações).
 [ ] Testar orçamento com 1 e múltiplos tipos/status/observações em tela de 380px.
 
 STATUS DOS CARDS — INDEX E GESTOR-LISTA-01
@@ -84,7 +84,7 @@ TESTE DE VAZAMENTO
 
 VERSÃO E CACHE
 
-[x] CACHE_NAME atual: mfc-tecnico-v143q.
+[x] CACHE_NAME atual: mfc-tecnico-v143r.
 [x] Index, Gestor e Cadastro carregam layout-guide.js?v=140a.
 [x] Index e Gestor carregam report-media.js?v=140.
 [x] Sintaxe dos scripts validada.
