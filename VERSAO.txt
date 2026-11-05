@@ -1,3 +1,13 @@
+MFC v144f
+
+ALERTAS, MENSAGEM DA VISITA E ROTA DO DIA
+
+- Gestor e Index: selo vermelho "Visita atrasada · N dias" quando a data da visita já passou e ela continua como Aguardando visita.
+- Gestor e Index: selo amarelo "Sem resposta há N dias" quando o orçamento está em Aguardando aprovação há 3 dias ou mais (conta a partir da mudança de status; orçamentos antigos usam a data da visita).
+- Gestor: clicar no status Aguardando visita do topo do cliente copia a mensagem "sua visita técnica da MFC Peças e Serviços está marcada para hoje/amanhã/dia às hh:mm"; sem data marcada, avisa em vez de copiar.
+- Gestor: o clique do status no topo passa a acompanhar a avaliação selecionada.
+- Index: botão "Rota do dia no Maps" no cabeçalho de HOJE, com as visitas do dia em ordem de horário (até 10 paradas; usa o alfinete quando existe e o endereço quando não). Inclui visitas, serviços aprovados fora do galpão e entregas.
+
 MFC v144e
 
 QUALIDADE DE VIDA — LISTA EM HOJE, RESUMO, SINGULAR E ALTERAÇÕES NÃO SALVAS
