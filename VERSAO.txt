@@ -1,3 +1,13 @@
+MFC v144e
+
+QUALIDADE DE VIDA — LISTA EM HOJE, RESUMO, SINGULAR E ALTERAÇÕES NÃO SALVAS
+
+- Gestor e Index: a lista abre já posicionada no dia de hoje (ou no próximo dia com visitas); o cabeçalho de hoje ganha o selo HOJE e o de amanhã o selo AMANHÃ. A rolagem acontece só ao abrir, sem pular depois que o usuário rola.
+- Gestor e Index: cabeçalho do dia em singular quando há uma visita ("1 visita").
+- Gestor: resumo na tela inicial com Visitas de hoje, Aguardando aprovação, Aprovados (clicáveis, abrem a lista no dia de hoje ou filtrada) e A receber (soma dos orçamentos aprovados, prontos ou finalizados ainda não marcados como pagos).
+- Gestor: aviso ao trocar de cliente, voltar ao início, mudar de tela ou fechar a página com alterações não salvas na avaliação.
+- Gestor e Index: leitura de valores aceita também decimal com ponto (ex.: 294.00), evitando ler 29400; o saldo passa a ser gravado com vírgula.
+
 MFC v144d
 
 ENTRADA AUTOMÁTICA DE 40% NO ORÇAMENTO — GESTOR

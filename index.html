@@ -378,6 +378,12 @@ html.mfc-force-mobile .card-foot{padding:4px 18px 18px!important}
 /* v144b — horário da visita em destaque, à direita do topo do card */
 .mfc-summary-card .mfc-summary-time,.vcard.mfc-summary-card .mfc-summary-time{color:var(--text)!important;font-weight:800!important;font-size:.86rem!important;letter-spacing:.01em!important}
 .mfc-summary-card .mfc-summary-time i,.vcard.mfc-summary-card .mfc-summary-time i{color:var(--sc,var(--text))!important}
+/* v144e — selos HOJE/AMANHÃ e rolagem até o dia de hoje */
+.day-rel{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:900;letter-spacing:.08em;vertical-align:middle;line-height:1.4}
+.day-rel-today{background:#22c55e22;color:#86efac;border:1px solid #22c55e88}
+.day-rel-tomorrow{background:#38bdf822;color:#7dd3fc;border:1px solid #38bdf888}
+.day-head.day-head-today .day-head-datebox{background:#14532d}
+.grupo-dia{scroll-margin-top:72px}
 </style>
 </head>
 <body>
@@ -481,7 +487,10 @@ const fdate=dt=>{if(!dt)return'—';const m=String(dt).match(/^(\d{4})-(\d{2})-(
 function todayIsoDate(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
 const maps=a=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a||'');
 function phoneDigits(v){let d=String(v||'').replace(/\D/g,'');if(d.length===8)d='71'+d;if(d.length===10||d.length===11)d='55'+d;return d}
-function moneyNum(v){return parseFloat(String(v||'').replace(/[R$\s.]/g,'').replace(',','.'))||0}
+function moneyNum(v){const s=String(v??'').replace(/[R$\s]/g,'');if(!s.includes(',')&&/^-?\d+\.\d{1,2}$/.test(s))return parseFloat(s)||0;return parseFloat(s.replace(/\./g,'').replace(',','.'))||0}
+function mfcDayDiff(d){const t=new Date(d||'');if(!Number.isFinite(t.getTime()))return null;const a=new Date(t.getFullYear(),t.getMonth(),t.getDate()),n=new Date(),b=new Date(n.getFullYear(),n.getMonth(),n.getDate());return Math.round((a-b)/86400000)}
+function mfcDayRelBadge(diff){return diff===0?'<span class="day-rel day-rel-today">HOJE</span>':diff===1?'<span class="day-rel day-rel-tomorrow">AMANHÃ</span>':''}
+function mfcScrollToToday(root,force=false){if(!root||(!force&&window.__mfcTodayScrolled))return;const secs=[...root.querySelectorAll('section.grupo-dia[data-diff]')].filter(s=>s.dataset.diff!=='');if(!secs.length)return;window.__mfcTodayScrolled=true;let target=null;secs.forEach(s=>{if(Number(s.dataset.diff)>=0)target=s});if(!target)target=secs.find(s=>Number(s.dataset.diff)<0);if(target&&(force||target!==secs[0]))target.scrollIntoView({block:'start'})}
 function fmtMoney(v){return 'R$ '+Number(v||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.')}
 function neutralizeHtmlString(value){const text=String(value??'');return /<\s*\/?\s*[a-z!]|on\w+\s*=/i.test(text)?text.replaceAll('<','＜').replaceAll('>','＞'):text}
 function neutralizeRecord(value){if(typeof value==='string')return neutralizeHtmlString(value);if(Array.isArray(value))return value.map(neutralizeRecord);if(value&&typeof value==='object'&&Object.getPrototypeOf(value)===Object.prototype){return Object.fromEntries(Object.entries(value).map(([key,item])=>[key,neutralizeRecord(item)]))}return value}
@@ -556,7 +565,7 @@ const ICON_FA={waiting:'fa-clock',workshop_pending:'fa-industry',evaluated:'fa-c
 const ICON_COLOR={waiting:'#3b82f6',workshop_pending:'#38bdf8',evaluated:'#10B981',quoted:'#F59E0B',approved:'#f97316',ready_delivery:'#38bdf8',service_finished:'#10B981',absent:'#a78bfa',done:'#10B981'};
 const STATUS_COLOR={waiting:'oklch(0.72 0.17 285)',workshop_pending:'oklch(0.70 0.14 220)',evaluated:'oklch(0.75 0.18 155)',quoted:'oklch(0.80 0.16 75)',approved:'oklch(0.75 0.18 45)',ready_delivery:'oklch(0.70 0.14 220)',service_finished:'oklch(0.75 0.18 155)',absent:'oklch(0.65 0.12 300)',discarded:'oklch(0.60 0.20 25)',done:'oklch(0.75 0.18 155)'};
 function dayKey(d){const t=new Date(d||'');if(!Number.isFinite(t.getTime()))return 'SEM DATA';return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0')}
-function dayHeaderHtml(d,count){const t=new Date(d||'');if(!Number.isFinite(t.getTime()))return '<div class="day-head">SEM DATA · '+count+' visitas</div>';const month=t.toLocaleDateString('pt-BR',{month:'short'}).replace('.','').toUpperCase(),day=String(t.getDate()).padStart(2,'0'),weekday=t.toLocaleDateString('pt-BR',{weekday:'long'}).toUpperCase(),date=t.toLocaleDateString('pt-BR');return '<div class="day-head"><div class="day-head-datebox"><span class="day-head-month">'+month+'</span><span class="day-head-day">'+day+'</span></div><div class="day-head-info"><span class="day-head-weekday">'+weekday+'</span><span class="day-head-details">'+date+' · '+count+' visitas</span></div></div>'}
+function dayHeaderHtml(d,count){const qty=count+' '+(count===1?'visita':'visitas');const t=new Date(d||'');if(!Number.isFinite(t.getTime()))return '<div class="day-head">SEM DATA · '+qty+'</div>';const month=t.toLocaleDateString('pt-BR',{month:'short'}).replace('.','').toUpperCase(),day=String(t.getDate()).padStart(2,'0'),weekday=t.toLocaleDateString('pt-BR',{weekday:'long'}).toUpperCase(),date=t.toLocaleDateString('pt-BR'),diff=mfcDayDiff(d);return '<div class="day-head'+(diff===0?' day-head-today':'')+'"><div class="day-head-datebox"><span class="day-head-month">'+month+'</span><span class="day-head-day">'+day+'</span></div><div class="day-head-info"><span class="day-head-weekday">'+weekday+mfcDayRelBadge(diff)+'</span><span class="day-head-details">'+date+' · '+qty+'</span></div></div>'}
 function hourOf(d){const t=new Date(d||'');if(!Number.isFinite(t.getTime()))return '';return t.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}
 const dayCounts=new Map();clients.forEach(c=>{const key=dayKey(cardDate(c));dayCounts.set(key,(dayCounts.get(key)||0)+1)});
 let html='',lastDay=null,dayGroupOpen=false;
@@ -565,7 +574,7 @@ clients.forEach(c=>{
   const actLayers=activeIndexLayers,multipleEvaluations=actLayers.length>1;
   const statusBadges=actLayers.map(({l:x,i})=>{const ls=st(x.status),ref=evaluationStatusRef(c,x,i),types=serviceTypeLabels(currentServiceType(x)).map(t=>{const k=t.includes('Corretiva')?'corrective':t.includes('Preventiva')?'preventive':t.includes('Laudo')?'laudo':t.includes('Instala')?'install':'other';return `<span class="report-service-type type-${k}">${t}</span>`}).join(''),icons=` ${serviceInWorkshop(x)?'<span class="indicator" title="Equipamento no galpão"><i class="fa-solid fa-industry"></i></span>':''}${(x.approval?.paid||x.paid)?'<span class="indicator" title="Serviço pago"><i class="fa-solid fa-dollar-sign"></i></span>':''}${x.approval?.owes?'<span class="indicator" title="Falta pagar"><i class="fa-solid fa-circle-exclamation"></i></span>':''}${x.approval?.warranty?'<span class="indicator" title="Garantia"><i class="fa-solid fa-shield-halved"></i></span>':''}`;return `<div class="rep-chip mfc-report-block"><div class="mfc-report-head"><span class="mfc-report-ref">${ref}</span></div><div class="mfc-report-types">${types}</div><div class="mfc-report-state"><span class="badge" style="--sc:${STATUS_COLOR[ls]||STATUS_COLOR.waiting}">${lbl(ls)}</span><span class="mfc-report-icons">${icons}</span></div></div>`}).join('');
   const dk=dayKey(cardDate(c));
-  if(dk!==lastDay){if(dayGroupOpen)html+='</section>';html+=`<section class="grupo-dia">${dayHeaderHtml(cardDate(c),dayCounts.get(dk)||1)}`;lastDay=dk;dayGroupOpen=true}
+  if(dk!==lastDay){if(dayGroupOpen)html+='</section>';html+=`<section class="grupo-dia" data-diff="${mfcDayDiff(cardDate(c))??''}">${dayHeaderHtml(cardDate(c),dayCounts.get(dk)||1)}`;lastDay=dk;dayGroupOpen=true}
   const hh=hourOf(cardDate(c));
   const serviceScheduled=!!(hh&&l?.approval?.serviceDate);
   
@@ -575,7 +584,7 @@ clients.forEach(c=>{
   html+=`<div class="card mfc-summary-card" style="--sc:${sc}" onclick="openDetail('${c.id}')"><div class="mfc-summary-top"><span class="mfc-summary-day"><i class="fa-solid ${cardIsCompany?'fa-building':'fa-user'}"></i> ${cardIsCompany?'Empresa':'Cliente'}</span><span class="mfc-summary-time"><i class="fa-regular fa-clock"></i> ${cardTime||'Sem horário'}</span></div><div class="mfc-summary-name">${c.name||'—'}${(c.companyMode||c.type==='company')&&c.requester?` (${c.requester})`:''}</div>${cardAddress?`<div class="mfc-summary-address"><i class="fa-solid fa-location-dot"></i> ${cardAddress}</div>`:''}<div class="mfc-summary-bottom"><div class="mfc-summary-status">${statusBadges}</div></div></div>`;
 });
 if(dayGroupOpen)html+='</section>';
-wrap.innerHTML=html};
+wrap.innerHTML=html;if(!detailHistory)mfcScrollToToday(wrap)};
 let detailHistory=false;
 function closeDetailInternal(){document.getElementById('detail').classList.remove('open');currentId=null;currentDetailClient=null;localPhotos={}}
 window.openDetail=id=>{const changing=currentId!==id;currentId=id;if(changing)localPhotos={};const c=allClients.find(x=>x.id===id);if(!c)return;currentDetailClient=c;const layers=getLayers(c);const firstIdx=layers.findIndex(l=>!l.done);currentLayerIdx=Math.max(0,firstIdx);document.getElementById('d-name').textContent=c.name||'Cliente';const av=document.getElementById('d-avatar');if(av)av.textContent=(c.name||'?').trim().charAt(0).toUpperCase();if(!document.getElementById('detail').classList.contains('open')){history.pushState({mfcDetail:true},'');detailHistory=true}document.getElementById('detail').classList.add('open');renderDetailFull(c,!changing)};
