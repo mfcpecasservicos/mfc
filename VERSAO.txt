@@ -1,3 +1,12 @@
+MFC v144c
+
+BOTÃO "ABRIR ROTA NO MAPS" NO ENDEREÇO — INDEX E GESTOR
+
+- No campo Endereço (cliente e empresa) aparece o botão "Abrir rota no Maps".
+- O botão usa o endereço escrito (rua, número, bairro, cidade) e abre o Google Maps já em modo de rota de carro, em nova aba.
+- É uma segunda opção ao mapa do alfinete: funciona mesmo quando o mapa não carrega ou o alfinete está errado.
+- Sem endereço cadastrado, o botão não aparece.
+
 MFC v144b
 
 TOPO DOS CARDS INVERTIDO — INDEX E GESTOR
