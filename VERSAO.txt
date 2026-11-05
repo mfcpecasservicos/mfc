@@ -1,3 +1,11 @@
+MFC v144d
+
+ENTRADA AUTOMÁTICA DE 40% NO ORÇAMENTO — GESTOR
+
+- Ao digitar o Valor do orçamento, o Valor de entrada é preenchido com 40% (ex.: 350 → 140; 349 → 139,60) e o saldo é recalculado.
+- Se o gestor digitar outro valor de entrada à mão, ele é mantido; apagar a entrada faz ela voltar a ser automática.
+- Campo Valor de entrada passa a aceitar vírgula (formato brasileiro), igual ao Valor do orçamento; antes era campo numérico com ponto, que o sistema lia errado em valores com centavos.
+
 MFC v144c
 
 BOTÃO "ABRIR ROTA NO MAPS" NO ENDEREÇO — INDEX E GESTOR
