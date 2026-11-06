@@ -1,3 +1,16 @@
+MFC v145a
+
+GESTOR NO CELULAR (ATUALIZAÇÃO GRANDE)
+
+- Todo o visual novo vale só para telas de até 700px; no PC o gestor continua idêntico (conferido medindo 63 elementos da tela na versão anterior e na nova).
+- Celular: a tela deixa de ser dividida em três faixas fixas. O gestor passa a funcionar em telas separadas, com uma rolagem só.
+- Início: botões (link de cadastro, nova visita, visita de empresa) lado a lado, busca e resumo compactos, e a lista de visitas logo abaixo, abrindo no dia de hoje.
+- Detalhe do cliente em tela cheia com botão "Voltar" fixo no topo; ao voltar, a lista reaparece na mesma posição.
+- Blocos de informação do cliente com altura do conteúdo (antes eram quadrados e cortavam o endereço e o botão de rota); endereço ocupa a largura toda.
+- Financeiro: lista de contas em tela cheia e detalhe da conta com "Voltar". Novos Cadastros e Lixeira ocupam a tela toda, sem a lista de visitas.
+- Barra do topo cabe na tela: ícones, botão de sair só com ícone e indicador de conexão.
+- Modais (Nova visita, Editar cliente etc.) com um campo por linha no celular.
+
 MFC v144i
 
 BOTÃO DE LOCALIZAÇÃO DENTRO DO MAPA — GESTOR

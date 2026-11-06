@@ -790,6 +790,39 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 /* v144b — horário da visita em destaque, à direita do topo do card */
 .mfc-summary-card .mfc-summary-time,.vcard.mfc-summary-card .mfc-summary-time{color:var(--text)!important;font-weight:800!important;font-size:.86rem!important;letter-spacing:.01em!important}
 .mfc-summary-card .mfc-summary-time i,.vcard.mfc-summary-card .mfc-summary-time i{color:var(--sc,var(--text))!important}
+/* v145a — GESTOR NO CELULAR. Tudo abaixo vale só até 700px de largura: o PC não muda. */
+.m-back{display:none}
+@media(max-width:700px){
+  .app{display:flex!important;flex-direction:column;height:100dvh;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+  .sidebar{position:sticky;top:0;z-index:60;flex:0 0 auto;height:58px!important;padding:6px 8px!important;gap:6px!important;overflow:hidden!important;background:var(--surface)}
+  .sidebar .side-brand{flex:0 0 auto}
+  .sidebar .side-nav{flex:1 1 auto;justify-content:space-evenly;gap:4px!important}
+  .sidebar .auth-account{display:flex!important;width:auto!important;flex:0 0 auto!important;margin:0!important;padding:0!important;background:transparent!important;border:0!important}
+  .sidebar .auth-account>#auth-email{display:none!important}
+  .sidebar .auth-account button{width:40px!important;height:40px!important;margin:0!important;padding:0!important;font-size:0!important;display:flex!important;align-items:center;justify-content:center;border-radius:10px}
+  .sidebar .auth-account button i{font-size:.95rem}
+  .sidebar #conn{margin:0!important;padding:0 2px!important;flex:0 0 auto}
+  .list-col,.detail-col,.gestor-lista,.gestor-detalhe{height:auto!important;min-height:0!important;overflow:visible!important;flex:0 0 auto}
+  .detail-col{order:1;padding:12px 12px 16px!important}
+  .list-col{order:2;border-bottom:0!important;padding:10px 10px 28px!important}
+  .grupo-dia{scroll-margin-top:66px}
+  body.m-detail .list-col{display:none!important}
+  body[data-mview="fin"] .list-col{order:1}
+  body[data-mview="fin"]:not(.m-fin-detail) .detail-col{display:none!important}
+  body.m-fin-detail .list-col{display:none!important}
+  body[data-mview="leads"] .list-col,body[data-mview="trash"] .list-col{display:none!important}
+  body.m-detail .m-back,body.m-fin-detail .m-back{display:flex;align-items:center;gap:8px;position:sticky;top:58px;z-index:55;width:calc(100% + 24px);margin:-12px -12px 12px;padding:12px 14px;border:0;border-bottom:1px solid var(--border);background:var(--surface);color:var(--text);font:inherit;font-weight:800;font-size:.92rem;cursor:pointer}
+  .home-wrap{min-height:0!important;gap:12px!important;padding:2px 0 4px}
+  .home-logo{display:none!important}
+  .home-btns{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+  .home-btns .btn{height:auto!important;min-height:60px;flex-direction:column;gap:5px!important;font-size:.72rem!important;line-height:1.15;padding:8px 6px!important;text-align:center;white-space:normal}
+  .home-search-row{grid-template-columns:1fr!important}
+  .info-core .iblk{aspect-ratio:auto!important;height:auto!important;min-height:0!important;overflow:visible!important}
+  .info-core .iblk:has(.addr-route-btn){grid-column:1/-1!important}
+  .modal{padding:16px 13px!important;max-height:94dvh}
+  .modal .fgrid{grid-template-columns:1fr!important}
+  .modal .fgrid>*{grid-column:1/-1!important}
+}
 </style>
 </head>
 <body>
@@ -820,6 +853,7 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 
   <!-- ===== DETAIL COLUMN ===== -->
   <section class="detail-col gestor-detalhe" aria-label="Detalhes do atendimento">
+    <button type="button" class="m-back" onclick="mobileBack()"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
     <div id="view-detail"></div>
 
     <div id="view-fin" style="display:none"></div>
@@ -1420,7 +1454,7 @@ window.removeRes=async key=>{
   toast('🗑 Conta removida');
 };
 window.copyTxt=async(txt)=>{try{await navigator.clipboard.writeText(String(txt));toast('📋 Copiado')}catch{prompt('Copie:',txt)}};
-window.selectFin=key=>{selectedFin=selectedFin===key?null:key;renderFin()};
+window.selectFin=key=>{if(isMobileG()&&!selectedFin)window.__mListScroll=document.getElementById('app')?.scrollTop||0;selectedFin=selectedFin===key?null:key;renderFin();syncMobileState();mobileScrollAfterNav(!!selectedFin)};
 window.addConta=async key=>{
   const valor=document.getElementById('nc-valor').value.trim();
   const vencBr=document.getElementById('nc-venc').value.trim();
@@ -1515,8 +1549,9 @@ window.switchView=v=>{
   document.getElementById('view-leads').style.display=v==='leads'?'block':'none';
   document.getElementById('view-trash').style.display=v==='trash'?'block':'none';
   if(v==='fin')renderFin();else{document.querySelector('.list-head').innerHTML='<h1 id="list-title">Visitas</h1><div class="list-filter-row" id="list-filter-wrap"></div>';render()}
+  syncMobileState();
 };
-window.goHome=()=>{if(!confirmLeaveDirty())return;selectedId=null;render()};
+window.goHome=()=>{if(!confirmLeaveDirty())return;const wasDetail=!!selectedId;selectedId=null;render();syncMobileState();if(wasDetail)mobileScrollAfterNav(false)};
 /* ===== BASIC FNS ===== */
 window.phoneMask=el=>{let v=el.value.replace(/\D/g,'');if(v.length>11)v=v.slice(0,11);if(v.length<=2)el.value=v;else if(v.length<=7)el.value=v.slice(0,2)+' '+v.slice(2);else if(v.length<=10)el.value=v.slice(0,2)+' '+v.slice(2,6)+'-'+v.slice(6);else el.value=v.slice(0,2)+' '+v.slice(2,3)+' '+v.slice(3,7)+'-'+v.slice(7)};
 function escAttr(v){return String(v??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
@@ -1836,9 +1871,14 @@ function render(){
   renderDetail();
   restoreGestorUiState(uiState);
   if(filter==='all'&&!clientSearch)mfcScrollToToday(list);
+  syncMobileState();
 }
 window.scrollListToToday=()=>{if(filter!=='all'||clientSearch){filter='all';clientSearch='';render()}mfcScrollToToday(document.getElementById('clist'),true)};
-window.selectClient=id=>{if(!confirmLeaveDirty())return;selectedId=selectedId===id?null:id;switchView('main')};
+window.selectClient=id=>{if(!confirmLeaveDirty())return;if(isMobileG()&&!selectedId)window.__mListScroll=document.getElementById('app')?.scrollTop||0;selectedId=selectedId===id?null:id;switchView('main');syncMobileState();mobileScrollAfterNav(!!selectedId)};
+function isMobileG(){return matchMedia('(max-width:700px)').matches}
+function syncMobileState(){const b=document.body;if(!b)return;b.dataset.mview=view;b.classList.toggle('m-detail',view==='main'&&!!selectedId);b.classList.toggle('m-fin-detail',view==='fin'&&!!selectedFin)}
+function mobileScrollAfterNav(entering){if(!isMobileG())return;const app=document.getElementById('app');if(!app)return;app.scrollTop=entering?0:(window.__mListScroll||0)}
+window.mobileBack=()=>{if(view==='fin'&&selectedFin){selectedFin=null;renderFin();syncMobileState();mobileScrollAfterNav(false)}else goHome()};
 window.render=render;
 
 /* ===== HOME (toolbar) ===== */
