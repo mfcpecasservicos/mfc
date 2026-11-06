@@ -157,6 +157,21 @@ service cloud.firestore {
         && leadAfter.data.phoneDigits == request.resource.data.phoneDigits;
     }
 
+    // Resposta do cliente ao link de localização: só marca como usado e grava o ponto.
+    function validLocationReply() {
+      let next = request.resource.data;
+      return activeToken(resource.data)
+        && next.diff(resource.data).affectedKeys()
+          .hasOnly(['used', 'usedAt', 'latitude', 'longitude', 'accuracy', 'source', 'confirmedAt'])
+        && next.used == true
+        && next.usedAt is string && next.usedAt.size() <= 40
+        && next.latitude is number && next.latitude >= -90 && next.latitude <= 90
+        && next.longitude is number && next.longitude >= -180 && next.longitude <= 180
+        && validAccuracy(next.get('accuracy', null))
+        && validText(next, 'source', 24)
+        && validText(next, 'confirmedAt', 40);
+    }
+
     // Gestor: acesso administrativo completo, inclusive para futuras coleções.
     match /{document=**} {
       allow read, write: if isManager();
@@ -183,6 +198,12 @@ service cloud.firestore {
 
     match /leads/{tokenId} {
       allow create: if validPublicLead(tokenId);
+    }
+
+    // Link de localização: o cliente lê o link válido e responde uma única vez.
+    match /locationRequests/{tokenId} {
+      allow get: if activeToken(resource.data);
+      allow update: if validLocationReply();
     }
   }
 }

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<!--
+  Página pública para o cliente confirmar a localização do atendimento.
+  Aberta pelo link gerado no Gestor (botão "Pedir localização ao cliente").
+  O link vale por 6 horas e só pode ser usado uma vez (coleção locationRequests).
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Localização - MFC Peças e Serviços</title>
+<link rel="stylesheet" href="fontawesome/css/all.min.css">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<style>
+  :root{--bg:#eef4fb;--surface:#ffffff;--primary:#06437a;--primary2:#0b63b6;--text:#0f172a;--muted:#64748b;--border:#dbe7f3;--success:#16a34a;--radius:20px;--shadow:0 12px 34px rgba(15,23,42,.10)}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
+  body{background:radial-gradient(circle at top,#f8fbff 0,#eef4fb 48%,#e8f0fa 100%);color:var(--text);padding:18px 14px 28px;min-height:100vh;display:flex;justify-content:center}
+  .container{max-width:640px;width:100%;display:flex;flex-direction:column;gap:14px}
+  .card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(6,67,122,.10);padding:20px}
+  .head{text-align:center}
+  .head img{width:96px;border-radius:22px;background:#fff;padding:6px;box-shadow:0 10px 26px rgba(6,67,122,.18);margin-bottom:10px}
+  .head h1{font-size:1.5rem;font-weight:900;color:var(--primary);letter-spacing:-.02em}
+  .head p{color:var(--muted);margin-top:6px;line-height:1.45}
+  .addr{margin-top:10px;font-size:.9rem;color:var(--text);background:#f1f6fc;border:1px solid var(--border);border-radius:12px;padding:9px 12px;text-align:left}
+  .steps{display:flex;flex-direction:column;gap:8px;font-size:.92rem;line-height:1.4;color:#334155}
+  .steps b{color:var(--primary)}
+  .btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:52px;border:0;border-radius:14px;font-size:1rem;font-weight:800;cursor:pointer;text-decoration:none}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .btn-gps{background:#e8f1fb;color:var(--primary);border:1px solid #bfdbfe}
+  .btn-send{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;box-shadow:0 10px 22px rgba(11,99,182,.25)}
+  .btn-wa{background:#16a34a;color:#fff}
+  .map{height:360px;border:1px solid #bfdbfe;border-radius:16px;overflow:hidden;background:#dbeafe;margin-top:12px}
+  .status{min-height:22px;margin-top:10px;font-size:.88rem;line-height:1.4;color:#475569}
+  .status.ok{color:#166534;font-weight:800}
+  .status.warn{color:#b45309;font-weight:700}
+  .actions{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+  .mfc-pin{width:40px;height:40px;border-radius:50% 50% 50% 0;background:#ef4444;color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;transform:rotate(-45deg);border:3px solid #fff;box-shadow:0 4px 12px #0007}
+  .mfc-pin i{transform:rotate(45deg)}
+  .center{text-align:center}
+  .big-icon{font-size:2.6rem;margin-bottom:10px}
+  .ok-icon{color:var(--success)}
+  .bad-icon{color:#ef4444}
+  .hidden{display:none!important}
+  .foot{text-align:center;font-size:.78rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="card head">
+    <img src="mfc-logo.png" alt="MFC Peças e Serviços">
+    <h1>Confirme o local do atendimento</h1>
+    <p id="greeting">Carregando…</p>
+    <div class="addr hidden" id="addr"></div>
+  </div>
+
+  <div class="card hidden" id="form-card">
+    <div class="steps">
+      <div><b>1.</b> Se você estiver em casa, toque em <b>Usar minha localização</b>.</div>
+      <div><b>2.</b> Se não estiver, toque no mapa em cima da sua casa.</div>
+      <div><b>3.</b> Arraste o alfinete para ajustar e toque em <b>Enviar localização</b>.</div>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn btn-gps" id="gps-btn" onclick="useMyLocation()"><i class="fa-solid fa-location-crosshairs"></i> Usar minha localização</button>
+    </div>
+    <div class="map" id="map"></div>
+    <div class="status" id="status">Toque no mapa onde fica a sua casa.</div>
+    <div class="actions">
+      <button type="button" class="btn btn-send" id="send-btn" onclick="sendLocation()" disabled><i class="fa-solid fa-paper-plane"></i> Enviar localização</button>
+    </div>
+  </div>
+
+  <div class="card center hidden" id="done-card">
+    <div class="big-icon ok-icon"><i class="fa-solid fa-circle-check"></i></div>
+    <h2>Localização enviada!</h2>
+    <p style="color:var(--muted);margin:8px 0 14px">Obrigado. Nosso técnico já vai encontrar o local certinho.</p>
+    <a class="btn btn-wa" id="wa-btn" href="#" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Avisar a MFC no WhatsApp</a>
+  </div>
+
+  <div class="card center hidden" id="bad-card">
+    <div class="big-icon bad-icon"><i class="fa-solid fa-link-slash"></i></div>
+    <h2>Este link expirou ou já foi usado</h2>
+    <p style="color:var(--muted);margin-top:8px">Peça um novo link ao atendimento da MFC.</p>
+  </div>
+
+  <div class="foot">MFC Peças e Serviços · Dias D'Ávila e região</div>
+</div>
+
+<script src="vendor/leaflet/leaflet.js"></script>
+<script src="location-view.js"></script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+  import { getFirestore, doc, getDoc, runTransaction } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+  const app = initializeApp({
+    apiKey: "AIzaSyAUUid850sbmBAVS9JzeZ94SbC-qzkk0B8",
+    authDomain: "roteiro-mfc-d3053.firebaseapp.com",
+    projectId: "roteiro-mfc-d3053",
+    storageBucket: "roteiro-mfc-d3053.firebasestorage.app",
+    messagingSenderId: "1030114859934",
+    appId: "1:1030114859934:web:ad353eafb55205d6b4148f"
+  });
+  const db = getFirestore(app);
+  const token = new URLSearchParams(location.search).get('token') || '';
+  const tokenRef = token ? doc(db, 'locationRequests', token) : null;
+  const DEFAULT_CENTER = [-12.6125, -38.2971]; // Dias D'Ávila
+  const $ = id => document.getElementById(id);
+  const point = { lat: null, lng: null, accuracy: null, source: '' };
+  let map = null, marker = null, clientName = '';
+
+  const tokenIsValid = data => !!data && !data.used && Date.now() <= Number(data.expiresAtMs || 0);
+  const setStatus = (text, cls = '') => { const el = $('status'); el.textContent = text; el.className = 'status ' + cls; };
+  const showBad = () => { $('greeting').textContent = 'Não foi possível abrir este link.'; $('form-card').classList.add('hidden'); $('bad-card').classList.remove('hidden'); };
+  const pinIcon = () => L.divIcon({ className: '', html: '<div class="mfc-pin"><i class="fa-solid fa-house"></i></div>', iconSize: [40, 40], iconAnchor: [20, 40] });
+
+  const placePin = (lat, lng, source, accuracy = null) => {
+    point.lat = Number(lat); point.lng = Number(lng); point.source = source; point.accuracy = accuracy;
+    if (!marker) {
+      marker = L.marker([point.lat, point.lng], { icon: pinIcon(), draggable: true, title: 'Sua casa' }).addTo(map);
+      marker.on('dragend', () => { const p = marker.getLatLng(); placePin(p.lat, p.lng, 'manual'); setStatus('Alfinete ajustado. Se estiver certo, toque em “Enviar localização”.', 'ok'); });
+    } else marker.setLatLng([point.lat, point.lng]);
+    $('send-btn').disabled = false;
+  };
+
+  const initMap = (center, zoom) => {
+    map = L.map('map', { zoomControl: true, attributionControl: true }).setView(center, zoom);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(map);
+    map.on('click', e => { placePin(e.latlng.lat, e.latlng.lng, 'manual'); setStatus('Alfinete marcado. Arraste para ajustar ou toque em “Enviar localização”.', 'ok'); });
+    setTimeout(() => map.invalidateSize(), 150);
+  };
+
+  window.useMyLocation = () => {
+    const btn = $('gps-btn');
+    if (!navigator.geolocation) { setStatus('Este aparelho não oferece localização. Toque no mapa em cima da sua casa.', 'warn'); return; }
+    btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Localizando…';
+    setStatus('Aguarde alguns segundos e mantenha a localização do celular ativada.');
+    navigator.geolocation.getCurrentPosition(pos => {
+      placePin(pos.coords.latitude, pos.coords.longitude, 'gps', Math.round(pos.coords.accuracy || 0) || null);
+      map.setView([point.lat, point.lng], 18);
+      setStatus('Confira o alfinete. Se precisar, arraste até a sua casa e toque em “Enviar localização”.', 'ok');
+      btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i> Localizar novamente';
+    }, err => {
+      const msg = { 1: 'A permissão de localização foi negada. Toque no mapa em cima da sua casa.', 2: 'Não foi possível obter a localização. Toque no mapa em cima da sua casa.', 3: 'A localização demorou demais. Tente de novo ou toque no mapa.' };
+      setStatus(msg[err.code] || msg[2], 'warn');
+      btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i> Usar minha localização';
+    }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+  };
+
+  window.sendLocation = async () => {
+    if (!Number.isFinite(point.lat) || !Number.isFinite(point.lng)) return setStatus('Marque a sua casa no mapa antes de enviar.', 'warn');
+    const btn = $('send-btn'); btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando…';
+    const now = new Date().toISOString();
+    try {
+      await runTransaction(db, async tx => {
+        const snap = await tx.get(tokenRef);
+        if (!snap.exists() || !tokenIsValid(snap.data())) throw Object.assign(new Error('invalid'), { code: 'token-invalid' });
+        tx.update(tokenRef, { used: true, usedAt: now, latitude: Number(point.lat.toFixed(7)), longitude: Number(point.lng.toFixed(7)), accuracy: point.accuracy, source: point.source || 'manual', confirmedAt: now });
+      });
+      $('form-card').classList.add('hidden'); $('done-card').classList.remove('hidden');
+      $('wa-btn').href = 'https://wa.me/5571981122167?text=' + encodeURIComponent('Olá! ' + (clientName ? 'Sou ' + clientName + ' e ' : '') + 'acabei de enviar minha localização.');
+    } catch (e) {
+      console.error(e);
+      if (e?.code === 'token-invalid' || e?.code === 'permission-denied') return showBad();
+      setStatus('Não foi possível enviar. Verifique a internet e tente novamente.', 'warn');
+      btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Enviar localização';
+    }
+  };
+
+  (async () => {
+    if (!tokenRef) return showBad();
+    let data = null;
+    try { const snap = await getDoc(tokenRef); data = snap.exists() ? snap.data() : null; } catch (e) { console.error(e); }
+    if (!tokenIsValid(data)) return showBad();
+    clientName = String(data.clientName || '').trim();
+    const first = clientName.split(/\s+/)[0] || '';
+    $('greeting').textContent = (first ? 'Olá, ' + first + '! ' : 'Olá! ') + 'Marque no mapa onde fica a sua casa para o nosso técnico chegar sem erro.';
+    if (data.address) { $('addr').innerHTML = '<i class="fa-solid fa-location-dot"></i> '; $('addr').append(String(data.address)); $('addr').classList.remove('hidden'); }
+    $('form-card').classList.remove('hidden');
+    let center = DEFAULT_CENTER, zoom = 14;
+    if (data.address && window.MFCLocation?.geocodeQuery) {
+      try { const g = await window.MFCLocation.geocodeQuery(String(data.address) + ', Bahia, Brasil'); if (g?.valid) { center = [g.lat, g.lng]; zoom = 17; } } catch (e) {}
+    }
+    initMap(center, zoom);
+  })();
+</script>
+</body>
+</html>

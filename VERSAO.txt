@@ -1,3 +1,12 @@
+MFC v144h
+
+LINK PARA O CLIENTE MARCAR A LOCALIZAÇÃO — GESTOR E NOVA PÁGINA localizacao.html
+
+- Gestor: abaixo da localização do atendimento, botão "Pedir localização ao cliente". Gera um link de uso único que vale 6 horas e copia uma mensagem pronta para o WhatsApp. Com um link ainda válido, o botão vira "Copiar o link de novo" e mostra o horário de envio e a validade.
+- Nova página localizacao.html: mostra só o mapa; o cliente usa a localização do celular ou toca no mapa, ajusta o alfinete e envia. Depois aparece um botão para avisar a MFC no WhatsApp.
+- Gestor: ao receber a resposta, aplica a localização no cliente como ponto confirmado (origem "cliente") e mostra um aviso; a barra passa a mostrar quando o cliente enviou.
+- firestore.rules: nova coleção locationRequests; o cliente só lê um link válido e responde uma única vez, gravando apenas o ponto. PRECISA SER PUBLICADO NO CONSOLE DO FIREBASE.
+
 MFC v144g
 
 RELATÓRIO PADRONIZADO E CÓPIA PARA O WORD
