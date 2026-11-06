@@ -1,3 +1,12 @@
+MFC v145b
+
+APPS SEPARADOS: MFC ROTEIRO E MFC GESTOR
+
+- Cada app tem seu próprio manifest: manifest.webmanifest = "MFC Roteiro" (abre o app do técnico) e o novo gestor.webmanifest = "MFC Gestor" (abre o gestor). Antes o gestor instalado no celular aparecia como "MFC" e abria o app do técnico.
+- iPhone: nome e ícone na tela inicial definidos nas próprias páginas (apple-mobile-web-app-title e apple-touch-icon).
+- Removida a imagem mfc-logo.png, que era idêntica à icon-512.png; todas as páginas passam a usar icon-512.png. Imagens do projeto: icon-512.png, icon-192.png e mfc-capa.png.
+- O ícone do MFC Gestor ainda é o mesmo do Roteiro; será trocado quando a nova imagem for enviada.
+
 MFC v145a
 
 GESTOR NO CELULAR (ATUALIZAÇÃO GRANDE)

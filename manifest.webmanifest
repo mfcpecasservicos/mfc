@@ -1,6 +1,7 @@
 {
-  "name": "MFC",
-  "short_name": "MFC",
+  "id": "./",
+  "name": "MFC Roteiro",
+  "short_name": "MFC Roteiro",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

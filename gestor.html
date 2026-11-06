@@ -4,8 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Painel Gestor — MFC</title>
-<link rel="manifest" href="manifest.webmanifest">
+<link rel="manifest" href="gestor.webmanifest">
 <link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#0d1117">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="MFC Gestor">
 <link rel="stylesheet" href="fontawesome/css/all.min.css">
 <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
 <style>
@@ -826,12 +831,12 @@ textarea.fi{height:auto;min-height:80px;padding:12px 14px;resize:vertical;line-h
 </style>
 </head>
 <body>
-<div id="auth-gate"><div class="auth-card"><img src="mfc-logo.png" alt="MFC"><h2>Acesso do gestor</h2><p>Entre com a conta autorizada para abrir o painel de gestão.</p><button type="button" class="auth-google" id="auth-login-btn" onclick="mfcGoogleLogin()"><span class="g">G</span> Entrar com Google</button><div class="auth-error" id="auth-error"></div></div></div>
+<div id="auth-gate"><div class="auth-card"><img src="icon-512.png" alt="MFC"><h2>Acesso do gestor</h2><p>Entre com a conta autorizada para abrir o painel de gestão.</p><button type="button" class="auth-google" id="auth-login-btn" onclick="mfcGoogleLogin()"><span class="g">G</span> Entrar com Google</button><div class="auth-error" id="auth-error"></div></div></div>
 <div class="app" id="app">
 
   <!-- ===== SIDEBAR ===== -->
   <aside class="sidebar">
-    <div class="side-brand"><img src="mfc-logo.png" alt="MFC" onerror="this.style.display='none'"><h2>Painel de gestão</h2></div>
+    <div class="side-brand"><img src="icon-512.png" alt="MFC" onerror="this.style.display='none'"><h2>Painel de gestão</h2></div>
     <nav class="side-nav">
       <button class="nav-item active" id="nav-main" onclick="switchView('main');goHome()"><i class="fa-solid fa-clipboard"></i> <span>Menu principal</span></button>
       <button class="nav-item" id="nav-fin" onclick="switchView('fin')"><i class="fa-solid fa-sack-dollar"></i> <span>Financeiro</span></button>
@@ -1884,7 +1889,7 @@ window.render=render;
 /* ===== HOME (toolbar) ===== */
 function homeHtml(){
   return `<div class="home-wrap">
-    <div class="home-logo"><img src="mfc-logo.png" alt="MFC" onerror="this.style.display='none'"></div>
+    <div class="home-logo"><img src="icon-512.png" alt="MFC" onerror="this.style.display='none'"></div>
     <div class="home-btns">
       <button class="btn btn-outline-blue" onclick="generateCadastroLink()"><i class="fa-solid fa-link"></i> Gerar link de cadastro</button>
       <button class="btn btn-green" onclick="openNewVisit()">＋ Nova visita</button>
