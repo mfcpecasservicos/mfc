@@ -1,3 +1,12 @@
+MFC v144g
+
+RELATÓRIO PADRONIZADO E CÓPIA PARA O WORD
+
+- Index: o campo Relatório funciona como lista, um serviço por linha (o texto do técnico não é alterado ao salvar).
+- Index: abaixo do campo aparecem sugestões de serviço; um toque adiciona a linha no padrão. As sugestões aprendem com os relatórios: linhas que se repetem em 2 ou mais atendimentos viram sugestão (ignorando maiúsculas, acentos e pontuação final); linhas longas ou de condição (começando com "se" ou "obs") não viram sugestão. Há uma lista inicial com os serviços mais repetidos nos relatórios atuais.
+- Index: ao digitar, as sugestões filtram pelo que está sendo escrito; o × esconde uma sugestão neste aparelho.
+- Gestor: botão "Copiar para o Word" no Relatório do Técnico. Copia em tópicos (lista de verdade no Word), com primeira letra maiúscula, ";" no fim de cada item e "." no último. Linhas que começam com "Obs:" vão para um parágrafo separado depois da lista.
+
 MFC v144f
 
 ALERTAS, MENSAGEM DA VISITA E ROTA DO DIA
