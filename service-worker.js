@@ -1,11 +1,24 @@
 importScripts('https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.13.2/firebase-messaging-compat.js');
 firebase.initializeApp({apiKey:"AIzaSyAUUid850sbmBAVS9JzeZ94SbC-qzkk0B8",authDomain:"roteiro-mfc-d3053.firebaseapp.com",projectId:"roteiro-mfc-d3053",storageBucket:"roteiro-mfc-d3053.firebasestorage.app",messagingSenderId:"1030114859934",appId:"1:1030114859934:web:ad353eafb55205d6b4148f"});
+// Toque na notificação: abre sempre o app MFC Roteiro (index.html), que é a área do app instalado.
+// Registrado antes do Firebase para ter prioridade sobre o link antigo (/mfc/).
+self.addEventListener('notificationclick', event => {
+  event.stopImmediatePropagation();
+  event.notification.close();
+  const target = new URL('./index.html', self.registration.scope).href;
+  event.waitUntil((async () => {
+    const wins = await clients.matchAll({ type: 'window', includeUncontrolled: true });
+    const open = wins.find(w => { const p = new URL(w.url).pathname; return p.endsWith('/index.html') || p.endsWith('/mfc/'); });
+    if (open) return open.focus();
+    return clients.openWindow(target);
+  })());
+});
 // Mensagens enviadas com payload "notification" já são exibidas pelo FCM.
 // Não chamar showNotification aqui evita que o mesmo aviso apareça duas vezes.
 firebase.messaging();
 
-const CACHE_NAME = 'mfc-tecnico-v145b';
+const CACHE_NAME = 'mfc-tecnico-v145c';
 const FIREBASE_MODULES = [
   'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js',
   'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js',

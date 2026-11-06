@@ -76,7 +76,7 @@ exports.notifyTecnico = onDocumentWritten('clients/{clientId}', async (event) =>
         token,
         notification: { title: m.title, body: m.body },
         webpush: {
-          fcmOptions: { link: 'https://mfcpecasservicos.github.io/mfc/' },
+          fcmOptions: { link: 'https://mfcpecasservicos.github.io/mfc/index.html' },
           notification: { icon: 'https://mfcpecasservicos.github.io/mfc/icon-192.png' }
         }
       });

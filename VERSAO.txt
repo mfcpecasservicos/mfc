@@ -1,3 +1,13 @@
+MFC v145c
+
+CORREÇÃO: LINK DO GESTOR ABRIA NO APP MFC ROTEIRO
+
+- Causa: o escopo do MFC Roteiro era a pasta inteira (/mfc/), que inclui o gestor.html; no Android, links do gestor eram abertos pelo app Roteiro instalado.
+- manifest.webmanifest (MFC Roteiro): start_url e scope passam a ser ./index.html (o id continua ./, então o app instalado é o mesmo).
+- gestor.webmanifest (MFC Gestor): start_url e scope passam a ser ./gestor.html.
+- service-worker.js: o toque na notificação abre sempre o MFC Roteiro (index.html), já que o link antigo (/mfc/) ficou fora do escopo do app.
+- functions/index.js: link da notificação atualizado para /mfc/index.html (vale quando as Cloud Functions forem publicadas de novo; o service worker já resolve sem isso).
+
 MFC v145b
 
 APPS SEPARADOS: MFC ROTEIRO E MFC GESTOR

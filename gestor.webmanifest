@@ -3,7 +3,7 @@
   "name": "MFC Gestor",
   "short_name": "MFC Gestor",
   "start_url": "./gestor.html",
-  "scope": "./",
+  "scope": "./gestor.html",
   "display": "standalone",
   "background_color": "#0d1117",
   "theme_color": "#0d1117",
