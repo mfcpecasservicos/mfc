@@ -1,3 +1,10 @@
+MFC v144i
+
+BOTÃO DE LOCALIZAÇÃO DENTRO DO MAPA — GESTOR
+
+- O botão "Pedir localização ao cliente" e o aviso do link passam para dentro do quadro Localização do atendimento, logo abaixo da linha de status e da rota.
+- Sem endereço (quando o quadro do mapa não aparece), o botão continua aparecendo sozinho no detalhe do cliente.
+
 MFC v144h
 
 LINK PARA O CLIENTE MARCAR A LOCALIZAÇÃO — GESTOR E NOVA PÁGINA localizacao.html
