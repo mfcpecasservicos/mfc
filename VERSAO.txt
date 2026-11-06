@@ -1,3 +1,11 @@
+MFC v145d
+
+CORREÇÃO: LOGIN DO GESTOR NO CELULAR E APP "JÁ INSTALADO"
+
+- Gestor: login com Google passa a usar sempre a janela pop-up (também no celular e no app instalado). O redirecionamento ficava preso na tela do Google porque os navegadores atuais bloqueiam o armazenamento entre github.io e firebaseapp.com; ele fica só como alternativa se o pop-up for bloqueado.
+- Mensagem amigável quando a janela de login é fechada antes de terminar.
+- Service worker: páginas e manifests sempre conferem a versão no servidor antes de usar a cópia guardada (antes o manifest vinha do cache, e o celular podia instalar o app com o manifest antigo e dizer que o Gestor "já estava instalado"). Sem internet, continua usando a cópia guardada.
+
 MFC v145c
 
 CORREÇÃO: LINK DO GESTOR ABRIA NO APP MFC ROTEIRO

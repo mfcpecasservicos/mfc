@@ -18,7 +18,7 @@ self.addEventListener('notificationclick', event => {
 // Não chamar showNotification aqui evita que o mesmo aviso apareça duas vezes.
 firebase.messaging();
 
-const CACHE_NAME = 'mfc-tecnico-v145c';
+const CACHE_NAME = 'mfc-tecnico-v145d';
 const FIREBASE_MODULES = [
   'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js',
   'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js',
@@ -79,11 +79,13 @@ self.addEventListener('fetch', event => {
   }
   if (url.origin !== self.location.origin) return;
 
-  const isHtml = req.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname === '/mfc/' || url.pathname === '/mfc';
+  // Páginas e manifests: sempre conferem a versão no servidor antes de usar a cópia guardada.
+  const isHtml = req.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname.endsWith('.webmanifest') || url.pathname === '/mfc/' || url.pathname === '/mfc';
   if (isHtml) {
     event.respondWith((async()=>{
       try {
-        const res = await fetch(req);
+        const res = await fetch(req.url, { cache: 'no-cache', credentials: 'same-origin' });
+        if (res.redirected) return Response.redirect(res.url, 302);
         const copy = res.clone();
         caches.open(CACHE_NAME).then(cache => cache.put(req, copy)).catch(() => {});
         return res;
